@@ -11,6 +11,9 @@ Attributes = dict[URIRef, Literal | IdentifiedNode]
 
 @dataclass
 class RoCrate:
+    """
+    Abstract class containing common functionality for both attached and detached RO-Crates
+    """
     #: rdflib Graph containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available.
     graph: Graph = field(init=False, default_factory=Graph)
     #: Version of the RO-Crate specification to use
@@ -26,7 +29,12 @@ class RoCrate:
             attrs: Attributes of the entity being added
 
         Example:
-            >>> crate.add_entity(BNode(), uris.Person, {uris.name: Literal("Alice")})
+            ```python
+            from rdflib import BNode,
+            from rdfcrate import uris
+
+            crate.add_entity(BNode(), uris.Person, {uris.name: Literal("Alice")})
+            ```
         """
         self.graph.add((id, RDF.type, type))
         self.add_metadata(id, attrs)
@@ -79,22 +87,25 @@ class RoCrate:
 @dataclass
 class AttachedCrate(RoCrate):
     """
-    See https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#attached-ro-crate
+    See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#attached-ro-crate>
     """
     #: The RO-Crate directory
-    root: Path
+    path: InitVar[str | Path]
+    root: Path = field(init=False)
+
     #: If true, automatically initialize the crate with all files and directories in the root
     recursive_init: InitVar[bool] = False
 
-    def __post_init__(self, recursive_init: bool = False):
+    def __post_init__(self, path: Path | str, recursive_init: bool = False):
+        self.root = Path(path)
         self.register_dir(self.root, recursive=recursive_init, attrs={})
-        self.register_file(self.ro_crate_metadata, attrs={
+        self.register_file(self._ro_crate_metadata, attrs={
             uris.conformsTo: URIRef(self.version.conforms_to),
             uris.about: URIRef(".")
         })
 
     @property
-    def ro_crate_metadata(self) -> Path:
+    def _ro_crate_metadata(self) -> Path:
         """
         Path to the RO-Crate metadata file
         """
@@ -102,11 +113,11 @@ class AttachedCrate(RoCrate):
 
     def write(self):
         """
-        Writes the RO-Crate to "ro-crate-metadata.json"
+        Writes the RO-Crate to `ro-crate-metadata.json`
         """
-        self.ro_crate_metadata.write_text(self.compile())
+        self._ro_crate_metadata.write_text(self.compile())
 
-    def resolve_path(self, path: Path | str) -> str:
+    def _resolve_path(self, path: Path | str) -> str:
         """
         Converts a crate path to a platform independent path compatible with RO-Crate
         """
@@ -126,13 +137,13 @@ class AttachedCrate(RoCrate):
 
     def register_file(self, path: Path | str, attrs: Attributes = {}, guess_mime: bool = True, add_size: bool = False, **kwargs: Any):
         """
-        See `RoCrate.register_file`.
+        See [`RoCrate.register_file`][rdfcrate.wrapper.RoCrate.register_file].
 
         Params:
             add_size: If true, automatically add the size of the file to the metadata
         """
         path = Path(path)
-        file_id = self.resolve_path(path)
+        file_id = self._resolve_path(path)
         super().register_file(file_id, attrs, guess_mime)
         if add_size:
             if uris.contentSize in attrs:
@@ -141,17 +152,17 @@ class AttachedCrate(RoCrate):
 
     def register_dir(self, path: Path | str, attrs: Attributes = {}, recursive: bool = False, **kwargs: Any):
         """
-        See `RoCrate.register_dir`
+        See [`RoCrate.register_dir`][rdfcrate.wrapper.RoCrate.register_dir].
 
         Params:
             recursive: If true, register all files and subdirectories in the directory. The automatically created children will only have default metadata.
                 You can use `add_metadata` to document them more comprehensively.
         """
-        super().register_dir(self.resolve_path(path), attrs)
+        super().register_dir(self._resolve_path(path), attrs)
 
         if recursive:
             for child in Path(path).iterdir():
-                self.add_metadata(URIRef(self.resolve_path(path)), {uris.hasPart: URIRef(self.resolve_path(child))})
+                self.add_metadata(URIRef(self._resolve_path(path)), {uris.hasPart: URIRef(self._resolve_path(child))})
                 if child.is_dir():
                     self.register_dir(child, recursive=True)
                 else:
@@ -160,7 +171,9 @@ class AttachedCrate(RoCrate):
 @dataclass
 class DetatchedCrate(RoCrate):
     """
-    See https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#detached-ro-crate
+    A crate describing local files.
+
+    See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#detached-ro-crate>
     """
     root: str
 

@@ -1,7 +1,7 @@
 [project]
 name = "rdfcrate"
 version = "0.1.0"
-description = "Add your description here"
+description = "Library for building RO-Crates using rdflib"
 readme = "README.md"
 authors = [
     { name = "Michael Milton", email = "michael.r.milton@gmail.com" } 

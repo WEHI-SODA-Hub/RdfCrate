@@ -12,7 +12,7 @@ def make_module(context: dict) -> ast.Module:
     for key, value in context["@context"].items():
         # Workaround for invalid Python identifiers
         if (not key.isidentifier()) or keyword.iskeyword(key):
-            key = "_" + key
+            key = "_" + key.replace("-", "_")
         body.append(ast.Assign(
             targets=[ast.Name(key)],
             value=ast.Call(

@@ -10,6 +10,7 @@ from os import stat
 #: Predicate-object tuple
 Double = tuple[URIRef, Literal | IdentifiedNode]
 Attributes = Iterable[Double]
+Type = Iterable[URIRef]
 
 def has_predicate(double: Iterable[Double], predicate: URIRef) -> bool:
     """
@@ -27,7 +28,7 @@ class RoCrate:
     #: Version of the RO-Crate specification to use
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
 
-    def add_entity(self, id: IdentifiedNode, type: URIRef, attrs: Attributes = []) -> IdentifiedNode:
+    def add_entity(self, id: IdentifiedNode, type: Type, attrs: Attributes = []) -> IdentifiedNode:
         """
         Adds any type of entity to the crate
 
@@ -47,7 +48,8 @@ class RoCrate:
             crate.add_entity(BNode(), uris.Person, {uris.name: Literal("Alice")})
             ```
         """
-        self.graph.add((id, RDF.type, type))
+        for t in type:
+            self.graph.add((id, RDF.type, t))
         self.add_metadata(id, attrs)
         return id
     
@@ -63,7 +65,7 @@ class RoCrate:
             guess_mime: If true, automatically guess and document the MIME type of the file based on its extension
         """
         file_id = URIRef(path)
-        self.add_entity(file_id, uris.File, attrs)
+        self.add_entity(file_id, [uris.File], attrs)
         if guess_mime:
             if has_predicate(attrs, uris.encodingFormat):
                 raise ValueError("Cannot guess MIME type when encodingFormat is provided")
@@ -84,7 +86,7 @@ class RoCrate:
             attrs: Attributes used to describe the `Dataset` entity
         """
         dir_id = URIRef(path)
-        self.add_entity(dir_id, uris.Dataset, attrs)
+        self.add_entity(dir_id, [uris.Dataset], attrs)
         return dir_id
 
     def add_metadata(self, entity: IdentifiedNode, attrs: Attributes) -> IdentifiedNode:

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 from rdflib import Graph, URIRef, Literal, RDF, IdentifiedNode
 from rdfcrate import uris
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
@@ -7,7 +7,15 @@ from dataclasses import InitVar, dataclass, field
 import mimetypes
 from os import stat
 
-Attributes = dict[URIRef, Literal | IdentifiedNode]
+#: Predicate-object tuple
+Double = tuple[URIRef, Literal | IdentifiedNode]
+Attributes = Iterable[Double]
+
+def has_predicate(double: Iterable[Double], predicate: URIRef) -> bool:
+    """
+    Checks if an attribute list contains a specific predicate
+    """
+    return any(pred == predicate for pred, _ in double)
 
 @dataclass
 class RoCrate:
@@ -19,7 +27,7 @@ class RoCrate:
     #: Version of the RO-Crate specification to use
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
 
-    def add_entity(self, id: IdentifiedNode, type: URIRef, attrs: Attributes = {}):
+    def add_entity(self, id: IdentifiedNode, type: URIRef, attrs: Attributes = []):
         """
         Adds any type of entity to the crate
 
@@ -39,7 +47,7 @@ class RoCrate:
         self.graph.add((id, RDF.type, type))
         self.add_metadata(id, attrs)
     
-    def register_file(self, path: str, attrs: Attributes = {}, guess_mime: bool = True, **kwargs: Any):
+    def register_file(self, path: str, attrs: Attributes = [], guess_mime: bool = True, **kwargs: Any):
         """
         Adds file metadata to the crate
 
@@ -51,11 +59,11 @@ class RoCrate:
         file_id = URIRef(path)
         self.add_entity(file_id, uris.File, attrs)
         if guess_mime:
-            if uris.encodingFormat in attrs:
+            if has_predicate(attrs, uris.encodingFormat):
                 raise ValueError("Cannot guess MIME type when encodingFormat is provided")
             guess_type, _guess_encoding = mimetypes.guess_type(path)
             if guess_type is not None:
-                self.add_metadata(file_id, {uris.encodingFormat: Literal(guess_type)})
+                self.add_metadata(file_id, [(uris.encodingFormat, Literal(guess_type))])
 
     def register_dir(self, path: str, attrs: Attributes = {}, **kwargs: Any):
         """
@@ -75,8 +83,8 @@ class RoCrate:
             entity: ID of the entity being described
             attrs: Attributes of the entity being described
         """
-        for key, value in attrs.items():
-            self.graph.add((entity, key, value))
+        for pred, obj in attrs:
+            self.graph.add((entity, pred, obj))
 
     def compile(self) -> str:
         """
@@ -94,15 +102,15 @@ class AttachedCrate(RoCrate):
     root: Path = field(init=False)
 
     #: If true, automatically initialize the crate with all files and directories in the root
-    recursive_init: InitVar[bool] = False
+    recursive_init: InitVar[bool] = field(default=False, kw_only=True)
 
     def __post_init__(self, path: Path | str, recursive_init: bool = False):
         self.root = Path(path)
         self.register_dir(self.root, recursive=recursive_init, attrs={})
-        self.register_file(self._ro_crate_metadata, attrs={
-            uris.conformsTo: URIRef(self.version.conforms_to),
-            uris.about: URIRef(".")
-        })
+        self.register_file(self._ro_crate_metadata, attrs=[
+            (uris.conformsTo, URIRef(self.version.conforms_to)),
+            (uris.about, URIRef("."))
+        ])
 
     @property
     def _ro_crate_metadata(self) -> Path:
@@ -146,9 +154,9 @@ class AttachedCrate(RoCrate):
         file_id = self._resolve_path(path)
         super().register_file(file_id, attrs, guess_mime)
         if add_size:
-            if uris.contentSize in attrs:
+            if has_predicate(attrs, uris.contentSize):
                 raise ValueError("Cannot add size when contentSize is provided")
-            self.add_metadata(URIRef(file_id), {uris.contentSize: Literal(stat(path).st_size)})
+            self.add_metadata(URIRef(file_id), [(uris.contentSize, Literal(stat(path).st_size))])
 
     def register_dir(self, path: Path | str, attrs: Attributes = {}, recursive: bool = False, **kwargs: Any):
         """
@@ -162,7 +170,7 @@ class AttachedCrate(RoCrate):
 
         if recursive:
             for child in Path(path).iterdir():
-                self.add_metadata(URIRef(self._resolve_path(path)), {uris.hasPart: URIRef(self._resolve_path(child))})
+                self.add_metadata(URIRef(self._resolve_path(path)), [(uris.hasPart, URIRef(self._resolve_path(child)))])
                 if child.is_dir():
                     self.register_dir(child, recursive=True)
                 else:

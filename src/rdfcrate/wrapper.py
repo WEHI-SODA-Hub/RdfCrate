@@ -19,7 +19,7 @@ class RoCrate:
     #: Version of the RO-Crate specification to use
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
 
-    def add_entity(self, id: IdentifiedNode, type: URIRef, attrs: Attributes):
+    def add_entity(self, id: IdentifiedNode, type: URIRef, attrs: Attributes = {}):
         """
         Adds any type of entity to the crate
 

@@ -1,0 +1,66 @@
+# Guide
+
+## Thinking in Triples
+
+When using `rdfcrate`, remember that everything is a triple of:
+
+* Subject: the thing being described
+* Predicate: the relationship between the subject and the object
+* Object: the value or target of the relationship
+
+Some other tips about working in RDF:
+* JSON-LD objects are just triples that all share the same subject
+* The `@type` field is just a specific predicate
+* You don't have to worry about `@context` at all. Hooray!
+
+```{python}
+from rdflib import Graph
+
+json_ld = """
+    {
+        "@context": "https://w3id.org/ro/crate/1.2-DRAFT/context",
+        "@id": "#monty",
+        "@type": "Place",
+        "name": "Montague Street Bridge"
+    }
+"""
+for subj, pred, obj in Graph().parse(data=json_ld, format="json-ld"):
+    print(f"{subj}, {pred}, {obj}")
+```
+
+## `rdflib` Types
+
+Unlike JSON-LD, URIs (which include all IDs, types, and predicates) are handled differently to literals (strings, integers etc).
+URIs can be created using `rdflib.URIRef`, whereas literals can be created with `rdflib.Literal`.
+There are also `rdf.BNode` which are IDs for blank nodes for entities that don't really make sense as an individual objects.
+
+```{python}
+from rdfcrate import AttachedCrate, uris
+from rdflib import Literal, URIRef, BNode
+
+AttachedCrate(".").add_entity()
+```
+
+## URIs
+
+`rdfcrate` provides a library of useful IRIs/URIs that can be used as predicates (field names), or types.
+The `rdfcrate.uris` module contains all URIs that are part of RO-Crate by default, which can help you when using autocomplete:
+
+![](media/autocomplete.png)
+
+There are also [BioSchemas](https://bioschemas.org/) specific IRIs in the `rdfcrate.bioschemas` module.
+
+## Multiple Values
+
+If you want to specify that a certain field has a list of values, you just need to repeat the same predicate multiple times.
+For example:
+
+```{python}
+from rdfcrate import AttachedCrate, uris
+from rdflib import Literal, URIRef
+
+AttachedCrate(".").add_entity(URIRef("#instructions"), [uris.HowTo], [
+    (uris.step, Literal("Put bread on plate")),
+    (uris.step, Literal("Add vegemite"))
+])
+```

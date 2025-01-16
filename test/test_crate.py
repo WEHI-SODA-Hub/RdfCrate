@@ -23,5 +23,6 @@ def test_recursive_add():
 
 def test_mime_type():
     crate = AttachedCrate(path=TEST_CRATE, recursive_init=True)
+    
     assert crate.graph.value(URIRef("text.txt"), uris.encodingFormat) == Literal("text/plain")
     assert crate.graph.value(URIRef("ro-crate-metadata.json"), uris.encodingFormat) == Literal("application/json")

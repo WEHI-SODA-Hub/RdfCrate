@@ -7,6 +7,7 @@ theme:
 plugins:
 - search
 - same-dir
+- mkquartodocs
 - mkdocstrings:
     default_handler: python
     handlers:
@@ -20,6 +21,7 @@ plugins:
 nav:
   - 'README.md'
   - 'api.md'
+  - 'guide.md'
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -29,3 +31,4 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - tables

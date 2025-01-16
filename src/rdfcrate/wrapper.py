@@ -45,7 +45,7 @@ class RoCrate:
             from rdflib import BNode,
             from rdfcrate import uris
 
-            crate.add_entity(BNode(), uris.Person, {uris.name: Literal("Alice")})
+            crate.add_entity(BNode(), [uris.Person], [(uris.name, Literal("Alice"))])
             ```
         """
         for t in type:
@@ -63,6 +63,15 @@ class RoCrate:
             path: Path or URL to the file being added
             attrs: Attributes used to describe the `File` entity
             guess_mime: If true, automatically guess and document the MIME type of the file based on its extension
+
+        Example:
+            ```python
+            from rdfcrate import uris, AttachedCrate
+
+            AttachedCrate(".").register_file("./some/data.txt", [
+                (uris.description, Literal("This is a file with some data")),
+            ])
+            ```
         """
         file_id = URIRef(path)
         self.add_entity(file_id, [uris.File], attrs)
@@ -84,6 +93,15 @@ class RoCrate:
         Params:
             path: Path to the directory, which must be within the crate root
             attrs: Attributes used to describe the `Dataset` entity
+
+        Example:
+            ```python
+            from rdfcrate import uris, AttachedCrate
+
+            AttachedCrate(".").register_dir("./some/dir", [
+                (uris.description, Literal("This is a directory I am describing")),
+            ])
+            ```
         """
         dir_id = URIRef(path)
         self.add_entity(dir_id, [uris.Dataset], attrs)

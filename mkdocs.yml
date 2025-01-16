@@ -7,7 +7,9 @@ theme:
 plugins:
 - search
 - same-dir
-- mkquartodocs
+# Run quarto render guide.qmd --to md before building, as
+# mkquartodocs seems to be broken https://github.com/jspaezp/mkquartodocs/issues/57
+# - mkquartodocs
 - mkdocstrings:
     default_handler: python
     handlers:

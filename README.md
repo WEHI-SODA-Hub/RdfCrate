@@ -41,14 +41,9 @@ print(crate.compile())
       "@context": "https://w3id.org/ro/crate/1.1/context",
       "@graph": [
         {
-          "@id": "ro-crate-metadata.json",
-          "@type": "CreativeWork",
-          "about": {
-            "@id": "./"
-          },
-          "conformsTo": {
-            "@id": "https://w3id.org/ro/crate/1.1"
-          }
+          "@id": "./",
+          "@type": "Dataset",
+          "datePublished": "2025-01-17T15:58:23.852731"
         },
         {
           "@id": "salvatore.jpg",
@@ -57,9 +52,14 @@ print(crate.compile())
           "name": "Salvatore the Seal"
         },
         {
-          "@id": "./",
-          "@type": "Dataset",
-          "datePublished": "2025-01-17T15:19:30.569061"
+          "@id": "ro-crate-metadata.json",
+          "@type": "CreativeWork",
+          "about": {
+            "@id": "./"
+          },
+          "conformsTo": {
+            "@id": "https://w3id.org/ro/crate/1.1"
+          }
         }
       ]
     }

@@ -2,7 +2,7 @@
 Generates URIs for everything in the RO-Crate context
 """
 import ast
-from typing import Iterable
+from typing import Iterable, cast
 import keyword
 from rdflib import Graph, RDFS, RDF
 from itertools import chain
@@ -31,7 +31,7 @@ def module_from_rdfs(uris: Iterable[ast.Assign]) -> ast.Module:
     Compiles a Python module from a list of URI assignments
     """
     return ast.fix_missing_locations(ast.Module(
-        body=[ast.ImportFrom(module="rdflib", names=[ast.alias(name="URIRef")], level=0)] + list(uris),
+        body=cast(list[ast.stmt], [ast.ImportFrom(module="rdflib", names=[ast.alias(name="URIRef")], level=0)] + list(uris)),
         type_ignores=[]
     ))
 

@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Michael Milton", email = "michael.r.milton@gmail.com" } 
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
     "rdflib>=7.1.2",
     "requests>=2.32.3",
@@ -31,3 +31,9 @@ dev-dependencies = [
     "pandas>=2.2.3",
     "tabulate>=0.9.0",
 ]
+
+[tool.pyright]
+include = ["src"]
+venvPath = "."
+venv = ".venv"
+exclude = [".venv"]

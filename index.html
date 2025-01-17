@@ -430,25 +430,25 @@ document. Here’s how you could make an RO-Crate using RdfCrate:</p>
   &quot;@context&quot;: &quot;https://w3id.org/ro/crate/1.1/context&quot;,
   &quot;@graph&quot;: [
     {
+      &quot;@id&quot;: &quot;./&quot;,
+      &quot;@type&quot;: &quot;Dataset&quot;,
+      &quot;datePublished&quot;: &quot;2025-01-17T15:58:23.852731&quot;
+    },
+    {
       &quot;@id&quot;: &quot;salvatore.jpg&quot;,
       &quot;@type&quot;: &quot;File&quot;,
       &quot;encodingFormat&quot;: &quot;image/jpeg&quot;,
       &quot;name&quot;: &quot;Salvatore the Seal&quot;
     },
     {
-      &quot;@id&quot;: &quot;.&quot;,
-      &quot;@type&quot;: &quot;Dataset&quot;
-    },
-    {
       &quot;@id&quot;: &quot;ro-crate-metadata.json&quot;,
-      &quot;@type&quot;: &quot;File&quot;,
+      &quot;@type&quot;: &quot;CreativeWork&quot;,
       &quot;about&quot;: {
-        &quot;@id&quot;: &quot;.&quot;
+        &quot;@id&quot;: &quot;./&quot;
       },
       &quot;conformsTo&quot;: {
         &quot;@id&quot;: &quot;https://w3id.org/ro/crate/1.1&quot;
-      },
-      &quot;encodingFormat&quot;: &quot;application/json&quot;
+      }
     }
   ]
 }

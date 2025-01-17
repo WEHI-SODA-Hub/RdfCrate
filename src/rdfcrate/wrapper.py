@@ -6,6 +6,7 @@ from rdfcrate.spec_version import SpecVersion, ROCrate1_1
 from dataclasses import InitVar, dataclass, field
 import mimetypes
 from os import stat
+from datetime import datetime
 
 #: Predicate-object tuple
 Double = tuple[URIRef, Literal | IdentifiedNode]
@@ -105,6 +106,9 @@ class RoCrate:
             ])
             ```
         """
+        if not path.endswith("/"):
+            # Directories must end with a slash in RO-Crate
+            path += "/"
         dir_id = URIRef(path)
         self.add_entity(dir_id, [uris.Dataset], attrs)
         return dir_id
@@ -145,10 +149,14 @@ class AttachedCrate(RoCrate):
 
     def __post_init__(self, path: Path | str, recursive_init: bool = False):
         self.root = Path(path)
-        self.register_dir(self.root, recursive=recursive_init, attrs={})
-        self.register_file(self._ro_crate_metadata, attrs=[
+        root_dataset = self.register_dir(self.root, recursive=recursive_init, attrs=[
+            (uris.datePublished, Literal(datetime.now().isoformat()))
+        ])
+        self.add_entity(URIRef(self._resolve_path(self._ro_crate_metadata)), type=[uris.CreativeWork], attrs=[
             (uris.conformsTo, URIRef(self.version.conforms_to)),
-            (uris.about, URIRef("."))
+            (uris.about, root_dataset),
+            # Even though File aka MediaObject is already a subclass of CreativeWork, the spec demands this is explicitly present
+            (RDF.type, uris.CreativeWork)
         ])
 
     @property
@@ -210,12 +218,11 @@ class AttachedCrate(RoCrate):
 
         if recursive:
             for child in Path(path).iterdir():
-                self.add_metadata(URIRef(self._resolve_path(path)), [(uris.hasPart, URIRef(self._resolve_path(child)))])
                 if child.is_dir():
-                    self.register_dir(child, recursive=True)
+                    child_id = self.register_dir(child, recursive=True)
                 else:
-                    self.register_file(child)
-
+                    child_id = self.register_file(child)
+                self.add_metadata(id, [(uris.hasPart, child_id)])
         return id
 
 @dataclass

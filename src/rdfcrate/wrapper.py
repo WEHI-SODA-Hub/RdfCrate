@@ -1,6 +1,5 @@
-from __future__ import annotations
 from pathlib import Path
-from typing import Any, Iterable, Union
+from typing import Any, Iterable
 from rdflib import Graph, URIRef, Literal, RDF, IdentifiedNode
 from rdfcrate import uris
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
@@ -10,7 +9,7 @@ from os import stat
 from datetime import datetime
 
 #: Predicate-object tuple
-Double = tuple[URIRef, Union[Literal, IdentifiedNode]]
+Double = tuple[URIRef, Literal | IdentifiedNode]
 Attributes = Iterable[Double]
 Type = Iterable[URIRef]
 

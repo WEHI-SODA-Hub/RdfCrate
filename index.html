@@ -391,7 +391,6 @@ here</a></strong>.</p>
 <li>Library of types and properties to speed up development and ensure
   correctness</li>
 <li>Valid JSON-LD guaranteed</li>
-<li>Leverage <code>rdflib</code> to query your crate</li>
 <li>Type checker friendly</li>
 </ul>
 <h2 id="example">Example</h2>
@@ -414,6 +413,12 @@ document. Here’s how you could make an RO-Crate using RdfCrate:</p>
       &quot;@type&quot;: &quot;Dataset&quot;
     },
     {
+      &quot;@id&quot;: &quot;salvatore.jpg&quot;,
+      &quot;@type&quot;: &quot;File&quot;,
+      &quot;encodingFormat&quot;: &quot;image/jpeg&quot;,
+      &quot;name&quot;: &quot;Salvatore the Seal&quot;
+    },
+    {
       &quot;@id&quot;: &quot;ro-crate-metadata.json&quot;,
       &quot;@type&quot;: &quot;File&quot;,
       &quot;about&quot;: {
@@ -423,12 +428,6 @@ document. Here’s how you could make an RO-Crate using RdfCrate:</p>
         &quot;@id&quot;: &quot;https://w3id.org/ro/crate/1.1&quot;
       },
       &quot;encodingFormat&quot;: &quot;application/json&quot;
-    },
-    {
-      &quot;@id&quot;: &quot;salvatore.jpg&quot;,
-      &quot;@type&quot;: &quot;File&quot;,
-      &quot;encodingFormat&quot;: &quot;image/jpeg&quot;,
-      &quot;name&quot;: &quot;Salvatore the Seal&quot;
     }
   ]
 }

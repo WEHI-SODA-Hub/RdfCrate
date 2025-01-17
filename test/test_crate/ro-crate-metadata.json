@@ -5,7 +5,7 @@
       "@id": "ro-crate-metadata.json",
       "@type": "File",
       "about": {
-        "@id": "."
+        "@id": "./"
       },
       "conformsTo": {
         "@id": "https://w3id.org/ro/crate/1.1"

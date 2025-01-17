@@ -23,10 +23,12 @@ class RoCrate:
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """
-    #: rdflib Graph containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available.
     graph: Graph = field(init=False, default_factory=Graph)
-    #: Version of the RO-Crate specification to use
+    """
+    `rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available.
+    """
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
+    "Version of the RO-Crate specification to use"
 
     def add_entity(self, id: IdentifiedNode, type: Type, attrs: Attributes = []) -> IdentifiedNode:
         """
@@ -133,9 +135,10 @@ class AttachedCrate(RoCrate):
     """
     See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#attached-ro-crate>
     """
-    #: The RO-Crate directory
     path: InitVar[str | Path]
+    "The RO-Crate directory"
     root: Path = field(init=False)
+    "The RO-Crate directory"
 
     #: If true, automatically initialize the crate with all files and directories in the root
     recursive_init: InitVar[bool] = field(default=False, kw_only=True)

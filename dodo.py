@@ -1,25 +1,18 @@
-from functools import partial
 import json
 from typing import Literal
 from rdfcrate.codegen import module_from_context, module_from_rdfs, uris_from_rdfs
-from ast import unparse
+from ast import unparse, Constant, Expr, Module
 from pathlib import Path
 import requests
 
 git_repo = Path("specifications").resolve()
 
 DOIT_CONFIG = {
-    'backend': 'json',
-    'dep_file': 'doit-db.json',
     'check_file_uptodate': 'timestamp'
 }
 
-def make_module(url: str, type: Literal["context", "rdfs"], path: Path):
-    if type == "context":
-        module = module_from_context(requests.get(url).json())
-    else:
-        module = module_from_rdfs(requests.get(url).text)
-    path.write_text(unparse(module))
+def add_docstring(module: Module, docstring: str):
+    module.body.insert(0, Expr(Constant(docstring)))
 
 def task_clone_bioschemas():
     """
@@ -46,6 +39,7 @@ def task_bioschemas():
             except json.JSONDecodeError:
                 print(f"Failed to parse {file}")
         module = module_from_rdfs(assignments)
+        add_docstring(module, "URIs for Bioschemas")
         dest_path.write_text(unparse(module))
 
     return {
@@ -62,6 +56,7 @@ def task_rocrate_uris():
 
     def _task():
         module = module_from_context(requests.get("https://w3id.org/ro/crate/1.2-DRAFT/context").json())
+        add_docstring(module, "URIs for RO-Crate")
         dest_path.write_text(unparse(module))
 
     return {

@@ -1,56 +1,60 @@
+
+
 # RdfCrate
 
 RO-Crate builder that uses RDF concepts.
 
-## Motivation
+**[Detailed documentation available
+here](https://wehi-soda-hub.github.io/RdfCrate/)**.
 
-RO-Crate is stored as JSON-LD, which seems user-friendly to people who are used to working with JSON.
-Unfortunately, once you get beyond the basics, JSON-LD is actually quite complex.
-It has special keys like `@context`, `@id` and `@type`, it has multiple ways to represent relationships, it has multiple forms like framed, flattened and expanded, and it uses URL prefixes.
-Because of this, you might find it easier to just embrace RDF concepts directly, where everything is just a triple of subject (the thing being described), predicate (the relationship) and object (the value), that's it!
+## Advantages
 
-RdfCrate provide some helpful utilities for creating RO-Crates on top of RDF, but it never tries to disguise it.
+- Simple API that doesn’t require understanding JSON-LD
+- Library of types and properties to speed up development and ensure
+  correctness
+- Valid JSON-LD guaranteed
+- Leverage `rdflib` to query your crate
+- Type checker friendly
 
 ## Example
 
-Let's say you have a directory with one file in it, which you want to document.
-Here's how you could make an RO-Crate using RdfCrate:
+Let’s say you have a directory with one file in it, which you want to
+document. Here’s how you could make an RO-Crate using RdfCrate:
 
-```python
+``` python
 from rdfcrate import AttachedCrate, uris
 from rdflib import Literal
 
-crate = AttachedCrate("/path/to/directory")
-crate.register_file("photo.jpg", [
-    (uris.name, Literal("Cool cat photo"))
+crate = AttachedCrate("/path/to/crate")
+crate.register_file("salvatore.jpg", [
+    (uris.name, Literal("Salvatore the Seal"))
 ])
 print(crate.compile())
 ```
-```json
-{
-  "@context": "https://w3id.org/ro/crate/1.1/context",
-  "@graph": [
+
     {
-      "@id": "photo.jpg",
-      "@type": "File",
-      "encodingFormat": "image/jpeg",
-      "name": "Cool cat photo"
-    },
-    {
-      "@id": "ro-crate-metadata.json",
-      "@type": "File",
-      "about": {
-        "@id": "."
-      },
-      "conformsTo": {
-        "@id": "https://w3id.org/ro/crate/1.1"
-      },
-      "encodingFormat": "application/json"
-    },
-    {
-      "@id": ".",
-      "@type": "Dataset"
+      "@context": "https://w3id.org/ro/crate/1.1/context",
+      "@graph": [
+        {
+          "@id": ".",
+          "@type": "Dataset"
+        },
+        {
+          "@id": "ro-crate-metadata.json",
+          "@type": "File",
+          "about": {
+            "@id": "."
+          },
+          "conformsTo": {
+            "@id": "https://w3id.org/ro/crate/1.1"
+          },
+          "encodingFormat": "application/json"
+        },
+        {
+          "@id": "salvatore.jpg",
+          "@type": "File",
+          "encodingFormat": "image/jpeg",
+          "name": "Salvatore the Seal"
+        }
+      ]
     }
-  ]
-}
-```

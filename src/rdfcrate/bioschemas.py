@@ -1,3 +1,4 @@
+"""URIs for Bioschemas"""
 from rdflib import URIRef
 BioChemEntity = URIRef('https://discovery.biothings.io/view/issue542/BioChemEntity')
 hasBioPolymerSequence = URIRef('https://discovery.biothings.io/view/issue542/hasBioPolymerSequence')

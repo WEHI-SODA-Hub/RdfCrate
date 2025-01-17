@@ -22,8 +22,9 @@ plugins:
 
 nav:
   - 'README.md'
-  - 'api.md'
-  - 'guide.md'
+  - 'docs/guide.md'
+  - 'docs/api.md'
+  - 'docs/motivation.md'
 
 markdown_extensions:
   - pymdownx.highlight:

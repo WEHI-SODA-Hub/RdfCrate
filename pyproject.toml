@@ -1,6 +1,6 @@
 [project]
 name = "rdfcrate"
-version = "0.1.0"
+version = "0.2.0"
 description = "Library for building RO-Crates using rdflib"
 readme = "README.md"
 authors = [
@@ -8,8 +8,7 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "rdflib>=7.1.2",
-    "requests>=2.32.3",
+    "rdflib>=7.1.2"
 ]
 
 [project.scripts]
@@ -30,6 +29,7 @@ dev-dependencies = [
     "mkquartodocs>=0.5.10",
     "pandas>=2.2.3",
     "tabulate>=0.9.0",
+    "requests>=2.32.3",
 ]
 
 [tool.pyright]

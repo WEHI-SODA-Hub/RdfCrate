@@ -1,3 +1,4 @@
+"""URIs for RO-Crate"""
 from rdflib import URIRef
 _3DModel = URIRef('http://schema.org/3DModel')
 AMRadioChannel = URIRef('http://schema.org/AMRadioChannel')

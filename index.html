@@ -10,7 +10,7 @@
       
       
       
-        <link rel="next" href="api/">
+        <link rel="next" href="docs/guide/">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -237,9 +237,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#motivation" class="md-nav__link">
+  <a href="#advantages" class="md-nav__link">
     <span class="md-ellipsis">
-      Motivation
+      Advantages
     </span>
   </a>
   
@@ -269,11 +269,51 @@
   
   
     <li class="md-nav__item">
-      <a href="api/" class="md-nav__link">
+      <a href="docs/guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="docs/api/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="docs/motivation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Motivation
   </span>
   
 
@@ -309,9 +349,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#motivation" class="md-nav__link">
+  <a href="#advantages" class="md-nav__link">
     <span class="md-ellipsis">
-      Motivation
+      Advantages
     </span>
   </a>
   
@@ -343,51 +383,56 @@
 
 <h1 id="rdfcrate">RdfCrate</h1>
 <p>RO-Crate builder that uses RDF concepts.</p>
-<h2 id="motivation">Motivation</h2>
-<p>RO-Crate is stored as JSON-LD, which seems user-friendly to people who are used to working with JSON.
-Unfortunately, once you get beyond the basics, JSON-LD is actually quite complex.
-It has special keys like <code>@context</code>, <code>@id</code> and <code>@type</code>, it has multiple ways to represent relationships, it has multiple forms like framed, flattened and expanded, and it uses URL prefixes.
-At this level, it becomes easier to just embrace RDF concepts directly, where everything is just a triple of subject (the thing being described), predicate (the relationship) and object (the value), that's it!</p>
-<p>RdfCrate provide some helpful utilities for creating RO-Crates on top of RDF, but it never tries to disguise it.</p>
+<p><strong><a href="https://wehi-soda-hub.github.io/RdfCrate/">Detailed documentation available
+here</a></strong>.</p>
+<h2 id="advantages">Advantages</h2>
+<ul>
+<li>Simple API that doesn’t require understanding JSON-LD</li>
+<li>Library of types and properties to speed up development and ensure
+  correctness</li>
+<li>Valid JSON-LD guaranteed</li>
+<li>Leverage <code>rdflib</code> to query your crate</li>
+<li>Type checker friendly</li>
+</ul>
 <h2 id="example">Example</h2>
-<p>Let's say you have a directory with one file in it, which you want to document.
-Here's how you could make an RO-Crate using RdfCrate:</p>
-<p><div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rdfcrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttachedCrate</span><span class="p">,</span> <span class="n">uris</span>
+<p>Let’s say you have a directory with one file in it, which you want to
+document. Here’s how you could make an RO-Crate using RdfCrate:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rdfcrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">AttachedCrate</span><span class="p">,</span> <span class="n">uris</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rdflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">crate</span> <span class="o">=</span> <span class="n">AttachedCrate</span><span class="p">(</span><span class="s2">&quot;/path/to/directory&quot;</span><span class="p">)</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">crate</span><span class="o">.</span><span class="n">register_file</span><span class="p">(</span><span class="s2">&quot;photo.jpg&quot;</span><span class="p">,</span> <span class="p">{</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">uris</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">Literal</span><span class="p">(</span><span class="s2">&quot;Cool cat photo&quot;</span><span class="p">)</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">})</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">crate</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">crate</span> <span class="o">=</span> <span class="n">AttachedCrate</span><span class="p">(</span><span class="s2">&quot;/path/to/crate&quot;</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">crate</span><span class="o">.</span><span class="n">register_file</span><span class="p">(</span><span class="s2">&quot;salvatore.jpg&quot;</span><span class="p">,</span> <span class="p">[</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="p">(</span><span class="n">uris</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">Literal</span><span class="p">(</span><span class="s2">&quot;Salvatore the Seal&quot;</span><span class="p">))</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">])</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">print</span><span class="p">(</span><span class="n">crate</span><span class="o">.</span><span class="n">compile</span><span class="p">())</span>
 </span></code></pre></div>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;@context&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://w3id.org/ro/crate/1.1/context&quot;</span><span class="p">,</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;@graph&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">&quot;@id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;photo.jpg&quot;</span><span class="p">,</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">&quot;@type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;File&quot;</span><span class="p">,</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">&quot;encodingFormat&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;image/jpeg&quot;</span><span class="p">,</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cool cat photo&quot;</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="p">},</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="nt">&quot;@id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ro-crate-metadata.json&quot;</span><span class="p">,</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="nt">&quot;@type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;File&quot;</span><span class="p">,</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="nt">&quot;about&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="nt">&quot;@id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;.&quot;</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="p">},</span>
-</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="nt">&quot;conformsTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">        </span><span class="nt">&quot;@id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://w3id.org/ro/crate/1.1&quot;</span>
-</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">      </span><span class="p">},</span>
-</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">      </span><span class="nt">&quot;encodingFormat&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;application/json&quot;</span>
-</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="p">},</span>
-</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">    </span><span class="p">{</span>
-</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">      </span><span class="nt">&quot;@id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
-</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">      </span><span class="nt">&quot;@type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Dataset&quot;</span>
-</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">  </span><span class="p">]</span>
-</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="p">}</span>
-</span></code></pre></div></p>
+<div class="language-text highlight"><pre><span></span><code>{
+  &quot;@context&quot;: &quot;https://w3id.org/ro/crate/1.1/context&quot;,
+  &quot;@graph&quot;: [
+    {
+      &quot;@id&quot;: &quot;.&quot;,
+      &quot;@type&quot;: &quot;Dataset&quot;
+    },
+    {
+      &quot;@id&quot;: &quot;ro-crate-metadata.json&quot;,
+      &quot;@type&quot;: &quot;File&quot;,
+      &quot;about&quot;: {
+        &quot;@id&quot;: &quot;.&quot;
+      },
+      &quot;conformsTo&quot;: {
+        &quot;@id&quot;: &quot;https://w3id.org/ro/crate/1.1&quot;
+      },
+      &quot;encodingFormat&quot;: &quot;application/json&quot;
+    },
+    {
+      &quot;@id&quot;: &quot;salvatore.jpg&quot;,
+      &quot;@type&quot;: &quot;File&quot;,
+      &quot;encodingFormat&quot;: &quot;image/jpeg&quot;,
+      &quot;name&quot;: &quot;Salvatore the Seal&quot;
+    }
+  ]
+}
+</code></pre></div>
 
 
 

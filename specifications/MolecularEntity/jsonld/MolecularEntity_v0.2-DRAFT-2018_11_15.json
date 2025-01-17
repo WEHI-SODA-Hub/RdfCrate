@@ -1,0 +1,468 @@
+{
+    "@context": {
+        "schema": "http://schema.org/",
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "bioschemastypes": "https://discovery.biothings.io/view/bioschemastypes/",
+        "bioschemas": "https://discovery.biothings.io/view/bioschemas/",
+        "owl": "http://www.w3.org/2002/07/owl/"
+    },
+    "@graph": [
+        {
+            "@id": "bioschemas:MolecularEntity",
+            "@type": "rdfs:Class",
+            "rdfs:comment": "Bioschemas profile describing a MolecularEntity This specification describes a MolecularEntity which is any constitutionally or isotopically distinct atom, molecule, ion, ion pair, radical, radical ion, complex, conformer etc., identifiable as a separately distinguishable entity. Version: 0.2-DRAFT-2018_11_15",
+            "schema:schemaVersion": [
+                "https://bioschemas.org/profiles/MolecularEntity/0.2-DRAFT-2018_11_15"
+            ],
+            "rdfs:label": "MolecularEntity",
+            "rdfs:subClassOf": {
+                "@id": "bioschemastypes:MolecularEntity"
+            },
+            "$validation": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                    "alternateName": {
+                        "description": " An alias for the item.",
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    },
+                    "biochemicalInteraction": {
+                        "description": "A BioChemEntity that is known to interact with the item. ",
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/biochementity"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/biochementity"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    },
+                    "biochemicalSimilarity": {
+                        "description": "A similar molecular entity, e.g., obtained by fingerprint similarity algorithms. ",
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/biochementity"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/biochementity"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    },
+                    "biologicalRole": {
+                        "description": "A role played by the molecular entity within a biological context. ",
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/definedterm"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/definedterm"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    },
+                    "chemicalRole": {
+                        "description": "A role played by the molecular entity within a chemical context. ",
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/definedterm"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/definedterm"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    },
+                    "description": {
+                        "description": " A description of the item.",
+                        "type": "string",
+                        "owl:cardinality": "one"
+                    },
+                    "disambiguatingDescription": {
+                        "description": " A sub property of description. A short description of the item used to disambiguate from other, similar items. Information from other properties (in particular, name) may be necessary for the description to be useful for disambiguation.",
+                        "type": "string",
+                        "owl:cardinality": "one"
+                    },
+                    "identifier": {
+                        "description": " The identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links. See [background notes](http://schema.org/docs/datamodel.html#identifierBg) for more details.",
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/propertyvalue"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "string",
+                                "format": "uri"
+                            }
+                        ],
+                        "owl:cardinality": "one"
+                    },
+                    "image": {
+                        "description": " An image of the item. This can be a URL or a fully described ImageObject.",
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/imageobject"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/imageobject"
+                                }
+                            },
+                            {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "format": "uri"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    },
+                    "inChI": {
+                        "description": "Non-proprietary identifier for chemical substances that can be used in printed and electronic data sources thus enabling easier linking of diverse data compilations. ",
+                        "type": "string",
+                        "owl:cardinality": "one"
+                    },
+                    "inChIKey": {
+                        "description": "InChIKey is a hashed version of the full InChI (using the SHA-256 algorithm) ",
+                        "type": "string",
+                        "owl:cardinality": "one"
+                    },
+                    "iupacName": {
+                        "description": "Systematic method of naming organic chemical compounds as recommended by the International Union of Pure and Applied Chemistry (IUPAC). ",
+                        "type": "string",
+                        "owl:cardinality": "one"
+                    },
+                    "molecularFormula": {
+                        "description": "The empirical formula is the simplest whole number ratio of all the atoms in a molecule. ",
+                        "type": "string",
+                        "owl:cardinality": "one"
+                    },
+                    "molecularWeight": {
+                        "description": "This is the molecular weight of the entity being described, not of the parent.  ",
+                        "type": "number",
+                        "owl:cardinality": "one"
+                    },
+                    "monoisotopicMolecularWeight": {
+                        "description": "The monoisotopic mass is the sum of the masses of the atoms in a molecule using the unbound, ground-state, rest mass of the principal (most abundant) isotope for each element instead of the isotopic average mass. ",
+                        "type": "number",
+                        "owl:cardinality": "one"
+                    },
+                    "name": {
+                        "description": " The name of the item.",
+                        "type": "string",
+                        "owl:cardinality": "one"
+                    },
+                    "potentialUse": {
+                        "description": "Intended use of the molecular entity by humans. ",
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/definedterm"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/definedterm"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    },
+                    "sameAs": {
+                        "description": " URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Wikidata entry, or official website.",
+                        "oneOf": [
+                            {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "format": "uri"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    },
+                    "smiles": {
+                        "description": "A specification in form of a line notation for describing the structure of chemical species using short ASCII strings ",
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    },
+                    "url": {
+                        "description": " URL of the item.",
+                        "oneOf": [
+                            {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "format": "uri"
+                                }
+                            }
+                        ],
+                        "owl:cardinality": "many"
+                    }
+                },
+                "required": [
+                    "identifier",
+                    "name",
+                    "url"
+                ],
+                "recommended": [
+                    "inChI",
+                    "inChIKey",
+                    "iupacName",
+                    "molecularFormula",
+                    "molecularWeight",
+                    "smiles"
+                ],
+                "optional": [
+                    "alternateName",
+                    "biochemicalInteraction",
+                    "biochemicalSimilarity",
+                    "biologicalRole",
+                    "chemicalRole",
+                    "description",
+                    "disambiguatingDescription",
+                    "image",
+                    "monoisotopicMolecularWeight",
+                    "potentialUse",
+                    "sameAs"
+                ],
+                "definitions": {
+                    "biochementity": {
+                        "@type": "bioschemas:BioChemEntity",
+                        "type": "object",
+                        "properties": {
+                            "url": {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "identifier": {
+                                "type": "string"
+                            }
+                        },
+                        "required": []
+                    },
+                    "definedterm": {
+                        "@type": "DefinedTerm",
+                        "type": "object",
+                        "properties": {
+                            "url": {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "termCode": {
+                                "type": "string"
+                            },
+                            "identifier": {
+                                "type": "string"
+                            },
+                            "inDefinedTermSet": {
+                                "$ref": "#/definitions/definedtermset"
+                            }
+                        },
+                        "required": []
+                    },
+                    "definedtermset": {
+                        "@type": "DefinedTermSet",
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "identifier": {
+                                "type": "string"
+                            },
+                            "url": {
+                                "type": "string",
+                                "format": "uri"
+                            }
+                        },
+                        "required": []
+                    },
+                    "propertyvalue": {
+                        "@type": "PropertyValue",
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "oneOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "type": "number"
+                                    }
+                                ]
+                            },
+                            "identifier": {
+                                "type": "string"
+                            },
+                            "valuereference": {
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/definitions/categorycode"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": [
+                                            {
+                                                "$ref": "#/definitions/categorycode"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            "unitCode": {
+                                "oneOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "string",
+                                        "format": "uri"
+                                    }
+                                ]
+                            },
+                            "unitText": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "value"
+                        ],
+                        "recommended": [
+                            "valueReference"
+                        ],
+                        "optional": [
+                            "unitCode",
+                            "unitText"
+                        ]
+                    },
+                    "categorycode": {
+                        "@type": "CategoryCode",
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "codeValue": {
+                                "type": "string"
+                            },
+                            "url": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "codeValue",
+                            "url"
+                        ]
+                    },
+                    "imageobject": {
+                        "@type": "ImageObject",
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "url": {
+                                "type": "string",
+                                "format": "uri"
+                            }
+                        },
+                        "required": []
+                    }
+                }
+            }
+        },
+        {
+            "@id": "bioschemas:biochemicalInteraction",
+            "rdfs:comment": "A BioChemEntity that is known to interact with the item.",
+            "@type": "rdf:Property",
+            "rdfs:label": "biochemicalInteraction",
+            "schema:domainIncludes": {
+                "@id": "bioschemas:MolecularEntity"
+            },
+            "schema:rangeIncludes": [
+                {
+                    "@id": "bioschemastypes:BioChemEntity"
+                }
+            ]
+        },
+        {
+            "@id": "bioschemas:biochemicalSimilarity",
+            "rdfs:comment": "A similar molecular entity, e.g., obtained by fingerprint similarity algorithms.",
+            "@type": "rdf:Property",
+            "rdfs:label": "biochemicalSimilarity",
+            "schema:domainIncludes": {
+                "@id": "bioschemas:MolecularEntity"
+            },
+            "schema:rangeIncludes": [
+                {
+                    "@id": "bioschemastypes:BioChemEntity"
+                }
+            ]
+        }
+    ]
+}

@@ -15,6 +15,12 @@ here](https://wehi-soda-hub.github.io/RdfCrate/)**.
 - Valid JSON-LD guaranteed
 - Type checker friendly
 
+## Installation
+
+``` bash
+pip install rdfcrate
+```
+
 ## Example
 
 Let’s say you have a directory with one file in it, which you want to
@@ -35,14 +41,14 @@ print(crate.compile())
       "@context": "https://w3id.org/ro/crate/1.1/context",
       "@graph": [
         {
-          "@id": ".",
-          "@type": "Dataset"
-        },
-        {
           "@id": "salvatore.jpg",
           "@type": "File",
           "encodingFormat": "image/jpeg",
           "name": "Salvatore the Seal"
+        },
+        {
+          "@id": ".",
+          "@type": "Dataset"
         },
         {
           "@id": "ro-crate-metadata.json",

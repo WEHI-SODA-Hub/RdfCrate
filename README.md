@@ -13,7 +13,6 @@ here](https://wehi-soda-hub.github.io/RdfCrate/)**.
 - Library of types and properties to speed up development and ensure
   correctness
 - Valid JSON-LD guaranteed
-- Leverage `rdflib` to query your crate
 - Type checker friendly
 
 ## Example
@@ -40,6 +39,12 @@ print(crate.compile())
           "@type": "Dataset"
         },
         {
+          "@id": "salvatore.jpg",
+          "@type": "File",
+          "encodingFormat": "image/jpeg",
+          "name": "Salvatore the Seal"
+        },
+        {
           "@id": "ro-crate-metadata.json",
           "@type": "File",
           "about": {
@@ -49,12 +54,6 @@ print(crate.compile())
             "@id": "https://w3id.org/ro/crate/1.1"
           },
           "encodingFormat": "application/json"
-        },
-        {
-          "@id": "salvatore.jpg",
-          "@type": "File",
-          "encodingFormat": "image/jpeg",
-          "name": "Salvatore the Seal"
         }
       ]
     }

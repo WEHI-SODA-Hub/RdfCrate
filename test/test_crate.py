@@ -3,11 +3,26 @@ from rdfcrate import uris, AttachedCrate, spec_version
 from rdflib import RDF, Literal, URIRef, Graph
 import json
 from datetime import datetime
+from itertools import chain
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
+
+def check_has_part(graph: Graph):
+    for data_entity in chain(
+        graph.subjects(predicate=RDF.type, object=uris.Dataset),
+        graph.subjects(predicate=RDF.type, object=uris.File),
+    ):
+        # Each data entity should be the object of exactly one hasPart relation
+        subject = graph.value(predicate=uris.hasPart, object=data_entity, any=False)
+        # And the subject of that relation should be a Dataset
+        assert graph.value(subject, RDF.type) == uris.Dataset
+
+
 def test_spec_conformant():
-    crate = AttachedCrate(path=TEST_CRATE, recursive_init=False, version=spec_version.ROCrate1_1)
+    crate = AttachedCrate(
+        path=TEST_CRATE, recursive_init=False, version=spec_version.ROCrate1_1
+    )
     # Normally checking JSON-LD using JSON is a bad idea, but RO-Crate mandates a specific structure that
     # goes beyond standard JSON-LD
     crate_json = json.loads(crate.compile())
@@ -34,25 +49,45 @@ def test_spec_conformant():
     assert found_metadata
     assert found_root
 
+
 def test_single_file():
     crate = AttachedCrate(path=TEST_CRATE)
     crate.register_file("text.txt")
 
     # Check that the graph has the expected structure
-    assert set(crate.graph.subjects()) == {URIRef("./"), URIRef("ro-crate-metadata.json"), URIRef("text.txt")}
+    assert set(crate.graph.subjects()) == {
+        URIRef("./"),
+        URIRef("ro-crate-metadata.json"),
+        URIRef("text.txt"),
+    }
     assert set(crate.graph.predicates()) >= {RDF.type, uris.about, uris.conformsTo}
     assert set(crate.graph.objects()) >= {uris.File, uris.Dataset}
+
+    check_has_part(crate.graph)
 
     # Check that we can round-trip the graph
     Graph().parse(data=crate.compile(), format="json-ld")
 
+
 def test_recursive_add():
     crate = AttachedCrate(path=TEST_CRATE, recursive_init=True)
-    assert set(crate.graph.subjects()) == {URIRef("./"), URIRef("ro-crate-metadata.json"), URIRef("text.txt"), URIRef("binary.bin"), URIRef("subdir/"), URIRef("subdir/more_text.txt")}, "All files and directories should be in the crate"
-    assert set(crate.graph.objects(URIRef("./"), uris.hasPart)) == {URIRef("ro-crate-metadata.json"), URIRef("text.txt"), URIRef("binary.bin"), URIRef("subdir/")}, "Root should have all files and directories as parts"
+    assert set(crate.graph.subjects()) == {
+        URIRef("./"),
+        URIRef("ro-crate-metadata.json"),
+        URIRef("text.txt"),
+        URIRef("binary.bin"),
+        URIRef("subdir/"),
+        URIRef("subdir/more_text.txt"),
+    }, "All files and directories should be in the crate"
+    check_has_part(crate.graph)
+
 
 def test_mime_type():
     crate = AttachedCrate(path=TEST_CRATE, recursive_init=True)
-    
-    assert crate.graph.value(URIRef("text.txt"), uris.encodingFormat) == Literal("text/plain")
-    assert crate.graph.value(URIRef("ro-crate-metadata.json"), uris.encodingFormat) == Literal("application/json")
+
+    assert crate.graph.value(URIRef("text.txt"), uris.encodingFormat) == Literal(
+        "text/plain"
+    )
+    assert crate.graph.value(
+        URIRef("ro-crate-metadata.json"), uris.encodingFormat
+    ) == Literal("application/json")

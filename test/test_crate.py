@@ -79,6 +79,7 @@ def test_recursive_add():
         URIRef("subdir/"),
         URIRef("subdir/more_text.txt"),
     }, "All files and directories should be in the crate"
+    assert crate.graph.value(predicate=uris.hasPart, object=URIRef("subdir/more_text.txt")) == URIRef("subdir/"), "Recursive add should link the immediate child and parent via hasPart"
     check_has_part(crate.graph)
 
 

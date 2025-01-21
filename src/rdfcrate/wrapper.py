@@ -33,8 +33,13 @@ class RoCrate(metaclass=ABCMeta):
     "Version of the RO-Crate specification to use"
 
     name: InitVar[str]
+    "Name of the RO-Crate. Will be attached to the root dataset."
+    
     description: InitVar[str]
+    "Description of the RO-Crate. Will be attached to the root dataset."
+
     license: InitVar[str | URIRef]
+    "License of the RO-Crate. Will be attached to the root dataset. Ideally this should be a URI, that links to a License entity"
 
     @property
     @abstractmethod

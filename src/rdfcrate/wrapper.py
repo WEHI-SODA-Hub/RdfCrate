@@ -14,17 +14,20 @@ Double = tuple[URIRef, Literal | IdentifiedNode]
 Attributes = Iterable[Double]
 Type = Iterable[URIRef]
 
+
 def has_predicate(double: Iterable[Double], predicate: URIRef) -> bool:
     """
     Checks if an attribute list contains a specific predicate
     """
     return any(pred == predicate for pred, _ in double)
 
+
 @dataclass
 class RoCrate(metaclass=ABCMeta):
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """
+
     graph: Graph = field(init=False, default_factory=Graph)
     """
     `rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available.
@@ -34,7 +37,7 @@ class RoCrate(metaclass=ABCMeta):
 
     name: InitVar[str]
     "Name of the RO-Crate. Will be attached to the root dataset."
-    
+
     description: InitVar[str]
     "Description of the RO-Crate. Will be attached to the root dataset."
 
@@ -49,7 +52,9 @@ class RoCrate(metaclass=ABCMeta):
         """
         pass
 
-    def add_entity(self, id: IdentifiedNode, type: Type, attrs: Attributes = []) -> IdentifiedNode:
+    def add_entity(
+        self, id: IdentifiedNode, type: Type, attrs: Attributes = []
+    ) -> IdentifiedNode:
         """
         Adds any type of entity to the crate
 
@@ -74,7 +79,9 @@ class RoCrate(metaclass=ABCMeta):
         self.add_metadata(id, attrs)
         return id
 
-    def link_to_dataset(self, entity: IdentifiedNode, dataset: IdentifiedNode | None) -> None:
+    def link_to_dataset(
+        self, entity: IdentifiedNode, dataset: IdentifiedNode | None
+    ) -> None:
         """
         Links a data entity to a Dataset.
 
@@ -88,7 +95,15 @@ class RoCrate(metaclass=ABCMeta):
             dataset = self.root_data_entity
         self.add_metadata(dataset, [(uris.hasPart, entity)])
 
-    def register_file(self, path: str, attrs: Attributes = [], *, guess_mime: bool = True, dataset: IdentifiedNode | None = None, **kwargs: Any) -> IdentifiedNode:
+    def register_file(
+        self,
+        path: str,
+        attrs: Attributes = [],
+        *,
+        guess_mime: bool = True,
+        dataset: IdentifiedNode | None = None,
+        **kwargs: Any,
+    ) -> IdentifiedNode:
         """
         Adds file metadata to the crate
 
@@ -114,7 +129,9 @@ class RoCrate(metaclass=ABCMeta):
 
         if guess_mime:
             if has_predicate(attrs, uris.encodingFormat):
-                raise ValueError("Cannot guess MIME type when encodingFormat is provided")
+                raise ValueError(
+                    "Cannot guess MIME type when encodingFormat is provided"
+                )
             guess_type, _guess_encoding = mimetypes.guess_type(path)
             if guess_type is not None:
                 self.add_metadata(file_id, [(uris.encodingFormat, Literal(guess_type))])
@@ -123,7 +140,14 @@ class RoCrate(metaclass=ABCMeta):
 
         return file_id
 
-    def register_dir(self, path: str, attrs: Attributes = {}, *, dataset: IdentifiedNode | None = None, **kwargs: Any) -> IdentifiedNode:
+    def register_dir(
+        self,
+        path: str,
+        attrs: Attributes = {},
+        *,
+        dataset: IdentifiedNode | None = None,
+        **kwargs: Any,
+    ) -> IdentifiedNode:
         """
         Adds metadata for a directory
 
@@ -134,7 +158,7 @@ class RoCrate(metaclass=ABCMeta):
             path: Path to the directory, which must be within the crate root
             attrs: Attributes used to describe the `Dataset` entity
             dataset: Dataset entity that the file should be linked to. If not provided, the file will be linked to the root dataset.
-                Note that 
+                Note that
 
         Example:
             ```python
@@ -176,11 +200,13 @@ class RoCrate(metaclass=ABCMeta):
         """
         return self.graph.serialize(format="json-ld", context=self.version.context)
 
+
 @dataclass
 class AttachedCrate(RoCrate):
     """
     See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#attached-ro-crate>
     """
+
     path: InitVar[str | Path]
     "The RO-Crate directory"
     root: Path = field(init=False)
@@ -189,18 +215,36 @@ class AttachedCrate(RoCrate):
     #: If true, automatically initialize the crate with all files and directories in the root
     recursive_init: InitVar[bool] = field(default=False, kw_only=True)
 
-    def __post_init__(self, name: str, description: str, license: str | URIRef, path: Path | str, recursive_init: bool = False):
+    def __post_init__(
+        self,
+        name: str,
+        description: str,
+        license: str | URIRef,
+        path: Path | str,
+        recursive_init: bool = False,
+    ):
         self.root = Path(path)
-        root_dataset = self.register_dir(self.root, recursive=recursive_init, attrs=[
-            (uris.datePublished, Literal(datetime.now().isoformat())),
-            (uris.name, Literal(name)),
-            (uris.description, Literal(description)),
-            (uris.license, license if isinstance(license, URIRef) else Literal(license)),
-        ])
-        self.add_entity(URIRef(self._resolve_path(self._metadata_path)), type=[uris.CreativeWork], attrs=[
-            (uris.conformsTo, URIRef(self.version.conforms_to)),
-            (uris.about, root_dataset),
-        ])
+        root_dataset = self.register_dir(
+            self.root,
+            recursive=recursive_init,
+            attrs=[
+                (uris.datePublished, Literal(datetime.now().isoformat())),
+                (uris.name, Literal(name)),
+                (uris.description, Literal(description)),
+                (
+                    uris.license,
+                    license if isinstance(license, URIRef) else Literal(license),
+                ),
+            ],
+        )
+        self.add_entity(
+            URIRef(self._resolve_path(self._metadata_path)),
+            type=[uris.CreativeWork],
+            attrs=[
+                (uris.conformsTo, URIRef(self.version.conforms_to)),
+                (uris.about, root_dataset),
+            ],
+        )
 
     @property
     def metadata_entity(self) -> IdentifiedNode:
@@ -237,14 +281,23 @@ class AttachedCrate(RoCrate):
         if path.is_absolute():
             # Absolute paths are accepted, but must be within the crate root
             if not path.is_relative_to(self.root):
-                raise ValueError(f"Path ({path}) must be within the crate root ({self.root})")
+                raise ValueError(
+                    f"Path ({path}) must be within the crate root ({self.root})"
+                )
         else:
             # Relative paths are assumed to be relative to the crate root
             path = self.root / path
 
         return path.relative_to(self.root).as_posix()
 
-    def register_file(self, path: Path | str, attrs: Attributes = [], *, add_size: bool = False, **kwargs: Any):
+    def register_file(
+        self,
+        path: Path | str,
+        attrs: Attributes = [],
+        *,
+        add_size: bool = False,
+        **kwargs: Any,
+    ):
         """
         See [`RoCrate.register_file`][rdfcrate.wrapper.RoCrate.register_file].
 
@@ -257,10 +310,19 @@ class AttachedCrate(RoCrate):
         if add_size:
             if has_predicate(attrs, uris.contentSize):
                 raise ValueError("Cannot add size when contentSize is provided")
-            self.add_metadata(URIRef(file_id), [(uris.contentSize, Literal(stat(path).st_size))])
+            self.add_metadata(
+                URIRef(file_id), [(uris.contentSize, Literal(stat(path).st_size))]
+            )
         return ret
 
-    def register_dir(self, path: Path | str, attrs: Attributes = [], *, recursive: bool = False, **kwargs: Any):
+    def register_dir(
+        self,
+        path: Path | str,
+        attrs: Attributes = [],
+        *,
+        recursive: bool = False,
+        **kwargs: Any,
+    ):
         """
         See [`RoCrate.register_dir`][rdfcrate.wrapper.RoCrate.register_dir].
 
@@ -283,6 +345,7 @@ class AttachedCrate(RoCrate):
                     self.register_file(child, dataset=id)
         return id
 
+
 @dataclass
 class DetatchedCrate(RoCrate):
     """
@@ -290,11 +353,12 @@ class DetatchedCrate(RoCrate):
 
     See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#detached-ro-crate>
     """
+
     root: str
 
     @property
     def root_data_entity(self) -> IdentifiedNode:
         return URIRef(self.root)
 
-    def __post_init__(self):
+    def __post_init__(self, name: str, description: str, license: str | URIRef):
         self.register_dir(self.root)

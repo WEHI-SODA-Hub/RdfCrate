@@ -32,6 +32,10 @@ class RoCrate(metaclass=ABCMeta):
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
     "Version of the RO-Crate specification to use"
 
+    name: InitVar[str]
+    description: InitVar[str]
+    license: InitVar[str | URIRef]
+
     @property
     @abstractmethod
     def root_data_entity(self) -> IdentifiedNode:
@@ -141,7 +145,9 @@ class RoCrate(metaclass=ABCMeta):
             path += "/"
         dir_id = URIRef(path)
         self.add_entity(dir_id, [uris.Dataset], attrs)
-        self.link_to_dataset(dir_id, dataset)
+        if self.root_data_entity != dir_id:
+            # The root dataset is not linked to itself
+            self.link_to_dataset(dir_id, dataset)
         return dir_id
 
     def add_metadata(self, entity: IdentifiedNode, attrs: Attributes) -> IdentifiedNode:
@@ -178,22 +184,32 @@ class AttachedCrate(RoCrate):
     #: If true, automatically initialize the crate with all files and directories in the root
     recursive_init: InitVar[bool] = field(default=False, kw_only=True)
 
-    def __post_init__(self, path: Path | str, recursive_init: bool = False):
+    def __post_init__(self, name: str, description: str, license: str | URIRef, path: Path | str, recursive_init: bool = False):
         self.root = Path(path)
         root_dataset = self.register_dir(self.root, recursive=recursive_init, attrs=[
-            (uris.datePublished, Literal(datetime.now().isoformat()))
+            (uris.datePublished, Literal(datetime.now().isoformat())),
+            (uris.name, Literal(name)),
+            (uris.description, Literal(description)),
+            (uris.license, license if isinstance(license, URIRef) else Literal(license)),
         ])
-        self.add_entity(URIRef(self._resolve_path(self._ro_crate_metadata)), type=[uris.CreativeWork], attrs=[
+        self.add_entity(URIRef(self._resolve_path(self._metadata_path)), type=[uris.CreativeWork], attrs=[
             (uris.conformsTo, URIRef(self.version.conforms_to)),
             (uris.about, root_dataset),
         ])
+
+    @property
+    def metadata_entity(self) -> IdentifiedNode:
+        """
+        The metadata entity of the RO-Crate
+        """
+        return URIRef(self._resolve_path(self._metadata_path))
 
     @property
     def root_data_entity(self) -> IdentifiedNode:
         return URIRef("./")
 
     @property
-    def _ro_crate_metadata(self) -> Path:
+    def _metadata_path(self) -> Path:
         """
         Path to the RO-Crate metadata file
         """
@@ -203,7 +219,7 @@ class AttachedCrate(RoCrate):
         """
         Writes the RO-Crate to `ro-crate-metadata.json`
         """
-        self._ro_crate_metadata.write_text(self.compile())
+        self._metadata_path.write_text(self.compile())
 
     def _resolve_path(self, path: Path | str) -> str:
         """
@@ -253,6 +269,9 @@ class AttachedCrate(RoCrate):
 
         if recursive:
             for child in Path(path).iterdir():
+                if child == self._metadata_path or self.root:
+                    # Never register the metadata file or the root directory
+                    continue
                 if child.is_dir():
                     self.register_dir(child, recursive=True, dataset=id)
                 else:

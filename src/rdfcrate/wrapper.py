@@ -274,7 +274,7 @@ class AttachedCrate(RoCrate):
 
         if recursive:
             for child in Path(path).iterdir():
-                if child == self._metadata_path or self.root:
+                if child in {self._metadata_path, self.root}:
                     # Never register the metadata file or the root directory
                     continue
                 if child.is_dir():

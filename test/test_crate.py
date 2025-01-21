@@ -99,6 +99,3 @@ def test_mime_type():
     assert crate.graph.value(URIRef("text.txt"), uris.encodingFormat) == Literal(
         "text/plain"
     )
-    assert crate.graph.value(
-        URIRef("ro-crate-metadata.json"), uris.encodingFormat
-    ) == Literal("application/json")

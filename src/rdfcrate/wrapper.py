@@ -224,27 +224,26 @@ class AttachedCrate(RoCrate):
         recursive_init: bool = False,
     ):
         self.root = Path(path)
+
+        attrs: list[tuple[URIRef, URIRef | Literal]] = [
+            (uris.datePublished, Literal(datetime.now().isoformat())),
+            (uris.name, Literal(name)),
+        ]
+        # Append optional attributes
+        if description:
+            attrs.append((uris.description, Literal(description)))
+        if license:
+            attrs.append(
+                (
+                    uris.license,
+                    license if isinstance(license, URIRef) else Literal(license),
+                )
+            )
+
         root_dataset = self.register_dir(
             self.root,
             recursive=recursive_init,
-            attrs=[
-                (uris.datePublished, Literal(datetime.now().isoformat())),
-                (uris.name, Literal(name)),
-                # Conditionally spread optional metadata
-                *([(uris.description, Literal(description))] if description else []),
-                *(
-                    [
-                        (
-                            uris.license,
-                            license
-                            if isinstance(license, URIRef)
-                            else Literal(license),
-                        )
-                    ]
-                    if license
-                    else []
-                ),
-            ],
+            attrs=attrs,
         )
         self.add_entity(
             URIRef(self._resolve_path(self._metadata_path)),

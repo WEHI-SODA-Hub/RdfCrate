@@ -225,7 +225,7 @@ class AttachedCrate(RoCrate):
     ):
         self.root = Path(path)
 
-        attrs: list[tuple[URIRef, URIRef | Literal]] = [
+        attrs: list[Double] = [
             (uris.datePublished, Literal(datetime.now().isoformat())),
             (uris.name, Literal(name)),
         ]

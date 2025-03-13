@@ -38,11 +38,11 @@ class RoCrate(metaclass=ABCMeta):
     name: InitVar[str]
     "Name of the RO-Crate. Will be attached to the root dataset."
 
-    description: InitVar[str]
-    "Description of the RO-Crate. Will be attached to the root dataset."
+    description: InitVar[str | None]
+    "Description of the RO-Crate (optional). Will be attached to the root dataset if defined."
 
-    license: InitVar[str | URIRef]
-    "License of the RO-Crate. Will be attached to the root dataset. Ideally this should be a URI, that links to a License entity"
+    license: InitVar[str | URIRef | None]
+    "License of the RO-Crate (optional). Will be attached to the root dataset if defined. Ideally this should be a URI, that links to a License entity"
 
     @property
     @abstractmethod
@@ -218,8 +218,8 @@ class AttachedCrate(RoCrate):
     def __post_init__(
         self,
         name: str,
-        description: str,
-        license: str | URIRef,
+        description: str | None,
+        license: str | URIRef | None,
         path: Path | str,
         recursive_init: bool = False,
     ):
@@ -230,10 +230,19 @@ class AttachedCrate(RoCrate):
             attrs=[
                 (uris.datePublished, Literal(datetime.now().isoformat())),
                 (uris.name, Literal(name)),
-                (uris.description, Literal(description)),
-                (
-                    uris.license,
-                    license if isinstance(license, URIRef) else Literal(license),
+                # Conditionally spread optional metadata
+                *([(uris.description, Literal(description))] if description else []),
+                *(
+                    [
+                        (
+                            uris.license,
+                            license
+                            if isinstance(license, URIRef)
+                            else Literal(license),
+                        )
+                    ]
+                    if license
+                    else []
                 ),
             ],
         )
@@ -360,5 +369,7 @@ class DetatchedCrate(RoCrate):
     def root_data_entity(self) -> IdentifiedNode:
         return URIRef(self.root)
 
-    def __post_init__(self, name: str, description: str, license: str | URIRef):
+    def __post_init__(
+        self, name: str, description: str | None, license: str | URIRef | None
+    ):
         self.register_dir(self.root)

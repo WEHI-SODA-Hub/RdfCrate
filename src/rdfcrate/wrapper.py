@@ -38,11 +38,11 @@ class RoCrate(metaclass=ABCMeta):
     name: InitVar[str]
     "Name of the RO-Crate. Will be attached to the root dataset."
 
-    description: InitVar[str | None]
-    "Description of the RO-Crate (optional). Will be attached to the root dataset if defined."
+    description: InitVar[str]
+    "Description of the RO-Crate. Will be attached to the root dataset."
 
-    license: InitVar[str | URIRef | None]
-    "License of the RO-Crate (optional). Will be attached to the root dataset if defined. Ideally this should be a URI, that links to a License entity"
+    license: InitVar[str | URIRef]
+    "License of the RO-Crate. Will be attached to the root dataset. Ideally this should be a URI, that links to a License entity"
 
     @property
     @abstractmethod
@@ -218,32 +218,24 @@ class AttachedCrate(RoCrate):
     def __post_init__(
         self,
         name: str,
-        description: str | None,
-        license: str | URIRef | None,
+        description: str,
+        license: str | URIRef,
         path: Path | str,
         recursive_init: bool = False,
     ):
         self.root = Path(path)
-
-        attrs: list[Double] = [
-            (uris.datePublished, Literal(datetime.now().isoformat())),
-            (uris.name, Literal(name)),
-        ]
-        # Append optional attributes
-        if description:
-            attrs.append((uris.description, Literal(description)))
-        if license:
-            attrs.append(
-                (
-                    uris.license,
-                    license if isinstance(license, URIRef) else Literal(license),
-                )
-            )
-
         root_dataset = self.register_dir(
             self.root,
             recursive=recursive_init,
-            attrs=attrs,
+            attrs=[
+                (uris.datePublished, Literal(datetime.now().isoformat())),
+                (uris.name, Literal(name)),
+                (uris.description, Literal(description)),
+                (
+                    uris.license,
+                    license if isinstance(license, URIRef) else Literal(license),
+                ),
+            ],
         )
         self.add_entity(
             URIRef(self._resolve_path(self._metadata_path)),
@@ -368,7 +360,5 @@ class DetatchedCrate(RoCrate):
     def root_data_entity(self) -> IdentifiedNode:
         return URIRef(self.root)
 
-    def __post_init__(
-        self, name: str, description: str | None, license: str | URIRef | None
-    ):
+    def __post_init__(self, name: str, description: str, license: str | URIRef):
         self.register_dir(self.root)

@@ -195,7 +195,7 @@ class RoCrate(metaclass=ABCMeta):
             self.graph.add((entity, pred, obj))
         return entity
 
-    def compile(self, context: Context = {}) -> str:
+    def compile(self, extra_context: Context | None = None) -> str:
         """
         Compiles the RO-Crate to a JSON-LD string
 
@@ -204,7 +204,15 @@ class RoCrate(metaclass=ABCMeta):
         """
         # Serializer kwargs are annoyingly not listed in the docs.
         # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
-        return self.graph.serialize(format="json-ld", context=[self.version.context, context])
+        if extra_context is not None:
+            context = [
+                self.version.context,
+                extra_context,
+            ]
+        else:
+            context = self.version.context
+
+        return self.graph.serialize(format="json-ld", context=context)
 
 
 @dataclass

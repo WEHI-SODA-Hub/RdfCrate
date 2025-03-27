@@ -11,22 +11,59 @@ from rocrate_validator.utils import URI
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
+MIT = URIRef("https://opensource.org/license/mit")
+ME = URIRef("https://orcid.org/0000-0002-8965-2595")
+WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
+
+BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
+
 def test_crate(recursive: bool = False):
-    return AttachedCrate(
+    crate = AttachedCrate(
         name="Test Crate",
         description="Crate for validating RdfCrate",
-        license="MIT",
+        license=MIT,
         path=TEST_CRATE,
         recursive_init=recursive,
         version=spec_version.ROCrate1_1
     )
+    crate.add_entity(
+        MIT,
+        type=[uris.CreativeWork],
+        attrs=[
+            (uris.title, Literal("MIT License")),
+        ]
+    )
+    crate.add_entity(
+        ME,
+        type=[uris.Person],
+        attrs=[
+            (uris.name, Literal("Michael")),
+            (uris.affiliation, WEHI_RCP),
+        ]
+    )
+    crate.add_entity(
+        WEHI_RCP,
+        type=[uris.Organization],
+        attrs=[
+            (uris.name, Literal("WEHI Research Computing Platform")),
+            (uris.url, WEHI_RCP),
+        ]
+    )
+    crate.add_metadata(
+        crate.root_data_entity,
+        [
+            (uris.author, ME),
+            (uris.publisher, WEHI_RCP)
+        ]
+    )
+    return crate
 
 def validate(crate: AttachedCrate):
     crate.write()
     result = services.validate(services.ValidationSettings(
         rocrate_uri=URI(crate.root),
         profile_identifier="ro-crate-1.1",
-        requirement_severity=models.Severity.REQUIRED
+        requirement_severity=models.Severity.RECOMMENDED
     ))
     for issue in result.get_issues():
         pytest.fail(f"Detected issue of severity {issue.severity.name} with check \"{issue.check.identifier}\": {issue.message}")
@@ -70,6 +107,7 @@ def test_single_file():
         URIRef("./"),
         URIRef("ro-crate-metadata.json"),
         URIRef("text.txt"),
+        *BASE_SUBJECTS
     }
     assert set(crate.graph.predicates()) >= {RDF.type, uris.about, uris.conformsTo}
     assert set(crate.graph.objects()) >= {uris.File, uris.Dataset}
@@ -89,6 +127,7 @@ def test_recursive_add():
         URIRef("binary.bin"),
         URIRef("subdir/"),
         URIRef("subdir/more_text.txt"),
+        *BASE_SUBJECTS
     }, "All files and directories should be in the crate"
     assert crate.graph.value(predicate=uris.hasPart, object=URIRef("subdir/more_text.txt")) == URIRef("subdir/"), "Recursive add should link the immediate child and parent via hasPart"
     validate(crate)

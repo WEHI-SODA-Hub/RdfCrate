@@ -7,6 +7,7 @@ from dataclasses import InitVar, dataclass, field
 import mimetypes
 from os import stat
 from datetime import datetime
+from rdfcrate.context import Context
 
 #: Predicate-object tuple
 Double = tuple[URIRef, Literal | IdentifiedNode]
@@ -128,11 +129,16 @@ class RoCrate:
             self.graph.add((entity, pred, obj))
         return entity
 
-    def compile(self) -> str:
+    def compile(self, context: Context = {}) -> str:
         """
         Compiles the RO-Crate to a JSON-LD string
+
+        Params:
+            context: Additional context used to define compact JSON-LD terms. This is actually required if you use any custom terms that aren't in the crate. See: https://www.researchobject.org/ro-crate/specification/1.1/structure.html#ro-crate-metadata-file-ro-crate-metadatajson. You can use utility functions in [`rdfcrate.context`][rdfcrate.context] to generate this.
         """
-        return self.graph.serialize(format="json-ld", context=self.version.context)
+        # Serializer kwargs are annoyingly not listed in the docs.
+        # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
+        return self.graph.serialize(format="json-ld", context=[self.version.context, context])
 
 @dataclass
 class AttachedCrate(RoCrate):

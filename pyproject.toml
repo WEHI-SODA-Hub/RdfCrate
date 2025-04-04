@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-rdfcrate = "rdfcrate:main"
+rdfcrate-codegen = "rdfcrate.codegen:main"
 
 [build-system]
 requires = ["hatchling"]

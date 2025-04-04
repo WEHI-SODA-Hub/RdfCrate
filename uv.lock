@@ -290,7 +290,7 @@ name = "click"
 version = "8.1.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b9/2e/0090cbf739cee7d23781ad4b89a9894a41538e4fcf4c31dcdd705b78eb8b/click-8.1.8.tar.gz", hash = "sha256:ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a", size = 226593 }
 wheels = [
@@ -630,7 +630,7 @@ name = "ipykernel"
 version = "6.29.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "appnope", marker = "platform_system == 'Darwin'" },
+    { name = "appnope", marker = "sys_platform == 'darwin'" },
     { name = "comm" },
     { name = "debugpy" },
     { name = "ipython" },
@@ -1116,7 +1116,7 @@ version = "1.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
-    { name = "colorama", marker = "platform_system == 'Windows'" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
     { name = "ghp-import" },
     { name = "jinja2" },
     { name = "markdown" },
@@ -1946,6 +1946,7 @@ dev = [
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "roc-validator", specifier = ">=0.5.0" },
+    { name = "roc-validator", specifier = ">=0.6.3" },
     { name = "tabulate", specifier = ">=0.9.0" },
 ]
 
@@ -2127,7 +2128,7 @@ wheels = [
 
 [[package]]
 name = "roc-validator"
-version = "0.5.0"
+version = "0.6.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -2142,9 +2143,9 @@ dependencies = [
     { name = "rich-click" },
     { name = "toml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/04/96/a51316c08b007a14a55691e493a79a868b3e37c9eefd3209239ed6929434/roc_validator-0.5.0.tar.gz", hash = "sha256:43e0b6b2f2ba1d5c0b55a18c022dc34b777f0ab66f1b8ae011e6a61199ac8e84", size = 94103 }
+sdist = { url = "https://files.pythonhosted.org/packages/a5/73/0e93cd74664c8c0a7825bca33c6a96616856116a4ffd9d53894c00dc5e35/roc_validator-0.6.3.tar.gz", hash = "sha256:88e5aa5d9292ccc729fe30b8e27072501ec4549f30f04fa5fe8fef4f995f8b90", size = 95238 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5a/57/36c7ff970c088649755a4285bf3f8c95ef0551ffee7fbf640709399020d7/roc_validator-0.5.0-py3-none-any.whl", hash = "sha256:5d1116d5665e77bcfd52112869c9dbbfff5c4cc615a431a13e0131521d252f5e", size = 183292 },
+    { url = "https://files.pythonhosted.org/packages/9d/3d/53314cc584993cb72f56799044b822be103fe918eef984c6b513ba625819/roc_validator-0.6.3-py3-none-any.whl", hash = "sha256:72352ee6ebbfbb2fafea58374898bf6b8cd1b055b326bd53188a37acf129c0f0", size = 189441 },
 ]
 
 [[package]]

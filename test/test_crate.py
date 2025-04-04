@@ -1,11 +1,10 @@
 from pathlib import Path
 
 import pytest
-from rdfcrate import uris, AttachedCrate, spec_version
+from rdfcrate import uris, AttachedCrate, spec_version, bioschemas
 from rdflib import RDF, Literal, URIRef, Graph
 import json
 from datetime import datetime
-from itertools import chain
 from rocrate_validator import services, models
 from rocrate_validator.utils import URI
 
@@ -138,4 +137,14 @@ def test_mime_type():
 
     assert crate.graph.value(URIRef("text.txt"), uris.encodingFormat) == Literal(
         "text/plain"
+    )
+
+def test_bioschemas():
+    crate = test_crate(recursive=False)
+    crate.add_entity(
+        id=URIRef("#some_protocol"),
+        type=[bioschemas.LabProtocol],
+        attrs=[
+            (uris.name, Literal("Some Protocol")),
+        ]
     )

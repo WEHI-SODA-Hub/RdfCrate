@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Any, Iterable
 from rdflib import Graph, URIRef, Literal, RDF, IdentifiedNode
 from rdfcrate import uris
+from rdfcrate.property_list import RdfType, PropertyList
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
 from dataclasses import InitVar, dataclass, field
 import mimetypes
@@ -52,6 +53,9 @@ class RoCrate(metaclass=ABCMeta):
         The root entity of the RO-Crate
         """
         pass
+
+    # def add_rdf_entityFields(self, type: type[RdfType], uri: URIRef, subjects: PropertyList | None = None, objects: PropertyList | None = None) -> RdfType:
+
 
     def add_entity(
         self, id: IdentifiedNode, type: Type, attrs: Attributes = []

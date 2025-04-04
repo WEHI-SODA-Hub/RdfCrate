@@ -7,7 +7,7 @@ from typing import Annotated, Any, ClassVar, Mapping, NewType, Protocol, Self, T
 from rdflib import Graph, Literal, URIRef, RDF
 from rdflib.term import Identifier
 
-from rdfcrate.property_list import PropertyList, RdfType
+from rdfcrate.rdftype import PropertyList, RdfType
 from rdfcrate.rdfterm import RdfTerm
 
 

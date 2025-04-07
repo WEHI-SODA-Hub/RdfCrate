@@ -5,10 +5,12 @@ import ast
 import itertools
 from typing import Any, Iterable, cast
 import keyword
-from rdflib import Graph, RDFS, RDF, SDO, URIRef
+from rdflib import Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from itertools import chain
 import argparse
+
+from rdflib.term import Identifier
 from rdfcrate.spec_version import all_specs, SpecVersion
 from graphlib import TopologicalSorter
 
@@ -30,22 +32,32 @@ def sanitize_cls_name(name: str) -> str:
     """
     Sanitizes a class name to be a valid Python identifier
     """
-    if not name.isidentifier():
+    if not name.isidentifier() or keyword.iskeyword(name):
         return f"_{name}"
     return name
+
+def triple_in_graph(graph: Graph, subject: IdentifiedNode, predicate: URIRef, object: IdentifiedNode) -> bool:
+    """
+    Checks if a triple is in the graph, checking both http and https versions of the subject
+    """
+    if (URIRef(subject.replace("http:", "https:")), predicate, object) in graph:
+        return True
+    if (URIRef(subject.replace("https:", "http:")), predicate, object) in graph:
+        return True
+    return False
+
 
 def property_range(graph: Graph, prop: URIRef) -> ast.expr:
     """
     Returns the range of a property, as a type annotation
     """
-    # range_name = "RdfType"
     range_options = []
     for range_ in itertools.chain(
         graph.objects(subject=prop, predicate=RDFS.range),
         graph.objects(subject=prop, predicate=SDO.rangeIncludes),
     ):
         # Check if the range is a class
-        if (range_, RDF.type, RDFS.Class) in graph:
+        if triple_in_graph(graph, range_, RDF.type, RDFS.Class):
             _, _, range_name = graph.compute_qname(range_)
             range_options.append(range_name)
     if len(range_options) == 0:
@@ -55,15 +67,43 @@ def property_range(graph: Graph, prop: URIRef) -> ast.expr:
         # If one range is found, use it
         return ast.Name(range_options[0])
     elif len(range_options) > 1:
-        # If multiple ranges are found, use a union of the ranges
-        return ast.Subscript(
-            value=ast.Name("Union"),
-            slice=ast.Tuple(elts=[ast.Name(range_name) for range_name in range_options])
+        # If multiple ranges are found, use a type union with `|`
+        union_expr = ast.BinOp(
+            left=ast.Name(range_options[0]),
+            op=ast.BitOr(),
+            right=ast.Name(range_options[1])
         )
+        for range_name in range_options[2:]:
+            union_expr = ast.BinOp(
+                left=union_expr,
+                op=ast.BitOr(),
+                right=ast.Name(range_name)
+            )
+        return union_expr
 
     raise ValueError(f"Could not determine range for property {prop}. No range found.")
 
-def properties_from_rdfs(graph: Graph, context_map: ContextMap) -> Iterable[ast.AnnAssign]:
+def term_with_specs(term: str, uri: str, contexts: ContextMap) -> ast.Call:
+    """
+    Creates the Python code for something like:
+    ```python
+    RdfTerm('CoverArt', 'http://schema.org/CoverArt', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+    ```
+    """
+    return ast.Call(
+        func=ast.Name("RdfTerm"),
+        args=[
+            ast.Constant(term),
+            ast.Constant(uri),
+            ast.List([
+                # Add RO-Crate specs that this term is defined in
+                ast.Constant(spec.version) for spec, ctx in contexts.items() if ctx.get(term) == uri
+            ])
+        ],
+        keywords=[]
+    )
+
+def properties_from_rdfs(graph: Graph, context_map: ContextMap) -> Iterable[ast.ClassDef]:
     """
     Creates a PropertyList subclass from RDFS definitions
 
@@ -77,28 +117,34 @@ def properties_from_rdfs(graph: Graph, context_map: ContextMap) -> Iterable[ast.
     for prop in graph.subjects(predicate=RDF.type, object=RDF.Property, unique=True):
         _, _, name = graph.compute_qname(prop)
 
-        yield ast.AnnAssign(
-            target=ast.Name(camel_to_snake(name)),
-            annotation=ast.Subscript(
-                value=ast.Name("Annotated"),
-                slice=ast.Tuple(elts=[
-                    ast.Subscript(
-                        value=ast.Name("list"),
-                        slice=property_range(graph, prop)
-                    ),
-                    ast.Call(
-                        func=ast.Name("RdfTerm"),
-                        args=[
-                            ast.Constant(name),
-                            ast.Constant(str(prop))
-                        ],
-                        keywords=[]
-                    )
-                ])
-            ),
-            value=None,
-            simple=1
+        """
+        e.g. 
+        @dataclass(frozen=True)
+        class image:
+            term = RdfTerm("image", "https://schema.org/image")
+            object: ImageObject
+        """
+        yield ast.ClassDef(
+            name=sanitize_cls_name(name),
+            type_params=[],
+            bases=[ast.Name("RdfProperty")],
+            keywords=[],
+            body=[
+                ast.Assign(
+                    targets=[ast.Name("term")],
+                    value=term_with_specs(name, str(prop), context_map),
+                    type_comment=None
+                ),
+                ast.AnnAssign(
+                    target=ast.Name("object"),
+                    annotation=property_range(graph, prop),
+                    value=None,
+                    simple=1
+                )
+            ],
+            decorator_list=[]
         )
+
 
 def properties_from_context(context: dict) -> Iterable[ast.AnnAssign]:
     """
@@ -205,7 +251,7 @@ def classes_from_rdfs(graph: Graph, context_map: ContextMap) -> Iterable[ast.Cla
     for cls_name in sorter.static_order():
         yield classes[cls_name]
 
-def type_module(name: str, classes: Iterable[ast.ClassDef], properties: Iterable[ast.AnnAssign]) -> ast.Module:
+def type_module(name: str, classes: Iterable[ast.ClassDef], properties: Iterable[ast.ClassDef]) -> ast.Module:
     """
     Creates an RdfType subclass from RDFS definitions
     e.g.
@@ -238,53 +284,17 @@ def type_module(name: str, classes: Iterable[ast.ClassDef], properties: Iterable
                 level=0
             ),
             ast.ImportFrom(
+                module="rdfcrate.rdfprop",
+                names=[ast.alias("RdfProperty")],
+                level=0
+            ),
+            ast.ImportFrom(
                 module="rdfcrate.rdfterm",
                 names=[ast.alias("RdfTerm")],
                 level=0
             ),
             *list(classes),
-            ast.ClassDef(
-                name=name.title(),
-                type_params=[],
-                bases=[ast.Name("TypedDict")],
-                keywords=[ast.keyword(
-                    "total", ast.Constant(False)
-                )],
-                body=list(properties),
-                decorator_list=[]
-            )
-        ], type_ignores=[])
-    )
-
-
-def properties_module(name: str, properties: Iterable[ast.AnnAssign]) -> ast.Module:
-    return ast.fix_missing_locations(
-        ast.Module([
-            ast.ImportFrom(
-                module="typing",
-                names=[ast.alias("TypedDict", None)],
-                level=0
-            ),
-            ast.ImportFrom(
-                module="rdfcrate.rdfterm",
-                names=[ast.alias("RdfTerm", None)],
-                level=0
-            ),
-            ast.ImportFrom(
-                module="rdfcrate.rdftype",
-                names=[ast.alias("RdfType", None)],
-                level=0
-            ),
-            ast.ClassDef(
-                name=name.title(),
-                type_params=[],
-                bases=[ast.Name("TypedDict")],#ast.Name("PropertyList")],
-                keywords=[ast.keyword(
-                    "total", ast.Constant(False)
-                )],
-                body=list(properties),
-                decorator_list=[]
-            )
+            *list(properties),
         ], type_ignores=[])
     )
 
@@ -316,22 +326,6 @@ def main():
     ret = type_module(args.name, classes_from_rdfs(graph, specs), properties_from_rdfs(graph, specs))
 
     print(ast.unparse(ret))
-
-    # if args.type == "class":
-    # else:
-    #     if args.mode == "context":
-    #         context = Context(args.input[0])
-    #         context = cast(dict, context)
-    #         properties = properties_from_context(context)
-    #     else:
-    #         # Load the RDF graph
-    #         graph = Graph()
-    #         for input_file in args.input:
-    #             graph.parse(input_file)
-
-    #         properties = properties_from_rdfs(graph)
-
-    #     print(ast.unparse(properties_module(args.name, properties)))
 
 if __name__ == "__main__":
     main()

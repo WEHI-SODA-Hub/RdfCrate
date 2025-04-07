@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Any, Iterable
 from rdflib import Graph, URIRef, Literal, RDF, IdentifiedNode
 from rdfcrate import uris
-from rdfcrate.rdftype import RdfType, PropertyList
+from rdfcrate.rdftype import RdfType
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
 from dataclasses import InitVar, dataclass, field
 import mimetypes

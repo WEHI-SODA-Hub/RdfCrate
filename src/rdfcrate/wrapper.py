@@ -210,11 +210,11 @@ class RoCrate(metaclass=ABCMeta):
         # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
         if extra_context is not None:
             context = [
-                self.version.context,
+                self.version.context_url,
                 extra_context,
             ]
         else:
-            context = self.version.context
+            context = self.version.context_url
 
         return self.graph.serialize(format="json-ld", context=context)
 
@@ -259,7 +259,7 @@ class AttachedCrate(RoCrate):
             URIRef(self._resolve_path(self._metadata_path)),
             type=[uris.CreativeWork],
             attrs=[
-                (uris.conformsTo, URIRef(self.version.conforms_to)),
+                (uris.conformsTo, URIRef(self.version.conforms_to_url)),
                 (uris.about, root_dataset),
             ],
         )

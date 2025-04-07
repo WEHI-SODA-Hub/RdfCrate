@@ -1,6 +1,5 @@
 from rdflib import URIRef
 
-
 class RdfTerm:
     """
     Wrapper for a term with a label and URI.
@@ -10,7 +9,10 @@ class RdfTerm:
     label: str
     #: The URI of the term
     uri: URIRef
+    #: List of RO-Crate versions numbers for which this term is automatically included in the context 
+    specs: list[str]
 
-    def __init__(self, label: str, term: str) -> None:
+    def __init__(self, label: str, term: str, specs: list[str] = []) -> None:
         self.label = label
         self.uri = URIRef(term)
+        self.specs = specs

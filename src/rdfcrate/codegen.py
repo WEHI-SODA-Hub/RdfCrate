@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Annotated, Any, Iterable, cast
 import keyword
 from typing_extensions import Doc
-from rdflib import Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef
+from rdflib import BNode, Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from itertools import chain
 import argparse
@@ -21,6 +21,7 @@ VOCABS = [
     "https://bioschemas.org/types/bioschemas_types.jsonld",
     "https://bioschemas.org/types/bioschemas_draft_types.jsonld",
     "https://schema.org/version/latest/schemaorg-current-http.jsonld",
+    "https://www.w3.org/2000/01/rdf-schema",
     "https://www.w3.org/1999/02/22-rdf-syntax-ns",
     "https://pcdm.org/models.rdf",
     "https://www.w3.org/ns/prov.ttl",
@@ -32,63 +33,96 @@ VOCABS = [
 
 @dataclass
 class CodegenState:
-    context_map: dict[SpecVersion, dict[str, Any]] = field(default_factory=dict)
+    context_map: dict[SpecVersion, dict[str, Any]] = field(init=False)
     #: A map of URIs to Python modules in which they are located. This is used for resolving imports "
-    term_map: dict[str, str] = field(default_factory=dict)
+    term_map: dict[str, str] = field(init=False)
     #: List of class definitions. Functions should append to this to define new classes.
-    classes: list[ast.ClassDef] = field(default_factory=list)
+    classes: list[ast.ClassDef] = field(init=False)
     #: List of imports, which can be appended to.
-    imports: list[ast.ImportFrom] = field(default_factory=list)
+    imports: list[str] = field(init=False)
 
     graph: Graph = field(default_factory=Graph)
 
     def __post_init__(self):
-        self.imports = [
-            ast.ImportFrom(
-                module="__future__",
-                names=[ast.alias("annotations")],
-                level=0
-            ),
-            ast.ImportFrom(
-                module="typing",
-                names=[
-                    ast.alias("TypedDict"),
-                    ast.alias("Annotated"),
-                ],
-                level=0
-            ),
-            ast.ImportFrom(
-                module="rdflib.term",
-                names=[ast.alias("Identifier")],
-                level=0
-            ),
-            ast.ImportFrom(
-                module="rdfcrate.rdfdatatype",
-                names=[ast.alias("RdfDataType")],
-                level=0
-            ),
-            ast.ImportFrom(
-                module="rdfcrate.rdfclass",
-                names=[ast.alias("RdfClass")],
-                level=0
-            ),
-            ast.ImportFrom(
-                module="rdfcrate.rdfprop",
-                names=[ast.alias("RdfProperty")],
-                level=0
-            ),
-            ast.ImportFrom(
-                module="rdfcrate.rdfterm",
-                names=[ast.alias("RdfTerm")],
-                level=0
-            )
-        ]
-
+        # This only needs to be done once, not per vocabulary
+        self.context_map = {}
         for spec in all_specs:
             self.context_map[spec] = spec.get_context()
 
-    def reset_graph(self):
+        self.term_map = {}
+
+        # This setup is done per-vocabulary
+        self.reset()
+
+    def reset(self):
+        """
+        Called when a new vocabulary needs to be processed
+        """
         self.graph = Graph()
+        self.classes = []
+        self.imports = [
+            "__future__.annotations",
+            "rdflib.term.Identifier",
+            "rdfcrate.rdfdatatype.RdfDataType",
+            "rdfcrate.rdfclass.RdfClass",
+            "rdfcrate.rdfprop.RdfProperty",
+            "rdfcrate.rdfterm.RdfTerm",
+        ]
+        
+        # [
+        #     ast.ImportFrom(
+        #         module="__future__",
+        #         names=[ast.alias("annotations")],
+        #         level=0
+        #     ),
+        #     ast.ImportFrom(
+        #         module="typing",
+        #         names=[
+        #             ast.alias("TypedDict"),
+        #             ast.alias("Annotated"),
+        #         ],
+        #         level=0
+        #     ),
+        #     ast.ImportFrom(
+        #         module="rdflib.term",
+        #         names=[ast.alias("Identifier")],
+        #         level=0
+        #     ),
+        #     ast.ImportFrom(
+        #         module="rdfcrate.rdfdatatype",
+        #         names=[ast.alias("RdfDataType")],
+        #         level=0
+        #     ),
+        #     ast.ImportFrom(
+        #         module="rdfcrate.rdfclass",
+        #         names=[ast.alias("RdfClass")],
+        #         level=0
+        #     ),
+        #     ast.ImportFrom(
+        #         module="rdfcrate.rdfprop",
+        #         names=[ast.alias("RdfProperty")],
+        #         level=0
+        #     ),
+        #     ast.ImportFrom(
+        #         module="rdfcrate.rdfterm",
+        #         names=[ast.alias("RdfTerm")],
+        #         level=0
+        #     )
+        # ]
+
+    def add_import(self, uri: str) -> None:
+        imp  = self.term_map[uri]
+        if imp not in self.imports:
+            self.imports.append(imp)
+
+    def import_stmts(self) -> Iterable[ast.ImportFrom]:
+        for imp in self.imports:
+            module, name = imp.rsplit(".", 1)
+            yield ast.ImportFrom(
+                module=module,
+                names=[ast.alias(name)],
+                level=0
+            )
 
     def property_range(self, prop: URIRef) -> ast.expr:
         """
@@ -99,10 +133,15 @@ class CodegenState:
             self.graph.objects(subject=prop, predicate=RDFS.range),
             self.graph.objects(subject=prop, predicate=SDO.rangeIncludes),
         ):
-            # Check if the range is a class
+            _, _, range_name = self.graph.compute_qname(range_)
             if triple_in_graph(self.graph, range_, RDF.type, RDFS.Class):
-                _, _, range_name = self.graph.compute_qname(range_)
+                # If the range is a class in the current graph, use it directly
                 range_options.append(range_name)
+            elif range_ in self.term_map:
+                # Import the range type from the other module
+                range_options.append(range_name)
+                self.add_import(range_)
+
         if len(range_options) == 0:
             # If no range is found, use the default
             return ast.Name("Identifier")
@@ -146,7 +185,7 @@ class CodegenState:
             keywords=[]
         )
 
-    def properties_from_rdfs(self, module_base: str):
+    def properties_from_rdfs(self, module_base: str) -> None:
         """
         Creates a PropertyList subclass from RDFS definitions
 
@@ -194,7 +233,7 @@ class CodegenState:
                 decorator_list=[]
             ))
 
-    def datatypes_from_rdfs(self, module_base: str) -> Iterable[ast.ClassDef]:
+    def datatypes_from_rdfs(self, module_base: str):
         """
         Creates a list of datatypes from RDFS definitions
         e.g.
@@ -203,15 +242,15 @@ class CodegenState:
             field = RdfTerm("field", "https://schema.org/field")
         ```
         """
-        for datatype in graph.subjects(predicate=RDF.type, object=RDFS.Datatype, unique=True):
-            if datatype in term_map:
+        for datatype in self.graph.subjects(predicate=RDF.type, object=RDFS.Datatype, unique=True):
+            if datatype in self.term_map:
                 # Skip datatypes that are already defined
                 continue
 
-            _, _, name = graph.compute_qname(datatype)
+            _, _, name = self.graph.compute_qname(datatype)
             # Register this URI as being defined in this module
-            term_map[datatype] = f"{module_base}.{name}"
-            yield ast.ClassDef(
+            self.term_map[datatype] = f"{module_base}.{name}"
+            self.classes.append(ast.ClassDef(
                 name=sanitize_cls_name(name),
                 type_params=[],
                 bases=[ast.Name("RdfDataType")],
@@ -219,14 +258,14 @@ class CodegenState:
                 body=[
                     ast.Assign(
                         targets=[ast.Name("term")],
-                        value=term_with_specs(name, str(datatype), contexts),
+                        value=self.term_with_specs(name, str(datatype)),
                         type_comment=None
                     )
                 ],
                 decorator_list=[]
-            )
+            ))
 
-    def classes_from_rdfs(self, module_base: str) -> Iterable[ast.stmt]:
+    def classes_from_rdfs(self, module_base: str) -> None:
         """
         Creates a list of classes from RDFS definitions
         """
@@ -234,7 +273,6 @@ class CodegenState:
         classes: dict[str, ast.ClassDef] = {}
         # Map of class names to the parent classes they depend on
         class_deps: dict[str, list[str]] = {}
-        imports: list[ast.ImportFrom] = []
         for cls_uri in self.graph.subjects(predicate=RDF.type, object=RDFS.Class, unique=True):
             if cls_uri in self.term_map:
                 # Skip classes that are already defined
@@ -242,26 +280,32 @@ class CodegenState:
 
             # Compute the short term name by removing the base URI
             _, _, term_name = self.graph.compute_qname(cls_uri)
+            cls_name = sanitize_cls_name(term_name)
             
             # Determine the base classes from rdfs:subClassOf
             bases: list[ast.Name] = []
             for superclass_uri in self.graph.objects(subject=cls_uri, predicate=RDFS.subClassOf):
+                if isinstance(superclass_uri, BNode):
+                    # Skip blank node superclasses
+                    continue
+                _, _, superclass_term = self.graph.compute_qname(superclass_uri)
+                superclass_name = sanitize_cls_name(superclass_term)
+
                 if (superclass_uri, RDF.type, RDFS.Class) in self.graph:
-                    _, _, superclass_term = self.graph.compute_qname(superclass_uri)
-                    superclass_name = sanitize_cls_name(superclass_term)
                     bases.append(ast.Name(superclass_name))
-                    if superclass_uri in self.term_map:
-                        # If we find a previously defined superclass, we need to import it
-                        imports.append(ast.ImportFrom(
-                            module=self.term_map[superclass_uri],
-                            names=[ast.alias(superclass_name)],
-                            level=0
-                        ))
+                    # Update dependencies, but only if it's in the current class
+                    class_deps[cls_name] = [base.id for base in bases if base.id != "RdfClass"]
+                elif superclass_uri in self.term_map:
+                    # If we find a previously defined superclass, we need to import it
+                    class_deps[cls_name] = []
+                    self.add_import(superclass_uri)
+                    bases.append(ast.Name(superclass_name))
+                else:
+                    pass
                         
             if len(bases) == 0:
                 bases = [ast.Name("RdfClass")]
 
-            cls_name = sanitize_cls_name(term_name)
             classes[cls_name] = ast.ClassDef(
                 name=cls_name,
                 type_params=[],
@@ -277,13 +321,11 @@ class CodegenState:
                 decorator_list=[]
             )
             self.term_map[cls_uri] = f"{module_base}.{cls_name}"
-            # Update dependencies
-            class_deps[cls_name] = [base.id for base in bases if base.id != "RdfClass"]
         
         # Sort the classes topologically so that parent classes are defined before child classes
         sorter = TopologicalSorter(class_deps)
-        sorted_classes = [ classes[cls_name] for cls_name in sorter.static_order() ]
-        return imports + sorted_classes
+        for cls_name in sorter.static_order():
+            self.classes.append(classes[cls_name])
 
     def type_module(self, module_base: str) -> ast.Module:
         """
@@ -295,7 +337,7 @@ class CodegenState:
 
         return ast.fix_missing_locations(
             ast.Module([
-                *self.imports,
+                *self.import_stmts(),
                 *self.classes
             ], type_ignores=[])
         )
@@ -397,7 +439,7 @@ def schema_org_https(graph: Graph):
     Rewrites the schema.org URIs in the graph to use http instead of https
     """
     for triple in graph:
-        new_triple = tuple([uri.replace("http://schema.org/", "https://schema.org/") for uri in triple])
+        new_triple = tuple([URIRef(uri.replace("http://schema.org/", "https://schema.org/")) if isinstance(uri, URIRef) else uri for uri in triple])
         if triple != new_triple:
             graph.remove(triple)
             graph.add(new_triple)
@@ -412,18 +454,21 @@ def generate_modules(vocabs: dict[str, list[str]], base_module: str, out_dir: Pa
     """
     state = CodegenState()
     for vocab, uris in vocabs.items():
-        state.reset_graph()
+        state.reset()
         for uri in uris:
             state.graph.parse(uri)
-        module = state.type_module(base_module)
+        schema_org_https(state.graph)
+        module = state.type_module(f"{base_module}.{vocab}")
         out_path = out_dir / f"{vocab}.py"
         out_path.write_text(ast.unparse(module))
 
 def core_vocab():
     generate_modules({
+        "rdfs": ["https://www.w3.org/2000/01/rdf-schema"],
         "rdf": ["https://www.w3.org/1999/02/22-rdf-syntax-ns"],
         "schemaorg": ["https://schema.org/version/latest/schemaorg-current-http.jsonld"],
-        "bioschemas": ["https://bioschemas.org/types/bioschemas_types.jsonld", "https://bioschemas.org/types/bioschemas_draft_types.jsonld"],
+        "bioschemas": ["https://bioschemas.org/types/bioschemas_types.jsonld"],
+        "bioschemas_drafts": ["https://bioschemas.org/types/bioschemas_draft_types.jsonld"],
         "pcdm": ["https://pcdm.org/models.rdf"],
         "prov": ["https://www.w3.org/ns/prov.ttl"],
         "pav": ["http://purl.org/pav"],

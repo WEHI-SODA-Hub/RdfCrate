@@ -7,7 +7,7 @@ from typing import Annotated, Any, ClassVar, Mapping, NewType, Protocol, Self, T
 from rdflib import Graph, Literal, URIRef, RDF
 from rdflib.term import Identifier
 
-from rdfcrate.rdftype import PropertyList, RdfType
+from rdfcrate.rdfclass import PropertyList, RdfClass
 from rdfcrate.rdfterm import RdfTerm
 
 
@@ -29,14 +29,14 @@ class Bioschemas:
 
 #     term = RdfTerm("Dataset", "https://schema.org/Dataset")
 
-class FormalParameter(RdfType):
+class FormalParameter(RdfClass):
     term = RdfTerm("FormalParameter", URIRef("https://bioschemas.org/FormalParameter"))
 
 class ComputationalWorkflowFields(PropertyList, Protocol):
     input: input
     output: output
 
-class ComputationalWorkflow(RdfType[ComputationalWorkflowFields]):
+class ComputationalWorkflow(RdfClass[ComputationalWorkflowFields]):
     term = RdfTerm("ComputationalWorkflow", URIRef("https://bioschemas.org/ComputationalWorkflow"))
 
 type input = Annotated[FormalParameter, RdfTerm("input", "https://bioschemas.org/properties/input")]

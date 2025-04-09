@@ -1,15 +1,19 @@
 from pathlib import Path
 from typing import Any, Iterable
+from typing_extensions import Doc
 from rdflib import Graph, URIRef, Literal, RDF, IdentifiedNode
 from rdfcrate import uris
-from rdfcrate.rdftype import RdfType
+from rdfcrate.rdfprop import RdfProperty, ReverseProperty
+from rdfcrate.rdfterm import RdfTerm
+from rdfcrate.rdfclass import RdfClass, EntityArgs, EntityUri
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
 from dataclasses import InitVar, dataclass, field
 import mimetypes
 from os import stat
 from datetime import datetime
-from rdfcrate.context import Context
+# from rdfcrate.context import Context
 from abc import ABCMeta, abstractmethod
+from rdflib.plugins.shared.jsonld.context import Context
 
 #: Predicate-object tuple
 Double = tuple[URIRef, Literal | IdentifiedNode]
@@ -31,20 +35,11 @@ class RoCrate(metaclass=ABCMeta):
     """
 
     graph: Graph = field(init=False, default_factory=Graph)
-    """
-    `rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available.
-    """
+    "`rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available."
+    context: Context = field(init=False, default_factory=Context)
+    "Collection of custom terms used in the RO-Crate. This is used to generate the JSON-LD context when serializing the crate."
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
     "Version of the RO-Crate specification to use"
-
-    name: InitVar[str]
-    "Name of the RO-Crate. Will be attached to the root dataset."
-
-    description: InitVar[str]
-    "Description of the RO-Crate. Will be attached to the root dataset."
-
-    license: InitVar[str | URIRef]
-    "License of the RO-Crate. Will be attached to the root dataset. Ideally this should be a URI, that links to a License entity"
 
     @property
     @abstractmethod
@@ -54,19 +49,27 @@ class RoCrate(metaclass=ABCMeta):
         """
         pass
 
-    # def add_rdf_entityFields(self, type: type[RdfType], uri: URIRef, subjects: PropertyList | None = None, objects: PropertyList | None = None) -> RdfType:
-
+    def register_terms(self, terms: Iterable[RdfTerm]) -> None:
+        for term in terms:
+            if self.version.version not in term.specs:
+                # Skip terms that are already in the RO-Crate context
+                self.context.add_term(
+                    term.label,
+                    term.uri
+                )
 
     def add_entity(
-        self, id: IdentifiedNode, type: Type, attrs: Attributes = []
+        self,
+        iri: EntityUri,
+        type: type[RdfClass],
+        *args: RdfProperty | ReverseProperty
     ) -> IdentifiedNode:
         """
         Adds any type of entity to the crate
 
         Params:
-            id: ID of the entity being added
+            iri: ID of the entity being added. This must be a valid URI or a relative path within the crate root.
             type: Type of the entity being added
-            attrs: Attributes of the entity being added
 
         Returns:
             The ID of the new entity
@@ -79,10 +82,8 @@ class RoCrate(metaclass=ABCMeta):
             crate.add_entity(BNode(), [uris.Person], [(uris.name, Literal("Alice"))])
             ```
         """
-        for t in type:
-            self.graph.add((id, RDF.type, t))
-        self.add_metadata(id, attrs)
-        return id
+        self.register_terms([arg.term for arg in args])
+        return type(self.graph, iri, *args)
 
     def link_to_dataset(
         self, entity: IdentifiedNode, dataset: IdentifiedNode | None
@@ -184,7 +185,7 @@ class RoCrate(metaclass=ABCMeta):
             self.link_to_dataset(dir_id, dataset)
         return dir_id
 
-    def add_metadata(self, entity: IdentifiedNode, attrs: Attributes) -> IdentifiedNode:
+    def add_metadata(self, uri: URIRef, *args: EntityArgs) -> IdentifiedNode:
         """
         Add metadata for an existing entity.
 
@@ -193,11 +194,10 @@ class RoCrate(metaclass=ABCMeta):
 
         Params:
             entity: ID of the entity being described
-            attrs: Attributes of the entity being described
         """
-        for pred, obj in attrs:
-            self.graph.add((entity, pred, obj))
-        return entity
+        for arg in args:
+            arg.add_to_graph(self.graph, uri)
+        return uri
 
     def compile(self, extra_context: Context | None = None) -> str:
         """

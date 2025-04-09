@@ -3,8 +3,10 @@ Generates URIs for everything in the RO-Crate context
 """
 import ast
 import itertools
-from typing import Any, Iterable, cast
+from pathlib import Path
+from typing import Annotated, Any, Iterable, cast
 import keyword
+from typing_extensions import Doc
 from rdflib import Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from itertools import chain
@@ -15,6 +17,20 @@ from rdfcrate.spec_version import all_specs, SpecVersion
 from graphlib import TopologicalSorter
 
 type ContextMap = dict[SpecVersion, dict[str, Any]]
+type TermMap = Annotated[dict[str, str], Doc("A map of URIs to Python modules in which they are located. This is used for resolving imports ")]
+
+VOCABS = [
+    "https://bioschemas.org/types/bioschemas_types.jsonld",
+    "https://bioschemas.org/types/bioschemas_draft_types.jsonld",
+    "https://schema.org/version/latest/schemaorg-current-http.jsonld",
+    "https://www.w3.org/1999/02/22-rdf-syntax-ns",
+    "https://pcdm.org/models.rdf",
+    "https://www.w3.org/ns/prov.ttl",
+    "http://purl.org/pav",
+    "https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl",
+    "https://www.w3.org/TR/dx-prof/rdf/prof.ttl",
+    "https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl"
+]
 
 def camel_to_snake(camel: str) -> str:
     segments = []
@@ -32,6 +48,7 @@ def sanitize_cls_name(name: str) -> str:
     """
     Sanitizes a class name to be a valid Python identifier
     """
+    name = name.replace("-", "_")
     if not name.isidentifier() or keyword.iskeyword(name):
         return f"_{name}"
     return name
@@ -62,7 +79,7 @@ def property_range(graph: Graph, prop: URIRef) -> ast.expr:
             range_options.append(range_name)
     if len(range_options) == 0:
         # If no range is found, use the default
-        return ast.Name("RdfType")
+        return ast.Name("Identifier")
     elif len(range_options) == 1:
         # If one range is found, use it
         return ast.Name(range_options[0])
@@ -170,7 +187,7 @@ def properties_from_context(context: dict) -> Iterable[ast.AnnAssign]:
                 slice=ast.Tuple(elts=[
                     ast.Subscript(
                         value=ast.Name("list"),
-                        slice=ast.Name("RdfType")  # Context mode does not handle ranges
+                        slice=ast.Name("RdfClass")
                     ),
                     ast.Call(
                         func=ast.Name("RdfTerm"),
@@ -190,45 +207,58 @@ def properties_from_context(context: dict) -> Iterable[ast.AnnAssign]:
             simple=1
         )
 
-def classes_from_rdfs(graph: Graph, context_map: ContextMap) -> Iterable[ast.ClassDef]:
+def datatypes_from_rdfs(graph: Graph, contexts: ContextMap, module_base: str, term_map: dict[str, str]) -> Iterable[ast.ClassDef]:
     """
-    Creates a list of classes from RDFS definitions
+    Creates a list of datatypes from RDFS definitions
     e.g.
     ```
-    class ComputationalWorkflow(RdfType):
+    class Html(RdfDataType):
         field = RdfTerm("field", "https://schema.org/field")
     ```
+    """
+    for datatype in graph.subjects(predicate=RDF.type, object=RDFS.Datatype, unique=True):
+        _, _, name = graph.compute_qname(datatype)
+        yield ast.ClassDef(
+            name=sanitize_cls_name(name),
+            type_params=[],
+            bases=[ast.Name("RdfDataType")],
+            keywords=[],
+            body=[
+                ast.Assign(
+                    targets=[ast.Name("term")],
+                    value=term_with_specs(name, str(datatype), contexts),
+                    type_comment=None
+                )
+            ],
+            decorator_list=[]
+        )
+
+def classes_from_rdfs(graph: Graph, context_map: ContextMap, module_base: str, term_map: dict[str, str]) -> Iterable[ast.ClassDef]:
+    """
+    Creates a list of classes from RDFS definitions
     """
     # Map of class names to their definitions
     classes: dict[str, ast.ClassDef] = {}
     # Map of class names to the parent classes they depend on
     class_deps: dict[str, list[str]] = {}
-    for cls in graph.subjects(predicate=RDF.type, object=RDFS.Class, unique=True):
-        _, _, name = graph.compute_qname(cls)
+    for cls_uri in graph.subjects(predicate=RDF.type, object=RDFS.Class, unique=True):
+        if cls_uri in term_map:
+            # Skip classes that are already defined
+            continue
+
+        # Compute the short term name by removing the base URI
+        _, _, term_name = graph.compute_qname(cls_uri)
         
         # Determine the base classes from rdfs:subClassOf
         bases: list[ast.Name] = []
-        for superclass in graph.objects(subject=cls, predicate=RDFS.subClassOf):
+        for superclass in graph.objects(subject=cls_uri, predicate=RDFS.subClassOf):
             if (superclass, RDF.type, RDFS.Class) in graph:
                 _, _, superclass_name = graph.compute_qname(superclass)
                 bases.append(ast.Name(sanitize_cls_name(superclass_name)))
         if len(bases) == 0:
-            bases = [ast.Name("RdfType")]
+            bases = [ast.Name("RdfClass")]
 
-        term = ast.Call(
-            func=ast.Name("RdfTerm"),
-            args=[
-                ast.Constant(name),
-                ast.Constant(str(cls)),
-                ast.List([
-                    # Add RO-Crate specs that this term is defined in
-                    ast.Constant(spec.version) for spec, ctx in context_map.items() if ctx.get(name) == str(cls)
-                ])
-            ],
-            keywords=[]
-        )
-
-        cls_name = sanitize_cls_name(name)
+        cls_name = sanitize_cls_name(term_name)
         classes[cls_name] = ast.ClassDef(
             name=cls_name,
             type_params=[],
@@ -237,32 +267,26 @@ def classes_from_rdfs(graph: Graph, context_map: ContextMap) -> Iterable[ast.Cla
             body=[
                 ast.Assign(
                     targets=[ast.Name("term")],
-                    value=term,
+                    value=term_with_specs(term_name, cls_uri, context_map),
                     type_comment=None
                 )
             ],
             decorator_list=[]
         )
+        term_map[cls_uri] = f"{module_base}.{cls_name}"
         # Update dependencies
-        class_deps[cls_name] = [base.id for base in bases if base.id != "RdfType"]
+        class_deps[cls_name] = [base.id for base in bases if base.id != "RdfClass"]
     
     # Sort the classes topologically so that parent classes are defined before child classes
     sorter = TopologicalSorter(class_deps)
     for cls_name in sorter.static_order():
         yield classes[cls_name]
 
-def type_module(name: str, classes: Iterable[ast.ClassDef], properties: Iterable[ast.ClassDef]) -> ast.Module:
+def type_module(graph: Graph, module_base: str, term_map: TermMap) -> ast.Module:
     """
-    Creates an RdfType subclass from RDFS definitions
-    e.g.
-    ```
-    from rdfcrate.rdftype import RdfType
-    from rdfcrate.rdfterm import RdfTerm
-
-    class ComputationalWorkflow(RdfType):
-        field = RdfTerm("field", "https://schema.org/field")
-    ```
+    Creates a module that lists all the classes and properties in the graph
     """
+    contexts = load_spec_contexts()
     return ast.fix_missing_locations(
         ast.Module([
             ast.ImportFrom(
@@ -279,8 +303,18 @@ def type_module(name: str, classes: Iterable[ast.ClassDef], properties: Iterable
                 level=0
             ),
             ast.ImportFrom(
-                module="rdfcrate.rdftype",
-                names=[ast.alias("RdfType")],
+                module="rdflib.term",
+                names=[ast.alias("Identifier")],
+                level=0
+            ),
+            ast.ImportFrom(
+                module="rdfcrate.rdfdatatype",
+                names=[ast.alias("RdfDataType")],
+                level=0
+            ),
+            ast.ImportFrom(
+                module="rdfcrate.rdfclass",
+                names=[ast.alias("RdfClass")],
                 level=0
             ),
             ast.ImportFrom(
@@ -293,15 +327,15 @@ def type_module(name: str, classes: Iterable[ast.ClassDef], properties: Iterable
                 names=[ast.alias("RdfTerm")],
                 level=0
             ),
-            *list(classes),
-            *list(properties),
+            *list(classes_from_rdfs(graph, contexts, module_base, term_map)),
+            *list(properties_from_rdfs(graph, contexts, module_base, term_map)),
+            *list(datatypes_from_rdfs(graph, contexts, module_base, term_map)),
         ], type_ignores=[])
     )
 
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate Python code for RDF properties")
-    parser.add_argument("input", type=str, help="Input RDF files", nargs="+")
-    parser.add_argument("--name", type=str, help="Name of the class to generate")
+    parser.add_argument("input", type=str, help="Input RDF files", nargs="*", default=VOCABS)
     return parser
 
 def load_spec_contexts() -> ContextMap:
@@ -313,19 +347,56 @@ def load_spec_contexts() -> ContextMap:
         contexts[spec] = spec.get_context()
     return contexts
 
-def main():
-    parser = get_parser()
-    args = parser.parse_args()
+def schema_org_https(graph: Graph):
+    """
+    Rewrites the schema.org URIs in the graph to use http instead of https
+    """
+    for triple in graph:
+        new_triple = tuple([uri.replace("http://schema.org/", "https://schema.org/") for uri in triple])
+        if triple != new_triple:
+            graph.remove(triple)
+            graph.add(new_triple)
 
-    specs = load_spec_contexts()
+def generate_modules(vocabs: dict[str, list[str]], out_dir: Path):
+    """
+    Generates a module in the given directory for each vocabulary
 
+    Params:
+        vocabs: A dictionary of vocabulary names to URIs RDFS URIs. This should be ordered such that dependencies like schema.org come first.
+        out_dir: The output directory
+    """
+    term_map: TermMap = {}
     graph = Graph()
-    for input_file in args.input:
-        graph.parse(input_file)
+    for vocab, uri in vocabs.items():
+        module = type_module(graph, vocab, term_map)
+        out_path = out_dir / f"{vocab}.py"
+        out_path.write_text(ast.unparse(module))
 
-    ret = type_module(args.name, classes_from_rdfs(graph, specs), properties_from_rdfs(graph, specs))
-
-    print(ast.unparse(ret))
+def core_vocab():
+    generate_modules({
+        "rdf": ["https://www.w3.org/1999/02/22-rdf-syntax-ns"],
+        "schemaorg": ["https://schema.org/version/latest/schemaorg-current-http.jsonld"],
+        "bioschemas": ["https://bioschemas.org/types/bioschemas_types.jsonld", "https://bioschemas.org/types/bioschemas_draft_types.jsonld"],
+        "pcdm": ["https://pcdm.org/models.rdf"],
+        "prov": ["https://www.w3.org/ns/prov.ttl"],
+        "pav": ["http://purl.org/pav"],
+        "dc": ["https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl"],
+        "prof": ["https://www.w3.org/TR/dx-prof/rdf/prof.ttl"],
+        "geo": ["https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl"]
+    }, Path("src/rdfcrate/vocabs"))
 
 if __name__ == "__main__":
-    main()
+    core_vocab()
+
+# def main():
+#     parser = get_parser()
+#     args = parser.parse_args()
+#     for input_file in args.input:
+#         graph.parse(input_file)
+
+#     ret = type_module(graph)
+
+#     print(ast.unparse(ret))
+
+# if __name__ == "__main__":
+#     main()

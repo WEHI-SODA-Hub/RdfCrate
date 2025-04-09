@@ -110,10 +110,20 @@ class CodegenState:
         #     )
         # ]
 
-    def add_import(self, uri: str) -> None:
+    def add_import(self, uri: str) -> str:
+        """
+        Given a URI, looks up the module it's defined in.
+        This might e.g. return `rdfcrate.vocabs.schemaorg.CoverArt`.
+        Then, we add an import to `rdfcrate.vocabs.schemaorg`.
+        Finally, we return `schemaorg.CoverArt` to allow for use in the code
+        """
         imp  = self.term_map[uri]
-        if imp not in self.imports:
-            self.imports.append(imp)
+        *a, b, c = imp.split(".")
+        
+        base = ".".join([*a, b])
+        if base not in self.imports:
+            self.imports.append(base)
+        return f"{b}.{c}"
 
     def import_stmts(self) -> Iterable[ast.ImportFrom]:
         for imp in self.imports:
@@ -139,8 +149,7 @@ class CodegenState:
                 range_options.append(range_name)
             elif range_ in self.term_map:
                 # Import the range type from the other module
-                range_options.append(range_name)
-                self.add_import(range_)
+                range_options.append(self.add_import(range_))
 
         if len(range_options) == 0:
             # If no range is found, use the default
@@ -298,8 +307,10 @@ class CodegenState:
                 elif superclass_uri in self.term_map:
                     # If we find a previously defined superclass, we need to import it
                     class_deps[cls_name] = []
-                    self.add_import(superclass_uri)
-                    bases.append(ast.Name(superclass_name))
+                    
+                    bases.append(ast.Name(
+                        self.add_import(superclass_uri)
+                    ))
                 else:
                     pass
                         

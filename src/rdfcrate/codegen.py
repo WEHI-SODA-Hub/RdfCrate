@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Annotated, Any, Iterable, cast
 import keyword
 from typing_extensions import Doc
-from rdflib import BNode, Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef
+from rdflib import OWL, BNode, Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from itertools import chain
 import argparse
@@ -143,6 +143,10 @@ class CodegenState:
             self.graph.objects(subject=prop, predicate=RDFS.range),
             self.graph.objects(subject=prop, predicate=SDO.rangeIncludes),
         ):
+            if isinstance(range_, BNode):
+                # Skip blank node ranges
+                continue
+
             _, _, range_name = self.graph.compute_qname(range_)
             if triple_in_graph(self.graph, range_, RDF.type, RDFS.Class):
                 # If the range is a class in the current graph, use it directly
@@ -205,7 +209,11 @@ class CodegenState:
             input: Annotated[list[FormalParameter], RdfTerm("input", "https://bioschemas.org/properties/input")] = field(default_factory=list)
         ```
         """
-        for prop in self.graph.subjects(predicate=RDF.type, object=RDF.Property, unique=True):
+        for prop in itertools.chain(
+            self.graph.subjects(predicate=RDF.type, object=RDF.Property, unique=True),
+            self.graph.subjects(predicate=RDF.type, object=OWL.DatatypeProperty, unique=True),
+            self.graph.subjects(predicate=RDF.type, object=OWL.ObjectProperty, unique=True),
+        ):
             if prop in self.term_map:
                 # Skip properties that are already defined
                 continue
@@ -282,9 +290,16 @@ class CodegenState:
         classes: dict[str, ast.ClassDef] = {}
         # Map of class names to the parent classes they depend on
         class_deps: dict[str, list[str]] = {}
-        for cls_uri in self.graph.subjects(predicate=RDF.type, object=RDFS.Class, unique=True):
+        for cls_uri in itertools.chain(
+            self.graph.subjects(predicate=RDF.type, object=RDFS.Class, unique=True),
+            self.graph.subjects(predicate=RDF.type, object=OWL.Class, unique=True)
+        ):
             if cls_uri in self.term_map:
                 # Skip classes that are already defined
+                continue
+
+            if isinstance(cls_uri, BNode):
+                # Skip blank node classes
                 continue
 
             # Compute the short term name by removing the base URI
@@ -293,6 +308,7 @@ class CodegenState:
             
             # Determine the base classes from rdfs:subClassOf
             bases: list[ast.Name] = []
+            class_deps[cls_name] = []
             for superclass_uri in self.graph.objects(subject=cls_uri, predicate=RDFS.subClassOf):
                 if isinstance(superclass_uri, BNode):
                     # Skip blank node superclasses
@@ -306,13 +322,9 @@ class CodegenState:
                     class_deps[cls_name] = [base.id for base in bases if base.id != "RdfClass"]
                 elif superclass_uri in self.term_map:
                     # If we find a previously defined superclass, we need to import it
-                    class_deps[cls_name] = []
-                    
                     bases.append(ast.Name(
                         self.add_import(superclass_uri)
                     ))
-                else:
-                    pass
                         
             if len(bases) == 0:
                 bases = [ast.Name("RdfClass")]

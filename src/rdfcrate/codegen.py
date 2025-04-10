@@ -8,8 +8,9 @@ from pathlib import Path
 from typing import Annotated, Any, Iterable, cast
 import keyword
 from typing_extensions import Doc
-from rdflib import OWL, BNode, Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef
+from rdflib import OWL, BNode, Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef, OWL
 from rdflib.plugins.shared.jsonld.context import Context
+from rdflib.query import ResultRow
 from itertools import chain
 import argparse
 
@@ -30,6 +31,57 @@ VOCABS = [
     "https://www.w3.org/TR/dx-prof/rdf/prof.ttl",
     "https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl"
 ]
+
+def find_classes(graph: Graph) -> Iterable[URIRef]:
+    """
+    Yields all classes that aren't literals
+    """
+    # These help us to find subclasses of OWL classes
+    graph.add((OWL.Class, RDFS.subClassOf, RDFS.Class))
+    for result in graph.query("""
+        SELECT DISTINCT ?class
+        WHERE {
+            # Follow any super class relationships
+            ?class rdfs:subClassOf* ?superclass .
+            ?superclass a rdfs:Class .
+            FILTER NOT EXISTS {
+                ?class rdfs:subClassOf* ?literal_superclass .
+                ?literal_superclass rdfs:subClassOf rdfs:Literal .
+            }
+            FILTER NOT EXISTS {
+                ?class rdfs:subClassOf* ?dt_superclass .
+                ?dt_superclass a schema:DataType .
+            }
+        }
+    """, initNs={"rdfs": RDFS, "schema": SDO}):
+        if isinstance(result, ResultRow):
+            yield result["class"]
+
+def find_datatypes(graph: Graph) -> Iterable[URIRef]:
+    """
+    Yields all datatypes that aren't classes
+    """
+    # These help us to find subclasses of RDF:Property
+    # graph.add((OWL.ObjectProperty, RDFS.subClassOf, RDF.Property))
+    # graph.add((OWL.DatatypeProperty, RDFS.subClassOf, RDF.Property))
+    # Schema.org datatypes are should be treated as datatypes, even though they aren't. 
+    # See https://github.com/schemaorg/schemaorg/issues/4325
+    for result in graph.query("""
+        SELECT DISTINCT ?class
+        WHERE {
+            {
+                ?class rdfs:subClassOf* ?superclass .
+                ?superclass a rdfs:Literal .
+            }
+            UNION 
+            {
+                ?class rdfs:subClassOf* ?superclass .
+                ?superclass a schema:DataType .
+            }
+        }
+    """, initNs={"rdfs": RDFS, "schema": SDO}):
+        if isinstance(result, ResultRow):
+            yield result[0]
 
 @dataclass
 class CodegenState:
@@ -58,7 +110,7 @@ class CodegenState:
         """
         Called when a new vocabulary needs to be processed
         """
-        self.graph = Graph()
+        # self.graph = Graph()
         self.classes = []
         self.imports = [
             "__future__.annotations",
@@ -148,12 +200,12 @@ class CodegenState:
                 continue
 
             _, _, range_name = self.graph.compute_qname(range_)
-            if triple_in_graph(self.graph, range_, RDF.type, RDFS.Class):
-                # If the range is a class in the current graph, use it directly
-                range_options.append(range_name)
-            elif range_ in self.term_map:
+            if range_ in self.term_map:
                 # Import the range type from the other module
                 range_options.append(self.add_import(range_))
+            elif (range_, RDF.type, RDFS.Class) in self.graph:
+                # If the range is a class in the current graph, use it directly
+                range_options.append(range_name)
 
         if len(range_options) == 0:
             # If no range is found, use the default
@@ -259,7 +311,7 @@ class CodegenState:
             field = RdfTerm("field", "https://schema.org/field")
         ```
         """
-        for datatype in self.graph.subjects(predicate=RDF.type, object=RDFS.Datatype, unique=True):
+        for datatype in find_datatypes(self.graph):
             if datatype in self.term_map:
                 # Skip datatypes that are already defined
                 continue
@@ -290,10 +342,7 @@ class CodegenState:
         classes: dict[str, ast.ClassDef] = {}
         # Map of class names to the parent classes they depend on
         class_deps: dict[str, list[str]] = {}
-        for cls_uri in itertools.chain(
-            self.graph.subjects(predicate=RDF.type, object=RDFS.Class, unique=True),
-            self.graph.subjects(predicate=RDF.type, object=OWL.Class, unique=True)
-        ):
+        for cls_uri in find_classes(self.graph):
             if cls_uri in self.term_map:
                 # Skip classes that are already defined
                 continue
@@ -302,13 +351,18 @@ class CodegenState:
                 # Skip blank node classes
                 continue
 
+            if (cls_uri, RDF.type, SDO.DataType) in self.graph:
+                # Skip schema.org datatypes, since they should not be treated as classes.
+                # See https://github.com/schemaorg/schemaorg/issues/4325
+                continue
+
             # Compute the short term name by removing the base URI
             _, _, term_name = self.graph.compute_qname(cls_uri)
             cls_name = sanitize_cls_name(term_name)
             
             # Determine the base classes from rdfs:subClassOf
             bases: list[ast.Name] = []
-            class_deps[cls_name] = []
+            class_deps[cls_uri] = []
             for superclass_uri in self.graph.objects(subject=cls_uri, predicate=RDFS.subClassOf):
                 if isinstance(superclass_uri, BNode):
                     # Skip blank node superclasses
@@ -316,20 +370,20 @@ class CodegenState:
                 _, _, superclass_term = self.graph.compute_qname(superclass_uri)
                 superclass_name = sanitize_cls_name(superclass_term)
 
-                if (superclass_uri, RDF.type, RDFS.Class) in self.graph:
-                    bases.append(ast.Name(superclass_name))
-                    # Update dependencies, but only if it's in the current class
-                    class_deps[cls_name] = [base.id for base in bases if base.id != "RdfClass"]
-                elif superclass_uri in self.term_map:
+                if superclass_uri in self.term_map:
                     # If we find a previously defined superclass, we need to import it
                     bases.append(ast.Name(
                         self.add_import(superclass_uri)
                     ))
+                elif (superclass_uri, RDF.type, RDFS.Class) in self.graph:
+                    bases.append(ast.Name(superclass_name))
+                    # Update dependencies, but only if it's in the current class
+                    class_deps[cls_uri].append(superclass_uri)
                         
             if len(bases) == 0:
                 bases = [ast.Name("RdfClass")]
 
-            classes[cls_name] = ast.ClassDef(
+            classes[cls_uri] = ast.ClassDef(
                 name=cls_name,
                 type_params=[],
                 bases=bases,
@@ -343,12 +397,14 @@ class CodegenState:
                 ],
                 decorator_list=[]
             )
-            self.term_map[cls_uri] = f"{module_base}.{cls_name}"
         
         # Sort the classes topologically so that parent classes are defined before child classes
         sorter = TopologicalSorter(class_deps)
-        for cls_name in sorter.static_order():
-            self.classes.append(classes[cls_name])
+        for cls_uri in sorter.static_order():
+            cls_def = classes[cls_uri]
+            self.classes.append(cls_def)
+            # Update the term map only at the end, so that future modules know how to import these classes
+            self.term_map[cls_uri] = f"{module_base}.{cls_def.name}"
 
     def type_module(self, module_base: str) -> ast.Module:
         """
@@ -489,15 +545,16 @@ def core_vocab():
     generate_modules({
         "rdfs": ["https://www.w3.org/2000/01/rdf-schema"],
         "rdf": ["https://www.w3.org/1999/02/22-rdf-syntax-ns"],
-        "schemaorg": ["https://schema.org/version/latest/schemaorg-current-http.jsonld"],
-        "bioschemas": ["https://bioschemas.org/types/bioschemas_types.jsonld"],
-        "bioschemas_drafts": ["https://bioschemas.org/types/bioschemas_draft_types.jsonld"],
+        "owl": ["https://www.w3.org/2002/07/owl"],
+        "dc": ["https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl"],
         "pcdm": ["https://pcdm.org/models.rdf"],
         "prov": ["https://www.w3.org/ns/prov.ttl"],
         "pav": ["http://purl.org/pav"],
-        "dc": ["https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl"],
         "prof": ["https://www.w3.org/TR/dx-prof/rdf/prof.ttl"],
-        "geo": ["https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl"]
+        "geo": ["https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl"],
+        "schemaorg": ["https://schema.org/version/latest/schemaorg-current-http.jsonld"],
+        "bioschemas": ["https://bioschemas.org/types/bioschemas_types.jsonld"],
+        "bioschemas_drafts": ["https://bioschemas.org/types/bioschemas_draft_types.jsonld"],
     }, "rdfcrate.vocabs", Path("src/rdfcrate/vocabs"))
 
 if __name__ == "__main__":

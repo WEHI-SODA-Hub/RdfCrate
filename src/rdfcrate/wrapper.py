@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Annotated, Any, Iterable
 from typing_extensions import Doc
 from rdflib import Graph, URIRef, Literal, RDF, IdentifiedNode
 from rdfcrate import uris
@@ -19,6 +19,7 @@ from rdflib.plugins.shared.jsonld.context import Context
 Double = tuple[URIRef, Literal | IdentifiedNode]
 Attributes = Iterable[Double]
 Type = Iterable[URIRef]
+type EntityType = Annotated[type[RdfClass], Doc("The main type of the entity to create. An entity can have multiple types, which you can specify using `rdf.type()`. However for static type checking, you should choose a main type that agrees with the property (predicate) that it will be linked to.")]
 
 
 def has_predicate(double: Iterable[Double], predicate: URIRef) -> bool:
@@ -61,15 +62,11 @@ class RoCrate(metaclass=ABCMeta):
     def add_entity(
         self,
         iri: EntityUri,
-        type: type[RdfClass],
+        type: EntityType,
         *args: RdfProperty | ReverseProperty
     ) -> IdentifiedNode:
         """
         Adds any type of entity to the crate
-
-        Params:
-            iri: ID of the entity being added. This must be a valid URI or a relative path within the crate root.
-            type: Type of the entity being added
 
         Returns:
             The ID of the new entity
@@ -77,9 +74,9 @@ class RoCrate(metaclass=ABCMeta):
         Example:
             ```python
             from rdflib import BNode,
-            from rdfcrate import uris
+            from rdfcrate.vocabs import schemaorg
 
-            crate.add_entity(BNode(), [uris.Person], [(uris.name, Literal("Alice"))])
+            crate.add_entity(BNode(), schemaorg.Person, schemaorg.name(Literal("Alice"))])
             ```
         """
         self.register_terms([arg.term for arg in args])

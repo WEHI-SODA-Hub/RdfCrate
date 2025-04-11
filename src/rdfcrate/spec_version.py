@@ -8,13 +8,18 @@ Attributes:
     ROCrate1_2: RO-Crate 1.2
 """
 from dataclasses import dataclass
+from rdflib import URIRef
 from requests import get
 
-@dataclass(frozen=True)
 class SpecVersion:
     version: str
-    context_url: str
-    conforms_to_url: str
+    context_url: URIRef
+    conforms_to_url: URIRef
+
+    def __init__(self, version: str, context_url: str, conforms_to_url: str):
+        self.version = version
+        self.context_url = URIRef(context_url)
+        self.conforms_to_url = URIRef(conforms_to_url)
 
     def get_context(self) -> dict:
         """Loads the context from the context URL."""

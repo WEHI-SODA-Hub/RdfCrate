@@ -5,37 +5,34 @@ import ast
 from dataclasses import dataclass, field
 import itertools
 from pathlib import Path
-from typing import Annotated, Any, Iterable, cast
+from typing import Any, Iterable
 import keyword
-from typing_extensions import Doc
 from rdflib import OWL, BNode, Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef, OWL
 from rdflib.plugins.shared.jsonld.context import Context
 from rdflib.query import ResultRow
-from itertools import chain
 import argparse
-from requests import get
 
-from rdflib.term import Identifier
 from rdfcrate.spec_version import all_specs, SpecVersion, ROCrate1_2
 from graphlib import TopologicalSorter
 
-VOCABS = [
-    "https://bioschemas.org/types/bioschemas_types.jsonld",
-    "https://bioschemas.org/types/bioschemas_draft_types.jsonld",
-    "https://schema.org/version/latest/schemaorg-current-http.jsonld",
-    "https://www.w3.org/2000/01/rdf-schema",
-    "https://www.w3.org/1999/02/22-rdf-syntax-ns",
-    "https://pcdm.org/models.rdf",
-    "https://www.w3.org/ns/prov.ttl",
-    "http://purl.org/pav",
-    "https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl",
-    "https://www.w3.org/TR/dx-prof/rdf/prof.ttl",
-    "https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl"
-]
+def frozen_dataclass_decorator() -> ast.expr:
+    """
+    Returns the frozen dataclass decorator
+    """
+    return ast.Call(
+        func=ast.Name("dataclass"),
+        args=[],
+        keywords=[
+            ast.keyword(
+                arg="frozen",
+                value=ast.Constant(value=True)
+            )
+        ]
+    )
 
 def find_classes(graph: Graph) -> Iterable[URIRef]:
     """
-    Yields all classes that aren't literals
+    Yields all classes that aren't Literals
     """
     # These help us to find subclasses of OWL classes
     graph.add((OWL.Class, RDFS.subClassOf, RDFS.Class))
@@ -76,9 +73,6 @@ def find_datatypes(graph: Graph) -> Iterable[URIRef]:
     """
     Yields all datatypes that aren't classes
     """
-    # These help us to find subclasses of RDF:Property
-    # graph.add((OWL.ObjectProperty, RDFS.subClassOf, RDF.Property))
-    # graph.add((OWL.DatatypeProperty, RDFS.subClassOf, RDF.Property))
     # Schema.org datatypes are should be treated as datatypes, even though they aren't. 
     # See https://github.com/schemaorg/schemaorg/issues/4325
     for result in graph.query("""
@@ -109,7 +103,7 @@ class CodegenState:
     imports: list[str] = field(init=False)
     #: Keeps track of which terms have already been defined. This helps when processing contexts, which duplicate many terms from the vocabs
     terms: set[tuple[str, str]] = field(init=False, default_factory=set)
-
+    #: The cumulative graph of all the vocabularies
     graph: Graph = field(default_factory=Graph)
 
     def __post_init__(self):
@@ -133,6 +127,7 @@ class CodegenState:
             "rdfcrate.rdfclass.RdfClass",
             "rdfcrate.rdfprop.RdfProperty",
             "rdfcrate.rdfterm.RdfTerm",
+            "dataclasses.dataclass",
         ]
 
     def add_import(self, uri: str) -> str:
@@ -151,6 +146,9 @@ class CodegenState:
         return f"{b}.{c}"
 
     def import_stmts(self) -> Iterable[ast.ImportFrom]:
+        """
+        Yields the source code for all the imports in the current module
+        """
         for imp in self.imports:
             module, name = imp.rsplit(".", 1)
             yield ast.ImportFrom(
@@ -205,7 +203,7 @@ class CodegenState:
 
     def term_with_specs(self, term: str, uri: str) -> ast.Call:
         """
-        Creates the Python code for something like:
+        Creates the term definition source code for a term. e.g.
         ```python
         RdfTerm('CoverArt', 'http://schema.org/CoverArt', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
         ```
@@ -225,6 +223,9 @@ class CodegenState:
         )
 
     def visit_enums(self):
+        """
+        Processes the enums in the graph
+        """
         for enum in find_enums(self.graph):
             _, _, name = self.graph.compute_qname(enum)
             # Ignore enums for now
@@ -232,14 +233,7 @@ class CodegenState:
 
     def properties_from_rdfs(self, module_base: str) -> None:
         """
-        Creates a PropertyList subclass from RDFS definitions
-
-        e.g.
-        ```
-        @dataclass
-        class Bioschemas:
-            input: Annotated[list[FormalParameter], RdfTerm("input", "https://bioschemas.org/properties/input")] = field(default_factory=list)
-        ```
+        Processes the properties in the graph.
         """
         for prop in itertools.chain(
             self.graph.subjects(predicate=RDF.type, object=RDF.Property, unique=True),
@@ -252,13 +246,6 @@ class CodegenState:
 
             _, _, name = self.graph.compute_qname(prop)
 
-            """
-            e.g. 
-            @dataclass(frozen=True)
-            class image:
-                term = RdfTerm("image", "https://schema.org/image")
-                object: ImageObject
-            """
             # Register this URI as being defined in this module
             self.module_map[prop] = f"{module_base}.{name}"
             self.classes.append(ast.ClassDef(
@@ -279,17 +266,15 @@ class CodegenState:
                         simple=1
                     )
                 ],
-                decorator_list=[]
+                decorator_list=[
+                    frozen_dataclass_decorator()
+                ]
             ))
 
     def datatypes_from_rdfs(self, module_base: str):
         """
-        Creates a list of datatypes from RDFS definitions
-        e.g.
-        ```
-        class Html(RdfDataType):
-            field = RdfTerm("field", "https://schema.org/field")
-        ```
+        Processes the datatypes in the graph.
+        Each will become a class that inherits from RdfDataType
         """
         for datatype in find_datatypes(self.graph):
             if datatype in self.module_map:
@@ -316,7 +301,11 @@ class CodegenState:
 
     def _find_superclasses(self, cls_uri: URIRef) -> tuple[list[ast.Name], list[URIRef]]:
         """
-        Returns a list of all base classes for the class, and also a list of their URIs if needed
+        Finds all the superclasses of a class
+
+        Returns:
+            - names: A list of ast.Name objects that can be used to define a child class
+            - uris: A list of URIs for these base classes
         """
         names: list[ast.Name] = []
         uris : list[URIRef] = []
@@ -345,7 +334,7 @@ class CodegenState:
 
     def classes_from_rdfs(self, module_base: str) -> None:
         """
-        Creates a list of classes from RDFS definitions
+        Processes the classes in the graph.
         """
         # Map of class names to their definitions
         classes: dict[str, ast.ClassDef] = {}
@@ -370,7 +359,6 @@ class CodegenState:
             cls_name = sanitize_cls_name(term_name)
             
             # Determine the base classes from rdfs:subClassOf
-            bases: list[ast.Name] = []
             class_deps[cls_uri] = []
             superclass_names, superclass_uris = self._find_superclasses(cls_uri)
             for superclass_uri in superclass_uris:
@@ -434,7 +422,7 @@ class CodegenState:
 
             if term[0].isupper():
                 # Assume it's a class if the first letter is uppercase
-                superclass_names, superclass_uris = self._find_superclasses(uri)
+                superclass_names, superclass_uris = self._find_superclasses(URIRef(uri))
                 self.classes.append(ast.ClassDef(
                     name=sanitize_cls_name(term),
                     type_params=[],
@@ -447,7 +435,7 @@ class CodegenState:
                             type_comment=None
                         )
                     ],
-                    decorator_list=[]
+                    decorator_list=[ frozen_dataclass_decorator() ]
                 ))
             else:
                 self.classes.append(ast.ClassDef(
@@ -463,7 +451,7 @@ class CodegenState:
                         ),
                         ast.AnnAssign(
                             target=ast.Name("object"),
-                            annotation=ast.Name("Identifier"),
+                            annotation=self.property_range(URIRef(uri)),
                             value=None,
                             simple=1
                         )
@@ -472,8 +460,10 @@ class CodegenState:
                 ))
 
 
-
 def camel_to_snake(camel: str) -> str:
+    """
+    Converts a camel case string to snake case
+    """
     segments = []
     start = 0
     i = 0
@@ -494,73 +484,10 @@ def sanitize_cls_name(name: str) -> str:
         return f"_{name}"
     return name
 
-def triple_in_graph(graph: Graph, subject: IdentifiedNode, predicate: URIRef, object: IdentifiedNode) -> bool:
-    """
-    Checks if a triple is in the graph, checking both http and https versions of the subject
-    """
-    if (URIRef(subject.replace("http:", "https:")), predicate, object) in graph:
-        return True
-    if (URIRef(subject.replace("https:", "http:")), predicate, object) in graph:
-        return True
-    return False
-
-def properties_from_context(context: dict) -> Iterable[ast.AnnAssign]:
-    """
-    Yields properties from a JSON-LD context
-    """
-    for term, uri in context["@context"].items():
-        # Workaround for invalid Python identifiers
-        field_name = term
-        if (not field_name.isidentifier()) or keyword.iskeyword(field_name):
-            field_name = "_" + field_name.replace("-", "_")
-        
-        if term[0].isupper():
-            # Skip classes
-            continue
-
-        """
-        e.g. `input: Annotated[list[FormalParameter], RdfTerm("input", "https://bioschemas.org/properties/input")] = field(default_factory=list)`
-        """
-        yield ast.AnnAssign(
-            target=ast.Name(field_name),
-            annotation=ast.Subscript(
-                value=ast.Name("Annotated"),
-                slice=ast.Tuple(elts=[
-                    ast.Subscript(
-                        value=ast.Name("list"),
-                        slice=ast.Name("RdfClass")
-                    ),
-                    ast.Call(
-                        func=ast.Name("RdfTerm"),
-                        args=[
-                            ast.Constant(term),
-                            ast.Constant(uri)
-                        ],
-                        keywords=[]
-                    )
-                ])
-            ),
-            value=ast.Call(
-                func=ast.Name("field"),
-                args=[],
-                keywords=[ast.keyword(arg="default_factory", value=ast.Name("list"))]
-            ),
-            simple=1
-        )
-
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate Python code for RDF properties")
     parser.add_argument("input", type=str, help="Input RDF files", nargs="*", default=VOCABS)
     return parser
-
-# def load_spec_contexts() -> ContextMap:
-#     """
-#     Loads the RO-Crate contexts from the spec_version.py file
-#     """
-#     contexts = {}
-#     for spec in all_specs:
-#         contexts[spec] = spec.get_context()
-#     return contexts
 
 def schema_org_https(graph: Graph):
     """
@@ -572,7 +499,7 @@ def schema_org_https(graph: Graph):
             graph.remove(triple)
             graph.add(new_triple)
 
-def generate_modules(vocabs: dict[str, list[str]], contexts: dict[str, dict[str, str]], base_module: str, out_dir: Path):
+def generate_modules(vocabs: dict[str, str], contexts: dict[str, dict[str, str]], base_module: str, out_dir: Path):
     """
     Generates a module in the given directory for each vocabulary
 
@@ -581,10 +508,9 @@ def generate_modules(vocabs: dict[str, list[str]], contexts: dict[str, dict[str,
         out_dir: The output directory
     """
     state = CodegenState()
-    for vocab, uris in vocabs.items():
+    for vocab, uri in vocabs.items():
         state.reset()
-        for uri in uris:
-            state.graph.parse(uri)
+        state.graph.parse(uri)
         schema_org_https(state.graph)
         module_base = f"{base_module}.{vocab}"
         state.classes_from_rdfs(module_base)
@@ -603,34 +529,21 @@ def generate_modules(vocabs: dict[str, list[str]], contexts: dict[str, dict[str,
 
 def core_vocab():
     generate_modules({
-        "rdfs": ["https://www.w3.org/2000/01/rdf-schema"],
-        "rdf": ["https://www.w3.org/1999/02/22-rdf-syntax-ns"],
-        "owl": ["https://www.w3.org/2002/07/owl"],
-        "dc": ["https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl"],
-        "pcdm": ["https://pcdm.org/models.rdf"],
-        "prov": ["https://www.w3.org/ns/prov.ttl"],
-        "pav": ["http://purl.org/pav"],
-        "prof": ["https://www.w3.org/TR/dx-prof/rdf/prof.ttl"],
-        "geo": ["https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl"],
-        "schemaorg": ["https://schema.org/version/latest/schemaorg-all-http.jsonld"],
-        "bioschemas": ["https://bioschemas.org/types/bioschemas_types.jsonld"],
-        "bioschemas_drafts": ["https://bioschemas.org/types/bioschemas_draft_types.jsonld"],
+        "rdfs": "https://www.w3.org/2000/01/rdf-schema",
+        "rdf": "https://www.w3.org/1999/02/22-rdf-syntax-ns",
+        "owl": "https://www.w3.org/2002/07/owl",
+        "dc": "https://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl",
+        "pcdm": "https://pcdm.org/models.rdf",
+        "prov": "https://www.w3.org/ns/prov.ttl",
+        "pav": "http://purl.org/pav",
+        "prof": "https://www.w3.org/TR/dx-prof/rdf/prof.ttl",
+        "geo": "https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl",
+        "schemaorg": "https://schema.org/version/latest/schemaorg-all-http.jsonld",
+        "bioschemas": "https://bioschemas.org/types/bioschemas_types.jsonld",
+        "bioschemas_drafts": "https://bioschemas.org/types/bioschemas_draft_types.jsonld",
     }, {
         "rocrate": ROCrate1_2.get_context()
     }, "rdfcrate.vocabs", Path("src/rdfcrate/vocabs"))
 
 if __name__ == "__main__":
     core_vocab()
-
-# def main():
-#     parser = get_parser()
-#     args = parser.parse_args()
-#     for input_file in args.input:
-#         graph.parse(input_file)
-
-#     ret = type_module(graph)
-
-#     print(ast.unparse(ret))
-
-# if __name__ == "__main__":
-#     main()

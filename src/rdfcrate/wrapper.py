@@ -14,6 +14,7 @@ from datetime import datetime
 # from rdfcrate.context import Context
 from abc import ABCMeta, abstractmethod
 from rdflib.plugins.shared.jsonld.context import Context
+from rdfcrate.vocabs import schemaorg
 
 #: Predicate-object tuple
 Double = tuple[URIRef, Literal | IdentifiedNode]
@@ -34,7 +35,6 @@ class RoCrate(metaclass=ABCMeta):
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """
-
     graph: Graph = field(init=False, default_factory=Graph)
     "`rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available."
     context: Context = field(init=False, default_factory=Context)
@@ -44,13 +44,16 @@ class RoCrate(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def root_data_entity(self) -> IdentifiedNode:
+    def root_data_entity(self) -> schemaorg.Dataset:
         """
         The root entity of the RO-Crate
         """
         pass
 
-    def register_terms(self, terms: Iterable[RdfTerm]) -> None:
+    def _register_terms(self, terms: Iterable[RdfTerm]) -> None:
+        """
+        Adds custom terms to the crate context
+        """
         for term in terms:
             if self.version.version not in term.specs:
                 # Skip terms that are already in the RO-Crate context
@@ -76,14 +79,18 @@ class RoCrate(metaclass=ABCMeta):
             from rdflib import BNode,
             from rdfcrate.vocabs import schemaorg
 
-            crate.add_entity(BNode(), schemaorg.Person, schemaorg.name(Literal("Alice"))])
+            crate.add_entity(
+                BNode(),
+                schemaorg.Person,
+                schemaorg.name("Alice")
+            )
             ```
         """
-        self.register_terms([arg.term for arg in args])
+        self._register_terms([arg.term for arg in args])
         return type(self.graph, iri, *args)
 
     def link_to_dataset(
-        self, entity: IdentifiedNode, dataset: IdentifiedNode | None
+        self, entity: schemaorg.Dataset | schemaorg.MediaObject, dataset: schemaorg.Dataset | None
     ) -> None:
         """
         Links a data entity to a Dataset.
@@ -96,7 +103,7 @@ class RoCrate(metaclass=ABCMeta):
         """
         if dataset is None:
             dataset = self.root_data_entity
-        self.add_metadata(dataset, [(uris.hasPart, entity)])
+        self.add_metadata(dataset, schemaorg.hasPart(entity))
 
     def register_file(
         self,

@@ -435,7 +435,7 @@ class CodegenState:
                             type_comment=None
                         )
                     ],
-                    decorator_list=[ frozen_dataclass_decorator() ]
+                    decorator_list=[]
                 ))
             else:
                 self.classes.append(ast.ClassDef(
@@ -456,7 +456,7 @@ class CodegenState:
                             simple=1
                         )
                     ],
-                    decorator_list=[]
+                    decorator_list=[ frozen_dataclass_decorator() ]
                 ))
 
 

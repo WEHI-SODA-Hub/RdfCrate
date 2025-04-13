@@ -12,6 +12,15 @@ from rdfcrate.vocabs import bioschemas_drafts
 class LabProtocol(schemaorg.HowTo):
     term = RdfTerm('LabProtocol', 'https://bioschemas.org/draft_terms/LabProtocol', [])
 
+class TaxonName(schemaorg.CreativeWork):
+    term = RdfTerm('TaxonName', 'https://bioschemas.org/draft_terms/TaxonName', [])
+
+class SequenceMatchingModel(schemaorg.CreativeWork):
+    term = RdfTerm('SequenceMatchingModel', 'https://bioschemas.org/draft_terms/SequenceMatchingModel', [])
+
+class Study(schemaorg.CreativeWork):
+    term = RdfTerm('Study', 'https://bioschemas.org/draft_terms/Study', [])
+
 class DNA(schemaorg.BioChemEntity):
     term = RdfTerm('DNA', 'https://bioschemas.org/draft_terms/DNA', [])
 
@@ -23,15 +32,6 @@ class BioChemEntity(schemaorg.BioChemEntity):
 
 class Enzyme(schemaorg.BioChemEntity):
     term = RdfTerm('Enzyme', 'https://bioschemas.org/draft_terms/Enzyme', [])
-
-class TaxonName(schemaorg.CreativeWork):
-    term = RdfTerm('TaxonName', 'https://bioschemas.org/draft_terms/TaxonName', [])
-
-class SequenceMatchingModel(schemaorg.CreativeWork):
-    term = RdfTerm('SequenceMatchingModel', 'https://bioschemas.org/draft_terms/SequenceMatchingModel', [])
-
-class Study(schemaorg.CreativeWork):
-    term = RdfTerm('Study', 'https://bioschemas.org/draft_terms/Study', [])
 
 class RNA(bioschemas.BioChemEntity):
     term = RdfTerm('RNA', 'https://bioschemas.org/draft_terms/RNA', [])

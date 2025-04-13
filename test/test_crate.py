@@ -1,7 +1,8 @@
 from pathlib import Path
 
 import pytest
-from rdfcrate import uris, AttachedCrate, spec_version, bioschemas
+from rdfcrate import AttachedCrate, spec_version, bioschemas
+from rdfcrate.vocabs import dc, sdo, roc
 from rdflib import RDF, Literal, URIRef, Graph
 import json
 from datetime import datetime
@@ -10,51 +11,27 @@ from rocrate_validator.utils import URI
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
-MIT = URIRef("https://opensource.org/license/mit")
-ME = URIRef("https://orcid.org/0000-0002-8965-2595")
-WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
+MIT = sdo.CreativeWork("https://opensource.org/license/mit")
+ME = sdo.Person("https://orcid.org/0000-0002-8965-2595")
+WEHI_RCP = sdo.Organization("https://github.com/WEHI-ResearchComputing")
 
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
 
 def test_crate(recursive: bool = False):
     crate = AttachedCrate(
-        name="Test Crate",
-        description="Crate for validating RdfCrate",
-        license=MIT,
-        path=TEST_CRATE,
-        recursive_init=recursive,
-        version=spec_version.ROCrate1_1
+        TEST_CRATE
     )
-    crate.add_entity(
-        MIT,
-        type=[uris.CreativeWork],
-        attrs=[
-            (uris.title, Literal("MIT License")),
-        ]
+
+    crate.add_root_entity(
+        sdo.name(sdo.Text("Test Crate")),
+        sdo.description(sdo.Text("Crate for validating RdfCrate")),
+        sdo.datePublished(sdo.DateTime(datetime.now().isoformat())),
+        sdo.license(crate.add_entity(MIT, sdo.CreativeWork, sdo.name(sdo.Text("MIT License")))),
+        sdo.version(sdo.Text("1.0")),
+        sdo.publisher(wehi:=crate.add_entity(WEHI_RCP, sdo.Organization, sdo.name(sdo.Text("WEHI Research Computing Platform")))),
+        sdo.author(crate.add_entity(ME, sdo.Person, sdo.name(sdo.Text("Michael")), sdo.affiliation(wehi))),
     )
-    crate.add_entity(
-        ME,
-        type=[uris.Person],
-        attrs=[
-            (uris.name, Literal("Michael")),
-            (uris.affiliation, WEHI_RCP),
-        ]
-    )
-    crate.add_entity(
-        WEHI_RCP,
-        type=[uris.Organization],
-        attrs=[
-            (uris.name, Literal("WEHI Research Computing Platform")),
-            (uris.url, WEHI_RCP),
-        ]
-    )
-    crate.add_metadata(
-        crate.root_data_entity,
-        [
-            (uris.author, ME),
-            (uris.publisher, WEHI_RCP)
-        ]
-    )
+    crate.add_metadata_entity()
     return crate
 
 def validate(crate: AttachedCrate):
@@ -103,13 +80,13 @@ def test_single_file():
 
     # Check that the graph has the expected structure
     assert set(crate.graph.subjects()) == {
-        URIRef("./"),
-        URIRef("ro-crate-metadata.json"),
-        URIRef("text.txt"),
+        sdo.Dataset("./"),
+        sdo.CreativeWork("ro-crate-metadata.json"),
+        roc.File("text.txt"),
         *BASE_SUBJECTS
     }
-    assert set(crate.graph.predicates()) >= {RDF.type, uris.about, uris.conformsTo}
-    assert set(crate.graph.objects()) >= {uris.File, uris.Dataset}
+    assert set(crate.graph.predicates()) >= {RDF.type, sdo.about.term.uri, dc.conformsTo.term.uri}
+    assert set(crate.graph.objects()) >= {roc.File.term.uri, sdo.Dataset.term.uri}
 
     validate(crate)
 

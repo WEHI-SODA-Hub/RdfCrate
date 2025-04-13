@@ -8,110 +8,113 @@ from dataclasses import dataclass
 from rdfcrate.vocabs import rdfs
 from rdfcrate.vocabs import schemaorg
 
-@dataclass(frozen=True)
 class _False(RdfClass):
     term = RdfTerm('False', 'https://schema.org/False', [])
 
-@dataclass(frozen=True)
 class HTML(rdfs.Literal):
     term = RdfTerm('HTML', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML', [])
 
-@dataclass(frozen=True)
 class File(schemaorg.CreativeWork):
     term = RdfTerm('File', 'https://schema.org/MediaObject', [])
 
-@dataclass(frozen=True)
 class Journal(schemaorg.CreativeWorkSeries):
     term = RdfTerm('Journal', 'https://schema.org/Periodical', [])
 
-@dataclass(frozen=True)
 class _True(RdfClass):
     term = RdfTerm('True', 'https://schema.org/True', [])
 
+@dataclass(frozen=True)
 class path(RdfProperty):
     term = RdfTerm('path', 'https://schema.org/contentUrl', [])
     object: schemaorg.URL
 
+@dataclass(frozen=True)
 class cite_as(RdfProperty):
     term = RdfTerm('cite-as', 'http://www.iana.org/assignments/relation/cite-as', ['1.2-DRAFT'])
     object: Identifier
 
-@dataclass(frozen=True)
 class RepositoryCollection(RdfClass):
     term = RdfTerm('RepositoryCollection', 'http://pcdm.org/models#Collection', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-@dataclass(frozen=True)
 class RepositoryObject(RdfClass):
     term = RdfTerm('RepositoryObject', 'http://pcdm.org/models#Object', ['1.1', '1.2-DRAFT'])
 
-@dataclass(frozen=True)
 class RepositoryFile(RdfClass):
     term = RdfTerm('RepositoryFile', 'http://pcdm.org/models#File', ['1.2-DRAFT'])
 
-@dataclass(frozen=True)
 class ComputationalWorkflow(RdfClass):
     term = RdfTerm('ComputationalWorkflow', 'https://bioschemas.org/ComputationalWorkflow', ['1.1', '1.2-DRAFT'])
 
+@dataclass(frozen=True)
 class input(RdfProperty):
     term = RdfTerm('input', 'https://bioschemas.org/properties/input', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class output(RdfProperty):
     term = RdfTerm('output', 'https://bioschemas.org/properties/output', ['1.2-DRAFT'])
     object: Identifier
 
-@dataclass(frozen=True)
 class FormalParameter(RdfClass):
     term = RdfTerm('FormalParameter', 'https://bioschemas.org/FormalParameter', ['1.1', '1.2-DRAFT'])
 
-@dataclass(frozen=True)
 class ResourceDescriptor(RdfClass):
     term = RdfTerm('ResourceDescriptor', 'http://www.w3.org/ns/dx/prof/ResourceDescriptor', ['1.2-DRAFT'])
 
-@dataclass(frozen=True)
 class ResourceRole(RdfClass):
     term = RdfTerm('ResourceRole', 'http://www.w3.org/ns/dx/prof/ResourceRole', ['1.2-DRAFT'])
 
+@dataclass(frozen=True)
 class softwareSuggestions(RdfProperty):
     term = RdfTerm('softwareSuggestions', 'https://codemeta.github.io/terms/softwareSuggestions', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class continuousIntegration(RdfProperty):
     term = RdfTerm('continuousIntegration', 'https://codemeta.github.io/terms/continuousIntegration', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class buildInstructions(RdfProperty):
     term = RdfTerm('buildInstructions', 'https://codemeta.github.io/terms/buildInstructions', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class developmentStatus(RdfProperty):
     term = RdfTerm('developmentStatus', 'https://codemeta.github.io/terms/developmentStatus', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class embargoEndDate(RdfProperty):
     term = RdfTerm('embargoEndDate', 'https://codemeta.github.io/terms/embargoEndDate', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class readme(RdfProperty):
     term = RdfTerm('readme', 'https://codemeta.github.io/terms/readme', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class issueTracker(RdfProperty):
     term = RdfTerm('issueTracker', 'https://codemeta.github.io/terms/issueTracker', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class referencePublication(RdfProperty):
     term = RdfTerm('referencePublication', 'https://codemeta.github.io/terms/referencePublication', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class hasSourceCode(RdfProperty):
     term = RdfTerm('hasSourceCode', 'https://codemeta.github.io/terms/hasSourceCode', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class isSourceCodeOf(RdfProperty):
     term = RdfTerm('isSourceCodeOf', 'https://codemeta.github.io/terms/isSourceCodeOf', ['1.2-DRAFT'])
     object: Identifier
 
+@dataclass(frozen=True)
 class localPath(RdfProperty):
     term = RdfTerm('localPath', 'https://w3id.org/ro/terms#localPath', ['1.2-DRAFT'])
     object: Identifier

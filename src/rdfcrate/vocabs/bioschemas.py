@@ -8,8 +8,11 @@ from dataclasses import dataclass
 from rdfcrate.vocabs import schemaorg
 from rdfcrate.vocabs import bioschemas
 
-class FormalParameter(schemaorg.Intangible):
-    term = RdfTerm('FormalParameter', 'https://bioschemas.org/terms/FormalParameter', [])
+class ComputationalWorkflow(schemaorg.SoftwareSourceCode):
+    term = RdfTerm('ComputationalWorkflow', 'https://bioschemas.org/terms/ComputationalWorkflow', [])
+
+class TaxonName(schemaorg.CreativeWork):
+    term = RdfTerm('TaxonName', 'https://bioschemas.org/terms/TaxonName', [])
 
 class MolecularEntity(schemaorg.BioChemEntity):
     term = RdfTerm('MolecularEntity', 'https://bioschemas.org/terms/MolecularEntity', [])
@@ -26,11 +29,8 @@ class Gene(schemaorg.BioChemEntity):
 class ChemicalSubstance(schemaorg.BioChemEntity):
     term = RdfTerm('ChemicalSubstance', 'https://bioschemas.org/terms/ChemicalSubstance', [])
 
-class ComputationalWorkflow(schemaorg.SoftwareSourceCode):
-    term = RdfTerm('ComputationalWorkflow', 'https://bioschemas.org/terms/ComputationalWorkflow', [])
-
-class TaxonName(schemaorg.CreativeWork):
-    term = RdfTerm('TaxonName', 'https://bioschemas.org/terms/TaxonName', [])
+class FormalParameter(schemaorg.Intangible):
+    term = RdfTerm('FormalParameter', 'https://bioschemas.org/terms/FormalParameter', [])
 
 class Taxon(schemaorg.Thing):
     term = RdfTerm('Taxon', 'https://bioschemas.org/terms/Taxon', [])

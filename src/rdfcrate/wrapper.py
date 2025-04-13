@@ -102,7 +102,7 @@ class RoCrate(metaclass=ABCMeta):
         Adds the root entity to the crate.
         """
         return self.add_entity(
-            URIRef(self.root_data_entity),
+            self.root_data_entity,
             schemaorg.Dataset,
             name,
             description,
@@ -267,8 +267,8 @@ class AttachedCrate(RoCrate):
     root: Path = field(init=False)
     "The RO-Crate directory"
 
-    #: If true, automatically initialize the crate with all files and directories in the root
-    recursive_init: InitVar[bool] = field(default=False, kw_only=True)
+    def __post_init__(self, path: str | Path):
+        self.root = Path(path).resolve()
 
     @property
     def metadata_entity(self) -> schemaorg.CreativeWork:

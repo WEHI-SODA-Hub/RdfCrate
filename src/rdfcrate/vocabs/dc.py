@@ -47,7 +47,7 @@ class ProvenanceStatement(RdfClass):
     term = RdfTerm('ProvenanceStatement', 'http://purl.org/dc/terms/ProvenanceStatement', [])
 
 class Standard(RdfClass):
-    term = RdfTerm('Standard', 'http://purl.org/dc/terms/Standard', [])
+    term = RdfTerm('Standard', 'http://purl.org/dc/terms/Standard', ['1.2-DRAFT'])
 
 class Jurisdiction(LocationPeriodOrJurisdiction):
     term = RdfTerm('Jurisdiction', 'http://purl.org/dc/terms/Jurisdiction', [])

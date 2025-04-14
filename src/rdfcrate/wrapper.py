@@ -22,6 +22,7 @@ Double = tuple[URIRef, Literal | IdentifiedNode]
 Attributes = Iterable[Double]
 Type = Iterable[URIRef]
 type EntityType = Annotated[type[RdfClass], Doc("The main type of the entity to create. An entity can have multiple types, which you can specify using `rdf.type()`. However for static type checking, you should choose a main type that agrees with the property (predicate) that it will be linked to.")]
+type Recursive = Annotated[bool, Doc("If true, register all files and subdirectories in the directory.  The child entities will only have minimal metadata, but more can be added later with [`RoCrate.add_metadata`][rdfcrate.wrapper.RoCrate.add_metadata].  Also note that each registered data entity will be linked to the directory entity with `hasPart`.")]
 
 
 def has_prop(props: Iterable[EntityArgs], predicate: type[RdfProperty]) -> bool:
@@ -275,7 +276,7 @@ class AttachedCrate(RoCrate):
         """
         The metadata entity of the RO-Crate
         """
-        return schemaorg.CreativeWork(self._resolve_path(self._metadata_path))
+        return schemaorg.CreativeWork(self._resolve_path(self._metadata_path)[1])
 
     @property
     def root_data_entity(self) -> schemaorg.Dataset:
@@ -294,9 +295,14 @@ class AttachedCrate(RoCrate):
         """
         self._metadata_path.write_text(self.compile())
 
-    def _resolve_path(self, path: Path | str) -> str:
+    def _resolve_path(self, path: Path | str) -> tuple[Path, URIRef]:
         """
         Converts a crate path to a platform independent path compatible with RO-Crate
+
+        Returns:
+            A tuple of:
+                - The absolute path
+                - The path as a URI, suitable for us as an IRI
         """
         if isinstance(path, str):
             # Paths can be provided as strings
@@ -312,7 +318,7 @@ class AttachedCrate(RoCrate):
             # Relative paths are assumed to be relative to the crate root
             path = self.root / path
 
-        return path.relative_to(self.root).as_posix()
+        return path.resolve(), URIRef(path.relative_to(self.root).as_posix())
 
     def register_file(
         self,
@@ -328,7 +334,7 @@ class AttachedCrate(RoCrate):
             add_size: If true, automatically add the size of the file to the metadata
         """
         path = Path(path)
-        file_id = self._resolve_path(path)
+        _, file_id = self._resolve_path(path)
         ret = super().register_file(file_id, *props, **kwargs)
         if add_size:
             if has_prop([*props], schemaorg.contentSize):
@@ -339,26 +345,24 @@ class AttachedCrate(RoCrate):
             )
         return ret
 
+    def add_root_entity(self, name: schemaorg.name, description: schemaorg.description, date_published: schemaorg.datePublished, license: schemaorg.license, *props: RdfProperty | ReverseProperty, recursive: Recursive = False) -> schemaorg.Dataset:
+        return self.register_dir(".", name, description, date_published, license, *props, recursive=recursive)
+
     def register_dir(
         self,
         path: Path | str,
         *props: EntityArgs,
-        recursive: bool = False,
+        recursive: Recursive = False,
         **kwargs: Any,
     ):
         """
         See [`RoCrate.register_dir`][rdfcrate.wrapper.RoCrate.register_dir].
-
-        Params:
-            recursive: If true, register all files and subdirectories in the directory.
-                The child entities will only have minimal metadata, but more can be added later with [`RoCrate.add_metadata`][rdfcrate.wrapper.RoCrate.add_metadata].
-                Also note that each registered data entity will be linked to the directory entity with `hasPart`.
-
         """
-        id = super().register_dir(self._resolve_path(path), *props, **kwargs)
+        full_path, id = self._resolve_path(path)
+        id = super().register_dir(id, *props, **kwargs)
 
         if recursive:
-            for child in Path(path).iterdir():
+            for child in full_path.iterdir():
                 if child in {self._metadata_path, self.root}:
                     # Never register the metadata file or the root directory
                     continue

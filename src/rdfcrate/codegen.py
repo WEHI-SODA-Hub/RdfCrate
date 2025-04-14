@@ -7,13 +7,17 @@ import itertools
 from pathlib import Path
 from typing import Any, Iterable
 import keyword
-from rdflib import OWL, BNode, Graph, RDFS, RDF, SDO, IdentifiedNode, URIRef, OWL
+from rdflib import OWL, BNode, Graph, RDFS, RDF, IdentifiedNode, URIRef, OWL
 from rdflib.plugins.shared.jsonld.context import Context
 from rdflib.query import ResultRow
 import argparse
+from rdflib.namespace import DefinedNamespace, Namespace
 
 from rdfcrate.spec_version import all_specs, SpecVersion, ROCrate1_2
 from graphlib import TopologicalSorter
+
+#: HTTP URI for schema.org
+SDO = Namespace("http://schema.org/")
 
 def frozen_dataclass_decorator() -> ast.expr:
     """
@@ -216,7 +220,7 @@ class CodegenState:
                 ast.Constant(str(uri)),
                 ast.List([
                     # Add RO-Crate specs that this term is defined in
-                    ast.Constant(spec.version) for spec, ctx in self.context_map.items() if ctx.get(term) == uri
+                    ast.Constant(spec.version) for spec, ctx in self.context_map.items() if ctx.get(term) == str(uri)
                 ])
             ],
             keywords=[]
@@ -410,7 +414,7 @@ class CodegenState:
                 field_name = "_" + field_name.replace("-", "_")
 
             # Need to fix this separately in the context
-            uri = uri.replace("http://schema.org/", "https://schema.org/")
+            uri = uri.replace("https://schema.org/", "http://schema.org/")
             
             if (term, uri) in self.terms:
                 # Skip terms that are already defined
@@ -491,10 +495,11 @@ def get_parser() -> argparse.ArgumentParser:
 
 def schema_org_https(graph: Graph):
     """
-    Rewrites the schema.org URIs in the graph to use http instead of https
+    Rewrites the schema.org URIs in the graph to use http instead of https.
+    This is recommended by the RO-Crate context.
     """
     for triple in graph:
-        new_triple = tuple([URIRef(uri.replace("http://schema.org/", "https://schema.org/")) if isinstance(uri, URIRef) else uri for uri in triple])
+        new_triple = tuple([URIRef(uri.replace("https://schema.org/", "http://schema.org/")) if isinstance(uri, URIRef) else uri for uri in triple])
         if triple != new_triple:
             graph.remove(triple)
             graph.add(new_triple)

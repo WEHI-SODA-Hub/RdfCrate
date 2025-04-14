@@ -9,23 +9,23 @@ from rdfcrate.vocabs import rdfs
 from rdfcrate.vocabs import schemaorg
 
 class _False(RdfClass):
-    term = RdfTerm('False', 'https://schema.org/False', [])
+    term = RdfTerm('False', 'http://schema.org/False', ['1.0', '1.1', '1.2-DRAFT'])
 
 class HTML(rdfs.Literal):
     term = RdfTerm('HTML', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML', [])
 
 class File(schemaorg.CreativeWork):
-    term = RdfTerm('File', 'https://schema.org/MediaObject', [])
+    term = RdfTerm('File', 'http://schema.org/MediaObject', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class Journal(schemaorg.CreativeWorkSeries):
-    term = RdfTerm('Journal', 'https://schema.org/Periodical', [])
+    term = RdfTerm('Journal', 'http://schema.org/Periodical', ['1.0', '1.1', '1.2-DRAFT'])
 
 class _True(RdfClass):
-    term = RdfTerm('True', 'https://schema.org/True', [])
+    term = RdfTerm('True', 'http://schema.org/True', ['1.0', '1.1', '1.2-DRAFT'])
 
 @dataclass(frozen=True)
 class path(RdfProperty):
-    term = RdfTerm('path', 'https://schema.org/contentUrl', [])
+    term = RdfTerm('path', 'http://schema.org/contentUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
     object: schemaorg.URL
 
 @dataclass(frozen=True)

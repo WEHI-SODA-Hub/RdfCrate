@@ -9,7 +9,7 @@ from rdfcrate.vocabs import dc
 from rdfcrate.vocabs import prof
 
 class Profile(dc.Standard):
-    term = RdfTerm('Profile', 'http://www.w3.org/ns/dx/prof/Profile', [])
+    term = RdfTerm('Profile', 'http://www.w3.org/ns/dx/prof/Profile', ['1.2-DRAFT'])
 
 @dataclass(frozen=True)
 class hasToken(RdfProperty):

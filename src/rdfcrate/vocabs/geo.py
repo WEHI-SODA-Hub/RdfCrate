@@ -24,7 +24,7 @@ class Feature(SpatialObject):
     term = RdfTerm('Feature', 'http://www.opengis.net/ont/geosparql#Feature', [])
 
 class Geometry(SpatialObject):
-    term = RdfTerm('Geometry', 'http://www.opengis.net/ont/geosparql#Geometry', [])
+    term = RdfTerm('Geometry', 'http://www.opengis.net/ont/geosparql#Geometry', ['1.2-DRAFT'])
 
 @dataclass(frozen=True)
 class defaultGeometry(RdfProperty):

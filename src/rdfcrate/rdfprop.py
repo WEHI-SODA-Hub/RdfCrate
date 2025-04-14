@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import ClassVar, dataclass_transform
+from typing import ClassVar
 from rdflib import URIRef
 from rdflib.term import Identifier
 

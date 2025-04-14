@@ -40,3 +40,8 @@ include = ["src"]
 venvPath = "."
 venv = ".venv"
 exclude = [".venv"]
+
+[tool.ruff]
+exclude = [
+    "src/rdfcrate/vocabs"
+]

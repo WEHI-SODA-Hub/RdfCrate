@@ -8,7 +8,6 @@ Attributes:
     ROCrate1_2: RO-Crate 1.2
 """
 
-from dataclasses import dataclass
 from rdflib import URIRef
 from requests import get
 

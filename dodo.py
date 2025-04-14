@@ -1,5 +1,4 @@
 import json
-from typing import Literal
 from rdfcrate.codegen import module_from_context, module_from_rdfs, uris_from_rdfs
 from ast import unparse, Constant, Expr, Module
 from pathlib import Path

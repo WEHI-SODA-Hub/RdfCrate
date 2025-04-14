@@ -8,7 +8,7 @@ import itertools
 from pathlib import Path
 from typing import Any, Iterable, cast
 import keyword
-from rdflib import OWL, BNode, Graph, RDFS, RDF, URIRef, OWL
+from rdflib import BNode, Graph, RDFS, RDF, URIRef, OWL
 from rdflib.plugins.shared.jsonld.context import Context
 from rdflib.query import ResultRow
 from rdflib.graph import _TripleType
@@ -63,7 +63,7 @@ def find_classes(graph: Graph) -> Iterable[URIRef]:
         ):
             yield cls_id
         else:
-            raise ValueError(f"Invalid query response")
+            raise ValueError("Invalid query response")
 
 
 def find_enums(graph: Graph) -> Iterable[URIRef]:
@@ -85,7 +85,7 @@ def find_enums(graph: Graph) -> Iterable[URIRef]:
         ):
             yield cls_id
         else:
-            raise ValueError(f"Invalid query response")
+            raise ValueError("Invalid query response")
 
 
 def find_datatypes(graph: Graph) -> Iterable[URIRef]:
@@ -116,7 +116,7 @@ def find_datatypes(graph: Graph) -> Iterable[URIRef]:
         ):
             yield cls_id
         else:
-            raise ValueError(f"Invalid query response")
+            raise ValueError("Invalid query response")
 
 
 @dataclass
@@ -525,16 +525,6 @@ def sanitize_cls_name(name: str) -> str:
     if not name.isidentifier() or keyword.iskeyword(name):
         return f"_{name}"
     return name
-
-
-def get_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="Generate Python code for RDF properties"
-    )
-    parser.add_argument(
-        "input", type=str, help="Input RDF files", nargs="*", default=VOCABS
-    )
-    return parser
 
 
 def schema_org_https(graph: Graph):

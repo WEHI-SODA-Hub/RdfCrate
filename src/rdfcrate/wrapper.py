@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from typing import Annotated, Any, Iterable
+from typing import Annotated, Any, Iterable, TypeVar
 from typing_extensions import Doc
 from rdflib import Graph, URIRef, IdentifiedNode
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
@@ -26,6 +26,7 @@ Recursive = Annotated[
         "If true, register all files and subdirectories in the directory.  The child entities will only have minimal metadata, but more can be added later with [`RoCrate.add_metadata`][rdfcrate.wrapper.RoCrate.add_metadata].  Also note that each registered data entity will be linked to the directory entity with `hasPart`."
     ),
 ]
+EntityClass = TypeVar("EntityClass", bound=RdfClass)
 
 
 def has_prop(props: Iterable[EntityArgs], predicate: type[RdfProperty]) -> bool:
@@ -65,7 +66,7 @@ class RoCrate(metaclass=ABCMeta):
                 # Skip terms that are already in the RO-Crate context
                 self.context.add_term(term.label, term.uri)
 
-    def add_entity[T: RdfClass](self, iri: str, type: type[T], *args: EntityArgs) -> T:
+    def add_entity(self, iri: str, type: type[EntityClass], *args: EntityArgs) -> EntityClass:
         """
         Adds any type of entity to the crate
 

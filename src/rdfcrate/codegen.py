@@ -5,13 +5,14 @@ import ast
 from dataclasses import dataclass, field
 import itertools
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, cast
 import keyword
-from rdflib import OWL, BNode, Graph, RDFS, RDF, IdentifiedNode, URIRef, OWL
+from rdflib import OWL, BNode, Graph, RDFS, RDF, URIRef, OWL
 from rdflib.plugins.shared.jsonld.context import Context
 from rdflib.query import ResultRow
+from rdflib.graph import _TripleType
 import argparse
-from rdflib.namespace import DefinedNamespace, Namespace
+from rdflib.namespace import Namespace
 
 from rdfcrate.spec_version import all_specs, SpecVersion, ROCrate1_2
 from graphlib import TopologicalSorter
@@ -56,8 +57,10 @@ def find_classes(graph: Graph) -> Iterable[URIRef]:
             }
         }
     """, initNs={"rdfs": RDFS, "schema": SDO}):
-        if isinstance(result, ResultRow):
-            yield result["class"]
+        if isinstance(result, ResultRow) and isinstance(cls_id := result["class"], URIRef):
+            yield cls_id
+        else:
+            raise ValueError(f"Invalid query response")
 
 def find_enums(graph: Graph) -> Iterable[URIRef]:
     """
@@ -70,8 +73,10 @@ def find_enums(graph: Graph) -> Iterable[URIRef]:
             ?type rdfs:subClassOf* schema:Enumeration .
         }
     """, initNs={"rdfs": RDFS, "schema": SDO}):
-        if isinstance(result, ResultRow):
-            yield result["class"]
+        if isinstance(result, ResultRow) and isinstance(cls_id := result["class"], URIRef):
+            yield cls_id
+        else:
+            raise ValueError(f"Invalid query response")
 
 def find_datatypes(graph: Graph) -> Iterable[URIRef]:
     """
@@ -93,8 +98,10 @@ def find_datatypes(graph: Graph) -> Iterable[URIRef]:
             }
         }
     """, initNs={"rdfs": RDFS, "schema": SDO}):
-        if isinstance(result, ResultRow):
-            yield result[0]
+        if isinstance(result, ResultRow) and isinstance(cls_id := result["class"], URIRef):
+            yield cls_id
+        else:
+            raise ValueError(f"Invalid query response")
 
 @dataclass
 class CodegenState:
@@ -244,6 +251,10 @@ class CodegenState:
             self.graph.subjects(predicate=RDF.type, object=OWL.DatatypeProperty, unique=True),
             self.graph.subjects(predicate=RDF.type, object=OWL.ObjectProperty, unique=True),
         ):
+            if not isinstance(prop, URIRef):
+                # Skip blank node properties
+                continue
+
             if prop in self.module_map:
                 # Skip properties that are already defined
                 continue
@@ -303,7 +314,7 @@ class CodegenState:
                 decorator_list=[]
             ))
 
-    def _find_superclasses(self, cls_uri: URIRef) -> tuple[list[ast.Name], list[URIRef]]:
+    def _find_superclasses(self, cls_uri: URIRef) -> tuple[list[ast.expr], list[URIRef]]:
         """
         Finds all the superclasses of a class
 
@@ -311,10 +322,10 @@ class CodegenState:
             - names: A list of ast.Name objects that can be used to define a child class
             - uris: A list of URIs for these base classes
         """
-        names: list[ast.Name] = []
+        names: list[ast.expr] = []
         uris : list[URIRef] = []
         for superclass_uri in self.graph.objects(subject=cls_uri, predicate=RDFS.subClassOf):
-            if isinstance(superclass_uri, BNode):
+            if not isinstance(superclass_uri, URIRef):
                 # Skip blank node superclasses
                 continue
             _, _, superclass_term = self.graph.compute_qname(superclass_uri)
@@ -502,7 +513,7 @@ def schema_org_https(graph: Graph):
         new_triple = tuple([URIRef(uri.replace("https://schema.org/", "http://schema.org/")) if isinstance(uri, URIRef) else uri for uri in triple])
         if triple != new_triple:
             graph.remove(triple)
-            graph.add(new_triple)
+            graph.add(cast(_TripleType, new_triple))
 
 def generate_modules(vocabs: dict[str, str], contexts: dict[str, dict[str, str]], base_module: str, out_dir: Path):
     """

@@ -12,7 +12,6 @@ from rdflib import BNode, Graph, RDFS, RDF, URIRef, OWL
 from rdflib.plugins.shared.jsonld.context import Context
 from rdflib.query import ResultRow
 from rdflib.graph import _TripleType
-import argparse
 from rdflib.namespace import Namespace
 
 from rdfcrate.spec_version import all_specs, SpecVersion, ROCrate1_2

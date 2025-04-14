@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABCMeta
-from typing import Annotated, Any, ClassVar, Self, cast
-from typing_extensions import Doc
+from typing import Annotated, Any, ClassVar, cast
+from typing_extensions import Doc, Self
 
 from rdflib import Graph, URIRef, RDF
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty

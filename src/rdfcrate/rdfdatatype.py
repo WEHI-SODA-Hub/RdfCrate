@@ -1,4 +1,5 @@
-from typing import Any, ClassVar, Self, cast
+from typing import Any, ClassVar, cast
+from typing_extensions import Self
 from rdflib.term import Literal
 
 from rdfcrate.rdfterm import RdfTerm

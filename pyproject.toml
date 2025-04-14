@@ -39,7 +39,8 @@ dev-dependencies = [
 include = ["src"]
 venvPath = "."
 venv = ".venv"
-exclude = [".venv"]
+# For now, don't include the vocabs directory in the type checking
+exclude = [".venv", "src/rdfcrate/vocabs"]
 
 [tool.ruff]
 exclude = [

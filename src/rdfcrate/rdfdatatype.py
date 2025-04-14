@@ -4,6 +4,10 @@ from rdflib.term import Literal
 from rdfcrate.rdfterm import RdfTerm
 
 class RdfDataType(Literal):
+    """
+    Broadly represents an rdfs:Literal or any of its subclasses: https://www.w3.org/TR/rdf-schema/#ch_literal.
+    ie a value and not an ID.
+    """
     def __new__(
         cls,
         lexical_or_value: Any,

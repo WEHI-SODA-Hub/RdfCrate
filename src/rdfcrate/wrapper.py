@@ -1,28 +1,31 @@
 from __future__ import annotations
 from pathlib import Path
-from typing import Annotated, Any, Iterable, cast
+from typing import Annotated, Any, Iterable
 from typing_extensions import Doc
-from rdflib import Graph, URIRef, Literal, RDF, IdentifiedNode
-from rdfcrate import uris
+from rdflib import Graph, URIRef, IdentifiedNode
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.rdfclass import RdfClass, EntityArgs, EntityUri
+from rdfcrate.rdfclass import RdfClass, EntityArgs
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
 from dataclasses import InitVar, dataclass, field
 import mimetypes
 from os import stat
-from datetime import datetime
-# from rdfcrate.context import Context
 from abc import ABCMeta, abstractmethod
 from rdflib.plugins.shared.jsonld.context import Context
-from rdfcrate.vocabs import dc, schemaorg, rocrate, prof
+from rdfcrate.vocabs import dc, schemaorg, rocrate
 
-#: Predicate-object tuple
-Double = tuple[URIRef, Literal | IdentifiedNode]
-Attributes = Iterable[Double]
-Type = Iterable[URIRef]
-type EntityType = Annotated[type[RdfClass], Doc("The main type of the entity to create. An entity can have multiple types, which you can specify using `rdf.type()`. However for static type checking, you should choose a main type that agrees with the property (predicate) that it will be linked to.")]
-type Recursive = Annotated[bool, Doc("If true, register all files and subdirectories in the directory.  The child entities will only have minimal metadata, but more can be added later with [`RoCrate.add_metadata`][rdfcrate.wrapper.RoCrate.add_metadata].  Also note that each registered data entity will be linked to the directory entity with `hasPart`.")]
+EntityType = Annotated[
+    type[RdfClass],
+    Doc(
+        "The main type of the entity to create. An entity can have multiple types, which you can specify using `rdf.type()`. However for static type checking, you should choose a main type that agrees with the property (predicate) that it will be linked to."
+    ),
+]
+Recursive = Annotated[
+    bool,
+    Doc(
+        "If true, register all files and subdirectories in the directory.  The child entities will only have minimal metadata, but more can be added later with [`RoCrate.add_metadata`][rdfcrate.wrapper.RoCrate.add_metadata].  Also note that each registered data entity will be linked to the directory entity with `hasPart`."
+    ),
+]
 
 
 def has_prop(props: Iterable[EntityArgs], predicate: type[RdfProperty]) -> bool:
@@ -37,6 +40,7 @@ class RoCrate(metaclass=ABCMeta):
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """
+
     graph: Graph = field(init=False, default_factory=Graph)
     "`rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available."
     context: Context = field(init=False, default_factory=Context)
@@ -59,17 +63,9 @@ class RoCrate(metaclass=ABCMeta):
         for term in terms:
             if self.version.version not in term.specs:
                 # Skip terms that are already in the RO-Crate context
-                self.context.add_term(
-                    term.label,
-                    term.uri
-                )
+                self.context.add_term(term.label, term.uri)
 
-    def add_entity[T: RdfClass](
-        self,
-        iri: str,
-        type: type[T],
-        *args: EntityArgs
-    ) -> T:
+    def add_entity[T: RdfClass](self, iri: str, type: type[T], *args: EntityArgs) -> T:
         """
         Adds any type of entity to the crate
 
@@ -92,13 +88,13 @@ class RoCrate(metaclass=ABCMeta):
         return type.add(self.graph, iri, *args)
 
     def add_root_entity(
-            self,
-            name: schemaorg.name,
-            description: schemaorg.description,
-            date_published: schemaorg.datePublished,
-            license: schemaorg.license,
-            *props: EntityArgs
-        ) -> schemaorg.Dataset:
+        self,
+        name: schemaorg.name,
+        description: schemaorg.description,
+        date_published: schemaorg.datePublished,
+        license: schemaorg.license,
+        *props: EntityArgs,
+    ) -> schemaorg.Dataset:
         """
         Adds the root entity to the crate.
         """
@@ -128,11 +124,13 @@ class RoCrate(metaclass=ABCMeta):
             schemaorg.CreativeWork,
             schemaorg.about(self.root_data_entity),
             dc.conformsTo(self.version.conforms_to_url),
-            *props
+            *props,
         )
 
     def link_to_dataset(
-        self, entity: schemaorg.Dataset | rocrate.File, dataset: schemaorg.Dataset | None
+        self,
+        entity: schemaorg.Dataset | rocrate.File,
+        dataset: schemaorg.Dataset | None,
     ) -> None:
         """
         Links a data entity to a Dataset.
@@ -153,7 +151,7 @@ class RoCrate(metaclass=ABCMeta):
         *args: EntityArgs,
         guess_mime: bool = True,
         dataset: schemaorg.Dataset | None = None,
-        **kwargs
+        **kwargs,
     ) -> rocrate.File:
         """
         Adds file metadata to the crate
@@ -182,7 +180,9 @@ class RoCrate(metaclass=ABCMeta):
                 )
             guess_type, _guess_encoding = mimetypes.guess_type(path)
             if guess_type is not None:
-                self.add_metadata(file_id, schemaorg.encodingFormat(schemaorg.Text(guess_type)))
+                self.add_metadata(
+                    file_id, schemaorg.encodingFormat(schemaorg.Text(guess_type))
+                )
 
         self.link_to_dataset(file_id, dataset)
 
@@ -193,7 +193,7 @@ class RoCrate(metaclass=ABCMeta):
         path: str,
         *props: EntityArgs,
         dataset: schemaorg.Dataset | None = None,
-        **kwargs
+        **kwargs,
     ) -> schemaorg.Dataset:
         """
         Adds metadata for a directory
@@ -345,8 +345,18 @@ class AttachedCrate(RoCrate):
             )
         return ret
 
-    def add_root_entity(self, name: schemaorg.name, description: schemaorg.description, date_published: schemaorg.datePublished, license: schemaorg.license, *props: RdfProperty | ReverseProperty, recursive: Recursive = False) -> schemaorg.Dataset:
-        return self.register_dir(".", name, description, date_published, license, *props, recursive=recursive)
+    def add_root_entity(
+        self,
+        name: schemaorg.name,
+        description: schemaorg.description,
+        date_published: schemaorg.datePublished,
+        license: schemaorg.license,
+        *props: RdfProperty | ReverseProperty,
+        recursive: Recursive = False,
+    ) -> schemaorg.Dataset:
+        return self.register_dir(
+            ".", name, description, date_published, license, *props, recursive=recursive
+        )
 
     def register_dir(
         self,

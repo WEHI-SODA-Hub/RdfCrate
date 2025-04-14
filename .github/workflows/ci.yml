@@ -31,6 +31,11 @@ jobs:
     - name: Install the project
       run: uv sync --all-extras --dev
 
+  - name: Run linter
+    uses: astral-sh/ruff-action@v3
+    with:
+      src: "./src"
+
     - name: Run tests
       run: uv run pytest test
 

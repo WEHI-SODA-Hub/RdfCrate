@@ -1,4 +1,19 @@
-from rdfcrate.vocabs import bioschemas, bioschemas_drafts, rocrate, dc, geo, owl, pav, pcdm, prof, prov, rdf, rdfs, schemaorg
+from rdfcrate.vocabs import (
+    bioschemas,
+    bioschemas_drafts,
+    rocrate,
+    dc,
+    geo,
+    owl,
+    pav,
+    pcdm,
+    prof,
+    prov,
+    rdf,
+    rdfs,
+    schemaorg,
+)
+
 sdo = schemaorg
 roc = rocrate
 

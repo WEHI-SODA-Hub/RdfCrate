@@ -9,355 +9,604 @@ from rdfcrate.vocabs import schemaorg
 from rdfcrate.vocabs import bioschemas
 from rdfcrate.vocabs import bioschemas_drafts
 
+
 class LabProtocol(schemaorg.HowTo):
-    term = RdfTerm('LabProtocol', 'https://bioschemas.org/draft_terms/LabProtocol', [])
+    term = RdfTerm("LabProtocol", "https://bioschemas.org/draft_terms/LabProtocol", [])
+
 
 class BioChemEntity(schemaorg.BioChemEntity):
-    term = RdfTerm('BioChemEntity', 'https://bioschemas.org/draft_terms/BioChemEntity', [])
+    term = RdfTerm(
+        "BioChemEntity", "https://bioschemas.org/draft_terms/BioChemEntity", []
+    )
+
 
 class DNA(schemaorg.BioChemEntity):
-    term = RdfTerm('DNA', 'https://bioschemas.org/draft_terms/DNA', [])
+    term = RdfTerm("DNA", "https://bioschemas.org/draft_terms/DNA", [])
+
 
 class Enzyme(schemaorg.BioChemEntity):
-    term = RdfTerm('Enzyme', 'https://bioschemas.org/draft_terms/Enzyme', [])
+    term = RdfTerm("Enzyme", "https://bioschemas.org/draft_terms/Enzyme", [])
+
 
 class BioChemStructure(schemaorg.BioChemEntity):
-    term = RdfTerm('BioChemStructure', 'https://bioschemas.org/draft_terms/BioChemStructure', [])
+    term = RdfTerm(
+        "BioChemStructure", "https://bioschemas.org/draft_terms/BioChemStructure", []
+    )
+
 
 class TaxonName(schemaorg.CreativeWork):
-    term = RdfTerm('TaxonName', 'https://bioschemas.org/draft_terms/TaxonName', [])
+    term = RdfTerm("TaxonName", "https://bioschemas.org/draft_terms/TaxonName", [])
+
 
 class Study(schemaorg.CreativeWork):
-    term = RdfTerm('Study', 'https://bioschemas.org/draft_terms/Study', [])
+    term = RdfTerm("Study", "https://bioschemas.org/draft_terms/Study", [])
+
 
 class SequenceMatchingModel(schemaorg.CreativeWork):
-    term = RdfTerm('SequenceMatchingModel', 'https://bioschemas.org/draft_terms/SequenceMatchingModel', [])
+    term = RdfTerm(
+        "SequenceMatchingModel",
+        "https://bioschemas.org/draft_terms/SequenceMatchingModel",
+        [],
+    )
+
 
 class RNA(bioschemas.BioChemEntity):
-    term = RdfTerm('RNA', 'https://bioschemas.org/draft_terms/RNA', [])
+    term = RdfTerm("RNA", "https://bioschemas.org/draft_terms/RNA", [])
+
 
 class SequenceAnnotation(bioschemas.BioChemEntity):
-    term = RdfTerm('SequenceAnnotation', 'https://bioschemas.org/draft_terms/SequenceAnnotation', [])
+    term = RdfTerm(
+        "SequenceAnnotation",
+        "https://bioschemas.org/draft_terms/SequenceAnnotation",
+        [],
+    )
+
 
 class SequenceRange(bioschemas.BioChemEntity):
-    term = RdfTerm('SequenceRange', 'https://bioschemas.org/draft_terms/SequenceRange', [])
+    term = RdfTerm(
+        "SequenceRange", "https://bioschemas.org/draft_terms/SequenceRange", []
+    )
+
 
 class Sample(schemaorg.Thing):
-    term = RdfTerm('Sample', 'https://bioschemas.org/draft_terms/Sample', [])
+    term = RdfTerm("Sample", "https://bioschemas.org/draft_terms/Sample", [])
+
 
 class Phenotype(schemaorg.Thing):
-    term = RdfTerm('Phenotype', 'https://bioschemas.org/draft_terms/Phenotype', [])
+    term = RdfTerm("Phenotype", "https://bioschemas.org/draft_terms/Phenotype", [])
+
 
 class Taxon(schemaorg.Thing):
-    term = RdfTerm('Taxon', 'https://bioschemas.org/draft_terms/Taxon', [])
+    term = RdfTerm("Taxon", "https://bioschemas.org/draft_terms/Taxon", [])
+
 
 class Gene(BioChemEntity):
-    term = RdfTerm('Gene', 'https://bioschemas.org/draft_terms/Gene', [])
+    term = RdfTerm("Gene", "https://bioschemas.org/draft_terms/Gene", [])
+
 
 class Protein(BioChemEntity):
-    term = RdfTerm('Protein', 'https://bioschemas.org/draft_terms/Protein', [])
+    term = RdfTerm("Protein", "https://bioschemas.org/draft_terms/Protein", [])
+
 
 @dataclass(frozen=True)
 class reagent(RdfProperty):
-    term = RdfTerm('reagent', 'https://bioschemas.org/draft_terms/reagent', [])
-    object: schemaorg.DefinedTerm | schemaorg.MolecularEntity | schemaorg.ChemicalSubstance | schemaorg.Text | schemaorg.BioChemEntity | schemaorg.URL | schemaorg.PropertyValue
+    term = RdfTerm("reagent", "https://bioschemas.org/draft_terms/reagent", [])
+    object: (
+        schemaorg.DefinedTerm
+        | schemaorg.MolecularEntity
+        | schemaorg.ChemicalSubstance
+        | schemaorg.Text
+        | schemaorg.BioChemEntity
+        | schemaorg.URL
+        | schemaorg.PropertyValue
+    )
+
 
 @dataclass(frozen=True)
 class labEquipment(RdfProperty):
-    term = RdfTerm('labEquipment', 'https://bioschemas.org/draft_terms/labEquipment', [])
-    object: schemaorg.DefinedTerm | schemaorg.URL | schemaorg.PropertyValue | schemaorg.Text
+    term = RdfTerm(
+        "labEquipment", "https://bioschemas.org/draft_terms/labEquipment", []
+    )
+    object: (
+        schemaorg.DefinedTerm | schemaorg.URL | schemaorg.PropertyValue | schemaorg.Text
+    )
+
 
 @dataclass(frozen=True)
 class scientificName(RdfProperty):
-    term = RdfTerm('scientificName', 'https://bioschemas.org/draft_terms/scientificName', [])
+    term = RdfTerm(
+        "scientificName", "https://bioschemas.org/draft_terms/scientificName", []
+    )
     object: schemaorg.URL | bioschemas_drafts.TaxonName | schemaorg.Text
+
 
 @dataclass(frozen=True)
 class taxonomicRange(RdfProperty):
-    term = RdfTerm('taxonomicRange', 'https://bioschemas.org/draft_terms/taxonomicRange', [])
+    term = RdfTerm(
+        "taxonomicRange", "https://bioschemas.org/draft_terms/taxonomicRange", []
+    )
     object: schemaorg.Text | schemaorg.DefinedTerm | schemaorg.URL | schemaorg.Taxon
+
 
 @dataclass(frozen=True)
 class hasAssociatedBioChemEntity(RdfProperty):
-    term = RdfTerm('hasAssociatedBioChemEntity', 'https://bioschemas.org/draft_terms/hasAssociatedBioChemEntity', [])
+    term = RdfTerm(
+        "hasAssociatedBioChemEntity",
+        "https://bioschemas.org/draft_terms/hasAssociatedBioChemEntity",
+        [],
+    )
     object: schemaorg.Protein | bioschemas_drafts.RNA
+
 
 @dataclass(frozen=True)
 class studyProcess(RdfProperty):
-    term = RdfTerm('studyProcess', 'https://bioschemas.org/draft_terms/studyProcess', [])
+    term = RdfTerm(
+        "studyProcess", "https://bioschemas.org/draft_terms/studyProcess", []
+    )
     object: schemaorg.URL | schemaorg.PropertyValue | schemaorg.Text
+
 
 @dataclass(frozen=True)
 class protocolAdvantage(RdfProperty):
-    term = RdfTerm('protocolAdvantage', 'https://bioschemas.org/draft_terms/protocolAdvantage', [])
+    term = RdfTerm(
+        "protocolAdvantage", "https://bioschemas.org/draft_terms/protocolAdvantage", []
+    )
     object: schemaorg.Text | schemaorg.CreativeWork
+
 
 @dataclass(frozen=True)
 class optimalTemperature(RdfProperty):
-    term = RdfTerm('optimalTemperature', 'https://bioschemas.org/draft_terms/optimalTemperature', [])
+    term = RdfTerm(
+        "optimalTemperature",
+        "https://bioschemas.org/draft_terms/optimalTemperature",
+        [],
+    )
     object: schemaorg.Quantity
+
 
 @dataclass(frozen=True)
 class hasStatus(RdfProperty):
-    term = RdfTerm('hasStatus', 'https://bioschemas.org/draft_terms/hasStatus', [])
+    term = RdfTerm("hasStatus", "https://bioschemas.org/draft_terms/hasStatus", [])
     object: schemaorg.Text
+
 
 @dataclass(frozen=True)
 class protocolOutcome(RdfProperty):
-    term = RdfTerm('protocolOutcome', 'https://bioschemas.org/draft_terms/protocolOutcome', [])
+    term = RdfTerm(
+        "protocolOutcome", "https://bioschemas.org/draft_terms/protocolOutcome", []
+    )
     object: schemaorg.CreativeWork | schemaorg.Text
+
 
 @dataclass(frozen=True)
 class intendedUse(RdfProperty):
-    term = RdfTerm('intendedUse', 'https://bioschemas.org/draft_terms/intendedUse', [])
+    term = RdfTerm("intendedUse", "https://bioschemas.org/draft_terms/intendedUse", [])
     object: schemaorg.URL | schemaorg.DefinedTerm | schemaorg.Text
+
 
 @dataclass(frozen=True)
 class anatomicalLocation(RdfProperty):
-    term = RdfTerm('anatomicalLocation', 'https://bioschemas.org/draft_terms/anatomicalLocation', [])
+    term = RdfTerm(
+        "anatomicalLocation",
+        "https://bioschemas.org/draft_terms/anatomicalLocation",
+        [],
+    )
     object: schemaorg.Text | schemaorg.URL | schemaorg.DefinedTerm
+
 
 @dataclass(frozen=True)
 class bioSample(RdfProperty):
-    term = RdfTerm('bioSample', 'https://bioschemas.org/draft_terms/bioSample', [])
-    object: bioschemas.BioSample | schemaorg.Text | schemaorg.BioChemEntity | schemaorg.URL | schemaorg.PropertyValue | schemaorg.DefinedTerm | schemaorg.Taxon
+    term = RdfTerm("bioSample", "https://bioschemas.org/draft_terms/bioSample", [])
+    object: (
+        bioschemas.BioSample
+        | schemaorg.Text
+        | schemaorg.BioChemEntity
+        | schemaorg.URL
+        | schemaorg.PropertyValue
+        | schemaorg.DefinedTerm
+        | schemaorg.Taxon
+    )
+
 
 @dataclass(frozen=True)
 class studyLocation(RdfProperty):
-    term = RdfTerm('studyLocation', 'https://bioschemas.org/draft_terms/studyLocation', [])
+    term = RdfTerm(
+        "studyLocation", "https://bioschemas.org/draft_terms/studyLocation", []
+    )
     object: schemaorg.AdministrativeArea | schemaorg.Place
+
 
 @dataclass(frozen=True)
 class isCodingRNA(RdfProperty):
-    term = RdfTerm('isCodingRNA', 'https://bioschemas.org/draft_terms/isCodingRNA', [])
+    term = RdfTerm("isCodingRNA", "https://bioschemas.org/draft_terms/isCodingRNA", [])
     object: schemaorg.Boolean
+
 
 @dataclass(frozen=True)
 class hasKineticRate(RdfProperty):
-    term = RdfTerm('hasKineticRate', 'https://bioschemas.org/draft_terms/hasKineticRate', [])
+    term = RdfTerm(
+        "hasKineticRate", "https://bioschemas.org/draft_terms/hasKineticRate", []
+    )
     object: schemaorg.Text
+
 
 @dataclass(frozen=True)
 class hasSequence(RdfProperty):
-    term = RdfTerm('hasSequence', 'https://bioschemas.org/draft_terms/hasSequence', [])
+    term = RdfTerm("hasSequence", "https://bioschemas.org/draft_terms/hasSequence", [])
     object: schemaorg.Text
+
 
 @dataclass(frozen=True)
 class studySubject(RdfProperty):
-    term = RdfTerm('studySubject', 'https://bioschemas.org/draft_terms/studySubject', [])
+    term = RdfTerm(
+        "studySubject", "https://bioschemas.org/draft_terms/studySubject", []
+    )
     object: schemaorg.MedicalEntity | schemaorg.BioChemEntity
+
 
 @dataclass(frozen=True)
 class protocolApplication(RdfProperty):
-    term = RdfTerm('protocolApplication', 'https://bioschemas.org/draft_terms/protocolApplication', [])
+    term = RdfTerm(
+        "protocolApplication",
+        "https://bioschemas.org/draft_terms/protocolApplication",
+        [],
+    )
     object: schemaorg.Text | schemaorg.CreativeWork
+
 
 @dataclass(frozen=True)
 class startDate(RdfProperty):
-    term = RdfTerm('startDate', 'https://bioschemas.org/draft_terms/startDate', [])
+    term = RdfTerm("startDate", "https://bioschemas.org/draft_terms/startDate", [])
     object: schemaorg.DateTime | schemaorg.Date
+
 
 @dataclass(frozen=True)
 class hasSequenceAnnotation(RdfProperty):
-    term = RdfTerm('hasSequenceAnnotation', 'https://bioschemas.org/draft_terms/hasSequenceAnnotation', [])
+    term = RdfTerm(
+        "hasSequenceAnnotation",
+        "https://bioschemas.org/draft_terms/hasSequenceAnnotation",
+        [],
+    )
     object: bioschemas_drafts.SequenceAnnotation | schemaorg.URL
+
 
 @dataclass(frozen=True)
 class isLocatedInSubcellularLocation(RdfProperty):
-    term = RdfTerm('isLocatedInSubcellularLocation', 'https://bioschemas.org/draft_terms/isLocatedInSubcellularLocation', [])
+    term = RdfTerm(
+        "isLocatedInSubcellularLocation",
+        "https://bioschemas.org/draft_terms/isLocatedInSubcellularLocation",
+        [],
+    )
     object: schemaorg.PropertyValue | schemaorg.DefinedTerm | schemaorg.URL
+
 
 @dataclass(frozen=True)
 class expressedIn(RdfProperty):
-    term = RdfTerm('expressedIn', 'https://bioschemas.org/draft_terms/expressedIn', [])
-    object: schemaorg.BioChemEntity | schemaorg.DefinedTerm | schemaorg.AnatomicalStructure | schemaorg.AnatomicalSystem
+    term = RdfTerm("expressedIn", "https://bioschemas.org/draft_terms/expressedIn", [])
+    object: (
+        schemaorg.BioChemEntity
+        | schemaorg.DefinedTerm
+        | schemaorg.AnatomicalStructure
+        | schemaorg.AnatomicalSystem
+    )
+
 
 @dataclass(frozen=True)
 class protocolLimitation(RdfProperty):
-    term = RdfTerm('protocolLimitation', 'https://bioschemas.org/draft_terms/protocolLimitation', [])
+    term = RdfTerm(
+        "protocolLimitation",
+        "https://bioschemas.org/draft_terms/protocolLimitation",
+        [],
+    )
     object: schemaorg.Text | schemaorg.CreativeWork
+
 
 @dataclass(frozen=True)
 class hasCofactor(RdfProperty):
-    term = RdfTerm('hasCofactor', 'https://bioschemas.org/draft_terms/hasCofactor', [])
+    term = RdfTerm("hasCofactor", "https://bioschemas.org/draft_terms/hasCofactor", [])
     object: schemaorg.ChemicalSubstance
+
 
 @dataclass(frozen=True)
 class additionalProperty(RdfProperty):
-    term = RdfTerm('additionalProperty', 'https://bioschemas.org/draft_terms/additionalProperty', [])
+    term = RdfTerm(
+        "additionalProperty",
+        "https://bioschemas.org/draft_terms/additionalProperty",
+        [],
+    )
     object: schemaorg.PropertyValue
+
 
 @dataclass(frozen=True)
 class alternativeOf(RdfProperty):
-    term = RdfTerm('alternativeOf', 'https://bioschemas.org/draft_terms/alternativeOf', [])
+    term = RdfTerm(
+        "alternativeOf", "https://bioschemas.org/draft_terms/alternativeOf", []
+    )
     object: schemaorg.Gene
+
 
 @dataclass(frozen=True)
 class isInvolvedInBiologicalProcess(RdfProperty):
-    term = RdfTerm('isInvolvedInBiologicalProcess', 'https://bioschemas.org/draft_terms/isInvolvedInBiologicalProcess', [])
+    term = RdfTerm(
+        "isInvolvedInBiologicalProcess",
+        "https://bioschemas.org/draft_terms/isInvolvedInBiologicalProcess",
+        [],
+    )
     object: schemaorg.PropertyValue | schemaorg.DefinedTerm | schemaorg.URL
+
 
 @dataclass(frozen=True)
 class creationMethod(RdfProperty):
-    term = RdfTerm('creationMethod', 'https://bioschemas.org/draft_terms/creationMethod', [])
+    term = RdfTerm(
+        "creationMethod", "https://bioschemas.org/draft_terms/creationMethod", []
+    )
     object: schemaorg.Text | schemaorg.URL | schemaorg.PropertyValue
+
 
 @dataclass(frozen=True)
 class match(RdfProperty):
-    term = RdfTerm('match', 'https://bioschemas.org/draft_terms/match', [])
+    term = RdfTerm("match", "https://bioschemas.org/draft_terms/match", [])
     object: schemaorg.BioChemEntity
+
 
 @dataclass(frozen=True)
 class startUncertainty(RdfProperty):
-    term = RdfTerm('startUncertainty', 'https://bioschemas.org/draft_terms/startUncertainty', [])
+    term = RdfTerm(
+        "startUncertainty", "https://bioschemas.org/draft_terms/startUncertainty", []
+    )
     object: schemaorg.Text
+
 
 @dataclass(frozen=True)
 class childTaxon(RdfProperty):
-    term = RdfTerm('childTaxon', 'https://bioschemas.org/draft_terms/childTaxon', [])
+    term = RdfTerm("childTaxon", "https://bioschemas.org/draft_terms/childTaxon", [])
     object: schemaorg.URL | schemaorg.Taxon | schemaorg.Text
+
 
 @dataclass(frozen=True)
 class sequenceValue(RdfProperty):
-    term = RdfTerm('sequenceValue', 'https://bioschemas.org/draft_terms/sequenceValue', [])
+    term = RdfTerm(
+        "sequenceValue", "https://bioschemas.org/draft_terms/sequenceValue", []
+    )
     object: schemaorg.URL | schemaorg.Text
+
 
 @dataclass(frozen=True)
 class massResolution(RdfProperty):
-    term = RdfTerm('massResolution', 'https://bioschemas.org/draft_terms/massResolution', [])
+    term = RdfTerm(
+        "massResolution", "https://bioschemas.org/draft_terms/massResolution", []
+    )
     object: schemaorg.Quantity
+
 
 @dataclass(frozen=True)
 class rangeStart(RdfProperty):
-    term = RdfTerm('rangeStart', 'https://bioschemas.org/draft_terms/rangeStart', [])
+    term = RdfTerm("rangeStart", "https://bioschemas.org/draft_terms/rangeStart", [])
     object: schemaorg.Integer
+
 
 @dataclass(frozen=True)
 class isMatchedBy(RdfProperty):
-    term = RdfTerm('isMatchedBy', 'https://bioschemas.org/draft_terms/isMatchedBy', [])
+    term = RdfTerm("isMatchedBy", "https://bioschemas.org/draft_terms/isMatchedBy", [])
     object: bioschemas_drafts.SequenceMatchingModel
+
 
 @dataclass(frozen=True)
 class associatedDisease(RdfProperty):
-    term = RdfTerm('associatedDisease', 'https://bioschemas.org/draft_terms/associatedDisease', [])
+    term = RdfTerm(
+        "associatedDisease", "https://bioschemas.org/draft_terms/associatedDisease", []
+    )
     object: schemaorg.MedicalCondition | schemaorg.URL | schemaorg.PropertyValue
+
 
 @dataclass(frozen=True)
 class biologicalType(RdfProperty):
-    term = RdfTerm('biologicalType', 'https://bioschemas.org/draft_terms/biologicalType', [])
-    object: schemaorg.Text | schemaorg.BioChemEntity | schemaorg.URL | schemaorg.DefinedTerm
+    term = RdfTerm(
+        "biologicalType", "https://bioschemas.org/draft_terms/biologicalType", []
+    )
+    object: (
+        schemaorg.Text | schemaorg.BioChemEntity | schemaorg.URL | schemaorg.DefinedTerm
+    )
+
 
 @dataclass(frozen=True)
 class encodesBioChemEntity(RdfProperty):
-    term = RdfTerm('encodesBioChemEntity', 'https://bioschemas.org/draft_terms/encodesBioChemEntity', [])
+    term = RdfTerm(
+        "encodesBioChemEntity",
+        "https://bioschemas.org/draft_terms/encodesBioChemEntity",
+        [],
+    )
     object: bioschemas.BioChemEntity
+
 
 @dataclass(frozen=True)
 class ethicalLegalSocial(RdfProperty):
-    term = RdfTerm('ethicalLegalSocial', 'https://bioschemas.org/draft_terms/ethicalLegalSocial', [])
+    term = RdfTerm(
+        "ethicalLegalSocial",
+        "https://bioschemas.org/draft_terms/ethicalLegalSocial",
+        [],
+    )
     object: schemaorg.Text
+
 
 @dataclass(frozen=True)
 class modelSignature(RdfProperty):
-    term = RdfTerm('modelSignature', 'https://bioschemas.org/draft_terms/modelSignature', [])
+    term = RdfTerm(
+        "modelSignature", "https://bioschemas.org/draft_terms/modelSignature", []
+    )
     object: schemaorg.PropertyValue | schemaorg.Text
+
 
 @dataclass(frozen=True)
 class taxonRank(RdfProperty):
-    term = RdfTerm('taxonRank', 'https://bioschemas.org/draft_terms/taxonRank', [])
+    term = RdfTerm("taxonRank", "https://bioschemas.org/draft_terms/taxonRank", [])
     object: schemaorg.URL | schemaorg.PropertyValue | schemaorg.Text
+
 
 @dataclass(frozen=True)
 class hasMolecularFunction(RdfProperty):
-    term = RdfTerm('hasMolecularFunction', 'https://bioschemas.org/draft_terms/hasMolecularFunction', [])
+    term = RdfTerm(
+        "hasMolecularFunction",
+        "https://bioschemas.org/draft_terms/hasMolecularFunction",
+        [],
+    )
     object: schemaorg.DefinedTerm | schemaorg.URL | schemaorg.PropertyValue
+
 
 @dataclass(frozen=True)
 class modelDataset(RdfProperty):
-    term = RdfTerm('modelDataset', 'https://bioschemas.org/draft_terms/modelDataset', [])
+    term = RdfTerm(
+        "modelDataset", "https://bioschemas.org/draft_terms/modelDataset", []
+    )
     object: schemaorg.Dataset
+
 
 @dataclass(frozen=True)
 class studyDomain(RdfProperty):
-    term = RdfTerm('studyDomain', 'https://bioschemas.org/draft_terms/studyDomain', [])
+    term = RdfTerm("studyDomain", "https://bioschemas.org/draft_terms/studyDomain", [])
     object: schemaorg.PropertyValue | schemaorg.Text | schemaorg.URL
+
 
 @dataclass(frozen=True)
 class optimalPH(RdfProperty):
-    term = RdfTerm('optimalPH', 'https://bioschemas.org/draft_terms/optimalPH', [])
+    term = RdfTerm("optimalPH", "https://bioschemas.org/draft_terms/optimalPH", [])
     object: schemaorg.Number
+
 
 @dataclass(frozen=True)
 class computationalTool(RdfProperty):
-    term = RdfTerm('computationalTool', 'https://bioschemas.org/draft_terms/computationalTool', [])
-    object: schemaorg.SoftwareApplication | schemaorg.PropertyValue | bioschemas.ComputationalWorkflow | schemaorg.SoftwareSourceCode | schemaorg.DefinedTerm
+    term = RdfTerm(
+        "computationalTool", "https://bioschemas.org/draft_terms/computationalTool", []
+    )
+    object: (
+        schemaorg.SoftwareApplication
+        | schemaorg.PropertyValue
+        | bioschemas.ComputationalWorkflow
+        | schemaorg.SoftwareSourceCode
+        | schemaorg.DefinedTerm
+    )
+
 
 @dataclass(frozen=True)
 class valueReference(RdfProperty):
-    term = RdfTerm('valueReference', 'https://bioschemas.org/draft_terms/valueReference', [])
-    object: schemaorg.Text | schemaorg.QuantitativeValue | schemaorg.QualitativeValue | schemaorg.URL | schemaorg.PropertyValue | schemaorg.Enumeration | schemaorg.DefinedTerm | schemaorg.StructuredValue
+    term = RdfTerm(
+        "valueReference", "https://bioschemas.org/draft_terms/valueReference", []
+    )
+    object: (
+        schemaorg.Text
+        | schemaorg.QuantitativeValue
+        | schemaorg.QualitativeValue
+        | schemaorg.URL
+        | schemaorg.PropertyValue
+        | schemaorg.Enumeration
+        | schemaorg.DefinedTerm
+        | schemaorg.StructuredValue
+    )
+
 
 @dataclass(frozen=True)
 class sample(RdfProperty):
-    term = RdfTerm('sample', 'https://bioschemas.org/draft_terms/sample', [])
+    term = RdfTerm("sample", "https://bioschemas.org/draft_terms/sample", [])
     object: schemaorg.PropertyValue | schemaorg.DefinedTerm | schemaorg.Thing
+
 
 @dataclass(frozen=True)
 class endDate(RdfProperty):
-    term = RdfTerm('endDate', 'https://bioschemas.org/draft_terms/endDate', [])
+    term = RdfTerm("endDate", "https://bioschemas.org/draft_terms/endDate", [])
     object: schemaorg.Date | schemaorg.DateTime
+
 
 @dataclass(frozen=True)
 class alternateScientificName(RdfProperty):
-    term = RdfTerm('alternateScientificName', 'https://bioschemas.org/draft_terms/alternateScientificName', [])
+    term = RdfTerm(
+        "alternateScientificName",
+        "https://bioschemas.org/draft_terms/alternateScientificName",
+        [],
+    )
     object: bioschemas_drafts.TaxonName | schemaorg.Text | schemaorg.URL
+
 
 @dataclass(frozen=True)
 class rangeEnd(RdfProperty):
-    term = RdfTerm('rangeEnd', 'https://bioschemas.org/draft_terms/rangeEnd', [])
+    term = RdfTerm("rangeEnd", "https://bioschemas.org/draft_terms/rangeEnd", [])
     object: schemaorg.Integer
+
 
 @dataclass(frozen=True)
 class hasCoenzyme(RdfProperty):
-    term = RdfTerm('hasCoenzyme', 'https://bioschemas.org/draft_terms/hasCoenzyme', [])
+    term = RdfTerm("hasCoenzyme", "https://bioschemas.org/draft_terms/hasCoenzyme", [])
     object: schemaorg.BioChemEntity
+
 
 @dataclass(frozen=True)
 class sequenceOrientation(RdfProperty):
-    term = RdfTerm('sequenceOrientation', 'https://bioschemas.org/draft_terms/sequenceOrientation', [])
+    term = RdfTerm(
+        "sequenceOrientation",
+        "https://bioschemas.org/draft_terms/sequenceOrientation",
+        [],
+    )
     object: schemaorg.Integer
+
 
 @dataclass(frozen=True)
 class relatedStudy(RdfProperty):
-    term = RdfTerm('relatedStudy', 'https://bioschemas.org/draft_terms/relatedStudy', [])
+    term = RdfTerm(
+        "relatedStudy", "https://bioschemas.org/draft_terms/relatedStudy", []
+    )
     object: bioschemas_drafts.Study
+
 
 @dataclass(frozen=True)
 class hasBioPolymerSequence(RdfProperty):
-    term = RdfTerm('hasBioPolymerSequence', 'https://bioschemas.org/draft_terms/hasBioPolymerSequence', [])
+    term = RdfTerm(
+        "hasBioPolymerSequence",
+        "https://bioschemas.org/draft_terms/hasBioPolymerSequence",
+        [],
+    )
     object: schemaorg.Text
+
 
 @dataclass(frozen=True)
 class sequenceLocation(RdfProperty):
-    term = RdfTerm('sequenceLocation', 'https://bioschemas.org/draft_terms/sequenceLocation', [])
+    term = RdfTerm(
+        "sequenceLocation", "https://bioschemas.org/draft_terms/sequenceLocation", []
+    )
     object: bioschemas_drafts.SequenceRange
+
 
 @dataclass(frozen=True)
 class boundMolecule(RdfProperty):
-    term = RdfTerm('boundMolecule', 'https://bioschemas.org/draft_terms/boundMolecule', [])
-    object: schemaorg.BioChemEntity | schemaorg.URL | schemaorg.ChemicalSubstance | schemaorg.DefinedTerm | schemaorg.MolecularEntity
+    term = RdfTerm(
+        "boundMolecule", "https://bioschemas.org/draft_terms/boundMolecule", []
+    )
+    object: (
+        schemaorg.BioChemEntity
+        | schemaorg.URL
+        | schemaorg.ChemicalSubstance
+        | schemaorg.DefinedTerm
+        | schemaorg.MolecularEntity
+    )
+
 
 @dataclass(frozen=True)
 class bioChemAssociation(RdfProperty):
-    term = RdfTerm('bioChemAssociation', 'https://bioschemas.org/draft_terms/bioChemAssociation', [])
+    term = RdfTerm(
+        "bioChemAssociation",
+        "https://bioschemas.org/draft_terms/bioChemAssociation",
+        [],
+    )
     object: schemaorg.BioChemEntity
+
 
 @dataclass(frozen=True)
 class endUncertainty(RdfProperty):
-    term = RdfTerm('endUncertainty', 'https://bioschemas.org/draft_terms/endUncertainty', [])
+    term = RdfTerm(
+        "endUncertainty", "https://bioschemas.org/draft_terms/endUncertainty", []
+    )
     object: schemaorg.Text
+
 
 @dataclass(frozen=True)
 class parentTaxon(RdfProperty):
-    term = RdfTerm('parentTaxon', 'https://bioschemas.org/draft_terms/parentTaxon', [])
+    term = RdfTerm("parentTaxon", "https://bioschemas.org/draft_terms/parentTaxon", [])
     object: schemaorg.URL | schemaorg.Taxon | schemaorg.Text

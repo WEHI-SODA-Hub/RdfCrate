@@ -1,6 +1,6 @@
 [project]
 name = "rdfcrate"
-version = "0.3.0"
+version = "1.0.0"
 description = "Library for building RO-Crates using rdflib"
 readme = "README.md"
 authors = [

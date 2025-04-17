@@ -63,8 +63,6 @@ def find_classes(graph: Graph) -> Iterable[URIRef]:
             cls_id := result["class"], URIRef
         ):
             yield cls_id
-        else:
-            raise ValueError("Invalid query response")
 
 
 def find_enums(graph: Graph) -> Iterable[URIRef]:
@@ -85,8 +83,6 @@ def find_enums(graph: Graph) -> Iterable[URIRef]:
             cls_id := result["class"], URIRef
         ):
             yield cls_id
-        else:
-            raise ValueError("Invalid query response")
 
 
 def find_datatypes(graph: Graph) -> Iterable[URIRef]:
@@ -116,8 +112,6 @@ def find_datatypes(graph: Graph) -> Iterable[URIRef]:
             cls_id := result["class"], URIRef
         ):
             yield cls_id
-        else:
-            raise ValueError("Invalid query response")
 
 def find_properties(graph: Graph) -> Iterable[URIRef]:
     """

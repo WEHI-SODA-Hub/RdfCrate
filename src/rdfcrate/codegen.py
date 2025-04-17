@@ -566,9 +566,9 @@ def generate_modules(
         state.graph.parse(uri)
         schema_org_https(state.graph)
         module_base = f"{base_module}.{vocab}"
+        state.datatypes_from_rdfs(module_base)
         state.classes_from_rdfs(module_base)
         state.properties_from_rdfs(module_base)
-        state.datatypes_from_rdfs(module_base)
         state.visit_enums()
         module = state.type_module()
         out_path = out_dir / f"{vocab}.py"

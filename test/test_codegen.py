@@ -5,7 +5,7 @@ from rdfcrate.codegen import find_classes, find_datatypes, find_enum_values, fin
 
 def test_find_classes_sdo():
     graph = Graph()
-    graph.parse( "https://schema.org/version/latest/schemaorg-current-http.jsonld",)
+    graph.parse("https://schema.org/version/latest/schemaorg-current-http.jsonld")
     classes = set(str(x) for x in find_classes(graph))
     assert str(SDO.Person) in classes
     assert str(SDO.Text) not in classes
@@ -20,14 +20,14 @@ def test_find_classes_rdf():
 
 def test_find_datatypes_sdo():
     graph = Graph()
-    graph.parse( "https://schema.org/version/latest/schemaorg-current-http.jsonld",)
+    graph.parse("https://schema.org/version/latest/schemaorg-current-http.jsonld")
     datatypes = set(str(x) for x in find_datatypes(graph))
     assert str(SDO.Text) in datatypes
     assert str(SDO.Person) not in datatypes
 
 def test_find_properties_sdo():
     graph = Graph()
-    graph.parse( "https://schema.org/version/latest/schemaorg-current-http.jsonld",)
+    graph.parse("https://schema.org/version/latest/schemaorg-current-http.jsonld")
     properties = set(str(x) for x in find_properties(graph))
     assert str(SDO.name) in properties
     assert str(SDO.Person) not in properties

@@ -29,7 +29,7 @@ Here's how you could make an RO-Crate using RdfCrate:
 from rdfcrate import AttachedCrate, sdo
 from datetime import date
 
-crate = AttachedCrate("/path/to/crate")
+crate = AttachedCrate("crate/")
 crate.register_file(
     "salvatore.jpg", 
     sdo.name(sdo.Text("Salvatore the Seal"))

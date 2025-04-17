@@ -2,7 +2,6 @@
 
 ```bash
 quarto render README.qmd
-quarto render docs/guide.qmd
 mkdocs build
 ```
 

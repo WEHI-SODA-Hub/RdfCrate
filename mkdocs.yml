@@ -22,7 +22,6 @@ plugins:
 
 nav:
   - 'README.md'
-  - 'docs/guide.md'
   - 'docs/api.md'
   - 'docs/motivation.md'
 

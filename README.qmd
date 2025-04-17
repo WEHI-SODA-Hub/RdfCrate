@@ -3,7 +3,7 @@ format: gfm
 ---
 # RdfCrate
 
-RO-Crate builder that uses RDF concepts.
+`rdfcrate` is a Python package for working with RO-Crates which treats RO-Crates as RDF graphs rather than JSON objects.
 
 **[Detailed documentation available here](https://wehi-soda-hub.github.io/RdfCrate/)**.
 
@@ -26,12 +26,19 @@ Let's say you have a directory with one file in it, which you want to document.
 Here's how you could make an RO-Crate using RdfCrate:
 
 ```{python}
-from rdfcrate import AttachedCrate, uris
-from rdflib import Literal
+from rdfcrate import AttachedCrate, sdo
+from datetime import date
 
 crate = AttachedCrate("/path/to/crate")
-crate.register_file("salvatore.jpg", [
-    (uris.name, Literal("Salvatore the Seal"))
-])
+crate.register_file(
+    "salvatore.jpg", 
+    sdo.name(sdo.Text("Salvatore the Seal"))
+)
+crate.add_root_entity(
+    sdo.name(sdo.Text("Melbourne Photos")),
+    sdo.description(sdo.Text("Photo gallery of iconic things in Melbourne")),
+    sdo.datePublished(sdo.Date(date.today())),
+    sdo.license(sdo.URL("https://creativecommons.org/licenses/by/4.0/"))
+)
 print(crate.compile())
 ```

@@ -236,7 +236,7 @@ class CodegenState:
         elif len(range_options) == 1:
             # If one range is found, use it
             return ast.Name(range_options[0])
-        elif len(range_options) > 1:
+        else:
             # If multiple ranges are found, use a type union with `|`
             union_expr = ast.BinOp(
                 left=ast.Name(range_options[0]),
@@ -248,10 +248,6 @@ class CodegenState:
                     left=union_expr, op=ast.BitOr(), right=ast.Name(range_name)
                 )
             return union_expr
-
-        raise ValueError(
-            f"Could not determine range for property {prop}. No range found."
-        )
 
     def term_with_specs(self, term: str, uri: str) -> ast.Call:
         """

@@ -320,9 +320,6 @@ class AttachedCrate(RoCrate):
             # Paths can be provided as strings
             path = Path(path)
 
-        if not path.exists():
-            raise ValueError(f"Path {path} does not exist")
-
         if path.is_absolute():
             # Absolute paths are accepted, but must be within the crate root
             if not path.is_relative_to(self.root):
@@ -332,6 +329,9 @@ class AttachedCrate(RoCrate):
         else:
             # Relative paths are assumed to be relative to the crate root
             path = self.root / path
+
+        if not path.exists():
+            raise ValueError(f"Path {path} does not exist")
 
         return path.resolve(), URIRef(path.relative_to(self.root).as_posix())
 

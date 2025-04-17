@@ -25,9 +25,6 @@ class Container(Resource):
 class Datatype(Class):
     term = RdfTerm('Datatype', 'http://www.w3.org/2000/01/rdf-schema#Datatype', [])
 
-class Class(Class):
-    term = RdfTerm('Class', 'http://www.w3.org/2002/07/owl#Class', [])
-
 class subClassOf(RdfProperty[rdfs.Class]):
     term = RdfTerm('subClassOf', 'http://www.w3.org/2000/01/rdf-schema#subClassOf', [])
 

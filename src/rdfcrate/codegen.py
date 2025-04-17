@@ -36,8 +36,6 @@ def find_classes(graph: Graph) -> Iterable[URIRef]:
     """
     Yields all classes that aren't Literals
     """
-    # These help us to find subclasses of OWL classes
-    graph.add((OWL.Class, RDFS.subClassOf, RDFS.Class))
     for result in graph.query(
         """
         SELECT DISTINCT ?class
@@ -498,7 +496,9 @@ class CodegenState:
                     )
                 )
 
-    def process_rdf(self, vocab_name: str, vocab_uri: str, base_module: str) -> ast.Module:
+    def process_rdf(
+        self, vocab_name: str, vocab_uri: str, base_module: str
+    ) -> ast.Module:
         """
         Processes a vocabulary and generates a module for it.
 

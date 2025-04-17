@@ -12,8 +12,8 @@ from rdfcrate.vocabs import owl
 class DataRange(rdfs.Datatype):
     term = RdfTerm('DataRange', 'http://www.w3.org/2002/07/owl#DataRange', [])
 
-class Restriction(rdfs.Class):
-    term = RdfTerm('Restriction', 'http://www.w3.org/2002/07/owl#Restriction', [])
+class Class(rdfs.Class):
+    term = RdfTerm('Class', 'http://www.w3.org/2002/07/owl#Class', [])
 
 class DeprecatedClass(rdfs.Class):
     term = RdfTerm('DeprecatedClass', 'http://www.w3.org/2002/07/owl#DeprecatedClass', [])
@@ -60,6 +60,9 @@ class Ontology(rdfs.Resource):
 class NamedIndividual(RdfClass):
     term = RdfTerm('NamedIndividual', 'http://www.w3.org/2002/07/owl#NamedIndividual', [])
 
+class Restriction(Class):
+    term = RdfTerm('Restriction', 'http://www.w3.org/2002/07/owl#Restriction', [])
+
 class AsymmetricProperty(ObjectProperty):
     term = RdfTerm('AsymmetricProperty', 'http://www.w3.org/2002/07/owl#AsymmetricProperty', [])
 
@@ -96,7 +99,7 @@ class assertionProperty(RdfProperty[rdf.Property]):
 class cardinality(RdfProperty[Identifier]):
     term = RdfTerm('cardinality', 'http://www.w3.org/2002/07/owl#cardinality', [])
 
-class complementOf(RdfProperty[rdfs.Class]):
+class complementOf(RdfProperty[owl.Class]):
     term = RdfTerm('complementOf', 'http://www.w3.org/2002/07/owl#complementOf', [])
 
 class datatypeComplementOf(RdfProperty[rdfs.Datatype]):
@@ -108,7 +111,7 @@ class differentFrom(RdfProperty[Identifier]):
 class disjointUnionOf(RdfProperty[rdf.List]):
     term = RdfTerm('disjointUnionOf', 'http://www.w3.org/2002/07/owl#disjointUnionOf', [])
 
-class disjointWith(RdfProperty[rdfs.Class]):
+class disjointWith(RdfProperty[owl.Class]):
     term = RdfTerm('disjointWith', 'http://www.w3.org/2002/07/owl#disjointWith', [])
 
 class distinctMembers(RdfProperty[rdf.List]):
@@ -150,7 +153,7 @@ class minCardinality(RdfProperty[Identifier]):
 class minQualifiedCardinality(RdfProperty[Identifier]):
     term = RdfTerm('minQualifiedCardinality', 'http://www.w3.org/2002/07/owl#minQualifiedCardinality', [])
 
-class onClass(RdfProperty[rdfs.Class]):
+class onClass(RdfProperty[owl.Class]):
     term = RdfTerm('onClass', 'http://www.w3.org/2002/07/owl#onClass', [])
 
 class onDataRange(RdfProperty[rdfs.Datatype]):

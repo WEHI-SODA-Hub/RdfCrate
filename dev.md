@@ -8,5 +8,5 @@ mkdocs build
 ## Regenerating Vocabs
 
 ```bash
- uv run src/rdfcrate/codegen.py
+uv run src/rdfcrate/codegen.py
 ```

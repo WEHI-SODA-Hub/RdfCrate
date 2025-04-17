@@ -53,6 +53,8 @@ def find_classes(graph: Graph) -> Iterable[URIRef]:
                 ?class rdfs:subClassOf* ?dt_superclass .
                 ?dt_superclass a schema:DataType .
             }
+            # We don't care about blank nodes or literals
+            FILTER isIRI(?class)
         }
     """,
         initNs={"rdfs": RDFS, "schema": SDO},
@@ -382,15 +384,6 @@ class CodegenState:
         for cls_uri in find_classes(self.graph):
             if cls_uri in self.module_map:
                 # Skip classes that are already defined
-                continue
-
-            if isinstance(cls_uri, BNode):
-                # Skip blank node classes
-                continue
-
-            if (cls_uri, RDF.type, SDO.DataType) in self.graph:
-                # Skip schema.org datatypes, since they should not be treated as classes.
-                # See https://github.com/schemaorg/schemaorg/issues/4325
                 continue
 
             # Compute the short term name by removing the base URI

@@ -498,6 +498,33 @@ class CodegenState:
                     )
                 )
 
+    def process_rdf(self, vocab_name: str, vocab_uri: str, base_module: str) -> ast.Module:
+        """
+        Processes a vocabulary and generates a module for it.
+
+        Params:
+            vocab_name: The name of the vocabulary
+            vocab_uri: The URI that will be used to load the vocabulary
+            base_module: The module path for all vocabularies
+        """
+        self.reset()
+        self.graph.parse(vocab_uri)
+        schema_org_https(self.graph)
+        module_base = f"{base_module}.{vocab_name}"
+        self.datatypes_from_rdfs(module_base)
+        self.classes_from_rdfs(module_base)
+        self.properties_from_rdfs(module_base)
+        self.visit_enums()
+        return self.type_module()
+
+    def process_context(self, context: Context) -> ast.Module:
+        """
+        Processes a JSON-LD context and generates a module for it.
+        """
+        self.reset()
+        self.parse_context(context)
+        return self.type_module()
+
 
 def camel_to_snake(camel: str) -> str:
     """
@@ -559,21 +586,15 @@ def generate_modules(
     """
     state = CodegenState()
     for vocab, uri in vocabs.items():
-        state.reset()
-        state.graph.parse(uri)
-        schema_org_https(state.graph)
-        module_base = f"{base_module}.{vocab}"
-        state.datatypes_from_rdfs(module_base)
-        state.classes_from_rdfs(module_base)
-        state.properties_from_rdfs(module_base)
-        state.visit_enums()
-        module = state.type_module()
+        module = state.process_rdf(
+            vocab_name=vocab,
+            vocab_uri=uri,
+            base_module=base_module,
+        )
         out_path = out_dir / f"{vocab}.py"
         out_path.write_text(ast.unparse(module))
     for name, context in contexts.items():
-        state.reset()
-        state.parse_context(Context(context))
-        module = state.type_module()
+        module = state.process_context(Context(context))
         out_path = out_dir / f"{name}.py"
         out_path.write_text(ast.unparse(module))
 

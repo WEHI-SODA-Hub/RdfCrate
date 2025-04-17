@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import ClassVar
+from typing import ClassVar, Generic, TypeVar
 from rdflib import URIRef
 from rdflib.term import Identifier
 
@@ -19,15 +19,17 @@ class ReverseProperty:
         graph.add((self.subject, self.term.uri, object))
 
 
+T = TypeVar("T", bound=Identifier)
+
 @dataclass(frozen=True)
-class RdfProperty:
+class RdfProperty(Generic[T]):
     """
     Represents the double of (predicate, object), with the subject being the class this is attached to.
     This is the normal way properties will be defined
     """
 
     term: ClassVar[RdfTerm]
-    object: Identifier
+    object: T
 
     @classmethod
     def reverse(cls, subject: URIRef):

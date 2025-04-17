@@ -119,6 +119,32 @@ def find_datatypes(graph: Graph) -> Iterable[URIRef]:
         else:
             raise ValueError("Invalid query response")
 
+def find_properties(graph: Graph) -> Iterable[URIRef]:
+    """
+    Yields all properties that aren't classes
+    """
+    for result in graph.query(
+        """
+        SELECT DISTINCT ?property
+        WHERE {
+            # It's a property if we can find rdf:Property by following rdf:type once and rdfs:subClassOf any number of times
+            # Note that finding owl:DatatypeProperty etc will require owl to be in the graph
+            ?property a ?type .
+            ?type rdfs:subClassOf* rdf:Property .
+
+            # We don't care about blank nodes or literals
+            FILTER isIRI(?property)
+        }
+    """,
+        initNs={"rdfs": RDFS, "schema": SDO},
+    ):
+        if isinstance(result, ResultRow) and isinstance(
+            prop_id := result["property"], URIRef
+        ):
+            yield prop_id
+        else:
+            raise ValueError("Invalid query response")
+
 
 @dataclass
 class CodegenState:
@@ -265,19 +291,7 @@ class CodegenState:
         """
         Processes the properties in the graph.
         """
-        for prop in itertools.chain(
-            self.graph.subjects(predicate=RDF.type, object=RDF.Property, unique=True),
-            self.graph.subjects(
-                predicate=RDF.type, object=OWL.DatatypeProperty, unique=True
-            ),
-            self.graph.subjects(
-                predicate=RDF.type, object=OWL.ObjectProperty, unique=True
-            ),
-        ):
-            if not isinstance(prop, URIRef):
-                # Skip blank node properties
-                continue
-
+        for prop in find_properties(self.graph):
             if prop in self.module_map:
                 # Skip properties that are already defined
                 continue

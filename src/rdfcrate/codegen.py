@@ -304,22 +304,21 @@ class CodegenState:
                 ast.ClassDef(
                     name=sanitize_cls_name(name),
                     type_params=[],
-                    bases=[ast.Name("RdfProperty")],
+                    bases=[
+                        # Set T to the range of the property
+                        ast.Subscript(
+                            value=ast.Name("RdfProperty"),
+                            slice=self.property_range(prop)
+                    )],
                     keywords=[],
                     body=[
                         ast.Assign(
                             targets=[ast.Name("term")],
                             value=self.term_with_specs(name, str(prop)),
                             type_comment=None,
-                        ),
-                        ast.AnnAssign(
-                            target=ast.Name("object"),
-                            annotation=self.property_range(prop),
-                            value=None,
-                            simple=1,
-                        ),
+                        )
                     ],
-                    decorator_list=[frozen_dataclass_decorator()],
+                    decorator_list=[]
                 )
             )
 

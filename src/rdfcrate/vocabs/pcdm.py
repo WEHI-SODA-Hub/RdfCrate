@@ -1,65 +1,38 @@
 from __future__ import annotations
 from rdflib.term import Identifier
+from rdfcrate.rdfdatatype import RdfDataType
 from rdfcrate.rdfclass import RdfClass
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
 from dataclasses import dataclass
 from rdfcrate.vocabs import pcdm
 
-
 class Collection(RdfClass):
-    term = RdfTerm("Collection", "http://pcdm.org/models#Collection", [])
-
+    term = RdfTerm('Collection', 'http://pcdm.org/models#Collection', [])
 
 class Object(RdfClass):
-    term = RdfTerm("Object", "http://pcdm.org/models#Object", [])
-
+    term = RdfTerm('Object', 'http://pcdm.org/models#Object', [])
 
 class File(RdfClass):
-    term = RdfTerm("File", "http://pcdm.org/models#File", [])
-
+    term = RdfTerm('File', 'http://pcdm.org/models#File', [])
 
 class AlternateOrder(Object):
-    term = RdfTerm("AlternateOrder", "http://pcdm.org/models#AlternateOrder", [])
+    term = RdfTerm('AlternateOrder', 'http://pcdm.org/models#AlternateOrder', [])
 
+class hasFile(RdfProperty[pcdm.File]):
+    term = RdfTerm('hasFile', 'http://pcdm.org/models#hasFile', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-@dataclass(frozen=True)
-class hasFile(RdfProperty):
-    term = RdfTerm(
-        "hasFile", "http://pcdm.org/models#hasFile", ["0.2", "1.0", "1.1", "1.2-DRAFT"]
-    )
-    object: pcdm.File
+class fileOf(RdfProperty[pcdm.Object]):
+    term = RdfTerm('fileOf', 'http://pcdm.org/models#fileOf', [])
 
+class hasMember(RdfProperty[Identifier]):
+    term = RdfTerm('hasMember', 'http://pcdm.org/models#hasMember', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-@dataclass(frozen=True)
-class fileOf(RdfProperty):
-    term = RdfTerm("fileOf", "http://pcdm.org/models#fileOf", [])
-    object: pcdm.Object
+class memberOf(RdfProperty[Identifier]):
+    term = RdfTerm('memberOf', 'http://pcdm.org/models#memberOf', [])
 
+class hasRelatedObject(RdfProperty[pcdm.Object]):
+    term = RdfTerm('hasRelatedObject', 'http://pcdm.org/models#hasRelatedObject', [])
 
-@dataclass(frozen=True)
-class hasMember(RdfProperty):
-    term = RdfTerm(
-        "hasMember",
-        "http://pcdm.org/models#hasMember",
-        ["0.2", "1.0", "1.1", "1.2-DRAFT"],
-    )
-    object: Identifier
-
-
-@dataclass(frozen=True)
-class memberOf(RdfProperty):
-    term = RdfTerm("memberOf", "http://pcdm.org/models#memberOf", [])
-    object: Identifier
-
-
-@dataclass(frozen=True)
-class hasRelatedObject(RdfProperty):
-    term = RdfTerm("hasRelatedObject", "http://pcdm.org/models#hasRelatedObject", [])
-    object: pcdm.Object
-
-
-@dataclass(frozen=True)
-class relatedObjectOf(RdfProperty):
-    term = RdfTerm("relatedObjectOf", "http://pcdm.org/models#relatedObjectOf", [])
-    object: Identifier
+class relatedObjectOf(RdfProperty[Identifier]):
+    term = RdfTerm('relatedObjectOf', 'http://pcdm.org/models#relatedObjectOf', [])

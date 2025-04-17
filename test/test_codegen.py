@@ -1,6 +1,6 @@
 from rdflib import RDFS, Graph, RDF, URIRef, PROV, Namespace
 
-from rdfcrate.codegen import find_classes, find_datatypes, find_enums, find_properties, SDO
+from rdfcrate.codegen import find_classes, find_datatypes, find_enum_values, find_properties, SDO
 
 
 def test_find_classes_sdo():
@@ -44,7 +44,7 @@ def test_find_properties_prov():
 def test_find_enums_sdo():
     graph = Graph()
     graph.parse("https://schema.org/version/latest/schemaorg-current-http.jsonld")
-    enums = set(str(x) for x in find_enums(graph))
+    enums = set(str(x) for x in find_enum_values(graph))
     assert str(SDO.Hardcover) in enums
     assert str(SDO.Lung) in enums
     assert str(SDO.Person) not in enums

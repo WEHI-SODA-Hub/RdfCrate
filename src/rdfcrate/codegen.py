@@ -65,9 +65,10 @@ def find_classes(graph: Graph) -> Iterable[URIRef]:
             yield cls_id
 
 
-def find_enums(graph: Graph) -> Iterable[URIRef]:
+def find_enum_values(graph: Graph) -> Iterable[URIRef]:
     """
-    Yields all classes that are enumerations
+    Yields all enum instances, such as https://schema.org/Hardcover,
+    but not enum classes like https://schema.org/BookFormatType
     """
     for result in graph.query(
         """
@@ -272,7 +273,7 @@ class CodegenState:
         """
         Processes the enums in the graph
         """
-        for enum in find_enums(self.graph):
+        for enum in find_enum_values(self.graph):
             _, _, name = self.graph.compute_qname(enum)
             # Ignore enums for now
             self.terms.add((name, str(enum)))

@@ -21,6 +21,7 @@ class ReverseProperty:
 
 T = TypeVar("T", bound=Identifier)
 
+
 @dataclass(frozen=True)
 class RdfProperty(Generic[T]):
     """

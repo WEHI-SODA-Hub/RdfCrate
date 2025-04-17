@@ -8,6 +8,42 @@ from dataclasses import dataclass
 from rdfcrate.vocabs import rdfs
 from rdfcrate.vocabs import schemaorg
 
+class Date(RdfDataType):
+    term = RdfTerm('Date', 'http://schema.org/Date', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class Text(RdfDataType):
+    term = RdfTerm('Text', 'http://schema.org/Text', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class URL(RdfDataType):
+    term = RdfTerm('URL', 'http://schema.org/URL', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class CssSelectorType(RdfDataType):
+    term = RdfTerm('CssSelectorType', 'http://schema.org/CssSelectorType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class PronounceableText(RdfDataType):
+    term = RdfTerm('PronounceableText', 'http://schema.org/PronounceableText', ['1.1', '1.2-DRAFT'])
+
+class XPathType(RdfDataType):
+    term = RdfTerm('XPathType', 'http://schema.org/XPathType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class DateTime(RdfDataType):
+    term = RdfTerm('DateTime', 'http://schema.org/DateTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class Number(RdfDataType):
+    term = RdfTerm('Number', 'http://schema.org/Number', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class Float(RdfDataType):
+    term = RdfTerm('Float', 'http://schema.org/Float', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class Integer(RdfDataType):
+    term = RdfTerm('Integer', 'http://schema.org/Integer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class Boolean(RdfDataType):
+    term = RdfTerm('Boolean', 'http://schema.org/Boolean', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
+class Time(RdfDataType):
+    term = RdfTerm('Time', 'http://schema.org/Time', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
+
 class DataType(rdfs.Class):
     term = RdfTerm('DataType', 'http://schema.org/DataType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
@@ -2804,28 +2840,28 @@ class paymentMethodType(RdfProperty[schemaorg.PaymentMethodType]):
 class event(RdfProperty[schemaorg.Event]):
     term = RdfTerm('event', 'http://schema.org/event', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class maxValue(RdfProperty[Number]):
+class maxValue(RdfProperty[schemaorg.Number]):
     term = RdfTerm('maxValue', 'http://schema.org/maxValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class mileageFromOdometer(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('mileageFromOdometer', 'http://schema.org/mileageFromOdometer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class doorTime(RdfProperty[Time | DateTime]):
+class doorTime(RdfProperty[schemaorg.Time | schemaorg.DateTime]):
     term = RdfTerm('doorTime', 'http://schema.org/doorTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class contentUrl(RdfProperty[URL]):
+class contentUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('contentUrl', 'http://schema.org/contentUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class sibling(RdfProperty[schemaorg.Person]):
     term = RdfTerm('sibling', 'http://schema.org/sibling', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class offersPrescriptionByMail(RdfProperty[Boolean]):
+class offersPrescriptionByMail(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('offersPrescriptionByMail', 'http://schema.org/offersPrescriptionByMail', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class reviewRating(RdfProperty[schemaorg.Rating]):
     term = RdfTerm('reviewRating', 'http://schema.org/reviewRating', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class reviewCount(RdfProperty[Integer]):
+class reviewCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('reviewCount', 'http://schema.org/reviewCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasProductReturnPolicy(RdfProperty[schemaorg.ProductReturnPolicy]):
@@ -2834,46 +2870,46 @@ class hasProductReturnPolicy(RdfProperty[schemaorg.ProductReturnPolicy]):
 class fuelCapacity(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('fuelCapacity', 'http://schema.org/fuelCapacity', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class howPerformed(RdfProperty[Text]):
+class howPerformed(RdfProperty[schemaorg.Text]):
     term = RdfTerm('howPerformed', 'http://schema.org/howPerformed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class productReturnLink(RdfProperty[URL]):
+class productReturnLink(RdfProperty[schemaorg.URL]):
     term = RdfTerm('productReturnLink', 'http://schema.org/productReturnLink', ['1.0', '1.1', '1.2-DRAFT'])
 
-class childMinAge(RdfProperty[Number]):
+class childMinAge(RdfProperty[schemaorg.Number]):
     term = RdfTerm('childMinAge', 'http://schema.org/childMinAge', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class printSection(RdfProperty[Text]):
+class printSection(RdfProperty[schemaorg.Text]):
     term = RdfTerm('printSection', 'http://schema.org/printSection', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class departureAirport(RdfProperty[schemaorg.Airport]):
     term = RdfTerm('departureAirport', 'http://schema.org/departureAirport', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class productID(RdfProperty[Text]):
+class productID(RdfProperty[schemaorg.Text]):
     term = RdfTerm('productID', 'http://schema.org/productID', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class inverseOf(RdfProperty[schemaorg.Property]):
     term = RdfTerm('inverseOf', 'http://schema.org/inverseOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class name(RdfProperty[Text]):
+class name(RdfProperty[schemaorg.Text]):
     term = RdfTerm('name', 'http://schema.org/name', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class unnamedSourcesPolicy(RdfProperty[URL | schemaorg.CreativeWork]):
+class unnamedSourcesPolicy(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('unnamedSourcesPolicy', 'http://schema.org/unnamedSourcesPolicy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class playerType(RdfProperty[Text]):
+class playerType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('playerType', 'http://schema.org/playerType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class knows(RdfProperty[schemaorg.Person]):
     term = RdfTerm('knows', 'http://schema.org/knows', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isicV4(RdfProperty[Text]):
+class isicV4(RdfProperty[schemaorg.Text]):
     term = RdfTerm('isicV4', 'http://schema.org/isicV4', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class fundedItem(RdfProperty[schemaorg.Product | schemaorg.Person | schemaorg.MedicalEntity | schemaorg.BioChemEntity | schemaorg.Organization | schemaorg.Event | schemaorg.CreativeWork]):
     term = RdfTerm('fundedItem', 'http://schema.org/fundedItem', ['1.0', '1.1', '1.2-DRAFT'])
 
-class legislationIdentifier(RdfProperty[Text | URL]):
+class legislationIdentifier(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('legislationIdentifier', 'http://schema.org/legislationIdentifier', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class loanTerm(RdfProperty[schemaorg.QuantitativeValue]):
@@ -2882,7 +2918,7 @@ class loanTerm(RdfProperty[schemaorg.QuantitativeValue]):
 class provider(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('provider', 'http://schema.org/provider', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class physicalRequirement(RdfProperty[Text | schemaorg.DefinedTerm | URL]):
+class physicalRequirement(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm | schemaorg.URL]):
     term = RdfTerm('physicalRequirement', 'http://schema.org/physicalRequirement', ['1.1', '1.2-DRAFT'])
 
 class applicationContact(RdfProperty[schemaorg.ContactPoint]):
@@ -2891,19 +2927,19 @@ class applicationContact(RdfProperty[schemaorg.ContactPoint]):
 class drugClass(RdfProperty[schemaorg.DrugClass]):
     term = RdfTerm('drugClass', 'http://schema.org/drugClass', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class endDate(RdfProperty[DateTime | Date]):
+class endDate(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('endDate', 'http://schema.org/endDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class certificationIdentification(RdfProperty[schemaorg.DefinedTerm | Text]):
+class certificationIdentification(RdfProperty[schemaorg.DefinedTerm | schemaorg.Text]):
     term = RdfTerm('certificationIdentification', 'http://schema.org/certificationIdentification', [])
 
 class resultReview(RdfProperty[schemaorg.Review]):
     term = RdfTerm('resultReview', 'http://schema.org/resultReview', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class vehicleTransmission(RdfProperty[schemaorg.QualitativeValue | URL | Text]):
+class vehicleTransmission(RdfProperty[schemaorg.QualitativeValue | schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('vehicleTransmission', 'http://schema.org/vehicleTransmission', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class responsibilities(RdfProperty[Text]):
+class responsibilities(RdfProperty[schemaorg.Text]):
     term = RdfTerm('responsibilities', 'http://schema.org/responsibilities', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class nationality(RdfProperty[schemaorg.Country]):
@@ -2918,7 +2954,7 @@ class diagram(RdfProperty[schemaorg.ImageObject]):
 class photos(RdfProperty[schemaorg.ImageObject | schemaorg.Photograph]):
     term = RdfTerm('photos', 'http://schema.org/photos', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class downPayment(RdfProperty[Number | schemaorg.MonetaryAmount]):
+class downPayment(RdfProperty[schemaorg.Number | schemaorg.MonetaryAmount]):
     term = RdfTerm('downPayment', 'http://schema.org/downPayment', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class usesDevice(RdfProperty[schemaorg.MedicalDevice]):
@@ -2930,25 +2966,25 @@ class warrantyScope(RdfProperty[schemaorg.WarrantyScope]):
 class parentService(RdfProperty[schemaorg.BroadcastService]):
     term = RdfTerm('parentService', 'http://schema.org/parentService', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class bodyType(RdfProperty[schemaorg.QualitativeValue | URL | Text]):
+class bodyType(RdfProperty[schemaorg.QualitativeValue | schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('bodyType', 'http://schema.org/bodyType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class actionProcess(RdfProperty[schemaorg.HowTo]):
     term = RdfTerm('actionProcess', 'http://schema.org/actionProcess', [])
 
-class educationRequirements(RdfProperty[Text | schemaorg.EducationalOccupationalCredential]):
+class educationRequirements(RdfProperty[schemaorg.Text | schemaorg.EducationalOccupationalCredential]):
     term = RdfTerm('educationRequirements', 'http://schema.org/educationRequirements', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class commentTime(RdfProperty[Date | DateTime]):
+class commentTime(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('commentTime', 'http://schema.org/commentTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class coursePrerequisites(RdfProperty[schemaorg.Course | Text | schemaorg.AlignmentObject]):
+class coursePrerequisites(RdfProperty[schemaorg.Course | schemaorg.Text | schemaorg.AlignmentObject]):
     term = RdfTerm('coursePrerequisites', 'http://schema.org/coursePrerequisites', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class honorificPrefix(RdfProperty[Text]):
+class honorificPrefix(RdfProperty[schemaorg.Text]):
     term = RdfTerm('honorificPrefix', 'http://schema.org/honorificPrefix', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class priceValidUntil(RdfProperty[Date]):
+class priceValidUntil(RdfProperty[schemaorg.Date]):
     term = RdfTerm('priceValidUntil', 'http://schema.org/priceValidUntil', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class siblings(RdfProperty[schemaorg.Person]):
@@ -2957,13 +2993,13 @@ class siblings(RdfProperty[schemaorg.Person]):
 class recipe(RdfProperty[schemaorg.Recipe]):
     term = RdfTerm('recipe', 'http://schema.org/recipe', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class minPrice(RdfProperty[Number]):
+class minPrice(RdfProperty[schemaorg.Number]):
     term = RdfTerm('minPrice', 'http://schema.org/minPrice', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class yearsInOperation(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('yearsInOperation', 'http://schema.org/yearsInOperation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class petsAllowed(RdfProperty[Boolean | Text]):
+class petsAllowed(RdfProperty[schemaorg.Boolean | schemaorg.Text]):
     term = RdfTerm('petsAllowed', 'http://schema.org/petsAllowed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class bioChemSimilarity(RdfProperty[schemaorg.BioChemEntity]):
@@ -2975,31 +3011,31 @@ class aggregateRating(RdfProperty[schemaorg.AggregateRating]):
 class hasEnergyEfficiencyCategory(RdfProperty[schemaorg.EnergyEfficiencyEnumeration]):
     term = RdfTerm('hasEnergyEfficiencyCategory', 'http://schema.org/hasEnergyEfficiencyCategory', ['1.1', '1.2-DRAFT'])
 
-class alcoholWarning(RdfProperty[Text]):
+class alcoholWarning(RdfProperty[schemaorg.Text]):
     term = RdfTerm('alcoholWarning', 'http://schema.org/alcoholWarning', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class totalHistoricalEnrollment(RdfProperty[Integer]):
+class totalHistoricalEnrollment(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('totalHistoricalEnrollment', 'http://schema.org/totalHistoricalEnrollment', ['1.2-DRAFT'])
 
-class colleague(RdfProperty[URL | schemaorg.Person]):
+class colleague(RdfProperty[schemaorg.URL | schemaorg.Person]):
     term = RdfTerm('colleague', 'http://schema.org/colleague', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class permittedUsage(RdfProperty[Text]):
+class permittedUsage(RdfProperty[schemaorg.Text]):
     term = RdfTerm('permittedUsage', 'http://schema.org/permittedUsage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class expectsAcceptanceOf(RdfProperty[schemaorg.Offer]):
     term = RdfTerm('expectsAcceptanceOf', 'http://schema.org/expectsAcceptanceOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class citation(RdfProperty[Text | schemaorg.CreativeWork]):
+class citation(RdfProperty[schemaorg.Text | schemaorg.CreativeWork]):
     term = RdfTerm('citation', 'http://schema.org/citation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class locationCreated(RdfProperty[schemaorg.Place]):
     term = RdfTerm('locationCreated', 'http://schema.org/locationCreated', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class tourBookingPage(RdfProperty[URL]):
+class tourBookingPage(RdfProperty[schemaorg.URL]):
     term = RdfTerm('tourBookingPage', 'http://schema.org/tourBookingPage', ['1.1', '1.2-DRAFT'])
 
-class replyToUrl(RdfProperty[URL]):
+class replyToUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('replyToUrl', 'http://schema.org/replyToUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class sdPublisher(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -3008,7 +3044,7 @@ class sdPublisher(RdfProperty[schemaorg.Person | schemaorg.Organization]):
 class programMembershipUsed(RdfProperty[schemaorg.ProgramMembership]):
     term = RdfTerm('programMembershipUsed', 'http://schema.org/programMembershipUsed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class totalPrice(RdfProperty[Number | Text | schemaorg.PriceSpecification]):
+class totalPrice(RdfProperty[schemaorg.Number | schemaorg.Text | schemaorg.PriceSpecification]):
     term = RdfTerm('totalPrice', 'http://schema.org/totalPrice', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class eligibleQuantity(RdfProperty[schemaorg.QuantitativeValue]):
@@ -3020,16 +3056,16 @@ class antagonist(RdfProperty[schemaorg.Muscle]):
 class thumbnail(RdfProperty[schemaorg.ImageObject]):
     term = RdfTerm('thumbnail', 'http://schema.org/thumbnail', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class passengerSequenceNumber(RdfProperty[Text]):
+class passengerSequenceNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('passengerSequenceNumber', 'http://schema.org/passengerSequenceNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class vehicleInteriorColor(RdfProperty[Text]):
+class vehicleInteriorColor(RdfProperty[schemaorg.Text]):
     term = RdfTerm('vehicleInteriorColor', 'http://schema.org/vehicleInteriorColor', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class circle(RdfProperty[Text]):
+class circle(RdfProperty[schemaorg.Text]):
     term = RdfTerm('circle', 'http://schema.org/circle', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class missionCoveragePrioritiesPolicy(RdfProperty[URL | schemaorg.CreativeWork]):
+class missionCoveragePrioritiesPolicy(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('missionCoveragePrioritiesPolicy', 'http://schema.org/missionCoveragePrioritiesPolicy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class containedInPlace(RdfProperty[schemaorg.Place]):
@@ -3038,13 +3074,13 @@ class containedInPlace(RdfProperty[schemaorg.Place]):
 class hasCertification(RdfProperty[schemaorg.Certification]):
     term = RdfTerm('hasCertification', 'http://schema.org/hasCertification', [])
 
-class phoneticText(RdfProperty[Text]):
+class phoneticText(RdfProperty[schemaorg.Text]):
     term = RdfTerm('phoneticText', 'http://schema.org/phoneticText', ['1.1', '1.2-DRAFT'])
 
 class isSimilarTo(RdfProperty[schemaorg.Product | schemaorg.Service]):
     term = RdfTerm('isSimilarTo', 'http://schema.org/isSimilarTo', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class videoFrameSize(RdfProperty[Text]):
+class videoFrameSize(RdfProperty[schemaorg.Text]):
     term = RdfTerm('videoFrameSize', 'http://schema.org/videoFrameSize', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class fuelConsumption(RdfProperty[schemaorg.QuantitativeValue]):
@@ -3053,31 +3089,31 @@ class fuelConsumption(RdfProperty[schemaorg.QuantitativeValue]):
 class yearlyRevenue(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('yearlyRevenue', 'http://schema.org/yearlyRevenue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class steps(RdfProperty[Text | schemaorg.ItemList | schemaorg.CreativeWork]):
+class steps(RdfProperty[schemaorg.Text | schemaorg.ItemList | schemaorg.CreativeWork]):
     term = RdfTerm('steps', 'http://schema.org/steps', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class browserRequirements(RdfProperty[Text]):
+class browserRequirements(RdfProperty[schemaorg.Text]):
     term = RdfTerm('browserRequirements', 'http://schema.org/browserRequirements', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class paymentMethod(RdfProperty[schemaorg.PaymentMethod | Text]):
+class paymentMethod(RdfProperty[schemaorg.PaymentMethod | schemaorg.Text]):
     term = RdfTerm('paymentMethod', 'http://schema.org/paymentMethod', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class hasRepresentation(RdfProperty[schemaorg.PropertyValue | URL | Text]):
+class hasRepresentation(RdfProperty[schemaorg.PropertyValue | schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('hasRepresentation', 'http://schema.org/hasRepresentation', ['1.2-DRAFT'])
 
-class carrierRequirements(RdfProperty[Text]):
+class carrierRequirements(RdfProperty[schemaorg.Text]):
     term = RdfTerm('carrierRequirements', 'http://schema.org/carrierRequirements', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class distribution(RdfProperty[schemaorg.DataDownload]):
     term = RdfTerm('distribution', 'http://schema.org/distribution', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class benefits(RdfProperty[Text]):
+class benefits(RdfProperty[schemaorg.Text]):
     term = RdfTerm('benefits', 'http://schema.org/benefits', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class variablesMeasured(RdfProperty[Text | schemaorg.PropertyValue]):
+class variablesMeasured(RdfProperty[schemaorg.Text | schemaorg.PropertyValue]):
     term = RdfTerm('variablesMeasured', 'http://schema.org/variablesMeasured', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class educationalCredentialAwarded(RdfProperty[schemaorg.EducationalOccupationalCredential | Text | URL]):
+class educationalCredentialAwarded(RdfProperty[schemaorg.EducationalOccupationalCredential | schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('educationalCredentialAwarded', 'http://schema.org/educationalCredentialAwarded', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class engineDisplacement(RdfProperty[schemaorg.QuantitativeValue]):
@@ -3086,7 +3122,7 @@ class engineDisplacement(RdfProperty[schemaorg.QuantitativeValue]):
 class tripOrigin(RdfProperty[schemaorg.Place]):
     term = RdfTerm('tripOrigin', 'http://schema.org/tripOrigin', ['1.2-DRAFT'])
 
-class programmingLanguage(RdfProperty[schemaorg.ComputerLanguage | Text]):
+class programmingLanguage(RdfProperty[schemaorg.ComputerLanguage | schemaorg.Text]):
     term = RdfTerm('programmingLanguage', 'http://schema.org/programmingLanguage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class incentiveType(RdfProperty[schemaorg.IncentiveType]):
@@ -3095,40 +3131,40 @@ class incentiveType(RdfProperty[schemaorg.IncentiveType]):
 class holdingArchive(RdfProperty[schemaorg.ArchiveOrganization]):
     term = RdfTerm('holdingArchive', 'http://schema.org/holdingArchive', ['1.0', '1.1', '1.2-DRAFT'])
 
-class breastfeedingWarning(RdfProperty[Text]):
+class breastfeedingWarning(RdfProperty[schemaorg.Text]):
     term = RdfTerm('breastfeedingWarning', 'http://schema.org/breastfeedingWarning', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class exchangeRateSpread(RdfProperty[Number | schemaorg.MonetaryAmount]):
+class exchangeRateSpread(RdfProperty[schemaorg.Number | schemaorg.MonetaryAmount]):
     term = RdfTerm('exchangeRateSpread', 'http://schema.org/exchangeRateSpread', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class colorSwatch(RdfProperty[URL | schemaorg.ImageObject]):
+class colorSwatch(RdfProperty[schemaorg.URL | schemaorg.ImageObject]):
     term = RdfTerm('colorSwatch', 'http://schema.org/colorSwatch', [])
 
 class geoMidpoint(RdfProperty[schemaorg.GeoCoordinates]):
     term = RdfTerm('geoMidpoint', 'http://schema.org/geoMidpoint', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfBeds(RdfProperty[Number]):
+class numberOfBeds(RdfProperty[schemaorg.Number]):
     term = RdfTerm('numberOfBeds', 'http://schema.org/numberOfBeds', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class evidenceOrigin(RdfProperty[Text]):
+class evidenceOrigin(RdfProperty[schemaorg.Text]):
     term = RdfTerm('evidenceOrigin', 'http://schema.org/evidenceOrigin', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class availableFrom(RdfProperty[DateTime]):
+class availableFrom(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('availableFrom', 'http://schema.org/availableFrom', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class _yield(RdfProperty[Text | schemaorg.QuantitativeValue]):
+class _yield(RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue]):
     term = RdfTerm('yield', 'http://schema.org/yield', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class pageEnd(RdfProperty[Integer | Text]):
+class pageEnd(RdfProperty[schemaorg.Integer | schemaorg.Text]):
     term = RdfTerm('pageEnd', 'http://schema.org/pageEnd', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfBathroomsTotal(RdfProperty[Integer]):
+class numberOfBathroomsTotal(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('numberOfBathroomsTotal', 'http://schema.org/numberOfBathroomsTotal', ['1.0', '1.1', '1.2-DRAFT'])
 
-class productionDate(RdfProperty[Date]):
+class productionDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('productionDate', 'http://schema.org/productionDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class publicationType(RdfProperty[Text]):
+class publicationType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('publicationType', 'http://schema.org/publicationType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class parent(RdfProperty[schemaorg.Person]):
@@ -3140,25 +3176,25 @@ class accessModeSufficient(RdfProperty[schemaorg.ItemList]):
 class answerExplanation(RdfProperty[schemaorg.Comment | schemaorg.WebContent]):
     term = RdfTerm('answerExplanation', 'http://schema.org/answerExplanation', ['1.1', '1.2-DRAFT'])
 
-class skills(RdfProperty[Text | schemaorg.DefinedTerm]):
+class skills(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm]):
     term = RdfTerm('skills', 'http://schema.org/skills', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class availableService(RdfProperty[schemaorg.MedicalTest | schemaorg.MedicalTherapy | schemaorg.MedicalProcedure]):
     term = RdfTerm('availableService', 'http://schema.org/availableService', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class requiredQuantity(RdfProperty[Text | schemaorg.QuantitativeValue | Number]):
+class requiredQuantity(RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue | schemaorg.Number]):
     term = RdfTerm('requiredQuantity', 'http://schema.org/requiredQuantity', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class publishingPrinciples(RdfProperty[URL | schemaorg.CreativeWork]):
+class publishingPrinciples(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('publishingPrinciples', 'http://schema.org/publishingPrinciples', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class contactlessPayment(RdfProperty[Boolean]):
+class contactlessPayment(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('contactlessPayment', 'http://schema.org/contactlessPayment', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class album(RdfProperty[schemaorg.MusicAlbum]):
     term = RdfTerm('album', 'http://schema.org/album', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class applicationSubCategory(RdfProperty[Text | URL]):
+class applicationSubCategory(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('applicationSubCategory', 'http://schema.org/applicationSubCategory', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class floorLimit(RdfProperty[schemaorg.MonetaryAmount]):
@@ -3167,37 +3203,37 @@ class floorLimit(RdfProperty[schemaorg.MonetaryAmount]):
 class birthPlace(RdfProperty[schemaorg.Place]):
     term = RdfTerm('birthPlace', 'http://schema.org/birthPlace', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numConstraints(RdfProperty[Integer]):
+class numConstraints(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('numConstraints', 'http://schema.org/numConstraints', ['1.0', '1.1', '1.2-DRAFT'])
 
 class floorSize(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('floorSize', 'http://schema.org/floorSize', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class polygon(RdfProperty[Text]):
+class polygon(RdfProperty[schemaorg.Text]):
     term = RdfTerm('polygon', 'http://schema.org/polygon', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class suggestedAge(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('suggestedAge', 'http://schema.org/suggestedAge', ['1.2-DRAFT'])
 
-class audienceType(RdfProperty[Text]):
+class audienceType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('audienceType', 'http://schema.org/audienceType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gameAvailabilityType(RdfProperty[Text | schemaorg.GameAvailabilityEnumeration]):
+class gameAvailabilityType(RdfProperty[schemaorg.Text | schemaorg.GameAvailabilityEnumeration]):
     term = RdfTerm('gameAvailabilityType', 'http://schema.org/gameAvailabilityType', ['1.2-DRAFT'])
 
-class addressRegion(RdfProperty[Text]):
+class addressRegion(RdfProperty[schemaorg.Text]):
     term = RdfTerm('addressRegion', 'http://schema.org/addressRegion', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class countryOfAssembly(RdfProperty[Text]):
+class countryOfAssembly(RdfProperty[schemaorg.Text]):
     term = RdfTerm('countryOfAssembly', 'http://schema.org/countryOfAssembly', ['1.2-DRAFT'])
 
-class vehicleSpecialUsage(RdfProperty[schemaorg.CarUsageType | Text]):
+class vehicleSpecialUsage(RdfProperty[schemaorg.CarUsageType | schemaorg.Text]):
     term = RdfTerm('vehicleSpecialUsage', 'http://schema.org/vehicleSpecialUsage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class seasons(RdfProperty[schemaorg.CreativeWorkSeason]):
     term = RdfTerm('seasons', 'http://schema.org/seasons', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumTotBeds(RdfProperty[Number]):
+class cvdNumTotBeds(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumTotBeds', 'http://schema.org/cvdNumTotBeds', ['1.1', '1.2-DRAFT'])
 
 class releaseOf(RdfProperty[schemaorg.MusicAlbum]):
@@ -3206,28 +3242,28 @@ class releaseOf(RdfProperty[schemaorg.MusicAlbum]):
 class itemDefectReturnLabelSource(RdfProperty[schemaorg.ReturnLabelSourceEnumeration]):
     term = RdfTerm('itemDefectReturnLabelSource', 'http://schema.org/itemDefectReturnLabelSource', ['1.2-DRAFT'])
 
-class inLanguage(RdfProperty[Text | schemaorg.Language]):
+class inLanguage(RdfProperty[schemaorg.Text | schemaorg.Language]):
     term = RdfTerm('inLanguage', 'http://schema.org/inLanguage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class abstract(RdfProperty[Text]):
+class abstract(RdfProperty[schemaorg.Text]):
     term = RdfTerm('abstract', 'http://schema.org/abstract', ['1.0', '1.1', '1.2-DRAFT'])
 
-class itemListElement(RdfProperty[schemaorg.Thing | Text | schemaorg.ListItem]):
+class itemListElement(RdfProperty[schemaorg.Thing | schemaorg.Text | schemaorg.ListItem]):
     term = RdfTerm('itemListElement', 'http://schema.org/itemListElement', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class startTime(RdfProperty[Time | DateTime]):
+class startTime(RdfProperty[schemaorg.Time | schemaorg.DateTime]):
     term = RdfTerm('startTime', 'http://schema.org/startTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class associatedMediaReview(RdfProperty[schemaorg.Review]):
     term = RdfTerm('associatedMediaReview', 'http://schema.org/associatedMediaReview', ['1.2-DRAFT'])
 
-class eligibleRegion(RdfProperty[Text | schemaorg.GeoShape | schemaorg.Place]):
+class eligibleRegion(RdfProperty[schemaorg.Text | schemaorg.GeoShape | schemaorg.Place]):
     term = RdfTerm('eligibleRegion', 'http://schema.org/eligibleRegion', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class molecularWeight(RdfProperty[schemaorg.QuantitativeValue | Text]):
+class molecularWeight(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Text]):
     term = RdfTerm('molecularWeight', 'http://schema.org/molecularWeight', ['1.2-DRAFT'])
 
-class valueMinLength(RdfProperty[Number]):
+class valueMinLength(RdfProperty[schemaorg.Number]):
     term = RdfTerm('valueMinLength', 'http://schema.org/valueMinLength', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class affectedBy(RdfProperty[schemaorg.Drug]):
@@ -3236,13 +3272,13 @@ class affectedBy(RdfProperty[schemaorg.Drug]):
 class recordingOf(RdfProperty[schemaorg.MusicComposition]):
     term = RdfTerm('recordingOf', 'http://schema.org/recordingOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class availabilityStarts(RdfProperty[Time | DateTime | Date]):
+class availabilityStarts(RdfProperty[schemaorg.Time | schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('availabilityStarts', 'http://schema.org/availabilityStarts', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class issueNumber(RdfProperty[Integer | Text]):
+class issueNumber(RdfProperty[schemaorg.Integer | schemaorg.Text]):
     term = RdfTerm('issueNumber', 'http://schema.org/issueNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class codeSampleType(RdfProperty[Text]):
+class codeSampleType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('codeSampleType', 'http://schema.org/codeSampleType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class inker(RdfProperty[schemaorg.Person]):
@@ -3251,13 +3287,13 @@ class inker(RdfProperty[schemaorg.Person]):
 class geoIntersects(RdfProperty[schemaorg.GeospatialGeometry | schemaorg.Place]):
     term = RdfTerm('geoIntersects', 'http://schema.org/geoIntersects', ['1.0', '1.1', '1.2-DRAFT'])
 
-class mainEntityOfPage(RdfProperty[URL | schemaorg.CreativeWork]):
+class mainEntityOfPage(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('mainEntityOfPage', 'http://schema.org/mainEntityOfPage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class associatedReview(RdfProperty[schemaorg.Review]):
     term = RdfTerm('associatedReview', 'http://schema.org/associatedReview', ['1.2-DRAFT'])
 
-class flightDistance(RdfProperty[schemaorg.Distance | Text]):
+class flightDistance(RdfProperty[schemaorg.Distance | schemaorg.Text]):
     term = RdfTerm('flightDistance', 'http://schema.org/flightDistance', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class infectiousAgentClass(RdfProperty[schemaorg.InfectiousAgentClass]):
@@ -3266,7 +3302,7 @@ class infectiousAgentClass(RdfProperty[schemaorg.InfectiousAgentClass]):
 class hasBioChemEntityPart(RdfProperty[schemaorg.BioChemEntity]):
     term = RdfTerm('hasBioChemEntityPart', 'http://schema.org/hasBioChemEntityPart', ['1.2-DRAFT'])
 
-class returnPolicyCountry(RdfProperty[Text | schemaorg.Country]):
+class returnPolicyCountry(RdfProperty[schemaorg.Text | schemaorg.Country]):
     term = RdfTerm('returnPolicyCountry', 'http://schema.org/returnPolicyCountry', ['1.2-DRAFT'])
 
 class eventSchedule(RdfProperty[schemaorg.Schedule]):
@@ -3275,58 +3311,58 @@ class eventSchedule(RdfProperty[schemaorg.Schedule]):
 class countryOfOrigin(RdfProperty[schemaorg.Country]):
     term = RdfTerm('countryOfOrigin', 'http://schema.org/countryOfOrigin', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numAdults(RdfProperty[Integer | schemaorg.QuantitativeValue]):
+class numAdults(RdfProperty[schemaorg.Integer | schemaorg.QuantitativeValue]):
     term = RdfTerm('numAdults', 'http://schema.org/numAdults', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasPOS(RdfProperty[schemaorg.Place]):
     term = RdfTerm('hasPOS', 'http://schema.org/hasPOS', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class suggestedMinAge(RdfProperty[Number]):
+class suggestedMinAge(RdfProperty[schemaorg.Number]):
     term = RdfTerm('suggestedMinAge', 'http://schema.org/suggestedMinAge', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class shippingLabel(RdfProperty[Text]):
+class shippingLabel(RdfProperty[schemaorg.Text]):
     term = RdfTerm('shippingLabel', 'http://schema.org/shippingLabel', ['1.1', '1.2-DRAFT'])
 
-class ratingValue(RdfProperty[Number | Text]):
+class ratingValue(RdfProperty[schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('ratingValue', 'http://schema.org/ratingValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfBedrooms(RdfProperty[Number | schemaorg.QuantitativeValue]):
+class numberOfBedrooms(RdfProperty[schemaorg.Number | schemaorg.QuantitativeValue]):
     term = RdfTerm('numberOfBedrooms', 'http://schema.org/numberOfBedrooms', ['1.1', '1.2-DRAFT'])
 
 class customerRemorseReturnLabelSource(RdfProperty[schemaorg.ReturnLabelSourceEnumeration]):
     term = RdfTerm('customerRemorseReturnLabelSource', 'http://schema.org/customerRemorseReturnLabelSource', ['1.2-DRAFT'])
 
-class webFeed(RdfProperty[URL | schemaorg.DataFeed]):
+class webFeed(RdfProperty[schemaorg.URL | schemaorg.DataFeed]):
     term = RdfTerm('webFeed', 'http://schema.org/webFeed', ['1.0', '1.1', '1.2-DRAFT'])
 
-class functionalClass(RdfProperty[schemaorg.MedicalEntity | Text]):
+class functionalClass(RdfProperty[schemaorg.MedicalEntity | schemaorg.Text]):
     term = RdfTerm('functionalClass', 'http://schema.org/functionalClass', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class legislationJurisdiction(RdfProperty[Text | schemaorg.AdministrativeArea]):
+class legislationJurisdiction(RdfProperty[schemaorg.Text | schemaorg.AdministrativeArea]):
     term = RdfTerm('legislationJurisdiction', 'http://schema.org/legislationJurisdiction', ['1.0', '1.1', '1.2-DRAFT'])
 
 class numItems(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('numItems', 'http://schema.org/numItems', [])
 
-class employmentType(RdfProperty[Text]):
+class employmentType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('employmentType', 'http://schema.org/employmentType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class contentLocation(RdfProperty[schemaorg.Place]):
     term = RdfTerm('contentLocation', 'http://schema.org/contentLocation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class speakable(RdfProperty[schemaorg.SpeakableSpecification | URL]):
+class speakable(RdfProperty[schemaorg.SpeakableSpecification | schemaorg.URL]):
     term = RdfTerm('speakable', 'http://schema.org/speakable', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class valueReference(RdfProperty[Text | schemaorg.PropertyValue | schemaorg.MeasurementTypeEnumeration | schemaorg.DefinedTerm | schemaorg.QuantitativeValue | schemaorg.Enumeration | schemaorg.StructuredValue | schemaorg.QualitativeValue]):
+class valueReference(RdfProperty[schemaorg.Text | schemaorg.PropertyValue | schemaorg.MeasurementTypeEnumeration | schemaorg.DefinedTerm | schemaorg.QuantitativeValue | schemaorg.Enumeration | schemaorg.StructuredValue | schemaorg.QualitativeValue]):
     term = RdfTerm('valueReference', 'http://schema.org/valueReference', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class knowsAbout(RdfProperty[schemaorg.Thing | Text | URL]):
+class knowsAbout(RdfProperty[schemaorg.Thing | schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('knowsAbout', 'http://schema.org/knowsAbout', ['1.0', '1.1', '1.2-DRAFT'])
 
-class urlTemplate(RdfProperty[Text]):
+class urlTemplate(RdfProperty[schemaorg.Text]):
     term = RdfTerm('urlTemplate', 'http://schema.org/urlTemplate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class ownedFrom(RdfProperty[DateTime]):
+class ownedFrom(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('ownedFrom', 'http://schema.org/ownedFrom', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class endorsers(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -3338,37 +3374,37 @@ class actionStatus(RdfProperty[schemaorg.ActionStatusType]):
 class firstPerformance(RdfProperty[schemaorg.Event]):
     term = RdfTerm('firstPerformance', 'http://schema.org/firstPerformance', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class experienceInPlaceOfEducation(RdfProperty[Boolean]):
+class experienceInPlaceOfEducation(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('experienceInPlaceOfEducation', 'http://schema.org/experienceInPlaceOfEducation', ['1.2-DRAFT'])
 
-class incomeLimit(RdfProperty[schemaorg.MonetaryAmount | Text]):
+class incomeLimit(RdfProperty[schemaorg.MonetaryAmount | schemaorg.Text]):
     term = RdfTerm('incomeLimit', 'http://schema.org/incomeLimit', [])
 
 class liveBlogUpdate(RdfProperty[schemaorg.BlogPosting]):
     term = RdfTerm('liveBlogUpdate', 'http://schema.org/liveBlogUpdate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gameEdition(RdfProperty[Text]):
+class gameEdition(RdfProperty[schemaorg.Text]):
     term = RdfTerm('gameEdition', 'http://schema.org/gameEdition', ['1.2-DRAFT'])
 
-class dateModified(RdfProperty[DateTime | Date]):
+class dateModified(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('dateModified', 'http://schema.org/dateModified', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class billingIncrement(RdfProperty[Number]):
+class billingIncrement(RdfProperty[schemaorg.Number]):
     term = RdfTerm('billingIncrement', 'http://schema.org/billingIncrement', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class stepValue(RdfProperty[Number]):
+class stepValue(RdfProperty[schemaorg.Number]):
     term = RdfTerm('stepValue', 'http://schema.org/stepValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class monoisotopicMolecularWeight(RdfProperty[Text | schemaorg.QuantitativeValue]):
+class monoisotopicMolecularWeight(RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue]):
     term = RdfTerm('monoisotopicMolecularWeight', 'http://schema.org/monoisotopicMolecularWeight', ['1.2-DRAFT'])
 
 class hasTierBenefit(RdfProperty[schemaorg.TierBenefitEnumeration]):
     term = RdfTerm('hasTierBenefit', 'http://schema.org/hasTierBenefit', [])
 
-class departureTime(RdfProperty[Time | DateTime]):
+class departureTime(RdfProperty[schemaorg.Time | schemaorg.DateTime]):
     term = RdfTerm('departureTime', 'http://schema.org/departureTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class sku(RdfProperty[Text]):
+class sku(RdfProperty[schemaorg.Text]):
     term = RdfTerm('sku', 'http://schema.org/sku', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class legislationEnsuresImplementationOf(RdfProperty[schemaorg.Legislation]):
@@ -3380,7 +3416,7 @@ class studySubject(RdfProperty[schemaorg.MedicalEntity]):
 class containsPlace(RdfProperty[schemaorg.Place]):
     term = RdfTerm('containsPlace', 'http://schema.org/containsPlace', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class telephone(RdfProperty[Text]):
+class telephone(RdfProperty[schemaorg.Text]):
     term = RdfTerm('telephone', 'http://schema.org/telephone', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasDigitalDocumentPermission(RdfProperty[schemaorg.DigitalDocumentPermission]):
@@ -3389,10 +3425,10 @@ class hasDigitalDocumentPermission(RdfProperty[schemaorg.DigitalDocumentPermissi
 class purchasePriceLimit(RdfProperty[schemaorg.MonetaryAmount]):
     term = RdfTerm('purchasePriceLimit', 'http://schema.org/purchasePriceLimit', [])
 
-class usageInfo(RdfProperty[URL | schemaorg.CreativeWork]):
+class usageInfo(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('usageInfo', 'http://schema.org/usageInfo', ['1.1', '1.2-DRAFT'])
 
-class availableLanguage(RdfProperty[Text | schemaorg.Language]):
+class availableLanguage(RdfProperty[schemaorg.Text | schemaorg.Language]):
     term = RdfTerm('availableLanguage', 'http://schema.org/availableLanguage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class artist(RdfProperty[schemaorg.Person]):
@@ -3416,16 +3452,16 @@ class regionDrained(RdfProperty[schemaorg.AnatomicalStructure | schemaorg.Anatom
 class originatesFrom(RdfProperty[schemaorg.Vessel]):
     term = RdfTerm('originatesFrom', 'http://schema.org/originatesFrom', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class workHours(RdfProperty[Text]):
+class workHours(RdfProperty[schemaorg.Text]):
     term = RdfTerm('workHours', 'http://schema.org/workHours', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class incentivizedItem(RdfProperty[schemaorg.DefinedTerm | schemaorg.Product]):
     term = RdfTerm('incentivizedItem', 'http://schema.org/incentivizedItem', [])
 
-class checkoutTime(RdfProperty[Time | DateTime]):
+class checkoutTime(RdfProperty[schemaorg.Time | schemaorg.DateTime]):
     term = RdfTerm('checkoutTime', 'http://schema.org/checkoutTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class jurisdiction(RdfProperty[schemaorg.AdministrativeArea | Text]):
+class jurisdiction(RdfProperty[schemaorg.AdministrativeArea | schemaorg.Text]):
     term = RdfTerm('jurisdiction', 'http://schema.org/jurisdiction', ['1.1', '1.2-DRAFT'])
 
 class attendees(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -3437,7 +3473,7 @@ class eligibleCustomerType(RdfProperty[schemaorg.BusinessEntityType]):
 class departureStation(RdfProperty[schemaorg.TrainStation]):
     term = RdfTerm('departureStation', 'http://schema.org/departureStation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class datePosted(RdfProperty[DateTime | Date]):
+class datePosted(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('datePosted', 'http://schema.org/datePosted', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class vendor(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -3446,7 +3482,7 @@ class vendor(RdfProperty[schemaorg.Person | schemaorg.Organization]):
 class warrantyPromise(RdfProperty[schemaorg.WarrantyPromise]):
     term = RdfTerm('warrantyPromise', 'http://schema.org/warrantyPromise', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfForwardGears(RdfProperty[Number | schemaorg.QuantitativeValue]):
+class numberOfForwardGears(RdfProperty[schemaorg.Number | schemaorg.QuantitativeValue]):
     term = RdfTerm('numberOfForwardGears', 'http://schema.org/numberOfForwardGears', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class fuelEfficiency(RdfProperty[schemaorg.QuantitativeValue]):
@@ -3458,16 +3494,16 @@ class letterer(RdfProperty[schemaorg.Person]):
 class issuedThrough(RdfProperty[schemaorg.Service]):
     term = RdfTerm('issuedThrough', 'http://schema.org/issuedThrough', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dosageForm(RdfProperty[Text]):
+class dosageForm(RdfProperty[schemaorg.Text]):
     term = RdfTerm('dosageForm', 'http://schema.org/dosageForm', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class scheduledPaymentDate(RdfProperty[Date]):
+class scheduledPaymentDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('scheduledPaymentDate', 'http://schema.org/scheduledPaymentDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class entertainmentBusiness(RdfProperty[schemaorg.EntertainmentBusiness]):
     term = RdfTerm('entertainmentBusiness', 'http://schema.org/entertainmentBusiness', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class season(RdfProperty[URL | schemaorg.CreativeWorkSeason]):
+class season(RdfProperty[schemaorg.URL | schemaorg.CreativeWorkSeason]):
     term = RdfTerm('season', 'http://schema.org/season', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class durationOfWarranty(RdfProperty[schemaorg.QuantitativeValue]):
@@ -3476,16 +3512,16 @@ class durationOfWarranty(RdfProperty[schemaorg.QuantitativeValue]):
 class includesAttraction(RdfProperty[schemaorg.TouristAttraction]):
     term = RdfTerm('includesAttraction', 'http://schema.org/includesAttraction', ['1.0', '1.1', '1.2-DRAFT'])
 
-class vehicleModelDate(RdfProperty[Date]):
+class vehicleModelDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('vehicleModelDate', 'http://schema.org/vehicleModelDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class structuralClass(RdfProperty[Text]):
+class structuralClass(RdfProperty[schemaorg.Text]):
     term = RdfTerm('structuralClass', 'http://schema.org/structuralClass', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasMerchantReturnPolicy(RdfProperty[schemaorg.MerchantReturnPolicy]):
     term = RdfTerm('hasMerchantReturnPolicy', 'http://schema.org/hasMerchantReturnPolicy', ['1.1', '1.2-DRAFT'])
 
-class maxPrice(RdfProperty[Number]):
+class maxPrice(RdfProperty[schemaorg.Number]):
     term = RdfTerm('maxPrice', 'http://schema.org/maxPrice', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class colorist(RdfProperty[schemaorg.Person]):
@@ -3494,13 +3530,13 @@ class colorist(RdfProperty[schemaorg.Person]):
 class shippingRate(RdfProperty[schemaorg.ShippingRateSettings | schemaorg.MonetaryAmount]):
     term = RdfTerm('shippingRate', 'http://schema.org/shippingRate', ['1.1', '1.2-DRAFT'])
 
-class procedure(RdfProperty[Text]):
+class procedure(RdfProperty[schemaorg.Text]):
     term = RdfTerm('procedure', 'http://schema.org/procedure', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdFacilityCounty(RdfProperty[Text]):
+class cvdFacilityCounty(RdfProperty[schemaorg.Text]):
     term = RdfTerm('cvdFacilityCounty', 'http://schema.org/cvdFacilityCounty', ['1.1', '1.2-DRAFT'])
 
-class expectedPrognosis(RdfProperty[Text]):
+class expectedPrognosis(RdfProperty[schemaorg.Text]):
     term = RdfTerm('expectedPrognosis', 'http://schema.org/expectedPrognosis', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class validForMemberTier(RdfProperty[schemaorg.MemberProgramTier]):
@@ -3512,25 +3548,25 @@ class borrower(RdfProperty[schemaorg.Person]):
 class availability(RdfProperty[schemaorg.ItemAvailability]):
     term = RdfTerm('availability', 'http://schema.org/availability', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class servingSize(RdfProperty[Text]):
+class servingSize(RdfProperty[schemaorg.Text]):
     term = RdfTerm('servingSize', 'http://schema.org/servingSize', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class sdDatePublished(RdfProperty[Date]):
+class sdDatePublished(RdfProperty[schemaorg.Date]):
     term = RdfTerm('sdDatePublished', 'http://schema.org/sdDatePublished', ['1.0', '1.1', '1.2-DRAFT'])
 
-class dateline(RdfProperty[Text]):
+class dateline(RdfProperty[schemaorg.Text]):
     term = RdfTerm('dateline', 'http://schema.org/dateline', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class arrivalPlatform(RdfProperty[Text]):
+class arrivalPlatform(RdfProperty[schemaorg.Text]):
     term = RdfTerm('arrivalPlatform', 'http://schema.org/arrivalPlatform', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class courseMode(RdfProperty[URL | Text]):
+class courseMode(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('courseMode', 'http://schema.org/courseMode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class object(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('object', 'http://schema.org/object', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class highPrice(RdfProperty[Text | Number]):
+class highPrice(RdfProperty[schemaorg.Text | schemaorg.Number]):
     term = RdfTerm('highPrice', 'http://schema.org/highPrice', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hospitalAffiliation(RdfProperty[schemaorg.Hospital]):
@@ -3548,25 +3584,25 @@ class imagingTechnique(RdfProperty[schemaorg.MedicalImagingTechnique]):
 class includedRiskFactor(RdfProperty[schemaorg.MedicalRiskFactor]):
     term = RdfTerm('includedRiskFactor', 'http://schema.org/includedRiskFactor', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class broadcastFrequency(RdfProperty[Text | schemaorg.BroadcastFrequencySpecification]):
+class broadcastFrequency(RdfProperty[schemaorg.Text | schemaorg.BroadcastFrequencySpecification]):
     term = RdfTerm('broadcastFrequency', 'http://schema.org/broadcastFrequency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isAvailableGenerically(RdfProperty[Boolean]):
+class isAvailableGenerically(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('isAvailableGenerically', 'http://schema.org/isAvailableGenerically', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfFullBathrooms(RdfProperty[Number]):
+class numberOfFullBathrooms(RdfProperty[schemaorg.Number]):
     term = RdfTerm('numberOfFullBathrooms', 'http://schema.org/numberOfFullBathrooms', ['1.0', '1.1', '1.2-DRAFT'])
 
-class percentile25(RdfProperty[Number]):
+class percentile25(RdfProperty[schemaorg.Number]):
     term = RdfTerm('percentile25', 'http://schema.org/percentile25', ['1.0', '1.1', '1.2-DRAFT'])
 
-class subtitleLanguage(RdfProperty[Text | schemaorg.Language]):
+class subtitleLanguage(RdfProperty[schemaorg.Text | schemaorg.Language]):
     term = RdfTerm('subtitleLanguage', 'http://schema.org/subtitleLanguage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class availableChannel(RdfProperty[schemaorg.ServiceChannel]):
     term = RdfTerm('availableChannel', 'http://schema.org/availableChannel', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class iswcCode(RdfProperty[Text]):
+class iswcCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('iswcCode', 'http://schema.org/iswcCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class encodesBioChemEntity(RdfProperty[schemaorg.BioChemEntity]):
@@ -3584,7 +3620,7 @@ class hasDeliveryMethod(RdfProperty[schemaorg.DeliveryMethod]):
 class servicePhone(RdfProperty[schemaorg.ContactPoint]):
     term = RdfTerm('servicePhone', 'http://schema.org/servicePhone', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class trainNumber(RdfProperty[Text]):
+class trainNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('trainNumber', 'http://schema.org/trainNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class numberOfEmployees(RdfProperty[schemaorg.QuantitativeValue]):
@@ -3593,7 +3629,7 @@ class numberOfEmployees(RdfProperty[schemaorg.QuantitativeValue]):
 class healthcareReportingData(RdfProperty[schemaorg.CDCPMDRecord | schemaorg.Dataset]):
     term = RdfTerm('healthcareReportingData', 'http://schema.org/healthcareReportingData', ['1.1', '1.2-DRAFT'])
 
-class acrissCode(RdfProperty[Text]):
+class acrissCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('acrissCode', 'http://schema.org/acrissCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class applicantLocationRequirements(RdfProperty[schemaorg.AdministrativeArea]):
@@ -3602,7 +3638,7 @@ class applicantLocationRequirements(RdfProperty[schemaorg.AdministrativeArea]):
 class archiveHeld(RdfProperty[schemaorg.ArchiveComponent]):
     term = RdfTerm('archiveHeld', 'http://schema.org/archiveHeld', ['1.0', '1.1', '1.2-DRAFT'])
 
-class paymentStatus(RdfProperty[schemaorg.PaymentStatusType | Text]):
+class paymentStatus(RdfProperty[schemaorg.PaymentStatusType | schemaorg.Text]):
     term = RdfTerm('paymentStatus', 'http://schema.org/paymentStatus', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class occupationLocation(RdfProperty[schemaorg.AdministrativeArea]):
@@ -3611,40 +3647,40 @@ class occupationLocation(RdfProperty[schemaorg.AdministrativeArea]):
 class includesHealthPlanNetwork(RdfProperty[schemaorg.HealthPlanNetwork]):
     term = RdfTerm('includesHealthPlanNetwork', 'http://schema.org/includesHealthPlanNetwork', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class itemLocation(RdfProperty[schemaorg.Place | schemaorg.PostalAddress | Text]):
+class itemLocation(RdfProperty[schemaorg.Place | schemaorg.PostalAddress | schemaorg.Text]):
     term = RdfTerm('itemLocation', 'http://schema.org/itemLocation', ['1.0', '1.1', '1.2-DRAFT'])
 
-class clipNumber(RdfProperty[Integer | Text]):
+class clipNumber(RdfProperty[schemaorg.Integer | schemaorg.Text]):
     term = RdfTerm('clipNumber', 'http://schema.org/clipNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class eligibleDuration(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('eligibleDuration', 'http://schema.org/eligibleDuration', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class observationDate(RdfProperty[DateTime]):
+class observationDate(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('observationDate', 'http://schema.org/observationDate', ['1.0', '1.1', '1.2-DRAFT'])
 
 class tocContinuation(RdfProperty[schemaorg.HyperTocEntry]):
     term = RdfTerm('tocContinuation', 'http://schema.org/tocContinuation', ['1.2-DRAFT'])
 
-class archivedAt(RdfProperty[URL | schemaorg.WebPage]):
+class archivedAt(RdfProperty[schemaorg.URL | schemaorg.WebPage]):
     term = RdfTerm('archivedAt', 'http://schema.org/archivedAt', ['1.2-DRAFT'])
 
 class weight(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Mass]):
     term = RdfTerm('weight', 'http://schema.org/weight', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class byMonthWeek(RdfProperty[Integer]):
+class byMonthWeek(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('byMonthWeek', 'http://schema.org/byMonthWeek', ['1.1', '1.2-DRAFT'])
 
-class inDefinedTermSet(RdfProperty[schemaorg.DefinedTermSet | URL]):
+class inDefinedTermSet(RdfProperty[schemaorg.DefinedTermSet | schemaorg.URL]):
     term = RdfTerm('inDefinedTermSet', 'http://schema.org/inDefinedTermSet', ['1.0', '1.1', '1.2-DRAFT'])
 
 class includedInHealthInsurancePlan(RdfProperty[schemaorg.HealthInsurancePlan]):
     term = RdfTerm('includedInHealthInsurancePlan', 'http://schema.org/includedInHealthInsurancePlan', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class byDay(RdfProperty[Text | schemaorg.DayOfWeek]):
+class byDay(RdfProperty[schemaorg.Text | schemaorg.DayOfWeek]):
     term = RdfTerm('byDay', 'http://schema.org/byDay', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class line(RdfProperty[Text]):
+class line(RdfProperty[schemaorg.Text]):
     term = RdfTerm('line', 'http://schema.org/line', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class vehicleEngine(RdfProperty[schemaorg.EngineSpecification]):
@@ -3653,25 +3689,25 @@ class vehicleEngine(RdfProperty[schemaorg.EngineSpecification]):
 class branchOf(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('branchOf', 'http://schema.org/branchOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class expectedArrivalUntil(RdfProperty[DateTime | Date]):
+class expectedArrivalUntil(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('expectedArrivalUntil', 'http://schema.org/expectedArrivalUntil', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class originalMediaLink(RdfProperty[schemaorg.MediaObject | URL | schemaorg.WebPage]):
+class originalMediaLink(RdfProperty[schemaorg.MediaObject | schemaorg.URL | schemaorg.WebPage]):
     term = RdfTerm('originalMediaLink', 'http://schema.org/originalMediaLink', ['1.2-DRAFT'])
 
-class printColumn(RdfProperty[Text]):
+class printColumn(RdfProperty[schemaorg.Text]):
     term = RdfTerm('printColumn', 'http://schema.org/printColumn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class trainingSalary(RdfProperty[schemaorg.MonetaryAmountDistribution]):
     term = RdfTerm('trainingSalary', 'http://schema.org/trainingSalary', ['1.0', '1.1', '1.2-DRAFT'])
 
-class typeOfBed(RdfProperty[schemaorg.BedType | Text]):
+class typeOfBed(RdfProperty[schemaorg.BedType | schemaorg.Text]):
     term = RdfTerm('typeOfBed', 'http://schema.org/typeOfBed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class percentile75(RdfProperty[Number]):
+class percentile75(RdfProperty[schemaorg.Number]):
     term = RdfTerm('percentile75', 'http://schema.org/percentile75', ['1.0', '1.1', '1.2-DRAFT'])
 
-class credentialCategory(RdfProperty[schemaorg.DefinedTerm | URL | Text]):
+class credentialCategory(RdfProperty[schemaorg.DefinedTerm | schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('credentialCategory', 'http://schema.org/credentialCategory', ['1.0', '1.1', '1.2-DRAFT'])
 
 class eventStatus(RdfProperty[schemaorg.EventStatusType]):
@@ -3683,7 +3719,7 @@ class medicalSpecialty(RdfProperty[schemaorg.MedicalSpecialty]):
 class returnShippingFeesAmount(RdfProperty[schemaorg.MonetaryAmount]):
     term = RdfTerm('returnShippingFeesAmount', 'http://schema.org/returnShippingFeesAmount', ['1.2-DRAFT'])
 
-class healthPlanCostSharing(RdfProperty[Boolean]):
+class healthPlanCostSharing(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('healthPlanCostSharing', 'http://schema.org/healthPlanCostSharing', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class customerRemorseReturnShippingFeesAmount(RdfProperty[schemaorg.MonetaryAmount]):
@@ -3695,7 +3731,7 @@ class interactionCount(RdfProperty[Identifier]):
 class billingAddress(RdfProperty[schemaorg.PostalAddress]):
     term = RdfTerm('billingAddress', 'http://schema.org/billingAddress', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class countriesNotSupported(RdfProperty[Text]):
+class countriesNotSupported(RdfProperty[schemaorg.Text]):
     term = RdfTerm('countriesNotSupported', 'http://schema.org/countriesNotSupported', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class shippingDetails(RdfProperty[schemaorg.OfferShippingDetails]):
@@ -3704,22 +3740,22 @@ class shippingDetails(RdfProperty[schemaorg.OfferShippingDetails]):
 class employees(RdfProperty[schemaorg.Person]):
     term = RdfTerm('employees', 'http://schema.org/employees', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class mpn(RdfProperty[Text]):
+class mpn(RdfProperty[schemaorg.Text]):
     term = RdfTerm('mpn', 'http://schema.org/mpn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class lesser(RdfProperty[schemaorg.QualitativeValue]):
     term = RdfTerm('lesser', 'http://schema.org/lesser', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class byMonth(RdfProperty[Integer]):
+class byMonth(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('byMonth', 'http://schema.org/byMonth', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class loanRepaymentForm(RdfProperty[schemaorg.RepaymentSpecification]):
     term = RdfTerm('loanRepaymentForm', 'http://schema.org/loanRepaymentForm', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class hasGS1DigitalLink(RdfProperty[URL]):
+class hasGS1DigitalLink(RdfProperty[schemaorg.URL]):
     term = RdfTerm('hasGS1DigitalLink', 'http://schema.org/hasGS1DigitalLink', [])
 
-class ownershipFundingInfo(RdfProperty[URL | schemaorg.AboutPage | schemaorg.CreativeWork | Text]):
+class ownershipFundingInfo(RdfProperty[schemaorg.URL | schemaorg.AboutPage | schemaorg.CreativeWork | schemaorg.Text]):
     term = RdfTerm('ownershipFundingInfo', 'http://schema.org/ownershipFundingInfo', ['1.0', '1.1', '1.2-DRAFT'])
 
 class mediaAuthenticityCategory(RdfProperty[schemaorg.MediaManipulationRatingEnumeration]):
@@ -3728,7 +3764,7 @@ class mediaAuthenticityCategory(RdfProperty[schemaorg.MediaManipulationRatingEnu
 class unsaturatedFatContent(RdfProperty[schemaorg.Mass]):
     term = RdfTerm('unsaturatedFatContent', 'http://schema.org/unsaturatedFatContent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class lastReviewed(RdfProperty[Date]):
+class lastReviewed(RdfProperty[schemaorg.Date]):
     term = RdfTerm('lastReviewed', 'http://schema.org/lastReviewed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class workTranslation(RdfProperty[schemaorg.CreativeWork]):
@@ -3737,25 +3773,25 @@ class workTranslation(RdfProperty[schemaorg.CreativeWork]):
 class partOfTrip(RdfProperty[schemaorg.Trip]):
     term = RdfTerm('partOfTrip', 'http://schema.org/partOfTrip', ['1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfDoors(RdfProperty[schemaorg.QuantitativeValue | Number]):
+class numberOfDoors(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Number]):
     term = RdfTerm('numberOfDoors', 'http://schema.org/numberOfDoors', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class preOp(RdfProperty[Text]):
+class preOp(RdfProperty[schemaorg.Text]):
     term = RdfTerm('preOp', 'http://schema.org/preOp', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class backstory(RdfProperty[Text | schemaorg.CreativeWork]):
+class backstory(RdfProperty[schemaorg.Text | schemaorg.CreativeWork]):
     term = RdfTerm('backstory', 'http://schema.org/backstory', ['1.0', '1.1', '1.2-DRAFT'])
 
-class verificationFactCheckingPolicy(RdfProperty[schemaorg.CreativeWork | URL]):
+class verificationFactCheckingPolicy(RdfProperty[schemaorg.CreativeWork | schemaorg.URL]):
     term = RdfTerm('verificationFactCheckingPolicy', 'http://schema.org/verificationFactCheckingPolicy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class url(RdfProperty[URL]):
+class url(RdfProperty[schemaorg.URL]):
     term = RdfTerm('url', 'http://schema.org/url', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class error(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('error', 'http://schema.org/error', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class sdLicense(RdfProperty[URL | schemaorg.CreativeWork]):
+class sdLicense(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('sdLicense', 'http://schema.org/sdLicense', ['1.0', '1.1', '1.2-DRAFT'])
 
 class legislationRepeals(RdfProperty[schemaorg.Legislation]):
@@ -3764,7 +3800,7 @@ class legislationRepeals(RdfProperty[schemaorg.Legislation]):
 class catalog(RdfProperty[schemaorg.DataCatalog]):
     term = RdfTerm('catalog', 'http://schema.org/catalog', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class embeddedTextCaption(RdfProperty[Text]):
+class embeddedTextCaption(RdfProperty[schemaorg.Text]):
     term = RdfTerm('embeddedTextCaption', 'http://schema.org/embeddedTextCaption', ['1.2-DRAFT'])
 
 class educationalAlignment(RdfProperty[schemaorg.AlignmentObject]):
@@ -3776,7 +3812,7 @@ class drainsTo(RdfProperty[schemaorg.Vessel]):
 class editor(RdfProperty[schemaorg.Person]):
     term = RdfTerm('editor', 'http://schema.org/editor', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class uploadDate(RdfProperty[Date | DateTime]):
+class uploadDate(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('uploadDate', 'http://schema.org/uploadDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class gameItem(RdfProperty[schemaorg.Thing]):
@@ -3788,7 +3824,7 @@ class legislationConsolidates(RdfProperty[schemaorg.Legislation]):
 class interactionType(RdfProperty[schemaorg.Action]):
     term = RdfTerm('interactionType', 'http://schema.org/interactionType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class securityClearanceRequirement(RdfProperty[Text | URL]):
+class securityClearanceRequirement(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('securityClearanceRequirement', 'http://schema.org/securityClearanceRequirement', ['1.1', '1.2-DRAFT'])
 
 class salaryUponCompletion(RdfProperty[schemaorg.MonetaryAmountDistribution]):
@@ -3797,25 +3833,25 @@ class salaryUponCompletion(RdfProperty[schemaorg.MonetaryAmountDistribution]):
 class hoursAvailable(RdfProperty[schemaorg.OpeningHoursSpecification]):
     term = RdfTerm('hoursAvailable', 'http://schema.org/hoursAvailable', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfPreviousOwners(RdfProperty[schemaorg.QuantitativeValue | Number]):
+class numberOfPreviousOwners(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Number]):
     term = RdfTerm('numberOfPreviousOwners', 'http://schema.org/numberOfPreviousOwners', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class legalStatus(RdfProperty[Text | schemaorg.DrugLegalStatus | schemaorg.MedicalEnumeration]):
+class legalStatus(RdfProperty[schemaorg.Text | schemaorg.DrugLegalStatus | schemaorg.MedicalEnumeration]):
     term = RdfTerm('legalStatus', 'http://schema.org/legalStatus', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class downloadUrl(RdfProperty[URL]):
+class downloadUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('downloadUrl', 'http://schema.org/downloadUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class valueName(RdfProperty[Text]):
+class valueName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('valueName', 'http://schema.org/valueName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class partOfSystem(RdfProperty[schemaorg.AnatomicalSystem]):
     term = RdfTerm('partOfSystem', 'http://schema.org/partOfSystem', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class inCodeSet(RdfProperty[schemaorg.CategoryCodeSet | URL]):
+class inCodeSet(RdfProperty[schemaorg.CategoryCodeSet | schemaorg.URL]):
     term = RdfTerm('inCodeSet', 'http://schema.org/inCodeSet', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class license(RdfProperty[URL | schemaorg.CreativeWork]):
+class license(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('license', 'http://schema.org/license', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class businessDays(RdfProperty[schemaorg.OpeningHoursSpecification | schemaorg.DayOfWeek]):
@@ -3824,13 +3860,13 @@ class businessDays(RdfProperty[schemaorg.OpeningHoursSpecification | schemaorg.D
 class ccRecipient(RdfProperty[schemaorg.Organization | schemaorg.ContactPoint | schemaorg.Person]):
     term = RdfTerm('ccRecipient', 'http://schema.org/ccRecipient', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class permissions(RdfProperty[Text]):
+class permissions(RdfProperty[schemaorg.Text]):
     term = RdfTerm('permissions', 'http://schema.org/permissions', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class broker(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('broker', 'http://schema.org/broker', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class contactType(RdfProperty[Text]):
+class contactType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('contactType', 'http://schema.org/contactType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class recognizedBy(RdfProperty[schemaorg.Organization]):
@@ -3842,7 +3878,7 @@ class greater(RdfProperty[schemaorg.QualitativeValue]):
 class opponent(RdfProperty[schemaorg.Person]):
     term = RdfTerm('opponent', 'http://schema.org/opponent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class icaoCode(RdfProperty[Text]):
+class icaoCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('icaoCode', 'http://schema.org/icaoCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class associatedAnatomy(RdfProperty[schemaorg.SuperficialAnatomy | schemaorg.AnatomicalStructure | schemaorg.AnatomicalSystem]):
@@ -3854,10 +3890,10 @@ class playMode(RdfProperty[schemaorg.GamePlayMode]):
 class tributary(RdfProperty[schemaorg.AnatomicalStructure]):
     term = RdfTerm('tributary', 'http://schema.org/tributary', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class tool(RdfProperty[schemaorg.HowToTool | Text]):
+class tool(RdfProperty[schemaorg.HowToTool | schemaorg.Text]):
     term = RdfTerm('tool', 'http://schema.org/tool', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class taxonomicRange(RdfProperty[Text | schemaorg.DefinedTerm | URL | schemaorg.Taxon]):
+class taxonomicRange(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm | schemaorg.URL | schemaorg.Taxon]):
     term = RdfTerm('taxonomicRange', 'http://schema.org/taxonomicRange', ['1.2-DRAFT'])
 
 class weightTotal(RdfProperty[schemaorg.QuantitativeValue]):
@@ -3866,7 +3902,7 @@ class weightTotal(RdfProperty[schemaorg.QuantitativeValue]):
 class actors(RdfProperty[schemaorg.Person]):
     term = RdfTerm('actors', 'http://schema.org/actors', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class maximumPhysicalAttendeeCapacity(RdfProperty[Integer]):
+class maximumPhysicalAttendeeCapacity(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('maximumPhysicalAttendeeCapacity', 'http://schema.org/maximumPhysicalAttendeeCapacity', ['1.1', '1.2-DRAFT'])
 
 class grantee(RdfProperty[schemaorg.Audience | schemaorg.ContactPoint | schemaorg.Person | schemaorg.Organization]):
@@ -3875,7 +3911,7 @@ class grantee(RdfProperty[schemaorg.Audience | schemaorg.ContactPoint | schemaor
 class marginOfError(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('marginOfError', 'http://schema.org/marginOfError', ['1.0', '1.1', '1.2-DRAFT'])
 
-class followup(RdfProperty[Text]):
+class followup(RdfProperty[schemaorg.Text]):
     term = RdfTerm('followup', 'http://schema.org/followup', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class connectedTo(RdfProperty[schemaorg.AnatomicalStructure]):
@@ -3887,7 +3923,7 @@ class foundingLocation(RdfProperty[schemaorg.Place]):
 class acquiredFrom(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('acquiredFrom', 'http://schema.org/acquiredFrom', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class estimatedFlightDuration(RdfProperty[schemaorg.Duration | Text]):
+class estimatedFlightDuration(RdfProperty[schemaorg.Duration | schemaorg.Text]):
     term = RdfTerm('estimatedFlightDuration', 'http://schema.org/estimatedFlightDuration', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class merchant(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -3902,16 +3938,16 @@ class partOfOrder(RdfProperty[schemaorg.Order]):
 class maintainer(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('maintainer', 'http://schema.org/maintainer', ['1.1', '1.2-DRAFT'])
 
-class serialNumber(RdfProperty[Text]):
+class serialNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('serialNumber', 'http://schema.org/serialNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfAxles(RdfProperty[Number | schemaorg.QuantitativeValue]):
+class numberOfAxles(RdfProperty[schemaorg.Number | schemaorg.QuantitativeValue]):
     term = RdfTerm('numberOfAxles', 'http://schema.org/numberOfAxles', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class median(RdfProperty[Number]):
+class median(RdfProperty[schemaorg.Number]):
     term = RdfTerm('median', 'http://schema.org/median', ['1.0', '1.1', '1.2-DRAFT'])
 
-class caption(RdfProperty[schemaorg.MediaObject | Text]):
+class caption(RdfProperty[schemaorg.MediaObject | schemaorg.Text]):
     term = RdfTerm('caption', 'http://schema.org/caption', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class application(RdfProperty[schemaorg.SoftwareApplication]):
@@ -3920,52 +3956,52 @@ class application(RdfProperty[schemaorg.SoftwareApplication]):
 class serviceArea(RdfProperty[schemaorg.GeoShape | schemaorg.AdministrativeArea | schemaorg.Place]):
     term = RdfTerm('serviceArea', 'http://schema.org/serviceArea', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dateDeleted(RdfProperty[Date | DateTime]):
+class dateDeleted(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('dateDeleted', 'http://schema.org/dateDeleted', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class drugUnit(RdfProperty[Text]):
+class drugUnit(RdfProperty[schemaorg.Text]):
     term = RdfTerm('drugUnit', 'http://schema.org/drugUnit', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class programPrerequisites(RdfProperty[schemaorg.EducationalOccupationalCredential | schemaorg.AlignmentObject | Text | schemaorg.Course]):
+class programPrerequisites(RdfProperty[schemaorg.EducationalOccupationalCredential | schemaorg.AlignmentObject | schemaorg.Text | schemaorg.Course]):
     term = RdfTerm('programPrerequisites', 'http://schema.org/programPrerequisites', ['1.0', '1.1', '1.2-DRAFT'])
 
-class childMaxAge(RdfProperty[Number]):
+class childMaxAge(RdfProperty[schemaorg.Number]):
     term = RdfTerm('childMaxAge', 'http://schema.org/childMaxAge', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class featureList(RdfProperty[Text | URL]):
+class featureList(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('featureList', 'http://schema.org/featureList', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class courseSchedule(RdfProperty[schemaorg.Schedule]):
     term = RdfTerm('courseSchedule', 'http://schema.org/courseSchedule', ['1.2-DRAFT'])
 
-class suggestedGender(RdfProperty[Text | schemaorg.GenderType]):
+class suggestedGender(RdfProperty[schemaorg.Text | schemaorg.GenderType]):
     term = RdfTerm('suggestedGender', 'http://schema.org/suggestedGender', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class sourceOrganization(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('sourceOrganization', 'http://schema.org/sourceOrganization', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class hasTierRequirement(RdfProperty[Text | schemaorg.MonetaryAmount | schemaorg.CreditCard | schemaorg.UnitPriceSpecification]):
+class hasTierRequirement(RdfProperty[schemaorg.Text | schemaorg.MonetaryAmount | schemaorg.CreditCard | schemaorg.UnitPriceSpecification]):
     term = RdfTerm('hasTierRequirement', 'http://schema.org/hasTierRequirement', [])
 
-class paymentDueDate(RdfProperty[DateTime | Date]):
+class paymentDueDate(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('paymentDueDate', 'http://schema.org/paymentDueDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class model(RdfProperty[Text | schemaorg.ProductModel]):
+class model(RdfProperty[schemaorg.Text | schemaorg.ProductModel]):
     term = RdfTerm('model', 'http://schema.org/model', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class contraindication(RdfProperty[schemaorg.MedicalContraindication | Text]):
+class contraindication(RdfProperty[schemaorg.MedicalContraindication | schemaorg.Text]):
     term = RdfTerm('contraindication', 'http://schema.org/contraindication', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class isRelatedTo(RdfProperty[schemaorg.Product | schemaorg.Service]):
     term = RdfTerm('isRelatedTo', 'http://schema.org/isRelatedTo', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class risks(RdfProperty[Text]):
+class risks(RdfProperty[schemaorg.Text]):
     term = RdfTerm('risks', 'http://schema.org/risks', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class trailer(RdfProperty[schemaorg.VideoObject]):
     term = RdfTerm('trailer', 'http://schema.org/trailer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class softwareVersion(RdfProperty[Text]):
+class softwareVersion(RdfProperty[schemaorg.Text]):
     term = RdfTerm('softwareVersion', 'http://schema.org/softwareVersion', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class recommendedIntake(RdfProperty[schemaorg.RecommendedDoseSchedule]):
@@ -3977,25 +4013,25 @@ class sportsTeam(RdfProperty[schemaorg.SportsTeam]):
 class evidenceLevel(RdfProperty[schemaorg.MedicalEvidenceLevel]):
     term = RdfTerm('evidenceLevel', 'http://schema.org/evidenceLevel', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class contentType(RdfProperty[Text]):
+class contentType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('contentType', 'http://schema.org/contentType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class instructor(RdfProperty[schemaorg.Person]):
     term = RdfTerm('instructor', 'http://schema.org/instructor', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class educationalFramework(RdfProperty[Text]):
+class educationalFramework(RdfProperty[schemaorg.Text]):
     term = RdfTerm('educationalFramework', 'http://schema.org/educationalFramework', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class reviews(RdfProperty[schemaorg.Review]):
     term = RdfTerm('reviews', 'http://schema.org/reviews', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class accessibilityHazard(RdfProperty[Text]):
+class accessibilityHazard(RdfProperty[schemaorg.Text]):
     term = RdfTerm('accessibilityHazard', 'http://schema.org/accessibilityHazard', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class partySize(RdfProperty[schemaorg.QuantitativeValue | Integer]):
+class partySize(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Integer]):
     term = RdfTerm('partySize', 'http://schema.org/partySize', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class executableLibraryName(RdfProperty[Text]):
+class executableLibraryName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('executableLibraryName', 'http://schema.org/executableLibraryName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class seeks(RdfProperty[schemaorg.Demand]):
@@ -4007,46 +4043,46 @@ class potentialUse(RdfProperty[schemaorg.DefinedTerm]):
 class nonprofitStatus(RdfProperty[schemaorg.NonprofitType]):
     term = RdfTerm('nonprofitStatus', 'http://schema.org/nonprofitStatus', ['1.1', '1.2-DRAFT'])
 
-class courseWorkload(RdfProperty[Text]):
+class courseWorkload(RdfProperty[schemaorg.Text]):
     term = RdfTerm('courseWorkload', 'http://schema.org/courseWorkload', ['1.0', '1.1', '1.2-DRAFT'])
 
-class endOffset(RdfProperty[Number | schemaorg.HyperTocEntry]):
+class endOffset(RdfProperty[schemaorg.Number | schemaorg.HyperTocEntry]):
     term = RdfTerm('endOffset', 'http://schema.org/endOffset', ['1.0', '1.1', '1.2-DRAFT'])
 
-class requiresSubscription(RdfProperty[Boolean | schemaorg.MediaSubscription]):
+class requiresSubscription(RdfProperty[schemaorg.Boolean | schemaorg.MediaSubscription]):
     term = RdfTerm('requiresSubscription', 'http://schema.org/requiresSubscription', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class parentOrganization(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('parentOrganization', 'http://schema.org/parentOrganization', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class leiCode(RdfProperty[Text]):
+class leiCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('leiCode', 'http://schema.org/leiCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class returnFees(RdfProperty[schemaorg.ReturnFeesEnumeration]):
     term = RdfTerm('returnFees', 'http://schema.org/returnFees', ['1.0', '1.1', '1.2-DRAFT'])
 
-class artMedium(RdfProperty[Text | URL]):
+class artMedium(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('artMedium', 'http://schema.org/artMedium', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class numberOfAccommodationUnits(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('numberOfAccommodationUnits', 'http://schema.org/numberOfAccommodationUnits', ['1.1', '1.2-DRAFT'])
 
-class associatedPathophysiology(RdfProperty[Text]):
+class associatedPathophysiology(RdfProperty[schemaorg.Text]):
     term = RdfTerm('associatedPathophysiology', 'http://schema.org/associatedPathophysiology', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gtin12(RdfProperty[Text]):
+class gtin12(RdfProperty[schemaorg.Text]):
     term = RdfTerm('gtin12', 'http://schema.org/gtin12', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isAcceptingNewPatients(RdfProperty[Boolean]):
+class isAcceptingNewPatients(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('isAcceptingNewPatients', 'http://schema.org/isAcceptingNewPatients', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class tocEntry(RdfProperty[schemaorg.HyperTocEntry]):
     term = RdfTerm('tocEntry', 'http://schema.org/tocEntry', ['1.2-DRAFT'])
 
-class step(RdfProperty[schemaorg.CreativeWork | Text | schemaorg.HowToSection | schemaorg.HowToStep]):
+class step(RdfProperty[schemaorg.CreativeWork | schemaorg.Text | schemaorg.HowToSection | schemaorg.HowToStep]):
     term = RdfTerm('step', 'http://schema.org/step', ['1.0', '1.1', '1.2-DRAFT'])
 
-class codeValue(RdfProperty[Text]):
+class codeValue(RdfProperty[schemaorg.Text]):
     term = RdfTerm('codeValue', 'http://schema.org/codeValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class orderValue(RdfProperty[schemaorg.MonetaryAmount]):
@@ -4055,22 +4091,22 @@ class orderValue(RdfProperty[schemaorg.MonetaryAmount]):
 class payload(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('payload', 'http://schema.org/payload', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class additionalName(RdfProperty[Text]):
+class additionalName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('additionalName', 'http://schema.org/additionalName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasCredential(RdfProperty[schemaorg.EducationalOccupationalCredential]):
     term = RdfTerm('hasCredential', 'http://schema.org/hasCredential', ['1.0', '1.1', '1.2-DRAFT'])
 
-class deathDate(RdfProperty[Date]):
+class deathDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('deathDate', 'http://schema.org/deathDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class populationType(RdfProperty[schemaorg.Class]):
     term = RdfTerm('populationType', 'http://schema.org/populationType', ['1.0', '1.1', '1.2-DRAFT'])
 
-class mealService(RdfProperty[Text]):
+class mealService(RdfProperty[schemaorg.Text]):
     term = RdfTerm('mealService', 'http://schema.org/mealService', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class inStoreReturnsOffered(RdfProperty[Boolean]):
+class inStoreReturnsOffered(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('inStoreReturnsOffered', 'http://schema.org/inStoreReturnsOffered', ['1.0', '1.1', '1.2-DRAFT'])
 
 class workExample(RdfProperty[schemaorg.CreativeWork]):
@@ -4085,13 +4121,13 @@ class composer(RdfProperty[schemaorg.Person | schemaorg.Organization]):
 class spokenByCharacter(RdfProperty[schemaorg.Organization | schemaorg.Person]):
     term = RdfTerm('spokenByCharacter', 'http://schema.org/spokenByCharacter', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class schoolClosuresInfo(RdfProperty[URL | schemaorg.WebContent]):
+class schoolClosuresInfo(RdfProperty[schemaorg.URL | schemaorg.WebContent]):
     term = RdfTerm('schoolClosuresInfo', 'http://schema.org/schoolClosuresInfo', ['1.1', '1.2-DRAFT'])
 
-class disambiguatingDescription(RdfProperty[Text]):
+class disambiguatingDescription(RdfProperty[schemaorg.Text]):
     term = RdfTerm('disambiguatingDescription', 'http://schema.org/disambiguatingDescription', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class episodeNumber(RdfProperty[Integer | Text]):
+class episodeNumber(RdfProperty[schemaorg.Integer | schemaorg.Text]):
     term = RdfTerm('episodeNumber', 'http://schema.org/episodeNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class supersededBy(RdfProperty[schemaorg.Class | schemaorg.Property | schemaorg.Enumeration]):
@@ -4100,19 +4136,19 @@ class supersededBy(RdfProperty[schemaorg.Class | schemaorg.Property | schemaorg.
 class founders(RdfProperty[schemaorg.Person]):
     term = RdfTerm('founders', 'http://schema.org/founders', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class pattern(RdfProperty[schemaorg.DefinedTerm | Text]):
+class pattern(RdfProperty[schemaorg.DefinedTerm | schemaorg.Text]):
     term = RdfTerm('pattern', 'http://schema.org/pattern', ['1.1', '1.2-DRAFT'])
 
-class commentText(RdfProperty[Text]):
+class commentText(RdfProperty[schemaorg.Text]):
     term = RdfTerm('commentText', 'http://schema.org/commentText', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumICUBedsOcc(RdfProperty[Number]):
+class cvdNumICUBedsOcc(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumICUBedsOcc', 'http://schema.org/cvdNumICUBedsOcc', ['1.1', '1.2-DRAFT'])
 
 class sodiumContent(RdfProperty[schemaorg.Mass]):
     term = RdfTerm('sodiumContent', 'http://schema.org/sodiumContent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class videoQuality(RdfProperty[Text]):
+class videoQuality(RdfProperty[schemaorg.Text]):
     term = RdfTerm('videoQuality', 'http://schema.org/videoQuality', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class validFor(RdfProperty[schemaorg.Duration]):
@@ -4121,19 +4157,19 @@ class validFor(RdfProperty[schemaorg.Duration]):
 class inBroadcastLineup(RdfProperty[schemaorg.CableOrSatelliteService]):
     term = RdfTerm('inBroadcastLineup', 'http://schema.org/inBroadcastLineup', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class broadcastTimezone(RdfProperty[Text]):
+class broadcastTimezone(RdfProperty[schemaorg.Text]):
     term = RdfTerm('broadcastTimezone', 'http://schema.org/broadcastTimezone', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class characterName(RdfProperty[Text]):
+class characterName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('characterName', 'http://schema.org/characterName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasMenuSection(RdfProperty[schemaorg.MenuSection]):
     term = RdfTerm('hasMenuSection', 'http://schema.org/hasMenuSection', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class accessCode(RdfProperty[Text]):
+class accessCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('accessCode', 'http://schema.org/accessCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class requiredMinAge(RdfProperty[Integer]):
+class requiredMinAge(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('requiredMinAge', 'http://schema.org/requiredMinAge', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class offers(RdfProperty[schemaorg.Offer | schemaorg.Demand]):
@@ -4145,10 +4181,10 @@ class equal(RdfProperty[schemaorg.QualitativeValue]):
 class geoCrosses(RdfProperty[schemaorg.GeospatialGeometry | schemaorg.Place]):
     term = RdfTerm('geoCrosses', 'http://schema.org/geoCrosses', ['1.0', '1.1', '1.2-DRAFT'])
 
-class diseaseSpreadStatistics(RdfProperty[schemaorg.Dataset | URL | schemaorg.Observation | schemaorg.WebContent]):
+class diseaseSpreadStatistics(RdfProperty[schemaorg.Dataset | schemaorg.URL | schemaorg.Observation | schemaorg.WebContent]):
     term = RdfTerm('diseaseSpreadStatistics', 'http://schema.org/diseaseSpreadStatistics', ['1.1', '1.2-DRAFT'])
 
-class closes(RdfProperty[Time]):
+class closes(RdfProperty[schemaorg.Time]):
     term = RdfTerm('closes', 'http://schema.org/closes', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasPart(RdfProperty[schemaorg.CreativeWork]):
@@ -4160,13 +4196,13 @@ class departureBusStop(RdfProperty[schemaorg.BusStation | schemaorg.BusStop]):
 class recordedAs(RdfProperty[schemaorg.MusicRecording]):
     term = RdfTerm('recordedAs', 'http://schema.org/recordedAs', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class overdosage(RdfProperty[Text]):
+class overdosage(RdfProperty[schemaorg.Text]):
     term = RdfTerm('overdosage', 'http://schema.org/overdosage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class cargoVolume(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('cargoVolume', 'http://schema.org/cargoVolume', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class keywords(RdfProperty[schemaorg.DefinedTerm | URL | Text]):
+class keywords(RdfProperty[schemaorg.DefinedTerm | schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('keywords', 'http://schema.org/keywords', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class exampleOfWork(RdfProperty[schemaorg.CreativeWork]):
@@ -4175,7 +4211,7 @@ class exampleOfWork(RdfProperty[schemaorg.CreativeWork]):
 class contactOption(RdfProperty[schemaorg.ContactPointOption]):
     term = RdfTerm('contactOption', 'http://schema.org/contactOption', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class copyrightNotice(RdfProperty[Text]):
+class copyrightNotice(RdfProperty[schemaorg.Text]):
     term = RdfTerm('copyrightNotice', 'http://schema.org/copyrightNotice', ['1.2-DRAFT'])
 
 class musicBy(RdfProperty[schemaorg.Person | schemaorg.MusicGroup]):
@@ -4184,70 +4220,70 @@ class musicBy(RdfProperty[schemaorg.Person | schemaorg.MusicGroup]):
 class arrivalBusStop(RdfProperty[schemaorg.BusStation | schemaorg.BusStop]):
     term = RdfTerm('arrivalBusStop', 'http://schema.org/arrivalBusStop', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isLiveBroadcast(RdfProperty[Boolean]):
+class isLiveBroadcast(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('isLiveBroadcast', 'http://schema.org/isLiveBroadcast', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class fileSize(RdfProperty[Text]):
+class fileSize(RdfProperty[schemaorg.Text]):
     term = RdfTerm('fileSize', 'http://schema.org/fileSize', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class encodingFormat(RdfProperty[Text | URL]):
+class encodingFormat(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('encodingFormat', 'http://schema.org/encodingFormat', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class hasDriveThroughService(RdfProperty[Boolean]):
+class hasDriveThroughService(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('hasDriveThroughService', 'http://schema.org/hasDriveThroughService', ['1.1', '1.2-DRAFT'])
 
-class arrivalGate(RdfProperty[Text]):
+class arrivalGate(RdfProperty[schemaorg.Text]):
     term = RdfTerm('arrivalGate', 'http://schema.org/arrivalGate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class numberOfAvailableAccommodationUnits(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('numberOfAvailableAccommodationUnits', 'http://schema.org/numberOfAvailableAccommodationUnits', ['1.1', '1.2-DRAFT'])
 
-class negativeNotes(RdfProperty[Text | schemaorg.ListItem | schemaorg.ItemList | schemaorg.WebContent]):
+class negativeNotes(RdfProperty[schemaorg.Text | schemaorg.ListItem | schemaorg.ItemList | schemaorg.WebContent]):
     term = RdfTerm('negativeNotes', 'http://schema.org/negativeNotes', ['1.2-DRAFT'])
 
-class identifier(RdfProperty[Text | schemaorg.PropertyValue | URL]):
+class identifier(RdfProperty[schemaorg.Text | schemaorg.PropertyValue | schemaorg.URL]):
     term = RdfTerm('identifier', 'http://schema.org/identifier', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class suggestedMeasurement(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('suggestedMeasurement', 'http://schema.org/suggestedMeasurement', ['1.2-DRAFT'])
 
-class recipeCuisine(RdfProperty[Text]):
+class recipeCuisine(RdfProperty[schemaorg.Text]):
     term = RdfTerm('recipeCuisine', 'http://schema.org/recipeCuisine', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class jobTitle(RdfProperty[Text | schemaorg.DefinedTerm]):
+class jobTitle(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm]):
     term = RdfTerm('jobTitle', 'http://schema.org/jobTitle', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class broadcastSignalModulation(RdfProperty[Text | schemaorg.QualitativeValue]):
+class broadcastSignalModulation(RdfProperty[schemaorg.Text | schemaorg.QualitativeValue]):
     term = RdfTerm('broadcastSignalModulation', 'http://schema.org/broadcastSignalModulation', ['1.0', '1.1', '1.2-DRAFT'])
 
-class bed(RdfProperty[schemaorg.BedType | Text | schemaorg.BedDetails]):
+class bed(RdfProperty[schemaorg.BedType | schemaorg.Text | schemaorg.BedDetails]):
     term = RdfTerm('bed', 'http://schema.org/bed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cutoffTime(RdfProperty[Time]):
+class cutoffTime(RdfProperty[schemaorg.Time]):
     term = RdfTerm('cutoffTime', 'http://schema.org/cutoffTime', ['1.1', '1.2-DRAFT'])
 
 class itemReviewed(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('itemReviewed', 'http://schema.org/itemReviewed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class vatID(RdfProperty[Text]):
+class vatID(RdfProperty[schemaorg.Text]):
     term = RdfTerm('vatID', 'http://schema.org/vatID', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class securityScreening(RdfProperty[Text]):
+class securityScreening(RdfProperty[schemaorg.Text]):
     term = RdfTerm('securityScreening', 'http://schema.org/securityScreening', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class leaseLength(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Duration]):
     term = RdfTerm('leaseLength', 'http://schema.org/leaseLength', ['1.0', '1.1', '1.2-DRAFT'])
 
-class orderQuantity(RdfProperty[Number | schemaorg.QuantitativeValue]):
+class orderQuantity(RdfProperty[schemaorg.Number | schemaorg.QuantitativeValue]):
     term = RdfTerm('orderQuantity', 'http://schema.org/orderQuantity', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class targetName(RdfProperty[Text]):
+class targetName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('targetName', 'http://schema.org/targetName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class engineType(RdfProperty[schemaorg.QualitativeValue | URL | Text]):
+class engineType(RdfProperty[schemaorg.QualitativeValue | schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('engineType', 'http://schema.org/engineType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class occupationalCategory(RdfProperty[schemaorg.CategoryCode | Text]):
+class occupationalCategory(RdfProperty[schemaorg.CategoryCode | schemaorg.Text]):
     term = RdfTerm('occupationalCategory', 'http://schema.org/occupationalCategory', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class branch(RdfProperty[schemaorg.AnatomicalStructure]):
@@ -4259,25 +4295,25 @@ class mainEntity(RdfProperty[schemaorg.Thing]):
 class suitableForDiet(RdfProperty[schemaorg.RestrictedDiet]):
     term = RdfTerm('suitableForDiet', 'http://schema.org/suitableForDiet', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class billingDuration(RdfProperty[schemaorg.QuantitativeValue | Number | schemaorg.Duration]):
+class billingDuration(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Number | schemaorg.Duration]):
     term = RdfTerm('billingDuration', 'http://schema.org/billingDuration', ['1.2-DRAFT'])
 
-class coverageStartTime(RdfProperty[DateTime]):
+class coverageStartTime(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('coverageStartTime', 'http://schema.org/coverageStartTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class employmentUnit(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('employmentUnit', 'http://schema.org/employmentUnit', ['1.0', '1.1', '1.2-DRAFT'])
 
-class gtin13(RdfProperty[Text]):
+class gtin13(RdfProperty[schemaorg.Text]):
     term = RdfTerm('gtin13', 'http://schema.org/gtin13', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class usesHealthPlanIdStandard(RdfProperty[URL | Text]):
+class usesHealthPlanIdStandard(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('usesHealthPlanIdStandard', 'http://schema.org/usesHealthPlanIdStandard', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class editEIDR(RdfProperty[URL | Text]):
+class editEIDR(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('editEIDR', 'http://schema.org/editEIDR', ['1.1', '1.2-DRAFT'])
 
-class maximumAttendeeCapacity(RdfProperty[Integer]):
+class maximumAttendeeCapacity(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('maximumAttendeeCapacity', 'http://schema.org/maximumAttendeeCapacity', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class relevantSpecialty(RdfProperty[schemaorg.MedicalSpecialty]):
@@ -4286,7 +4322,7 @@ class relevantSpecialty(RdfProperty[schemaorg.MedicalSpecialty]):
 class billingPeriod(RdfProperty[schemaorg.Duration]):
     term = RdfTerm('billingPeriod', 'http://schema.org/billingPeriod', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class shippingSettingsLink(RdfProperty[URL]):
+class shippingSettingsLink(RdfProperty[schemaorg.URL]):
     term = RdfTerm('shippingSettingsLink', 'http://schema.org/shippingSettingsLink', ['1.1', '1.2-DRAFT'])
 
 class referencesOrder(RdfProperty[schemaorg.Order]):
@@ -4295,10 +4331,10 @@ class referencesOrder(RdfProperty[schemaorg.Order]):
 class processingTime(RdfProperty[schemaorg.Duration]):
     term = RdfTerm('processingTime', 'http://schema.org/processingTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class copyrightYear(RdfProperty[Number]):
+class copyrightYear(RdfProperty[schemaorg.Number]):
     term = RdfTerm('copyrightYear', 'http://schema.org/copyrightYear', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class broadcastSubChannel(RdfProperty[Text]):
+class broadcastSubChannel(RdfProperty[schemaorg.Text]):
     term = RdfTerm('broadcastSubChannel', 'http://schema.org/broadcastSubChannel', ['1.0', '1.1', '1.2-DRAFT'])
 
 class specialOpeningHoursSpecification(RdfProperty[schemaorg.OpeningHoursSpecification]):
@@ -4307,28 +4343,28 @@ class specialOpeningHoursSpecification(RdfProperty[schemaorg.OpeningHoursSpecifi
 class incentiveStatus(RdfProperty[schemaorg.IncentiveStatus]):
     term = RdfTerm('incentiveStatus', 'http://schema.org/incentiveStatus', [])
 
-class servesCuisine(RdfProperty[Text]):
+class servesCuisine(RdfProperty[schemaorg.Text]):
     term = RdfTerm('servesCuisine', 'http://schema.org/servesCuisine', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class collectionSize(RdfProperty[Integer]):
+class collectionSize(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('collectionSize', 'http://schema.org/collectionSize', ['1.0', '1.1', '1.2-DRAFT'])
 
-class operatingSystem(RdfProperty[Text]):
+class operatingSystem(RdfProperty[schemaorg.Text]):
     term = RdfTerm('operatingSystem', 'http://schema.org/operatingSystem', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class orderPercentage(RdfProperty[Number]):
+class orderPercentage(RdfProperty[schemaorg.Number]):
     term = RdfTerm('orderPercentage', 'http://schema.org/orderPercentage', [])
 
-class encodingType(RdfProperty[Text]):
+class encodingType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('encodingType', 'http://schema.org/encodingType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class nerve(RdfProperty[schemaorg.Nerve]):
     term = RdfTerm('nerve', 'http://schema.org/nerve', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class webCheckinTime(RdfProperty[DateTime]):
+class webCheckinTime(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('webCheckinTime', 'http://schema.org/webCheckinTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class taxID(RdfProperty[Text]):
+class taxID(RdfProperty[schemaorg.Text]):
     term = RdfTerm('taxID', 'http://schema.org/taxID', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasMeasurement(RdfProperty[schemaorg.QuantitativeValue]):
@@ -4340,103 +4376,103 @@ class about(RdfProperty[schemaorg.Thing]):
 class healthCondition(RdfProperty[schemaorg.MedicalCondition]):
     term = RdfTerm('healthCondition', 'http://schema.org/healthCondition', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dataFeedElement(RdfProperty[schemaorg.DataFeedItem | schemaorg.Thing | Text]):
+class dataFeedElement(RdfProperty[schemaorg.DataFeedItem | schemaorg.Thing | schemaorg.Text]):
     term = RdfTerm('dataFeedElement', 'http://schema.org/dataFeedElement', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class prescriptionStatus(RdfProperty[schemaorg.DrugPrescriptionStatus | Text]):
+class prescriptionStatus(RdfProperty[schemaorg.DrugPrescriptionStatus | schemaorg.Text]):
     term = RdfTerm('prescriptionStatus', 'http://schema.org/prescriptionStatus', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class containedIn(RdfProperty[schemaorg.Place]):
     term = RdfTerm('containedIn', 'http://schema.org/containedIn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class diseasePreventionInfo(RdfProperty[URL | schemaorg.WebContent]):
+class diseasePreventionInfo(RdfProperty[schemaorg.URL | schemaorg.WebContent]):
     term = RdfTerm('diseasePreventionInfo', 'http://schema.org/diseasePreventionInfo', ['1.1', '1.2-DRAFT'])
 
-class aspect(RdfProperty[Text]):
+class aspect(RdfProperty[schemaorg.Text]):
     term = RdfTerm('aspect', 'http://schema.org/aspect', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class deliveryLeadTime(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('deliveryLeadTime', 'http://schema.org/deliveryLeadTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isrcCode(RdfProperty[Text]):
+class isrcCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('isrcCode', 'http://schema.org/isrcCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class nerveMotor(RdfProperty[schemaorg.Muscle]):
     term = RdfTerm('nerveMotor', 'http://schema.org/nerveMotor', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class valuePattern(RdfProperty[Text]):
+class valuePattern(RdfProperty[schemaorg.Text]):
     term = RdfTerm('valuePattern', 'http://schema.org/valuePattern', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class programType(RdfProperty[Text | schemaorg.DefinedTerm]):
+class programType(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm]):
     term = RdfTerm('programType', 'http://schema.org/programType', ['1.1', '1.2-DRAFT'])
 
-class datePublished(RdfProperty[Date | DateTime]):
+class datePublished(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('datePublished', 'http://schema.org/datePublished', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class location(RdfProperty[Text | schemaorg.Place | schemaorg.VirtualLocation | schemaorg.PostalAddress]):
+class location(RdfProperty[schemaorg.Text | schemaorg.Place | schemaorg.VirtualLocation | schemaorg.PostalAddress]):
     term = RdfTerm('location', 'http://schema.org/location', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dropoffTime(RdfProperty[DateTime]):
+class dropoffTime(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('dropoffTime', 'http://schema.org/dropoffTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class algorithm(RdfProperty[Text]):
+class algorithm(RdfProperty[schemaorg.Text]):
     term = RdfTerm('algorithm', 'http://schema.org/algorithm', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class jobImmediateStart(RdfProperty[Boolean]):
+class jobImmediateStart(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('jobImmediateStart', 'http://schema.org/jobImmediateStart', ['1.0', '1.1', '1.2-DRAFT'])
 
-class applicationCategory(RdfProperty[Text | URL]):
+class applicationCategory(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('applicationCategory', 'http://schema.org/applicationCategory', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class directApply(RdfProperty[Boolean]):
+class directApply(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('directApply', 'http://schema.org/directApply', ['1.2-DRAFT'])
 
-class estimatedCost(RdfProperty[schemaorg.MonetaryAmount | Text]):
+class estimatedCost(RdfProperty[schemaorg.MonetaryAmount | schemaorg.Text]):
     term = RdfTerm('estimatedCost', 'http://schema.org/estimatedCost', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class lyricist(RdfProperty[schemaorg.Person]):
     term = RdfTerm('lyricist', 'http://schema.org/lyricist', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class requiredGender(RdfProperty[Text]):
+class requiredGender(RdfProperty[schemaorg.Text]):
     term = RdfTerm('requiredGender', 'http://schema.org/requiredGender', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class reservationStatus(RdfProperty[schemaorg.ReservationStatusType]):
     term = RdfTerm('reservationStatus', 'http://schema.org/reservationStatus', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class broadcastChannelId(RdfProperty[Text]):
+class broadcastChannelId(RdfProperty[schemaorg.Text]):
     term = RdfTerm('broadcastChannelId', 'http://schema.org/broadcastChannelId', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class educationalLevel(RdfProperty[Text | schemaorg.DefinedTerm | URL]):
+class educationalLevel(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm | schemaorg.URL]):
     term = RdfTerm('educationalLevel', 'http://schema.org/educationalLevel', ['1.0', '1.1', '1.2-DRAFT'])
 
-class embedUrl(RdfProperty[URL]):
+class embedUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('embedUrl', 'http://schema.org/embedUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class coverageEndTime(RdfProperty[DateTime]):
+class coverageEndTime(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('coverageEndTime', 'http://schema.org/coverageEndTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class timeToComplete(RdfProperty[schemaorg.Duration]):
     term = RdfTerm('timeToComplete', 'http://schema.org/timeToComplete', ['1.0', '1.1', '1.2-DRAFT'])
 
-class isResizable(RdfProperty[Boolean]):
+class isResizable(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('isResizable', 'http://schema.org/isResizable', ['1.1', '1.2-DRAFT'])
 
 class seller(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('seller', 'http://schema.org/seller', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class passengerPriorityStatus(RdfProperty[Text | schemaorg.QualitativeValue]):
+class passengerPriorityStatus(RdfProperty[schemaorg.Text | schemaorg.QualitativeValue]):
     term = RdfTerm('passengerPriorityStatus', 'http://schema.org/passengerPriorityStatus', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class possibleComplication(RdfProperty[Text]):
+class possibleComplication(RdfProperty[schemaorg.Text]):
     term = RdfTerm('possibleComplication', 'http://schema.org/possibleComplication', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class jobStartDate(RdfProperty[Text | Date]):
+class jobStartDate(RdfProperty[schemaorg.Text | schemaorg.Date]):
     term = RdfTerm('jobStartDate', 'http://schema.org/jobStartDate', ['1.0', '1.1', '1.2-DRAFT'])
 
 class adverseOutcome(RdfProperty[schemaorg.MedicalEntity]):
     term = RdfTerm('adverseOutcome', 'http://schema.org/adverseOutcome', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class membershipPointsEarned(RdfProperty[schemaorg.QuantitativeValue | Number]):
+class membershipPointsEarned(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Number]):
     term = RdfTerm('membershipPointsEarned', 'http://schema.org/membershipPointsEarned', ['1.0', '1.1', '1.2-DRAFT'])
 
 class nextItem(RdfProperty[schemaorg.ListItem]):
@@ -4448,16 +4484,16 @@ class includedDataCatalog(RdfProperty[schemaorg.DataCatalog]):
 class signDetected(RdfProperty[schemaorg.MedicalSign]):
     term = RdfTerm('signDetected', 'http://schema.org/signDetected', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdFacilityId(RdfProperty[Text]):
+class cvdFacilityId(RdfProperty[schemaorg.Text]):
     term = RdfTerm('cvdFacilityId', 'http://schema.org/cvdFacilityId', ['1.1', '1.2-DRAFT'])
 
-class programmingModel(RdfProperty[Text]):
+class programmingModel(RdfProperty[schemaorg.Text]):
     term = RdfTerm('programmingModel', 'http://schema.org/programmingModel', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class chemicalComposition(RdfProperty[Text]):
+class chemicalComposition(RdfProperty[schemaorg.Text]):
     term = RdfTerm('chemicalComposition', 'http://schema.org/chemicalComposition', ['1.2-DRAFT'])
 
-class accessibilityFeature(RdfProperty[Text]):
+class accessibilityFeature(RdfProperty[schemaorg.Text]):
     term = RdfTerm('accessibilityFeature', 'http://schema.org/accessibilityFeature', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class relatedCondition(RdfProperty[schemaorg.MedicalCondition]):
@@ -4466,7 +4502,7 @@ class relatedCondition(RdfProperty[schemaorg.MedicalCondition]):
 class legislationChanges(RdfProperty[schemaorg.Legislation]):
     term = RdfTerm('legislationChanges', 'http://schema.org/legislationChanges', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class qualifications(RdfProperty[schemaorg.EducationalOccupationalCredential | Text]):
+class qualifications(RdfProperty[schemaorg.EducationalOccupationalCredential | schemaorg.Text]):
     term = RdfTerm('qualifications', 'http://schema.org/qualifications', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class colleagues(RdfProperty[schemaorg.Person]):
@@ -4478,19 +4514,19 @@ class returnLabelSource(RdfProperty[schemaorg.ReturnLabelSourceEnumeration]):
 class guidelineSubject(RdfProperty[schemaorg.MedicalEntity]):
     term = RdfTerm('guidelineSubject', 'http://schema.org/guidelineSubject', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class duringMedia(RdfProperty[schemaorg.MediaObject | URL]):
+class duringMedia(RdfProperty[schemaorg.MediaObject | schemaorg.URL]):
     term = RdfTerm('duringMedia', 'http://schema.org/duringMedia', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class seatNumber(RdfProperty[Text]):
+class seatNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('seatNumber', 'http://schema.org/seatNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class musicReleaseFormat(RdfProperty[schemaorg.MusicReleaseFormatType]):
     term = RdfTerm('musicReleaseFormat', 'http://schema.org/musicReleaseFormat', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class articleSection(RdfProperty[Text]):
+class articleSection(RdfProperty[schemaorg.Text]):
     term = RdfTerm('articleSection', 'http://schema.org/articleSection', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class materialExtent(RdfProperty[Text | schemaorg.QuantitativeValue]):
+class materialExtent(RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue]):
     term = RdfTerm('materialExtent', 'http://schema.org/materialExtent', ['1.0', '1.1', '1.2-DRAFT'])
 
 class signOrSymptom(RdfProperty[schemaorg.MedicalSignOrSymptom]):
@@ -4502,10 +4538,10 @@ class musicArrangement(RdfProperty[schemaorg.MusicComposition]):
 class video(RdfProperty[schemaorg.Clip | schemaorg.VideoObject]):
     term = RdfTerm('video', 'http://schema.org/video', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class remainingAttendeeCapacity(RdfProperty[Integer]):
+class remainingAttendeeCapacity(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('remainingAttendeeCapacity', 'http://schema.org/remainingAttendeeCapacity', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class availableThrough(RdfProperty[DateTime]):
+class availableThrough(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('availableThrough', 'http://schema.org/availableThrough', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class geoCoveredBy(RdfProperty[schemaorg.Place | schemaorg.GeospatialGeometry]):
@@ -4514,28 +4550,28 @@ class geoCoveredBy(RdfProperty[schemaorg.Place | schemaorg.GeospatialGeometry]):
 class advanceBookingRequirement(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('advanceBookingRequirement', 'http://schema.org/advanceBookingRequirement', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class touristType(RdfProperty[schemaorg.Audience | Text]):
+class touristType(RdfProperty[schemaorg.Audience | schemaorg.Text]):
     term = RdfTerm('touristType', 'http://schema.org/touristType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gtin(RdfProperty[Text | URL]):
+class gtin(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('gtin', 'http://schema.org/gtin', ['1.0', '1.1', '1.2-DRAFT'])
 
 class seasonalOverride(RdfProperty[schemaorg.OpeningHoursSpecification]):
     term = RdfTerm('seasonalOverride', 'http://schema.org/seasonalOverride', [])
 
-class loanType(RdfProperty[Text | URL]):
+class loanType(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('loanType', 'http://schema.org/loanType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class meetsEmissionStandard(RdfProperty[schemaorg.QualitativeValue | URL | Text]):
+class meetsEmissionStandard(RdfProperty[schemaorg.QualitativeValue | schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('meetsEmissionStandard', 'http://schema.org/meetsEmissionStandard', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class arrivalStation(RdfProperty[schemaorg.TrainStation]):
     term = RdfTerm('arrivalStation', 'http://schema.org/arrivalStation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class description(RdfProperty[Text | schemaorg.TextObject]):
+class description(RdfProperty[schemaorg.Text | schemaorg.TextObject]):
     term = RdfTerm('description', 'http://schema.org/description', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class applicationSuite(RdfProperty[Text]):
+class applicationSuite(RdfProperty[schemaorg.Text]):
     term = RdfTerm('applicationSuite', 'http://schema.org/applicationSuite', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class handlingTime(RdfProperty[schemaorg.QuantitativeValue | schemaorg.ServicePeriod]):
@@ -4547,31 +4583,31 @@ class seriousAdverseOutcome(RdfProperty[schemaorg.MedicalEntity]):
 class cookTime(RdfProperty[schemaorg.Duration]):
     term = RdfTerm('cookTime', 'http://schema.org/cookTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class checkinTime(RdfProperty[Time | DateTime]):
+class checkinTime(RdfProperty[schemaorg.Time | schemaorg.DateTime]):
     term = RdfTerm('checkinTime', 'http://schema.org/checkinTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class primaryPrevention(RdfProperty[schemaorg.MedicalTherapy]):
     term = RdfTerm('primaryPrevention', 'http://schema.org/primaryPrevention', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isGift(RdfProperty[Boolean]):
+class isGift(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('isGift', 'http://schema.org/isGift', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class departureTerminal(RdfProperty[Text]):
+class departureTerminal(RdfProperty[schemaorg.Text]):
     term = RdfTerm('departureTerminal', 'http://schema.org/departureTerminal', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class ticketToken(RdfProperty[URL | Text]):
+class ticketToken(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('ticketToken', 'http://schema.org/ticketToken', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class albumReleaseType(RdfProperty[schemaorg.MusicAlbumReleaseType]):
     term = RdfTerm('albumReleaseType', 'http://schema.org/albumReleaseType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class nonProprietaryName(RdfProperty[Text]):
+class nonProprietaryName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('nonProprietaryName', 'http://schema.org/nonProprietaryName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class seatRow(RdfProperty[Text]):
+class seatRow(RdfProperty[schemaorg.Text]):
     term = RdfTerm('seatRow', 'http://schema.org/seatRow', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class countriesSupported(RdfProperty[Text]):
+class countriesSupported(RdfProperty[schemaorg.Text]):
     term = RdfTerm('countriesSupported', 'http://schema.org/countriesSupported', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class winner(RdfProperty[schemaorg.Person]):
@@ -4589,22 +4625,22 @@ class funding(RdfProperty[schemaorg.Grant]):
 class legislationCommences(RdfProperty[schemaorg.Legislation]):
     term = RdfTerm('legislationCommences', 'http://schema.org/legislationCommences', [])
 
-class healthPlanCoinsuranceOption(RdfProperty[Text]):
+class healthPlanCoinsuranceOption(RdfProperty[schemaorg.Text]):
     term = RdfTerm('healthPlanCoinsuranceOption', 'http://schema.org/healthPlanCoinsuranceOption', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class termsOfService(RdfProperty[Text | URL]):
+class termsOfService(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('termsOfService', 'http://schema.org/termsOfService', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class artworkSurface(RdfProperty[Text | URL]):
+class artworkSurface(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('artworkSurface', 'http://schema.org/artworkSurface', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class diversityPolicy(RdfProperty[URL | schemaorg.CreativeWork]):
+class diversityPolicy(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('diversityPolicy', 'http://schema.org/diversityPolicy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class openingHours(RdfProperty[Text]):
+class openingHours(RdfProperty[schemaorg.Text]):
     term = RdfTerm('openingHours', 'http://schema.org/openingHours', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class usNPI(RdfProperty[Text]):
+class usNPI(RdfProperty[schemaorg.Text]):
     term = RdfTerm('usNPI', 'http://schema.org/usNPI', [])
 
 class penciler(RdfProperty[schemaorg.Person]):
@@ -4613,25 +4649,25 @@ class penciler(RdfProperty[schemaorg.Person]):
 class publishedBy(RdfProperty[schemaorg.Organization | schemaorg.Person]):
     term = RdfTerm('publishedBy', 'http://schema.org/publishedBy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfPartialBathrooms(RdfProperty[Number]):
+class numberOfPartialBathrooms(RdfProperty[schemaorg.Number]):
     term = RdfTerm('numberOfPartialBathrooms', 'http://schema.org/numberOfPartialBathrooms', ['1.1', '1.2-DRAFT'])
 
 class runsTo(RdfProperty[schemaorg.Vessel]):
     term = RdfTerm('runsTo', 'http://schema.org/runsTo', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class givenName(RdfProperty[Text]):
+class givenName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('givenName', 'http://schema.org/givenName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasTiers(RdfProperty[schemaorg.MemberProgramTier]):
     term = RdfTerm('hasTiers', 'http://schema.org/hasTiers', [])
 
-class reservationId(RdfProperty[Text]):
+class reservationId(RdfProperty[schemaorg.Text]):
     term = RdfTerm('reservationId', 'http://schema.org/reservationId', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class specialCommitments(RdfProperty[Text]):
+class specialCommitments(RdfProperty[schemaorg.Text]):
     term = RdfTerm('specialCommitments', 'http://schema.org/specialCommitments', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class surface(RdfProperty[Text | URL]):
+class surface(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('surface', 'http://schema.org/surface', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class isConsumableFor(RdfProperty[schemaorg.Product]):
@@ -4640,28 +4676,28 @@ class isConsumableFor(RdfProperty[schemaorg.Product]):
 class bccRecipient(RdfProperty[schemaorg.ContactPoint | schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('bccRecipient', 'http://schema.org/bccRecipient', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class pickupTime(RdfProperty[DateTime]):
+class pickupTime(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('pickupTime', 'http://schema.org/pickupTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class inChI(RdfProperty[Text]):
+class inChI(RdfProperty[schemaorg.Text]):
     term = RdfTerm('inChI', 'http://schema.org/inChI', ['1.2-DRAFT'])
 
-class sha256(RdfProperty[Text]):
+class sha256(RdfProperty[schemaorg.Text]):
     term = RdfTerm('sha256', 'http://schema.org/sha256', ['1.2-DRAFT'])
 
 class attendee(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('attendee', 'http://schema.org/attendee', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isProprietary(RdfProperty[Boolean]):
+class isProprietary(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('isProprietary', 'http://schema.org/isProprietary', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class ratingCount(RdfProperty[Integer]):
+class ratingCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('ratingCount', 'http://schema.org/ratingCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class price(RdfProperty[Text | Number]):
+class price(RdfProperty[schemaorg.Text | schemaorg.Number]):
     term = RdfTerm('price', 'http://schema.org/price', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class utterances(RdfProperty[Text]):
+class utterances(RdfProperty[schemaorg.Text]):
     term = RdfTerm('utterances', 'http://schema.org/utterances', ['1.2-DRAFT'])
 
 class recognizingAuthority(RdfProperty[schemaorg.Organization]):
@@ -4670,34 +4706,34 @@ class recognizingAuthority(RdfProperty[schemaorg.Organization]):
 class agent(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('agent', 'http://schema.org/agent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class validFrom(RdfProperty[DateTime | Date]):
+class validFrom(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('validFrom', 'http://schema.org/validFrom', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class broadcastServiceTier(RdfProperty[Text]):
+class broadcastServiceTier(RdfProperty[schemaorg.Text]):
     term = RdfTerm('broadcastServiceTier', 'http://schema.org/broadcastServiceTier', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class paymentAccepted(RdfProperty[Text]):
+class paymentAccepted(RdfProperty[schemaorg.Text]):
     term = RdfTerm('paymentAccepted', 'http://schema.org/paymentAccepted', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class legislationLegalValue(RdfProperty[schemaorg.LegalValueLevel]):
     term = RdfTerm('legislationLegalValue', 'http://schema.org/legislationLegalValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class lodgingUnitDescription(RdfProperty[Text]):
+class lodgingUnitDescription(RdfProperty[schemaorg.Text]):
     term = RdfTerm('lodgingUnitDescription', 'http://schema.org/lodgingUnitDescription', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class blogPosts(RdfProperty[schemaorg.BlogPosting]):
     term = RdfTerm('blogPosts', 'http://schema.org/blogPosts', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class departurePlatform(RdfProperty[Text]):
+class departurePlatform(RdfProperty[schemaorg.Text]):
     term = RdfTerm('departurePlatform', 'http://schema.org/departurePlatform', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class albumRelease(RdfProperty[schemaorg.MusicRelease]):
     term = RdfTerm('albumRelease', 'http://schema.org/albumRelease', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class mobileUrl(RdfProperty[Text]):
+class mobileUrl(RdfProperty[schemaorg.Text]):
     term = RdfTerm('mobileUrl', 'http://schema.org/mobileUrl', ['1.2-DRAFT'])
 
-class headline(RdfProperty[Text]):
+class headline(RdfProperty[schemaorg.Text]):
     term = RdfTerm('headline', 'http://schema.org/headline', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class wheelbase(RdfProperty[schemaorg.QuantitativeValue]):
@@ -4706,13 +4742,13 @@ class wheelbase(RdfProperty[schemaorg.QuantitativeValue]):
 class appliesToPaymentMethod(RdfProperty[schemaorg.PaymentMethod]):
     term = RdfTerm('appliesToPaymentMethod', 'http://schema.org/appliesToPaymentMethod', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class labelDetails(RdfProperty[URL]):
+class labelDetails(RdfProperty[schemaorg.URL]):
     term = RdfTerm('labelDetails', 'http://schema.org/labelDetails', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class originalMediaContextDescription(RdfProperty[Text]):
+class originalMediaContextDescription(RdfProperty[schemaorg.Text]):
     term = RdfTerm('originalMediaContextDescription', 'http://schema.org/originalMediaContextDescription', ['1.2-DRAFT'])
 
-class category(RdfProperty[schemaorg.CategoryCode | URL | schemaorg.Thing | schemaorg.PhysicalActivityCategory | Text]):
+class category(RdfProperty[schemaorg.CategoryCode | schemaorg.URL | schemaorg.Thing | schemaorg.PhysicalActivityCategory | schemaorg.Text]):
     term = RdfTerm('category', 'http://schema.org/category', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class includedInDataCatalog(RdfProperty[schemaorg.DataCatalog]):
@@ -4721,7 +4757,7 @@ class includedInDataCatalog(RdfProperty[schemaorg.DataCatalog]):
 class distance(RdfProperty[schemaorg.Distance]):
     term = RdfTerm('distance', 'http://schema.org/distance', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class actionPlatform(RdfProperty[Text | schemaorg.DigitalPlatformEnumeration | URL]):
+class actionPlatform(RdfProperty[schemaorg.Text | schemaorg.DigitalPlatformEnumeration | schemaorg.URL]):
     term = RdfTerm('actionPlatform', 'http://schema.org/actionPlatform', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class digitalSourceType(RdfProperty[schemaorg.IPTCDigitalSourceEnumeration]):
@@ -4745,7 +4781,7 @@ class question(RdfProperty[schemaorg.Question]):
 class measurementQualifier(RdfProperty[schemaorg.Enumeration]):
     term = RdfTerm('measurementQualifier', 'http://schema.org/measurementQualifier', ['1.2-DRAFT'])
 
-class asin(RdfProperty[Text | URL]):
+class asin(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('asin', 'http://schema.org/asin', ['1.2-DRAFT'])
 
 class suggestedAnswer(RdfProperty[schemaorg.ItemList | schemaorg.Answer]):
@@ -4754,13 +4790,13 @@ class suggestedAnswer(RdfProperty[schemaorg.ItemList | schemaorg.Answer]):
 class postalCodeRange(RdfProperty[schemaorg.PostalCodeRangeSpecification]):
     term = RdfTerm('postalCodeRange', 'http://schema.org/postalCodeRange', ['1.1', '1.2-DRAFT'])
 
-class cvdNumC19HospPats(RdfProperty[Number]):
+class cvdNumC19HospPats(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumC19HospPats', 'http://schema.org/cvdNumC19HospPats', ['1.1', '1.2-DRAFT'])
 
-class assemblyVersion(RdfProperty[Text]):
+class assemblyVersion(RdfProperty[schemaorg.Text]):
     term = RdfTerm('assemblyVersion', 'http://schema.org/assemblyVersion', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class runtime(RdfProperty[Text]):
+class runtime(RdfProperty[schemaorg.Text]):
     term = RdfTerm('runtime', 'http://schema.org/runtime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class isPlanForApartment(RdfProperty[schemaorg.Accommodation]):
@@ -4769,7 +4805,7 @@ class isPlanForApartment(RdfProperty[schemaorg.Accommodation]):
 class hasBroadcastChannel(RdfProperty[schemaorg.BroadcastChannel]):
     term = RdfTerm('hasBroadcastChannel', 'http://schema.org/hasBroadcastChannel', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class learningResourceType(RdfProperty[schemaorg.DefinedTerm | Text]):
+class learningResourceType(RdfProperty[schemaorg.DefinedTerm | schemaorg.Text]):
     term = RdfTerm('learningResourceType', 'http://schema.org/learningResourceType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class relatedTo(RdfProperty[schemaorg.Person]):
@@ -4778,7 +4814,7 @@ class relatedTo(RdfProperty[schemaorg.Person]):
 class gameServer(RdfProperty[schemaorg.GameServer]):
     term = RdfTerm('gameServer', 'http://schema.org/gameServer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class foundingDate(RdfProperty[Date]):
+class foundingDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('foundingDate', 'http://schema.org/foundingDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class prepTime(RdfProperty[schemaorg.Duration]):
@@ -4787,34 +4823,34 @@ class prepTime(RdfProperty[schemaorg.Duration]):
 class validIn(RdfProperty[schemaorg.AdministrativeArea]):
     term = RdfTerm('validIn', 'http://schema.org/validIn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class transmissionMethod(RdfProperty[Text]):
+class transmissionMethod(RdfProperty[schemaorg.Text]):
     term = RdfTerm('transmissionMethod', 'http://schema.org/transmissionMethod', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class itinerary(RdfProperty[schemaorg.ItemList | schemaorg.Place]):
     term = RdfTerm('itinerary', 'http://schema.org/itinerary', ['1.0', '1.1', '1.2-DRAFT'])
 
-class alternativeHeadline(RdfProperty[Text]):
+class alternativeHeadline(RdfProperty[schemaorg.Text]):
     term = RdfTerm('alternativeHeadline', 'http://schema.org/alternativeHeadline', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class numberOfPlayers(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('numberOfPlayers', 'http://schema.org/numberOfPlayers', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfCredits(RdfProperty[schemaorg.StructuredValue | Integer]):
+class numberOfCredits(RdfProperty[schemaorg.StructuredValue | schemaorg.Integer]):
     term = RdfTerm('numberOfCredits', 'http://schema.org/numberOfCredits', ['1.1', '1.2-DRAFT'])
 
 class aggregateElement(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('aggregateElement', 'http://schema.org/aggregateElement', [])
 
-class playersOnline(RdfProperty[Integer]):
+class playersOnline(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('playersOnline', 'http://schema.org/playersOnline', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class maps(RdfProperty[URL]):
+class maps(RdfProperty[schemaorg.URL]):
     term = RdfTerm('maps', 'http://schema.org/maps', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class birthDate(RdfProperty[Date]):
+class birthDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('birthDate', 'http://schema.org/birthDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class temporal(RdfProperty[DateTime | Text]):
+class temporal(RdfProperty[schemaorg.DateTime | schemaorg.Text]):
     term = RdfTerm('temporal', 'http://schema.org/temporal', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class deliveryTime(RdfProperty[schemaorg.ShippingDeliveryTime]):
@@ -4826,19 +4862,19 @@ class serviceLocation(RdfProperty[schemaorg.Place]):
 class performer(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('performer', 'http://schema.org/performer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class seatSection(RdfProperty[Text]):
+class seatSection(RdfProperty[schemaorg.Text]):
     term = RdfTerm('seatSection', 'http://schema.org/seatSection', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class result(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('result', 'http://schema.org/result', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cookingMethod(RdfProperty[Text]):
+class cookingMethod(RdfProperty[schemaorg.Text]):
     term = RdfTerm('cookingMethod', 'http://schema.org/cookingMethod', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class subStageSuffix(RdfProperty[Text]):
+class subStageSuffix(RdfProperty[schemaorg.Text]):
     term = RdfTerm('subStageSuffix', 'http://schema.org/subStageSuffix', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class opens(RdfProperty[Time]):
+class opens(RdfProperty[schemaorg.Time]):
     term = RdfTerm('opens', 'http://schema.org/opens', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class freeShippingThreshold(RdfProperty[schemaorg.DeliveryChargeSpecification | schemaorg.MonetaryAmount]):
@@ -4847,19 +4883,19 @@ class freeShippingThreshold(RdfProperty[schemaorg.DeliveryChargeSpecification | 
 class primaryImageOfPage(RdfProperty[schemaorg.ImageObject]):
     term = RdfTerm('primaryImageOfPage', 'http://schema.org/primaryImageOfPage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class color(RdfProperty[Text]):
+class color(RdfProperty[schemaorg.Text]):
     term = RdfTerm('color', 'http://schema.org/color', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class acceptedAnswer(RdfProperty[schemaorg.Answer | schemaorg.ItemList]):
     term = RdfTerm('acceptedAnswer', 'http://schema.org/acceptedAnswer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class constraintProperty(RdfProperty[URL | schemaorg.Property]):
+class constraintProperty(RdfProperty[schemaorg.URL | schemaorg.Property]):
     term = RdfTerm('constraintProperty', 'http://schema.org/constraintProperty', ['1.2-DRAFT'])
 
-class streetAddress(RdfProperty[Text]):
+class streetAddress(RdfProperty[schemaorg.Text]):
     term = RdfTerm('streetAddress', 'http://schema.org/streetAddress', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isBasedOnUrl(RdfProperty[URL | schemaorg.CreativeWork | schemaorg.Product]):
+class isBasedOnUrl(RdfProperty[schemaorg.URL | schemaorg.CreativeWork | schemaorg.Product]):
     term = RdfTerm('isBasedOnUrl', 'http://schema.org/isBasedOnUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class recipient(RdfProperty[schemaorg.Organization | schemaorg.Audience | schemaorg.ContactPoint | schemaorg.Person]):
@@ -4880,7 +4916,7 @@ class riskFactor(RdfProperty[schemaorg.MedicalRiskFactor]):
 class servicePostalAddress(RdfProperty[schemaorg.PostalAddress]):
     term = RdfTerm('servicePostalAddress', 'http://schema.org/servicePostalAddress', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class commentCount(RdfProperty[Integer]):
+class commentCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('commentCount', 'http://schema.org/commentCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasVariant(RdfProperty[schemaorg.Product]):
@@ -4889,25 +4925,25 @@ class hasVariant(RdfProperty[schemaorg.Product]):
 class legislationTransposes(RdfProperty[schemaorg.Legislation]):
     term = RdfTerm('legislationTransposes', 'http://schema.org/legislationTransposes', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class speechToTextMarkup(RdfProperty[Text]):
+class speechToTextMarkup(RdfProperty[schemaorg.Text]):
     term = RdfTerm('speechToTextMarkup', 'http://schema.org/speechToTextMarkup', ['1.1', '1.2-DRAFT'])
 
 class cholesterolContent(RdfProperty[schemaorg.Mass]):
     term = RdfTerm('cholesterolContent', 'http://schema.org/cholesterolContent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class busNumber(RdfProperty[Text]):
+class busNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('busNumber', 'http://schema.org/busNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class certificationRating(RdfProperty[schemaorg.Rating]):
     term = RdfTerm('certificationRating', 'http://schema.org/certificationRating', [])
 
-class feesAndCommissionsSpecification(RdfProperty[Text | URL]):
+class feesAndCommissionsSpecification(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('feesAndCommissionsSpecification', 'http://schema.org/feesAndCommissionsSpecification', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class infectiousAgent(RdfProperty[Text]):
+class infectiousAgent(RdfProperty[schemaorg.Text]):
     term = RdfTerm('infectiousAgent', 'http://schema.org/infectiousAgent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class incentiveCompensation(RdfProperty[Text]):
+class incentiveCompensation(RdfProperty[schemaorg.Text]):
     term = RdfTerm('incentiveCompensation', 'http://schema.org/incentiveCompensation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class broadcastOfEvent(RdfProperty[schemaorg.Event]):
@@ -4916,7 +4952,7 @@ class broadcastOfEvent(RdfProperty[schemaorg.Event]):
 class sportsEvent(RdfProperty[schemaorg.SportsEvent]):
     term = RdfTerm('sportsEvent', 'http://schema.org/sportsEvent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dateCreated(RdfProperty[Date | DateTime]):
+class dateCreated(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('dateCreated', 'http://schema.org/dateCreated', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class toRecipient(RdfProperty[schemaorg.Organization | schemaorg.Audience | schemaorg.ContactPoint | schemaorg.Person]):
@@ -4925,10 +4961,10 @@ class toRecipient(RdfProperty[schemaorg.Organization | schemaorg.Audience | sche
 class medicineSystem(RdfProperty[schemaorg.MedicineSystem]):
     term = RdfTerm('medicineSystem', 'http://schema.org/medicineSystem', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class unitText(RdfProperty[Text]):
+class unitText(RdfProperty[schemaorg.Text]):
     term = RdfTerm('unitText', 'http://schema.org/unitText', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class frequency(RdfProperty[Text]):
+class frequency(RdfProperty[schemaorg.Text]):
     term = RdfTerm('frequency', 'http://schema.org/frequency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class orderStatus(RdfProperty[schemaorg.OrderStatus]):
@@ -4940,13 +4976,13 @@ class addOn(RdfProperty[schemaorg.Offer]):
 class acceptedOffer(RdfProperty[schemaorg.Offer]):
     term = RdfTerm('acceptedOffer', 'http://schema.org/acceptedOffer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class artEdition(RdfProperty[Integer | Text]):
+class artEdition(RdfProperty[schemaorg.Integer | schemaorg.Text]):
     term = RdfTerm('artEdition', 'http://schema.org/artEdition', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class secondaryPrevention(RdfProperty[schemaorg.MedicalTherapy]):
     term = RdfTerm('secondaryPrevention', 'http://schema.org/secondaryPrevention', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class yearBuilt(RdfProperty[Number]):
+class yearBuilt(RdfProperty[schemaorg.Number]):
     term = RdfTerm('yearBuilt', 'http://schema.org/yearBuilt', ['1.1', '1.2-DRAFT'])
 
 class sharedContent(RdfProperty[schemaorg.CreativeWork]):
@@ -4958,40 +4994,40 @@ class certificationStatus(RdfProperty[schemaorg.CertificationStatusEnumeration])
 class subEvents(RdfProperty[schemaorg.Event]):
     term = RdfTerm('subEvents', 'http://schema.org/subEvents', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class fileFormat(RdfProperty[Text | URL]):
+class fileFormat(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('fileFormat', 'http://schema.org/fileFormat', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class propertyID(RdfProperty[Text | URL]):
+class propertyID(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('propertyID', 'http://schema.org/propertyID', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class teaches(RdfProperty[schemaorg.DefinedTerm | Text]):
+class teaches(RdfProperty[schemaorg.DefinedTerm | schemaorg.Text]):
     term = RdfTerm('teaches', 'http://schema.org/teaches', ['1.1', '1.2-DRAFT'])
 
 class regionsAllowed(RdfProperty[schemaorg.Place]):
     term = RdfTerm('regionsAllowed', 'http://schema.org/regionsAllowed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class addressCountry(RdfProperty[Text | schemaorg.Country]):
+class addressCountry(RdfProperty[schemaorg.Text | schemaorg.Country]):
     term = RdfTerm('addressCountry', 'http://schema.org/addressCountry', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class validUntil(RdfProperty[Date]):
+class validUntil(RdfProperty[schemaorg.Date]):
     term = RdfTerm('validUntil', 'http://schema.org/validUntil', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class baseSalary(RdfProperty[schemaorg.PriceSpecification | Number | schemaorg.MonetaryAmount]):
+class baseSalary(RdfProperty[schemaorg.PriceSpecification | schemaorg.Number | schemaorg.MonetaryAmount]):
     term = RdfTerm('baseSalary', 'http://schema.org/baseSalary', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class productSupported(RdfProperty[schemaorg.Product | Text]):
+class productSupported(RdfProperty[schemaorg.Product | schemaorg.Text]):
     term = RdfTerm('productSupported', 'http://schema.org/productSupported', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasCourseInstance(RdfProperty[schemaorg.CourseInstance]):
     term = RdfTerm('hasCourseInstance', 'http://schema.org/hasCourseInstance', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class merchantReturnDays(RdfProperty[Date | Integer | DateTime]):
+class merchantReturnDays(RdfProperty[schemaorg.Date | schemaorg.Integer | schemaorg.DateTime]):
     term = RdfTerm('merchantReturnDays', 'http://schema.org/merchantReturnDays', ['1.1', '1.2-DRAFT'])
 
 class sportsActivityLocation(RdfProperty[schemaorg.SportsActivityLocation]):
     term = RdfTerm('sportsActivityLocation', 'http://schema.org/sportsActivityLocation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class countryOfLastProcessing(RdfProperty[Text]):
+class countryOfLastProcessing(RdfProperty[schemaorg.Text]):
     term = RdfTerm('countryOfLastProcessing', 'http://schema.org/countryOfLastProcessing', ['1.2-DRAFT'])
 
 class availableDeliveryMethod(RdfProperty[schemaorg.DeliveryMethod]):
@@ -5000,22 +5036,22 @@ class availableDeliveryMethod(RdfProperty[schemaorg.DeliveryMethod]):
 class guideline(RdfProperty[schemaorg.MedicalGuideline]):
     term = RdfTerm('guideline', 'http://schema.org/guideline', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class accessibilityControl(RdfProperty[Text]):
+class accessibilityControl(RdfProperty[schemaorg.Text]):
     term = RdfTerm('accessibilityControl', 'http://schema.org/accessibilityControl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class interestRate(RdfProperty[schemaorg.QuantitativeValue | Number]):
+class interestRate(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Number]):
     term = RdfTerm('interestRate', 'http://schema.org/interestRate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isPartOf(RdfProperty[URL | schemaorg.CreativeWork]):
+class isPartOf(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('isPartOf', 'http://schema.org/isPartOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class transcript(RdfProperty[Text]):
+class transcript(RdfProperty[schemaorg.Text]):
     term = RdfTerm('transcript', 'http://schema.org/transcript', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class containsSeason(RdfProperty[schemaorg.CreativeWorkSeason]):
     term = RdfTerm('containsSeason', 'http://schema.org/containsSeason', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class geoRadius(RdfProperty[schemaorg.Distance | Text | Number]):
+class geoRadius(RdfProperty[schemaorg.Distance | schemaorg.Text | schemaorg.Number]):
     term = RdfTerm('geoRadius', 'http://schema.org/geoRadius', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class legislationResponsible(RdfProperty[schemaorg.Organization | schemaorg.Person]):
@@ -5030,7 +5066,7 @@ class legislationCorrects(RdfProperty[schemaorg.Legislation]):
 class speed(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('speed', 'http://schema.org/speed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class logo(RdfProperty[URL | schemaorg.ImageObject]):
+class logo(RdfProperty[schemaorg.URL | schemaorg.ImageObject]):
     term = RdfTerm('logo', 'http://schema.org/logo', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class employee(RdfProperty[schemaorg.Person]):
@@ -5042,10 +5078,10 @@ class subjectOf(RdfProperty[schemaorg.Event | schemaorg.CreativeWork]):
 class claimInterpreter(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('claimInterpreter', 'http://schema.org/claimInterpreter', ['1.2-DRAFT'])
 
-class pagination(RdfProperty[Text]):
+class pagination(RdfProperty[schemaorg.Text]):
     term = RdfTerm('pagination', 'http://schema.org/pagination', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class afterMedia(RdfProperty[schemaorg.MediaObject | URL]):
+class afterMedia(RdfProperty[schemaorg.MediaObject | schemaorg.URL]):
     term = RdfTerm('afterMedia', 'http://schema.org/afterMedia', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class alumniOf(RdfProperty[schemaorg.Organization | schemaorg.EducationalOrganization]):
@@ -5054,19 +5090,19 @@ class alumniOf(RdfProperty[schemaorg.Organization | schemaorg.EducationalOrganiz
 class lender(RdfProperty[schemaorg.Organization | schemaorg.Person]):
     term = RdfTerm('lender', 'http://schema.org/lender', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class modelDate(RdfProperty[Date]):
+class modelDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('modelDate', 'http://schema.org/modelDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class parentTaxon(RdfProperty[schemaorg.Taxon | Text | URL]):
+class parentTaxon(RdfProperty[schemaorg.Taxon | schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('parentTaxon', 'http://schema.org/parentTaxon', ['1.2-DRAFT'])
 
-class additionalNumberOfGuests(RdfProperty[Number]):
+class additionalNumberOfGuests(RdfProperty[schemaorg.Number]):
     term = RdfTerm('additionalNumberOfGuests', 'http://schema.org/additionalNumberOfGuests', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class iupacName(RdfProperty[Text]):
+class iupacName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('iupacName', 'http://schema.org/iupacName', ['1.2-DRAFT'])
 
-class addressLocality(RdfProperty[Text]):
+class addressLocality(RdfProperty[schemaorg.Text]):
     term = RdfTerm('addressLocality', 'http://schema.org/addressLocality', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class contactPoints(RdfProperty[schemaorg.ContactPoint]):
@@ -5075,22 +5111,22 @@ class contactPoints(RdfProperty[schemaorg.ContactPoint]):
 class roofLoad(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('roofLoad', 'http://schema.org/roofLoad', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class legalName(RdfProperty[Text]):
+class legalName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('legalName', 'http://schema.org/legalName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class lodgingUnitType(RdfProperty[Text | schemaorg.QualitativeValue]):
+class lodgingUnitType(RdfProperty[schemaorg.Text | schemaorg.QualitativeValue]):
     term = RdfTerm('lodgingUnitType', 'http://schema.org/lodgingUnitType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class activityFrequency(RdfProperty[Text | schemaorg.QuantitativeValue]):
+class activityFrequency(RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue]):
     term = RdfTerm('activityFrequency', 'http://schema.org/activityFrequency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isInvolvedInBiologicalProcess(RdfProperty[schemaorg.PropertyValue | schemaorg.DefinedTerm | URL]):
+class isInvolvedInBiologicalProcess(RdfProperty[schemaorg.PropertyValue | schemaorg.DefinedTerm | schemaorg.URL]):
     term = RdfTerm('isInvolvedInBiologicalProcess', 'http://schema.org/isInvolvedInBiologicalProcess', ['1.2-DRAFT'])
 
 class cheatCode(RdfProperty[schemaorg.CreativeWork]):
     term = RdfTerm('cheatCode', 'http://schema.org/cheatCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class jobBenefits(RdfProperty[Text]):
+class jobBenefits(RdfProperty[schemaorg.Text]):
     term = RdfTerm('jobBenefits', 'http://schema.org/jobBenefits', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class subTest(RdfProperty[schemaorg.MedicalTest]):
@@ -5102,22 +5138,22 @@ class competitor(RdfProperty[schemaorg.Person | schemaorg.SportsTeam]):
 class alumni(RdfProperty[schemaorg.Person]):
     term = RdfTerm('alumni', 'http://schema.org/alumni', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfSeasons(RdfProperty[Integer]):
+class numberOfSeasons(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('numberOfSeasons', 'http://schema.org/numberOfSeasons', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfRooms(RdfProperty[schemaorg.QuantitativeValue | Number]):
+class numberOfRooms(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Number]):
     term = RdfTerm('numberOfRooms', 'http://schema.org/numberOfRooms', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class orderNumber(RdfProperty[Text]):
+class orderNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('orderNumber', 'http://schema.org/orderNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class athlete(RdfProperty[schemaorg.Person]):
     term = RdfTerm('athlete', 'http://schema.org/athlete', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class associatedDisease(RdfProperty[schemaorg.MedicalCondition | URL | schemaorg.PropertyValue]):
+class associatedDisease(RdfProperty[schemaorg.MedicalCondition | schemaorg.URL | schemaorg.PropertyValue]):
     term = RdfTerm('associatedDisease', 'http://schema.org/associatedDisease', ['1.2-DRAFT'])
 
-class accessibilityAPI(RdfProperty[Text]):
+class accessibilityAPI(RdfProperty[schemaorg.Text]):
     term = RdfTerm('accessibilityAPI', 'http://schema.org/accessibilityAPI', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class relatedTherapy(RdfProperty[schemaorg.MedicalTherapy]):
@@ -5129,10 +5165,10 @@ class returnMethod(RdfProperty[schemaorg.ReturnMethodEnumeration]):
 class issuedBy(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('issuedBy', 'http://schema.org/issuedBy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class contentReferenceTime(RdfProperty[DateTime]):
+class contentReferenceTime(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('contentReferenceTime', 'http://schema.org/contentReferenceTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class amount(RdfProperty[schemaorg.MonetaryAmount | Number]):
+class amount(RdfProperty[schemaorg.MonetaryAmount | schemaorg.Number]):
     term = RdfTerm('amount', 'http://schema.org/amount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class identifyingExam(RdfProperty[schemaorg.PhysicalExam]):
@@ -5141,7 +5177,7 @@ class identifyingExam(RdfProperty[schemaorg.PhysicalExam]):
 class syllabusSections(RdfProperty[schemaorg.Syllabus]):
     term = RdfTerm('syllabusSections', 'http://schema.org/syllabusSections', ['1.2-DRAFT'])
 
-class targetPlatform(RdfProperty[Text]):
+class targetPlatform(RdfProperty[schemaorg.Text]):
     term = RdfTerm('targetPlatform', 'http://schema.org/targetPlatform', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class shippingOrigin(RdfProperty[schemaorg.DefinedRegion]):
@@ -5156,16 +5192,16 @@ class performTime(RdfProperty[schemaorg.Duration]):
 class partOfEpisode(RdfProperty[schemaorg.Episode]):
     term = RdfTerm('partOfEpisode', 'http://schema.org/partOfEpisode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class ratingExplanation(RdfProperty[Text]):
+class ratingExplanation(RdfProperty[schemaorg.Text]):
     term = RdfTerm('ratingExplanation', 'http://schema.org/ratingExplanation', ['1.0', '1.1', '1.2-DRAFT'])
 
-class newsUpdatesAndGuidelines(RdfProperty[URL | schemaorg.WebContent]):
+class newsUpdatesAndGuidelines(RdfProperty[schemaorg.URL | schemaorg.WebContent]):
     term = RdfTerm('newsUpdatesAndGuidelines', 'http://schema.org/newsUpdatesAndGuidelines', ['1.1', '1.2-DRAFT'])
 
-class percentile90(RdfProperty[Number]):
+class percentile90(RdfProperty[schemaorg.Number]):
     term = RdfTerm('percentile90', 'http://schema.org/percentile90', ['1.0', '1.1', '1.2-DRAFT'])
 
-class availableOnDevice(RdfProperty[Text]):
+class availableOnDevice(RdfProperty[schemaorg.Text]):
     term = RdfTerm('availableOnDevice', 'http://schema.org/availableOnDevice', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class albums(RdfProperty[schemaorg.MusicAlbum]):
@@ -5174,13 +5210,13 @@ class albums(RdfProperty[schemaorg.MusicAlbum]):
 class lyrics(RdfProperty[schemaorg.CreativeWork]):
     term = RdfTerm('lyrics', 'http://schema.org/lyrics', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class postOp(RdfProperty[Text]):
+class postOp(RdfProperty[schemaorg.Text]):
     term = RdfTerm('postOp', 'http://schema.org/postOp', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class orderDate(RdfProperty[DateTime | Date]):
+class orderDate(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('orderDate', 'http://schema.org/orderDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class orderItemNumber(RdfProperty[Text]):
+class orderItemNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('orderItemNumber', 'http://schema.org/orderItemNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class stupidProperty(RdfProperty[schemaorg.QuantitativeValue]):
@@ -5189,37 +5225,37 @@ class stupidProperty(RdfProperty[schemaorg.QuantitativeValue]):
 class providesBroadcastService(RdfProperty[schemaorg.BroadcastService]):
     term = RdfTerm('providesBroadcastService', 'http://schema.org/providesBroadcastService', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfAirbags(RdfProperty[Number | Text]):
+class numberOfAirbags(RdfProperty[schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('numberOfAirbags', 'http://schema.org/numberOfAirbags', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class naics(RdfProperty[Text]):
+class naics(RdfProperty[schemaorg.Text]):
     term = RdfTerm('naics', 'http://schema.org/naics', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class readBy(RdfProperty[schemaorg.Person]):
     term = RdfTerm('readBy', 'http://schema.org/readBy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class healthPlanDrugOption(RdfProperty[Text]):
+class healthPlanDrugOption(RdfProperty[schemaorg.Text]):
     term = RdfTerm('healthPlanDrugOption', 'http://schema.org/healthPlanDrugOption', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gamePlatform(RdfProperty[URL | schemaorg.Thing | Text]):
+class gamePlatform(RdfProperty[schemaorg.URL | schemaorg.Thing | schemaorg.Text]):
     term = RdfTerm('gamePlatform', 'http://schema.org/gamePlatform', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class answerCount(RdfProperty[Integer]):
+class answerCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('answerCount', 'http://schema.org/answerCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class item(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('item', 'http://schema.org/item', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class flightNumber(RdfProperty[Text]):
+class flightNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('flightNumber', 'http://schema.org/flightNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class multipleValues(RdfProperty[Boolean]):
+class multipleValues(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('multipleValues', 'http://schema.org/multipleValues', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class legislationDate(RdfProperty[Date]):
+class legislationDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('legislationDate', 'http://schema.org/legislationDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class mechanismOfAction(RdfProperty[Text]):
+class mechanismOfAction(RdfProperty[schemaorg.Text]):
     term = RdfTerm('mechanismOfAction', 'http://schema.org/mechanismOfAction', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class workPerformed(RdfProperty[schemaorg.CreativeWork]):
@@ -5231,7 +5267,7 @@ class customerRemorseReturnFees(RdfProperty[schemaorg.ReturnFeesEnumeration]):
 class offeredBy(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('offeredBy', 'http://schema.org/offeredBy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class bankAccountType(RdfProperty[Text | URL]):
+class bankAccountType(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('bankAccountType', 'http://schema.org/bankAccountType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class duration(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Duration]):
@@ -5246,31 +5282,31 @@ class accelerationTime(RdfProperty[schemaorg.QuantitativeValue]):
 class hasDefinedTerm(RdfProperty[schemaorg.DefinedTerm]):
     term = RdfTerm('hasDefinedTerm', 'http://schema.org/hasDefinedTerm', ['1.0', '1.1', '1.2-DRAFT'])
 
-class childTaxon(RdfProperty[Text | URL | schemaorg.Taxon]):
+class childTaxon(RdfProperty[schemaorg.Text | schemaorg.URL | schemaorg.Taxon]):
     term = RdfTerm('childTaxon', 'http://schema.org/childTaxon', ['1.2-DRAFT'])
 
 class study(RdfProperty[schemaorg.MedicalStudy]):
     term = RdfTerm('study', 'http://schema.org/study', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gettingTestedInfo(RdfProperty[schemaorg.WebContent | URL]):
+class gettingTestedInfo(RdfProperty[schemaorg.WebContent | schemaorg.URL]):
     term = RdfTerm('gettingTestedInfo', 'http://schema.org/gettingTestedInfo', ['1.1', '1.2-DRAFT'])
 
-class artform(RdfProperty[Text | URL]):
+class artform(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('artform', 'http://schema.org/artform', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class isTierOf(RdfProperty[schemaorg.MemberProgram]):
     term = RdfTerm('isTierOf', 'http://schema.org/isTierOf', [])
 
-class query(RdfProperty[Text]):
+class query(RdfProperty[schemaorg.Text]):
     term = RdfTerm('query', 'http://schema.org/query', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class healthPlanCopay(RdfProperty[schemaorg.PriceSpecification]):
     term = RdfTerm('healthPlanCopay', 'http://schema.org/healthPlanCopay', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class volumeNumber(RdfProperty[Integer | Text]):
+class volumeNumber(RdfProperty[schemaorg.Integer | schemaorg.Text]):
     term = RdfTerm('volumeNumber', 'http://schema.org/volumeNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class stageAsNumber(RdfProperty[Number]):
+class stageAsNumber(RdfProperty[schemaorg.Number]):
     term = RdfTerm('stageAsNumber', 'http://schema.org/stageAsNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class geoContains(RdfProperty[schemaorg.Place | schemaorg.GeospatialGeometry]):
@@ -5285,43 +5321,43 @@ class estimatesRiskOf(RdfProperty[schemaorg.MedicalEntity]):
 class loser(RdfProperty[schemaorg.Person]):
     term = RdfTerm('loser', 'http://schema.org/loser', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class validThrough(RdfProperty[Date | DateTime]):
+class validThrough(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('validThrough', 'http://schema.org/validThrough', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class torque(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('torque', 'http://schema.org/torque', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class rxcui(RdfProperty[Text]):
+class rxcui(RdfProperty[schemaorg.Text]):
     term = RdfTerm('rxcui', 'http://schema.org/rxcui', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class offerCount(RdfProperty[Integer]):
+class offerCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('offerCount', 'http://schema.org/offerCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class broadcaster(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('broadcaster', 'http://schema.org/broadcaster', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class monthlyMinimumRepaymentAmount(RdfProperty[schemaorg.MonetaryAmount | Number]):
+class monthlyMinimumRepaymentAmount(RdfProperty[schemaorg.MonetaryAmount | schemaorg.Number]):
     term = RdfTerm('monthlyMinimumRepaymentAmount', 'http://schema.org/monthlyMinimumRepaymentAmount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isBasedOn(RdfProperty[URL | schemaorg.CreativeWork | schemaorg.Product]):
+class isBasedOn(RdfProperty[schemaorg.URL | schemaorg.CreativeWork | schemaorg.Product]):
     term = RdfTerm('isBasedOn', 'http://schema.org/isBasedOn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class itemListOrder(RdfProperty[Text | schemaorg.ItemListOrderType]):
+class itemListOrder(RdfProperty[schemaorg.Text | schemaorg.ItemListOrderType]):
     term = RdfTerm('itemListOrder', 'http://schema.org/itemListOrder', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class geo(RdfProperty[schemaorg.GeoCoordinates | schemaorg.GeoShape]):
     term = RdfTerm('geo', 'http://schema.org/geo', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class printPage(RdfProperty[Text]):
+class printPage(RdfProperty[schemaorg.Text]):
     term = RdfTerm('printPage', 'http://schema.org/printPage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class alternateName(RdfProperty[Text]):
+class alternateName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('alternateName', 'http://schema.org/alternateName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class timeOfDay(RdfProperty[Text]):
+class timeOfDay(RdfProperty[schemaorg.Text]):
     term = RdfTerm('timeOfDay', 'http://schema.org/timeOfDay', ['1.1', '1.2-DRAFT'])
 
-class publicAccess(RdfProperty[Boolean]):
+class publicAccess(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('publicAccess', 'http://schema.org/publicAccess', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class actor(RdfProperty[schemaorg.Person | schemaorg.PerformingGroup]):
@@ -5333,49 +5369,49 @@ class performers(RdfProperty[schemaorg.Person | schemaorg.Organization]):
 class owns(RdfProperty[schemaorg.Product | schemaorg.OwnershipInfo]):
     term = RdfTerm('owns', 'http://schema.org/owns', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class seasonNumber(RdfProperty[Integer | Text]):
+class seasonNumber(RdfProperty[schemaorg.Integer | schemaorg.Text]):
     term = RdfTerm('seasonNumber', 'http://schema.org/seasonNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class valueAddedTaxIncluded(RdfProperty[Boolean]):
+class valueAddedTaxIncluded(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('valueAddedTaxIncluded', 'http://schema.org/valueAddedTaxIncluded', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class requiredMaxAge(RdfProperty[Integer]):
+class requiredMaxAge(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('requiredMaxAge', 'http://schema.org/requiredMaxAge', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class worstRating(RdfProperty[Number | Text]):
+class worstRating(RdfProperty[schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('worstRating', 'http://schema.org/worstRating', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class callSign(RdfProperty[Text]):
+class callSign(RdfProperty[schemaorg.Text]):
     term = RdfTerm('callSign', 'http://schema.org/callSign', ['1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumBedsOcc(RdfProperty[Number]):
+class cvdNumBedsOcc(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumBedsOcc', 'http://schema.org/cvdNumBedsOcc', ['1.1', '1.2-DRAFT'])
 
-class variesBy(RdfProperty[Text | schemaorg.DefinedTerm]):
+class variesBy(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm]):
     term = RdfTerm('variesBy', 'http://schema.org/variesBy', ['1.1', '1.2-DRAFT'])
 
-class termCode(RdfProperty[Text]):
+class termCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('termCode', 'http://schema.org/termCode', ['1.0', '1.1', '1.2-DRAFT'])
 
-class creativeWorkStatus(RdfProperty[schemaorg.DefinedTerm | Text]):
+class creativeWorkStatus(RdfProperty[schemaorg.DefinedTerm | schemaorg.Text]):
     term = RdfTerm('creativeWorkStatus', 'http://schema.org/creativeWorkStatus', ['1.0', '1.1', '1.2-DRAFT'])
 
-class dateRead(RdfProperty[Date | DateTime]):
+class dateRead(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('dateRead', 'http://schema.org/dateRead', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class device(RdfProperty[Text]):
+class device(RdfProperty[schemaorg.Text]):
     term = RdfTerm('device', 'http://schema.org/device', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class departureGate(RdfProperty[Text]):
+class departureGate(RdfProperty[schemaorg.Text]):
     term = RdfTerm('departureGate', 'http://schema.org/departureGate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class award(RdfProperty[Text]):
+class award(RdfProperty[schemaorg.Text]):
     term = RdfTerm('award', 'http://schema.org/award', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class estimatedSalary(RdfProperty[schemaorg.MonetaryAmountDistribution | Number | schemaorg.MonetaryAmount]):
+class estimatedSalary(RdfProperty[schemaorg.MonetaryAmountDistribution | schemaorg.Number | schemaorg.MonetaryAmount]):
     term = RdfTerm('estimatedSalary', 'http://schema.org/estimatedSalary', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class educationalUse(RdfProperty[Text | schemaorg.DefinedTerm]):
+class educationalUse(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm]):
     term = RdfTerm('educationalUse', 'http://schema.org/educationalUse', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class drug(RdfProperty[schemaorg.Drug]):
@@ -5387,34 +5423,34 @@ class returnPolicyCategory(RdfProperty[schemaorg.MerchantReturnEnumeration]):
 class sensoryUnit(RdfProperty[schemaorg.AnatomicalStructure | schemaorg.SuperficialAnatomy]):
     term = RdfTerm('sensoryUnit', 'http://schema.org/sensoryUnit', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isFamilyFriendly(RdfProperty[Boolean]):
+class isFamilyFriendly(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('isFamilyFriendly', 'http://schema.org/isFamilyFriendly', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class namedPosition(RdfProperty[URL | Text]):
+class namedPosition(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('namedPosition', 'http://schema.org/namedPosition', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class activeIngredient(RdfProperty[Text]):
+class activeIngredient(RdfProperty[schemaorg.Text]):
     term = RdfTerm('activeIngredient', 'http://schema.org/activeIngredient', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class costOrigin(RdfProperty[Text]):
+class costOrigin(RdfProperty[schemaorg.Text]):
     term = RdfTerm('costOrigin', 'http://schema.org/costOrigin', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class healthPlanNetworkId(RdfProperty[Text]):
+class healthPlanNetworkId(RdfProperty[schemaorg.Text]):
     term = RdfTerm('healthPlanNetworkId', 'http://schema.org/healthPlanNetworkId', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class trackingNumber(RdfProperty[Text]):
+class trackingNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('trackingNumber', 'http://schema.org/trackingNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class tongueWeight(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('tongueWeight', 'http://schema.org/tongueWeight', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class screenshot(RdfProperty[URL | schemaorg.ImageObject]):
+class screenshot(RdfProperty[schemaorg.URL | schemaorg.ImageObject]):
     term = RdfTerm('screenshot', 'http://schema.org/screenshot', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class interactivityType(RdfProperty[Text]):
+class interactivityType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('interactivityType', 'http://schema.org/interactivityType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class releaseDate(RdfProperty[Date]):
+class releaseDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('releaseDate', 'http://schema.org/releaseDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class activityDuration(RdfProperty[schemaorg.Duration | schemaorg.QuantitativeValue]):
@@ -5426,55 +5462,55 @@ class brand(RdfProperty[schemaorg.Brand | schemaorg.Organization]):
 class hasHealthAspect(RdfProperty[schemaorg.HealthAspectEnumeration]):
     term = RdfTerm('hasHealthAspect', 'http://schema.org/hasHealthAspect', ['1.0', '1.1', '1.2-DRAFT'])
 
-class value(RdfProperty[schemaorg.StructuredValue | Number | Boolean | Text]):
+class value(RdfProperty[schemaorg.StructuredValue | schemaorg.Number | schemaorg.Boolean | schemaorg.Text]):
     term = RdfTerm('value', 'http://schema.org/value', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dateIssued(RdfProperty[Date | DateTime]):
+class dateIssued(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('dateIssued', 'http://schema.org/dateIssued', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class transFatContent(RdfProperty[schemaorg.Mass]):
     term = RdfTerm('transFatContent', 'http://schema.org/transFatContent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class box(RdfProperty[Text]):
+class box(RdfProperty[schemaorg.Text]):
     term = RdfTerm('box', 'http://schema.org/box', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class publication(RdfProperty[schemaorg.PublicationEvent]):
     term = RdfTerm('publication', 'http://schema.org/publication', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class inProductGroupWithID(RdfProperty[Text]):
+class inProductGroupWithID(RdfProperty[schemaorg.Text]):
     term = RdfTerm('inProductGroupWithID', 'http://schema.org/inProductGroupWithID', ['1.1', '1.2-DRAFT'])
 
 class followee(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('followee', 'http://schema.org/followee', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class providerMobility(RdfProperty[Text]):
+class providerMobility(RdfProperty[schemaorg.Text]):
     term = RdfTerm('providerMobility', 'http://schema.org/providerMobility', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class children(RdfProperty[schemaorg.Person]):
     term = RdfTerm('children', 'http://schema.org/children', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class seatingCapacity(RdfProperty[Number | schemaorg.QuantitativeValue]):
+class seatingCapacity(RdfProperty[schemaorg.Number | schemaorg.QuantitativeValue]):
     term = RdfTerm('seatingCapacity', 'http://schema.org/seatingCapacity', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class merchantReturnLink(RdfProperty[URL]):
+class merchantReturnLink(RdfProperty[schemaorg.URL]):
     term = RdfTerm('merchantReturnLink', 'http://schema.org/merchantReturnLink', ['1.1', '1.2-DRAFT'])
 
-class latitude(RdfProperty[Number | Text]):
+class latitude(RdfProperty[schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('latitude', 'http://schema.org/latitude', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class resultComment(RdfProperty[schemaorg.Comment]):
     term = RdfTerm('resultComment', 'http://schema.org/resultComment', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class processorRequirements(RdfProperty[Text]):
+class processorRequirements(RdfProperty[schemaorg.Text]):
     term = RdfTerm('processorRequirements', 'http://schema.org/processorRequirements', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class releaseNotes(RdfProperty[URL | Text]):
+class releaseNotes(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('releaseNotes', 'http://schema.org/releaseNotes', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class lesserOrEqual(RdfProperty[schemaorg.QualitativeValue]):
     term = RdfTerm('lesserOrEqual', 'http://schema.org/lesserOrEqual', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class amountOfThisGood(RdfProperty[Number]):
+class amountOfThisGood(RdfProperty[schemaorg.Number]):
     term = RdfTerm('amountOfThisGood', 'http://schema.org/amountOfThisGood', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class broadcastAffiliateOf(RdfProperty[schemaorg.Organization]):
@@ -5486,13 +5522,13 @@ class legislationApplies(RdfProperty[schemaorg.Legislation]):
 class accountablePerson(RdfProperty[schemaorg.Person]):
     term = RdfTerm('accountablePerson', 'http://schema.org/accountablePerson', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class linkRelationship(RdfProperty[Text]):
+class linkRelationship(RdfProperty[schemaorg.Text]):
     term = RdfTerm('linkRelationship', 'http://schema.org/linkRelationship', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class mathExpression(RdfProperty[schemaorg.SolveMathAction | Text]):
+class mathExpression(RdfProperty[schemaorg.SolveMathAction | schemaorg.Text]):
     term = RdfTerm('mathExpression', 'http://schema.org/mathExpression', ['1.2-DRAFT'])
 
-class bookingTime(RdfProperty[DateTime]):
+class bookingTime(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('bookingTime', 'http://schema.org/bookingTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class softwareAddOn(RdfProperty[schemaorg.SoftwareApplication]):
@@ -5501,10 +5537,10 @@ class softwareAddOn(RdfProperty[schemaorg.SoftwareApplication]):
 class area(RdfProperty[schemaorg.Place]):
     term = RdfTerm('area', 'http://schema.org/area', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class knowsLanguage(RdfProperty[Text | schemaorg.Language]):
+class knowsLanguage(RdfProperty[schemaorg.Text | schemaorg.Language]):
     term = RdfTerm('knowsLanguage', 'http://schema.org/knowsLanguage', ['1.0', '1.1', '1.2-DRAFT'])
 
-class totalJobOpenings(RdfProperty[Integer]):
+class totalJobOpenings(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('totalJobOpenings', 'http://schema.org/totalJobOpenings', ['1.0', '1.1', '1.2-DRAFT'])
 
 class hostingOrganization(RdfProperty[schemaorg.Organization]):
@@ -5513,19 +5549,19 @@ class hostingOrganization(RdfProperty[schemaorg.Organization]):
 class bioChemInteraction(RdfProperty[schemaorg.BioChemEntity]):
     term = RdfTerm('bioChemInteraction', 'http://schema.org/bioChemInteraction', ['1.2-DRAFT'])
 
-class xpath(RdfProperty[XPathType]):
+class xpath(RdfProperty[schemaorg.XPathType]):
     term = RdfTerm('xpath', 'http://schema.org/xpath', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class postOfficeBoxNumber(RdfProperty[Text]):
+class postOfficeBoxNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('postOfficeBoxNumber', 'http://schema.org/postOfficeBoxNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class dropoffLocation(RdfProperty[schemaorg.Place]):
     term = RdfTerm('dropoffLocation', 'http://schema.org/dropoffLocation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cssSelector(RdfProperty[CssSelectorType]):
+class cssSelector(RdfProperty[schemaorg.CssSelectorType]):
     term = RdfTerm('cssSelector', 'http://schema.org/cssSelector', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isLocatedInSubcellularLocation(RdfProperty[schemaorg.PropertyValue | schemaorg.DefinedTerm | URL]):
+class isLocatedInSubcellularLocation(RdfProperty[schemaorg.PropertyValue | schemaorg.DefinedTerm | schemaorg.URL]):
     term = RdfTerm('isLocatedInSubcellularLocation', 'http://schema.org/isLocatedInSubcellularLocation', ['1.2-DRAFT'])
 
 class totalPaymentDue(RdfProperty[schemaorg.MonetaryAmount | schemaorg.PriceSpecification]):
@@ -5540,46 +5576,46 @@ class arterialBranch(RdfProperty[schemaorg.AnatomicalStructure]):
 class customer(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('customer', 'http://schema.org/customer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class requirements(RdfProperty[URL | Text]):
+class requirements(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('requirements', 'http://schema.org/requirements', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class language(RdfProperty[schemaorg.Language]):
     term = RdfTerm('language', 'http://schema.org/language', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class abridged(RdfProperty[Boolean]):
+class abridged(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('abridged', 'http://schema.org/abridged', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class driveWheelConfiguration(RdfProperty[schemaorg.DriveWheelConfigurationValue | Text]):
+class driveWheelConfiguration(RdfProperty[schemaorg.DriveWheelConfigurationValue | schemaorg.Text]):
     term = RdfTerm('driveWheelConfiguration', 'http://schema.org/driveWheelConfiguration', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class manufacturer(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('manufacturer', 'http://schema.org/manufacturer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class map(RdfProperty[URL]):
+class map(RdfProperty[schemaorg.URL]):
     term = RdfTerm('map', 'http://schema.org/map', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class termsPerYear(RdfProperty[Number]):
+class termsPerYear(RdfProperty[schemaorg.Number]):
     term = RdfTerm('termsPerYear', 'http://schema.org/termsPerYear', ['1.1', '1.2-DRAFT'])
 
-class paymentMethodId(RdfProperty[Text]):
+class paymentMethodId(RdfProperty[schemaorg.Text]):
     term = RdfTerm('paymentMethodId', 'http://schema.org/paymentMethodId', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class sender(RdfProperty[schemaorg.Audience | schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('sender', 'http://schema.org/sender', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class targetUrl(RdfProperty[URL]):
+class targetUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('targetUrl', 'http://schema.org/targetUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class arrivalTerminal(RdfProperty[Text]):
+class arrivalTerminal(RdfProperty[schemaorg.Text]):
     term = RdfTerm('arrivalTerminal', 'http://schema.org/arrivalTerminal', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class version(RdfProperty[Number | Text]):
+class version(RdfProperty[schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('version', 'http://schema.org/version', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class accountId(RdfProperty[Text]):
+class accountId(RdfProperty[schemaorg.Text]):
     term = RdfTerm('accountId', 'http://schema.org/accountId', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class expires(RdfProperty[DateTime | Date]):
+class expires(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('expires', 'http://schema.org/expires', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class doseSchedule(RdfProperty[schemaorg.DoseSchedule]):
@@ -5591,22 +5627,22 @@ class currentExchangeRate(RdfProperty[schemaorg.UnitPriceSpecification]):
 class menuAddOn(RdfProperty[schemaorg.MenuSection | schemaorg.MenuItem]):
     term = RdfTerm('menuAddOn', 'http://schema.org/menuAddOn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class awards(RdfProperty[Text]):
+class awards(RdfProperty[schemaorg.Text]):
     term = RdfTerm('awards', 'http://schema.org/awards', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class menu(RdfProperty[URL | schemaorg.Menu | Text]):
+class menu(RdfProperty[schemaorg.URL | schemaorg.Menu | schemaorg.Text]):
     term = RdfTerm('menu', 'http://schema.org/menu', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class codeRepository(RdfProperty[URL]):
+class codeRepository(RdfProperty[schemaorg.URL]):
     term = RdfTerm('codeRepository', 'http://schema.org/codeRepository', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class replacer(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('replacer', 'http://schema.org/replacer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class legislationDateOfApplicability(RdfProperty[Date]):
+class legislationDateOfApplicability(RdfProperty[schemaorg.Date]):
     term = RdfTerm('legislationDateOfApplicability', 'http://schema.org/legislationDateOfApplicability', [])
 
-class representativeOfPage(RdfProperty[Boolean]):
+class representativeOfPage(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('representativeOfPage', 'http://schema.org/representativeOfPage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class subStructure(RdfProperty[schemaorg.AnatomicalStructure]):
@@ -5615,25 +5651,25 @@ class subStructure(RdfProperty[schemaorg.AnatomicalStructure]):
 class firstAppearance(RdfProperty[schemaorg.CreativeWork]):
     term = RdfTerm('firstAppearance', 'http://schema.org/firstAppearance', ['1.0', '1.1', '1.2-DRAFT'])
 
-class pregnancyWarning(RdfProperty[Text]):
+class pregnancyWarning(RdfProperty[schemaorg.Text]):
     term = RdfTerm('pregnancyWarning', 'http://schema.org/pregnancyWarning', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class affiliation(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('affiliation', 'http://schema.org/affiliation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class text(RdfProperty[Text]):
+class text(RdfProperty[schemaorg.Text]):
     term = RdfTerm('text', 'http://schema.org/text', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class hasMap(RdfProperty[URL | schemaorg.Map]):
+class hasMap(RdfProperty[schemaorg.URL | schemaorg.Map]):
     term = RdfTerm('hasMap', 'http://schema.org/hasMap', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class trainName(RdfProperty[Text]):
+class trainName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('trainName', 'http://schema.org/trainName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class width(RdfProperty[schemaorg.Distance | schemaorg.QuantitativeValue]):
     term = RdfTerm('width', 'http://schema.org/width', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class financialAidEligible(RdfProperty[Text | schemaorg.DefinedTerm]):
+class financialAidEligible(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm]):
     term = RdfTerm('financialAidEligible', 'http://schema.org/financialAidEligible', ['1.1', '1.2-DRAFT'])
 
 class producer(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -5642,25 +5678,25 @@ class producer(RdfProperty[schemaorg.Person | schemaorg.Organization]):
 class orderDelivery(RdfProperty[schemaorg.ParcelDelivery]):
     term = RdfTerm('orderDelivery', 'http://schema.org/orderDelivery', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class startDate(RdfProperty[Date | DateTime]):
+class startDate(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('startDate', 'http://schema.org/startDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numChildren(RdfProperty[Integer | schemaorg.QuantitativeValue]):
+class numChildren(RdfProperty[schemaorg.Integer | schemaorg.QuantitativeValue]):
     term = RdfTerm('numChildren', 'http://schema.org/numChildren', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dietFeatures(RdfProperty[Text]):
+class dietFeatures(RdfProperty[schemaorg.Text]):
     term = RdfTerm('dietFeatures', 'http://schema.org/dietFeatures', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class authenticator(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('authenticator', 'http://schema.org/authenticator', ['1.0', '1.1', '1.2-DRAFT'])
 
-class screenCount(RdfProperty[Number]):
+class screenCount(RdfProperty[schemaorg.Number]):
     term = RdfTerm('screenCount', 'http://schema.org/screenCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class discountCode(RdfProperty[Text]):
+class discountCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('discountCode', 'http://schema.org/discountCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class thumbnailUrl(RdfProperty[URL]):
+class thumbnailUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('thumbnailUrl', 'http://schema.org/thumbnailUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class dayOfWeek(RdfProperty[schemaorg.DayOfWeek]):
@@ -5672,7 +5708,7 @@ class warranty(RdfProperty[schemaorg.WarrantyPromise]):
 class illustrator(RdfProperty[schemaorg.Person]):
     term = RdfTerm('illustrator', 'http://schema.org/illustrator', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class installUrl(RdfProperty[URL]):
+class installUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('installUrl', 'http://schema.org/installUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class parents(RdfProperty[schemaorg.Person]):
@@ -5684,19 +5720,19 @@ class availableIn(RdfProperty[schemaorg.AdministrativeArea]):
 class endorsee(RdfProperty[schemaorg.Organization | schemaorg.Person]):
     term = RdfTerm('endorsee', 'http://schema.org/endorsee', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class scheduledTime(RdfProperty[Date | DateTime]):
+class scheduledTime(RdfProperty[schemaorg.Date | schemaorg.DateTime]):
     term = RdfTerm('scheduledTime', 'http://schema.org/scheduledTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class scheduleTimezone(RdfProperty[Text]):
+class scheduleTimezone(RdfProperty[schemaorg.Text]):
     term = RdfTerm('scheduleTimezone', 'http://schema.org/scheduleTimezone', ['1.1', '1.2-DRAFT'])
 
-class seatingType(RdfProperty[schemaorg.QualitativeValue | Text]):
+class seatingType(RdfProperty[schemaorg.QualitativeValue | schemaorg.Text]):
     term = RdfTerm('seatingType', 'http://schema.org/seatingType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class supportingData(RdfProperty[schemaorg.DataFeed]):
     term = RdfTerm('supportingData', 'http://schema.org/supportingData', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class strengthUnit(RdfProperty[Text]):
+class strengthUnit(RdfProperty[schemaorg.Text]):
     term = RdfTerm('strengthUnit', 'http://schema.org/strengthUnit', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class subEvent(RdfProperty[schemaorg.Event]):
@@ -5714,13 +5750,13 @@ class energyEfficiencyScaleMin(RdfProperty[schemaorg.EUEnergyEfficiencyEnumerati
 class exercisePlan(RdfProperty[schemaorg.ExercisePlan]):
     term = RdfTerm('exercisePlan', 'http://schema.org/exercisePlan', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class intensity(RdfProperty[Text | schemaorg.QuantitativeValue]):
+class intensity(RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue]):
     term = RdfTerm('intensity', 'http://schema.org/intensity', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class warning(RdfProperty[URL | Text]):
+class warning(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('warning', 'http://schema.org/warning', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class targetPopulation(RdfProperty[Text]):
+class targetPopulation(RdfProperty[schemaorg.Text]):
     term = RdfTerm('targetPopulation', 'http://schema.org/targetPopulation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class collection(RdfProperty[schemaorg.Thing]):
@@ -5732,16 +5768,16 @@ class agentInteractionStatistic(RdfProperty[schemaorg.InteractionCounter]):
 class hiringOrganization(RdfProperty[schemaorg.Organization | schemaorg.Person]):
     term = RdfTerm('hiringOrganization', 'http://schema.org/hiringOrganization', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isbn(RdfProperty[Text]):
+class isbn(RdfProperty[schemaorg.Text]):
     term = RdfTerm('isbn', 'http://schema.org/isbn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class iso6523Code(RdfProperty[Text]):
+class iso6523Code(RdfProperty[schemaorg.Text]):
     term = RdfTerm('iso6523Code', 'http://schema.org/iso6523Code', ['1.2-DRAFT'])
 
 class relevantOccupation(RdfProperty[schemaorg.Occupation]):
     term = RdfTerm('relevantOccupation', 'http://schema.org/relevantOccupation', ['1.0', '1.1', '1.2-DRAFT'])
 
-class experienceRequirements(RdfProperty[schemaorg.OccupationalExperienceRequirements | Text]):
+class experienceRequirements(RdfProperty[schemaorg.OccupationalExperienceRequirements | schemaorg.Text]):
     term = RdfTerm('experienceRequirements', 'http://schema.org/experienceRequirements', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class mediaItemAppearance(RdfProperty[schemaorg.MediaObject]):
@@ -5750,22 +5786,22 @@ class mediaItemAppearance(RdfProperty[schemaorg.MediaObject]):
 class itemDefectReturnFees(RdfProperty[schemaorg.ReturnFeesEnumeration]):
     term = RdfTerm('itemDefectReturnFees', 'http://schema.org/itemDefectReturnFees', ['1.2-DRAFT'])
 
-class repeatCount(RdfProperty[Integer]):
+class repeatCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('repeatCount', 'http://schema.org/repeatCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class variantCover(RdfProperty[Text]):
+class variantCover(RdfProperty[schemaorg.Text]):
     term = RdfTerm('variantCover', 'http://schema.org/variantCover', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class sampleType(RdfProperty[Text]):
+class sampleType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('sampleType', 'http://schema.org/sampleType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class recourseLoan(RdfProperty[Boolean]):
+class recourseLoan(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('recourseLoan', 'http://schema.org/recourseLoan', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class includedComposition(RdfProperty[schemaorg.MusicComposition]):
     term = RdfTerm('includedComposition', 'http://schema.org/includedComposition', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class sport(RdfProperty[Text | URL]):
+class sport(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('sport', 'http://schema.org/sport', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class copyrightHolder(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -5777,46 +5813,46 @@ class workPresented(RdfProperty[schemaorg.Movie]):
 class quest(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('quest', 'http://schema.org/quest', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class monthsOfExperience(RdfProperty[Number]):
+class monthsOfExperience(RdfProperty[schemaorg.Number]):
     term = RdfTerm('monthsOfExperience', 'http://schema.org/monthsOfExperience', ['1.2-DRAFT'])
 
-class numberOfLoanPayments(RdfProperty[Number]):
+class numberOfLoanPayments(RdfProperty[schemaorg.Number]):
     term = RdfTerm('numberOfLoanPayments', 'http://schema.org/numberOfLoanPayments', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class hasMenu(RdfProperty[Text | URL | schemaorg.Menu]):
+class hasMenu(RdfProperty[schemaorg.Text | schemaorg.URL | schemaorg.Menu]):
     term = RdfTerm('hasMenu', 'http://schema.org/hasMenu', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class usedToDiagnose(RdfProperty[schemaorg.MedicalCondition]):
     term = RdfTerm('usedToDiagnose', 'http://schema.org/usedToDiagnose', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class wordCount(RdfProperty[Integer]):
+class wordCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('wordCount', 'http://schema.org/wordCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class occupationalCredentialAwarded(RdfProperty[schemaorg.EducationalOccupationalCredential | Text | URL]):
+class occupationalCredentialAwarded(RdfProperty[schemaorg.EducationalOccupationalCredential | schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('occupationalCredentialAwarded', 'http://schema.org/occupationalCredentialAwarded', ['1.0', '1.1', '1.2-DRAFT'])
 
 class sourcedFrom(RdfProperty[schemaorg.BrainStructure]):
     term = RdfTerm('sourcedFrom', 'http://schema.org/sourcedFrom', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class jobLocationType(RdfProperty[Text]):
+class jobLocationType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('jobLocationType', 'http://schema.org/jobLocationType', ['1.0', '1.1', '1.2-DRAFT'])
 
-class doseValue(RdfProperty[schemaorg.QualitativeValue | Number]):
+class doseValue(RdfProperty[schemaorg.QualitativeValue | schemaorg.Number]):
     term = RdfTerm('doseValue', 'http://schema.org/doseValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class geoTouches(RdfProperty[schemaorg.GeospatialGeometry | schemaorg.Place]):
     term = RdfTerm('geoTouches', 'http://schema.org/geoTouches', ['1.0', '1.1', '1.2-DRAFT'])
 
-class hasMolecularFunction(RdfProperty[schemaorg.PropertyValue | schemaorg.DefinedTerm | URL]):
+class hasMolecularFunction(RdfProperty[schemaorg.PropertyValue | schemaorg.DefinedTerm | schemaorg.URL]):
     term = RdfTerm('hasMolecularFunction', 'http://schema.org/hasMolecularFunction', ['1.2-DRAFT'])
 
-class elevation(RdfProperty[Number | Text]):
+class elevation(RdfProperty[schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('elevation', 'http://schema.org/elevation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class homeTeam(RdfProperty[schemaorg.Person | schemaorg.SportsTeam]):
     term = RdfTerm('homeTeam', 'http://schema.org/homeTeam', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class bodyLocation(RdfProperty[Text]):
+class bodyLocation(RdfProperty[schemaorg.Text]):
     term = RdfTerm('bodyLocation', 'http://schema.org/bodyLocation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasAdultConsideration(RdfProperty[schemaorg.AdultOrientedEnumeration]):
@@ -5825,7 +5861,7 @@ class hasAdultConsideration(RdfProperty[schemaorg.AdultOrientedEnumeration]):
 class hasMenuItem(RdfProperty[schemaorg.MenuItem]):
     term = RdfTerm('hasMenuItem', 'http://schema.org/hasMenuItem', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class free(RdfProperty[Boolean]):
+class free(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('free', 'http://schema.org/free', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class directors(RdfProperty[schemaorg.Person]):
@@ -5834,22 +5870,22 @@ class directors(RdfProperty[schemaorg.Person]):
 class actionAccessibilityRequirement(RdfProperty[schemaorg.ActionAccessSpecification]):
     term = RdfTerm('actionAccessibilityRequirement', 'http://schema.org/actionAccessibilityRequirement', ['1.0', '1.1', '1.2-DRAFT'])
 
-class target(RdfProperty[schemaorg.EntryPoint | URL]):
+class target(RdfProperty[schemaorg.EntryPoint | schemaorg.URL]):
     term = RdfTerm('target', 'http://schema.org/target', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class calories(RdfProperty[schemaorg.Energy]):
     term = RdfTerm('calories', 'http://schema.org/calories', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class articleBody(RdfProperty[Text]):
+class articleBody(RdfProperty[schemaorg.Text]):
     term = RdfTerm('articleBody', 'http://schema.org/articleBody', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class recordedAt(RdfProperty[schemaorg.Event]):
     term = RdfTerm('recordedAt', 'http://schema.org/recordedAt', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class boardingGroup(RdfProperty[Text]):
+class boardingGroup(RdfProperty[schemaorg.Text]):
     term = RdfTerm('boardingGroup', 'http://schema.org/boardingGroup', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class biomechnicalClass(RdfProperty[Text]):
+class biomechnicalClass(RdfProperty[schemaorg.Text]):
     term = RdfTerm('biomechnicalClass', 'http://schema.org/biomechnicalClass', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class audience(RdfProperty[schemaorg.Audience]):
@@ -5861,7 +5897,7 @@ class distinguishingSign(RdfProperty[schemaorg.MedicalSignOrSymptom]):
 class businessFunction(RdfProperty[schemaorg.BusinessFunction]):
     term = RdfTerm('businessFunction', 'http://schema.org/businessFunction', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class weightPercentage(RdfProperty[Number]):
+class weightPercentage(RdfProperty[schemaorg.Number]):
     term = RdfTerm('weightPercentage', 'http://schema.org/weightPercentage', [])
 
 class spatial(RdfProperty[schemaorg.Place]):
@@ -5873,76 +5909,76 @@ class serviceOperator(RdfProperty[schemaorg.Organization]):
 class biologicalRole(RdfProperty[schemaorg.DefinedTerm]):
     term = RdfTerm('biologicalRole', 'http://schema.org/biologicalRole', ['1.2-DRAFT'])
 
-class loanPaymentFrequency(RdfProperty[Number]):
+class loanPaymentFrequency(RdfProperty[schemaorg.Number]):
     term = RdfTerm('loanPaymentFrequency', 'http://schema.org/loanPaymentFrequency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class interpretedAsClaim(RdfProperty[schemaorg.Claim]):
     term = RdfTerm('interpretedAsClaim', 'http://schema.org/interpretedAsClaim', ['1.2-DRAFT'])
 
-class discountCurrency(RdfProperty[Text]):
+class discountCurrency(RdfProperty[schemaorg.Text]):
     term = RdfTerm('discountCurrency', 'http://schema.org/discountCurrency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class creditText(RdfProperty[Text]):
+class creditText(RdfProperty[schemaorg.Text]):
     term = RdfTerm('creditText', 'http://schema.org/creditText', ['1.2-DRAFT'])
 
-class domiciledMortgage(RdfProperty[Boolean]):
+class domiciledMortgage(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('domiciledMortgage', 'http://schema.org/domiciledMortgage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class encodesCreativeWork(RdfProperty[schemaorg.CreativeWork]):
     term = RdfTerm('encodesCreativeWork', 'http://schema.org/encodesCreativeWork', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class statType(RdfProperty[URL | schemaorg.Property | Text]):
+class statType(RdfProperty[schemaorg.URL | schemaorg.Property | schemaorg.Text]):
     term = RdfTerm('statType', 'http://schema.org/statType', ['1.2-DRAFT'])
 
 class course(RdfProperty[schemaorg.Place]):
     term = RdfTerm('course', 'http://schema.org/course', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class fuelType(RdfProperty[Text | schemaorg.QualitativeValue | URL]):
+class fuelType(RdfProperty[schemaorg.Text | schemaorg.QualitativeValue | schemaorg.URL]):
     term = RdfTerm('fuelType', 'http://schema.org/fuelType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class associatedArticle(RdfProperty[schemaorg.NewsArticle]):
     term = RdfTerm('associatedArticle', 'http://schema.org/associatedArticle', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class vehicleInteriorType(RdfProperty[Text]):
+class vehicleInteriorType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('vehicleInteriorType', 'http://schema.org/vehicleInteriorType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumVentUse(RdfProperty[Number]):
+class cvdNumVentUse(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumVentUse', 'http://schema.org/cvdNumVentUse', ['1.1', '1.2-DRAFT'])
 
 class coach(RdfProperty[schemaorg.Person]):
     term = RdfTerm('coach', 'http://schema.org/coach', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class educationalRole(RdfProperty[Text]):
+class educationalRole(RdfProperty[schemaorg.Text]):
     term = RdfTerm('educationalRole', 'http://schema.org/educationalRole', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class reviewBody(RdfProperty[Text]):
+class reviewBody(RdfProperty[schemaorg.Text]):
     term = RdfTerm('reviewBody', 'http://schema.org/reviewBody', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class byMonthDay(RdfProperty[Integer]):
+class byMonthDay(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('byMonthDay', 'http://schema.org/byMonthDay', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class endTime(RdfProperty[Time | DateTime]):
+class endTime(RdfProperty[schemaorg.Time | schemaorg.DateTime]):
     term = RdfTerm('endTime', 'http://schema.org/endTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class material(RdfProperty[schemaorg.Product | Text | URL]):
+class material(RdfProperty[schemaorg.Product | schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('material', 'http://schema.org/material', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class amenityFeature(RdfProperty[schemaorg.LocationFeatureSpecification]):
     term = RdfTerm('amenityFeature', 'http://schema.org/amenityFeature', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class membershipNumber(RdfProperty[Text]):
+class membershipNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('membershipNumber', 'http://schema.org/membershipNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dateReceived(RdfProperty[DateTime]):
+class dateReceived(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('dateReceived', 'http://schema.org/dateReceived', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class translator(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('translator', 'http://schema.org/translator', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class arrivalTime(RdfProperty[Time | DateTime]):
+class arrivalTime(RdfProperty[schemaorg.Time | schemaorg.DateTime]):
     term = RdfTerm('arrivalTime', 'http://schema.org/arrivalTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfItems(RdfProperty[Integer]):
+class numberOfItems(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('numberOfItems', 'http://schema.org/numberOfItems', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class greaterOrEqual(RdfProperty[schemaorg.QualitativeValue]):
@@ -5954,19 +5990,19 @@ class bloodSupply(RdfProperty[schemaorg.Vessel]):
 class rsvpResponse(RdfProperty[schemaorg.RsvpResponseType]):
     term = RdfTerm('rsvpResponse', 'http://schema.org/rsvpResponse', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class auditDate(RdfProperty[DateTime | Date]):
+class auditDate(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('auditDate', 'http://schema.org/auditDate', [])
 
-class suggestedMaxAge(RdfProperty[Number]):
+class suggestedMaxAge(RdfProperty[schemaorg.Number]):
     term = RdfTerm('suggestedMaxAge', 'http://schema.org/suggestedMaxAge', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class vehicleConfiguration(RdfProperty[Text]):
+class vehicleConfiguration(RdfProperty[schemaorg.Text]):
     term = RdfTerm('vehicleConfiguration', 'http://schema.org/vehicleConfiguration', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class naturalProgression(RdfProperty[Text]):
+class naturalProgression(RdfProperty[schemaorg.Text]):
     term = RdfTerm('naturalProgression', 'http://schema.org/naturalProgression', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class option(RdfProperty[schemaorg.Thing | Text]):
+class option(RdfProperty[schemaorg.Thing | schemaorg.Text]):
     term = RdfTerm('option', 'http://schema.org/option', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class buyer(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -5981,28 +6017,28 @@ class blogPost(RdfProperty[schemaorg.BlogPosting]):
 class recordedIn(RdfProperty[schemaorg.CreativeWork]):
     term = RdfTerm('recordedIn', 'http://schema.org/recordedIn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class runtimePlatform(RdfProperty[Text]):
+class runtimePlatform(RdfProperty[schemaorg.Text]):
     term = RdfTerm('runtimePlatform', 'http://schema.org/runtimePlatform', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class inAlbum(RdfProperty[schemaorg.MusicAlbum]):
     term = RdfTerm('inAlbum', 'http://schema.org/inAlbum', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class alignmentType(RdfProperty[Text]):
+class alignmentType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('alignmentType', 'http://schema.org/alignmentType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class healthPlanCoinsuranceRate(RdfProperty[Number]):
+class healthPlanCoinsuranceRate(RdfProperty[schemaorg.Number]):
     term = RdfTerm('healthPlanCoinsuranceRate', 'http://schema.org/healthPlanCoinsuranceRate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class tickerSymbol(RdfProperty[Text]):
+class tickerSymbol(RdfProperty[schemaorg.Text]):
     term = RdfTerm('tickerSymbol', 'http://schema.org/tickerSymbol', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class applicableLocation(RdfProperty[schemaorg.AdministrativeArea]):
     term = RdfTerm('applicableLocation', 'http://schema.org/applicableLocation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class preparation(RdfProperty[Text | schemaorg.MedicalEntity]):
+class preparation(RdfProperty[schemaorg.Text | schemaorg.MedicalEntity]):
     term = RdfTerm('preparation', 'http://schema.org/preparation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfEpisodes(RdfProperty[Integer]):
+class numberOfEpisodes(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('numberOfEpisodes', 'http://schema.org/numberOfEpisodes', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class announcementLocation(RdfProperty[schemaorg.LocalBusiness | schemaorg.CivicStructure]):
@@ -6023,7 +6059,7 @@ class parentItem(RdfProperty[schemaorg.CreativeWork | schemaorg.Comment]):
 class targetProduct(RdfProperty[schemaorg.SoftwareApplication]):
     term = RdfTerm('targetProduct', 'http://schema.org/targetProduct', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class sizeSystem(RdfProperty[Text | schemaorg.SizeSystemEnumeration]):
+class sizeSystem(RdfProperty[schemaorg.Text | schemaorg.SizeSystemEnumeration]):
     term = RdfTerm('sizeSystem', 'http://schema.org/sizeSystem', ['1.2-DRAFT'])
 
 class funder(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -6032,7 +6068,7 @@ class funder(RdfProperty[schemaorg.Person | schemaorg.Organization]):
 class incentiveAmount(RdfProperty[schemaorg.QuantitativeValue | schemaorg.LoanOrCredit | schemaorg.UnitPriceSpecification]):
     term = RdfTerm('incentiveAmount', 'http://schema.org/incentiveAmount', [])
 
-class address(RdfProperty[schemaorg.PostalAddress | Text]):
+class address(RdfProperty[schemaorg.PostalAddress | schemaorg.Text]):
     term = RdfTerm('address', 'http://schema.org/address', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class alternativeOf(RdfProperty[schemaorg.Gene]):
@@ -6041,37 +6077,37 @@ class alternativeOf(RdfProperty[schemaorg.Gene]):
 class additionalProperty(RdfProperty[schemaorg.PropertyValue]):
     term = RdfTerm('additionalProperty', 'http://schema.org/additionalProperty', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class significance(RdfProperty[Text]):
+class significance(RdfProperty[schemaorg.Text]):
     term = RdfTerm('significance', 'http://schema.org/significance', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class doesNotShip(RdfProperty[Boolean]):
+class doesNotShip(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('doesNotShip', 'http://schema.org/doesNotShip', ['1.1', '1.2-DRAFT'])
 
-class additionalType(RdfProperty[URL | Text]):
+class additionalType(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('additionalType', 'http://schema.org/additionalType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class previousStartDate(RdfProperty[Date]):
+class previousStartDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('previousStartDate', 'http://schema.org/previousStartDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class instrument(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('instrument', 'http://schema.org/instrument', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class inSupportOf(RdfProperty[Text]):
+class inSupportOf(RdfProperty[schemaorg.Text]):
     term = RdfTerm('inSupportOf', 'http://schema.org/inSupportOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class status(RdfProperty[schemaorg.EventStatusType | Text | schemaorg.MedicalStudyStatus]):
+class status(RdfProperty[schemaorg.EventStatusType | schemaorg.Text | schemaorg.MedicalStudyStatus]):
     term = RdfTerm('status', 'http://schema.org/status', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class healthPlanId(RdfProperty[Text]):
+class healthPlanId(RdfProperty[schemaorg.Text]):
     term = RdfTerm('healthPlanId', 'http://schema.org/healthPlanId', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class programName(RdfProperty[Text]):
+class programName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('programName', 'http://schema.org/programName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class typeOfGood(RdfProperty[schemaorg.Product | schemaorg.Service]):
     term = RdfTerm('typeOfGood', 'http://schema.org/typeOfGood', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class slogan(RdfProperty[Text]):
+class slogan(RdfProperty[schemaorg.Text]):
     term = RdfTerm('slogan', 'http://schema.org/slogan', ['1.0', '1.1', '1.2-DRAFT'])
 
 class encodings(RdfProperty[schemaorg.MediaObject]):
@@ -6080,10 +6116,10 @@ class encodings(RdfProperty[schemaorg.MediaObject]):
 class arrivalBoatTerminal(RdfProperty[schemaorg.BoatTerminal]):
     term = RdfTerm('arrivalBoatTerminal', 'http://schema.org/arrivalBoatTerminal', ['1.1', '1.2-DRAFT'])
 
-class additionalVariable(RdfProperty[Text]):
+class additionalVariable(RdfProperty[schemaorg.Text]):
     term = RdfTerm('additionalVariable', 'http://schema.org/additionalVariable', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class tissueSample(RdfProperty[Text]):
+class tissueSample(RdfProperty[schemaorg.Text]):
     term = RdfTerm('tissueSample', 'http://schema.org/tissueSample', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasMemberProgram(RdfProperty[schemaorg.MemberProgram]):
@@ -6092,10 +6128,10 @@ class hasMemberProgram(RdfProperty[schemaorg.MemberProgram]):
 class duplicateTherapy(RdfProperty[schemaorg.MedicalTherapy]):
     term = RdfTerm('duplicateTherapy', 'http://schema.org/duplicateTherapy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class floorLevel(RdfProperty[Text]):
+class floorLevel(RdfProperty[schemaorg.Text]):
     term = RdfTerm('floorLevel', 'http://schema.org/floorLevel', ['1.0', '1.1', '1.2-DRAFT'])
 
-class educationalProgramMode(RdfProperty[URL | Text]):
+class educationalProgramMode(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('educationalProgramMode', 'http://schema.org/educationalProgramMode', ['1.1', '1.2-DRAFT'])
 
 class depth(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Distance]):
@@ -6107,13 +6143,13 @@ class netWorth(RdfProperty[schemaorg.MonetaryAmount | schemaorg.PriceSpecificati
 class hasCourse(RdfProperty[schemaorg.Course]):
     term = RdfTerm('hasCourse', 'http://schema.org/hasCourse', ['1.1', '1.2-DRAFT'])
 
-class proprietaryName(RdfProperty[Text]):
+class proprietaryName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('proprietaryName', 'http://schema.org/proprietaryName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class orderItemStatus(RdfProperty[schemaorg.OrderStatus]):
     term = RdfTerm('orderItemStatus', 'http://schema.org/orderItemStatus', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class memoryRequirements(RdfProperty[Text | URL]):
+class memoryRequirements(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('memoryRequirements', 'http://schema.org/memoryRequirements', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class departureBoatTerminal(RdfProperty[schemaorg.BoatTerminal]):
@@ -6122,28 +6158,28 @@ class departureBoatTerminal(RdfProperty[schemaorg.BoatTerminal]):
 class eligibleTransactionVolume(RdfProperty[schemaorg.PriceSpecification]):
     term = RdfTerm('eligibleTransactionVolume', 'http://schema.org/eligibleTransactionVolume', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class pageStart(RdfProperty[Integer | Text]):
+class pageStart(RdfProperty[schemaorg.Integer | schemaorg.Text]):
     term = RdfTerm('pageStart', 'http://schema.org/pageStart', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class contributor(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('contributor', 'http://schema.org/contributor', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class benefitsSummaryUrl(RdfProperty[URL]):
+class benefitsSummaryUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('benefitsSummaryUrl', 'http://schema.org/benefitsSummaryUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class exerciseRelatedDiet(RdfProperty[schemaorg.Diet]):
     term = RdfTerm('exerciseRelatedDiet', 'http://schema.org/exerciseRelatedDiet', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class maximumVirtualAttendeeCapacity(RdfProperty[Integer]):
+class maximumVirtualAttendeeCapacity(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('maximumVirtualAttendeeCapacity', 'http://schema.org/maximumVirtualAttendeeCapacity', ['1.1', '1.2-DRAFT'])
 
 class maximumIntake(RdfProperty[schemaorg.MaximumDoseSchedule]):
     term = RdfTerm('maximumIntake', 'http://schema.org/maximumIntake', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class position(RdfProperty[Integer | Text]):
+class position(RdfProperty[schemaorg.Integer | schemaorg.Text]):
     term = RdfTerm('position', 'http://schema.org/position', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class correctionsPolicy(RdfProperty[URL | schemaorg.CreativeWork]):
+class correctionsPolicy(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('correctionsPolicy', 'http://schema.org/correctionsPolicy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class replacee(RdfProperty[schemaorg.Thing]):
@@ -6152,46 +6188,46 @@ class replacee(RdfProperty[schemaorg.Thing]):
 class itemShipped(RdfProperty[schemaorg.Product]):
     term = RdfTerm('itemShipped', 'http://schema.org/itemShipped', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumBeds(RdfProperty[Number]):
+class cvdNumBeds(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumBeds', 'http://schema.org/cvdNumBeds', ['1.1', '1.2-DRAFT'])
 
-class priceRange(RdfProperty[Text]):
+class priceRange(RdfProperty[schemaorg.Text]):
     term = RdfTerm('priceRange', 'http://schema.org/priceRange', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class partOfInvoice(RdfProperty[schemaorg.Invoice]):
     term = RdfTerm('partOfInvoice', 'http://schema.org/partOfInvoice', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class serviceUrl(RdfProperty[URL]):
+class serviceUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('serviceUrl', 'http://schema.org/serviceUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class subTrip(RdfProperty[schemaorg.Trip]):
     term = RdfTerm('subTrip', 'http://schema.org/subTrip', ['1.0', '1.1', '1.2-DRAFT'])
 
-class beneficiaryBank(RdfProperty[Text | schemaorg.BankOrCreditUnion]):
+class beneficiaryBank(RdfProperty[schemaorg.Text | schemaorg.BankOrCreditUnion]):
     term = RdfTerm('beneficiaryBank', 'http://schema.org/beneficiaryBank', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class potentialAction(RdfProperty[schemaorg.Action]):
     term = RdfTerm('potentialAction', 'http://schema.org/potentialAction', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class conditionsOfAccess(RdfProperty[Text]):
+class conditionsOfAccess(RdfProperty[schemaorg.Text]):
     term = RdfTerm('conditionsOfAccess', 'http://schema.org/conditionsOfAccess', ['1.0', '1.1', '1.2-DRAFT'])
 
 class review(RdfProperty[schemaorg.Review]):
     term = RdfTerm('review', 'http://schema.org/review', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class temporalCoverage(RdfProperty[Text | URL | DateTime]):
+class temporalCoverage(RdfProperty[schemaorg.Text | schemaorg.URL | schemaorg.DateTime]):
     term = RdfTerm('temporalCoverage', 'http://schema.org/temporalCoverage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class productGroupID(RdfProperty[Text]):
+class productGroupID(RdfProperty[schemaorg.Text]):
     term = RdfTerm('productGroupID', 'http://schema.org/productGroupID', ['1.1', '1.2-DRAFT'])
 
-class defaultValue(RdfProperty[schemaorg.Thing | Text]):
+class defaultValue(RdfProperty[schemaorg.Thing | schemaorg.Text]):
     term = RdfTerm('defaultValue', 'http://schema.org/defaultValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class molecularFormula(RdfProperty[Text]):
+class molecularFormula(RdfProperty[schemaorg.Text]):
     term = RdfTerm('molecularFormula', 'http://schema.org/molecularFormula', ['1.2-DRAFT'])
 
-class priceType(RdfProperty[schemaorg.PriceTypeEnumeration | Text]):
+class priceType(RdfProperty[schemaorg.PriceTypeEnumeration | schemaorg.Text]):
     term = RdfTerm('priceType', 'http://schema.org/priceType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class permitAudience(RdfProperty[schemaorg.Audience]):
@@ -6200,31 +6236,31 @@ class permitAudience(RdfProperty[schemaorg.Audience]):
 class mentions(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('mentions', 'http://schema.org/mentions', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class administrationRoute(RdfProperty[Text]):
+class administrationRoute(RdfProperty[schemaorg.Text]):
     term = RdfTerm('administrationRoute', 'http://schema.org/administrationRoute', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class legislationType(RdfProperty[Text | schemaorg.CategoryCode]):
+class legislationType(RdfProperty[schemaorg.Text | schemaorg.CategoryCode]):
     term = RdfTerm('legislationType', 'http://schema.org/legislationType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class increasesRiskOf(RdfProperty[schemaorg.MedicalEntity]):
     term = RdfTerm('increasesRiskOf', 'http://schema.org/increasesRiskOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class textValue(RdfProperty[Text]):
+class textValue(RdfProperty[schemaorg.Text]):
     term = RdfTerm('textValue', 'http://schema.org/textValue', ['1.1', '1.2-DRAFT'])
 
-class reportNumber(RdfProperty[Text]):
+class reportNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('reportNumber', 'http://schema.org/reportNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dateSent(RdfProperty[DateTime]):
+class dateSent(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('dateSent', 'http://schema.org/dateSent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class itemCondition(RdfProperty[schemaorg.OfferItemCondition]):
     term = RdfTerm('itemCondition', 'http://schema.org/itemCondition', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class hasBioPolymerSequence(RdfProperty[Text]):
+class hasBioPolymerSequence(RdfProperty[schemaorg.Text]):
     term = RdfTerm('hasBioPolymerSequence', 'http://schema.org/hasBioPolymerSequence', ['1.2-DRAFT'])
 
-class relatedLink(RdfProperty[URL]):
+class relatedLink(RdfProperty[schemaorg.URL]):
     term = RdfTerm('relatedLink', 'http://schema.org/relatedLink', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class deliveryAddress(RdfProperty[schemaorg.PostalAddress]):
@@ -6236,10 +6272,10 @@ class interactionStatistic(RdfProperty[schemaorg.InteractionCounter]):
 class totalTime(RdfProperty[schemaorg.Duration]):
     term = RdfTerm('totalTime', 'http://schema.org/totalTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class noBylinesPolicy(RdfProperty[URL | schemaorg.CreativeWork]):
+class noBylinesPolicy(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('noBylinesPolicy', 'http://schema.org/noBylinesPolicy', ['1.0', '1.1', '1.2-DRAFT'])
 
-class globalLocationNumber(RdfProperty[Text]):
+class globalLocationNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('globalLocationNumber', 'http://schema.org/globalLocationNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class pregnancyCategory(RdfProperty[schemaorg.DrugPregnancyCategory]):
@@ -6248,19 +6284,19 @@ class pregnancyCategory(RdfProperty[schemaorg.DrugPregnancyCategory]):
 class orderedItem(RdfProperty[schemaorg.Product | schemaorg.OrderItem | schemaorg.Service]):
     term = RdfTerm('orderedItem', 'http://schema.org/orderedItem', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class paymentDue(RdfProperty[DateTime]):
+class paymentDue(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('paymentDue', 'http://schema.org/paymentDue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class permissionType(RdfProperty[schemaorg.DigitalDocumentPermissionType]):
     term = RdfTerm('permissionType', 'http://schema.org/permissionType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class sameAs(RdfProperty[URL]):
+class sameAs(RdfProperty[schemaorg.URL]):
     term = RdfTerm('sameAs', 'http://schema.org/sameAs', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class modifiedTime(RdfProperty[DateTime]):
+class modifiedTime(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('modifiedTime', 'http://schema.org/modifiedTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dependencies(RdfProperty[Text]):
+class dependencies(RdfProperty[schemaorg.Text]):
     term = RdfTerm('dependencies', 'http://schema.org/dependencies', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class landlord(RdfProperty[schemaorg.Organization | schemaorg.Person]):
@@ -6275,46 +6311,46 @@ class loanMortgageMandateAmount(RdfProperty[schemaorg.MonetaryAmount]):
 class serverStatus(RdfProperty[schemaorg.GameServerStatus]):
     term = RdfTerm('serverStatus', 'http://schema.org/serverStatus', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class typicalCreditsPerTerm(RdfProperty[schemaorg.StructuredValue | Integer]):
+class typicalCreditsPerTerm(RdfProperty[schemaorg.StructuredValue | schemaorg.Integer]):
     term = RdfTerm('typicalCreditsPerTerm', 'http://schema.org/typicalCreditsPerTerm', ['1.1', '1.2-DRAFT'])
 
-class acceptsReservations(RdfProperty[Boolean | Text | URL]):
+class acceptsReservations(RdfProperty[schemaorg.Boolean | schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('acceptsReservations', 'http://schema.org/acceptsReservations', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class eventAttendanceMode(RdfProperty[schemaorg.EventAttendanceModeEnumeration]):
     term = RdfTerm('eventAttendanceMode', 'http://schema.org/eventAttendanceMode', ['1.1', '1.2-DRAFT'])
 
-class schemaVersion(RdfProperty[Text | URL]):
+class schemaVersion(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('schemaVersion', 'http://schema.org/schemaVersion', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class physiologicalBenefits(RdfProperty[Text]):
+class physiologicalBenefits(RdfProperty[schemaorg.Text]):
     term = RdfTerm('physiologicalBenefits', 'http://schema.org/physiologicalBenefits', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class hasOccupation(RdfProperty[schemaorg.Occupation]):
     term = RdfTerm('hasOccupation', 'http://schema.org/hasOccupation', ['1.0', '1.1', '1.2-DRAFT'])
 
-class acquireLicensePage(RdfProperty[URL | schemaorg.CreativeWork]):
+class acquireLicensePage(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('acquireLicensePage', 'http://schema.org/acquireLicensePage', ['1.1', '1.2-DRAFT'])
 
 class priceComponent(RdfProperty[schemaorg.UnitPriceSpecification]):
     term = RdfTerm('priceComponent', 'http://schema.org/priceComponent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumC19Died(RdfProperty[Number]):
+class cvdNumC19Died(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumC19Died', 'http://schema.org/cvdNumC19Died', ['1.1', '1.2-DRAFT'])
 
-class catalogNumber(RdfProperty[Text]):
+class catalogNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('catalogNumber', 'http://schema.org/catalogNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class ticketedSeat(RdfProperty[schemaorg.Seat]):
     term = RdfTerm('ticketedSeat', 'http://schema.org/ticketedSeat', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class recipeIngredient(RdfProperty[Text]):
+class recipeIngredient(RdfProperty[schemaorg.Text]):
     term = RdfTerm('recipeIngredient', 'http://schema.org/recipeIngredient', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class starRating(RdfProperty[schemaorg.Rating]):
     term = RdfTerm('starRating', 'http://schema.org/starRating', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class recipeInstructions(RdfProperty[schemaorg.ItemList | schemaorg.CreativeWork | Text]):
+class recipeInstructions(RdfProperty[schemaorg.ItemList | schemaorg.CreativeWork | schemaorg.Text]):
     term = RdfTerm('recipeInstructions', 'http://schema.org/recipeInstructions', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class partOfSeason(RdfProperty[schemaorg.CreativeWorkSeason]):
@@ -6323,7 +6359,7 @@ class partOfSeason(RdfProperty[schemaorg.CreativeWorkSeason]):
 class creditedTo(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('creditedTo', 'http://schema.org/creditedTo', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class restPeriods(RdfProperty[Text | schemaorg.QuantitativeValue]):
+class restPeriods(RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue]):
     term = RdfTerm('restPeriods', 'http://schema.org/restPeriods', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class geoWithin(RdfProperty[schemaorg.GeospatialGeometry | schemaorg.Place]):
@@ -6332,10 +6368,10 @@ class geoWithin(RdfProperty[schemaorg.GeospatialGeometry | schemaorg.Place]):
 class differentialDiagnosis(RdfProperty[schemaorg.DDxElement]):
     term = RdfTerm('differentialDiagnosis', 'http://schema.org/differentialDiagnosis', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numTracks(RdfProperty[Integer]):
+class numTracks(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('numTracks', 'http://schema.org/numTracks', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class eduQuestionType(RdfProperty[Text]):
+class eduQuestionType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('eduQuestionType', 'http://schema.org/eduQuestionType', ['1.1', '1.2-DRAFT'])
 
 class referenceQuantity(RdfProperty[schemaorg.QuantitativeValue]):
@@ -6347,19 +6383,19 @@ class deathPlace(RdfProperty[schemaorg.Place]):
 class makesOffer(RdfProperty[schemaorg.Offer]):
     term = RdfTerm('makesOffer', 'http://schema.org/makesOffer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class eligibilityToWorkRequirement(RdfProperty[Text]):
+class eligibilityToWorkRequirement(RdfProperty[schemaorg.Text]):
     term = RdfTerm('eligibilityToWorkRequirement', 'http://schema.org/eligibilityToWorkRequirement', ['1.1', '1.2-DRAFT'])
 
-class dateVehicleFirstRegistered(RdfProperty[Date]):
+class dateVehicleFirstRegistered(RdfProperty[schemaorg.Date]):
     term = RdfTerm('dateVehicleFirstRegistered', 'http://schema.org/dateVehicleFirstRegistered', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumICUBeds(RdfProperty[Number]):
+class cvdNumICUBeds(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumICUBeds', 'http://schema.org/cvdNumICUBeds', ['1.1', '1.2-DRAFT'])
 
 class deliveryStatus(RdfProperty[schemaorg.DeliveryEvent]):
     term = RdfTerm('deliveryStatus', 'http://schema.org/deliveryStatus', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class vehicleIdentificationNumber(RdfProperty[Text]):
+class vehicleIdentificationNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('vehicleIdentificationNumber', 'http://schema.org/vehicleIdentificationNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class successorOf(RdfProperty[schemaorg.ProductModel]):
@@ -6374,7 +6410,7 @@ class measuredProperty(RdfProperty[schemaorg.Property]):
 class causeOf(RdfProperty[schemaorg.MedicalEntity]):
     term = RdfTerm('causeOf', 'http://schema.org/causeOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class printEdition(RdfProperty[Text]):
+class printEdition(RdfProperty[schemaorg.Text]):
     term = RdfTerm('printEdition', 'http://schema.org/printEdition', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class purchaseType(RdfProperty[schemaorg.PurchaseType]):
@@ -6389,7 +6425,7 @@ class diet(RdfProperty[schemaorg.Diet]):
 class department(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('department', 'http://schema.org/department', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class publicTransportClosuresInfo(RdfProperty[schemaorg.WebContent | URL]):
+class publicTransportClosuresInfo(RdfProperty[schemaorg.WebContent | schemaorg.URL]):
     term = RdfTerm('publicTransportClosuresInfo', 'http://schema.org/publicTransportClosuresInfo', ['1.1', '1.2-DRAFT'])
 
 class availableStrength(RdfProperty[schemaorg.DrugStrength]):
@@ -6401,34 +6437,34 @@ class appearance(RdfProperty[schemaorg.CreativeWork]):
 class observationAbout(RdfProperty[schemaorg.Place | schemaorg.Thing]):
     term = RdfTerm('observationAbout', 'http://schema.org/observationAbout', ['1.2-DRAFT'])
 
-class bookEdition(RdfProperty[Text]):
+class bookEdition(RdfProperty[schemaorg.Text]):
     term = RdfTerm('bookEdition', 'http://schema.org/bookEdition', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class clincalPharmacology(RdfProperty[Text]):
+class clincalPharmacology(RdfProperty[schemaorg.Text]):
     term = RdfTerm('clincalPharmacology', 'http://schema.org/clincalPharmacology', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class bookFormat(RdfProperty[schemaorg.BookFormatType]):
     term = RdfTerm('bookFormat', 'http://schema.org/bookFormat', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class codingSystem(RdfProperty[Text]):
+class codingSystem(RdfProperty[schemaorg.Text]):
     term = RdfTerm('codingSystem', 'http://schema.org/codingSystem', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class quarantineGuidelines(RdfProperty[URL | schemaorg.WebContent]):
+class quarantineGuidelines(RdfProperty[schemaorg.URL | schemaorg.WebContent]):
     term = RdfTerm('quarantineGuidelines', 'http://schema.org/quarantineGuidelines', ['1.1', '1.2-DRAFT'])
 
-class epidemiology(RdfProperty[Text]):
+class epidemiology(RdfProperty[schemaorg.Text]):
     term = RdfTerm('epidemiology', 'http://schema.org/epidemiology', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class currenciesAccepted(RdfProperty[Text]):
+class currenciesAccepted(RdfProperty[schemaorg.Text]):
     term = RdfTerm('currenciesAccepted', 'http://schema.org/currenciesAccepted', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class legislationAmends(RdfProperty[schemaorg.Legislation]):
     term = RdfTerm('legislationAmends', 'http://schema.org/legislationAmends', [])
 
-class emissionsCO2(RdfProperty[Number]):
+class emissionsCO2(RdfProperty[schemaorg.Number]):
     term = RdfTerm('emissionsCO2', 'http://schema.org/emissionsCO2', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class healthPlanMarketingUrl(RdfProperty[URL]):
+class healthPlanMarketingUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('healthPlanMarketingUrl', 'http://schema.org/healthPlanMarketingUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class serviceSmsNumber(RdfProperty[schemaorg.ContactPoint]):
@@ -6440,28 +6476,28 @@ class comprisedOf(RdfProperty[schemaorg.AnatomicalStructure | schemaorg.Anatomic
 class sponsor(RdfProperty[schemaorg.Organization | schemaorg.Person]):
     term = RdfTerm('sponsor', 'http://schema.org/sponsor', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class recommendationStrength(RdfProperty[Text]):
+class recommendationStrength(RdfProperty[schemaorg.Text]):
     term = RdfTerm('recommendationStrength', 'http://schema.org/recommendationStrength', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class valueMaxLength(RdfProperty[Number]):
+class valueMaxLength(RdfProperty[schemaorg.Number]):
     term = RdfTerm('valueMaxLength', 'http://schema.org/valueMaxLength', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class itemDefectReturnShippingFeesAmount(RdfProperty[schemaorg.MonetaryAmount]):
     term = RdfTerm('itemDefectReturnShippingFeesAmount', 'http://schema.org/itemDefectReturnShippingFeesAmount', ['1.2-DRAFT'])
 
-class doseUnit(RdfProperty[Text]):
+class doseUnit(RdfProperty[schemaorg.Text]):
     term = RdfTerm('doseUnit', 'http://schema.org/doseUnit', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class measurementTechnique(RdfProperty[Text | schemaorg.DefinedTerm | URL | schemaorg.MeasurementMethodEnum]):
+class measurementTechnique(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm | schemaorg.URL | schemaorg.MeasurementMethodEnum]):
     term = RdfTerm('measurementTechnique', 'http://schema.org/measurementTechnique', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class ticketNumber(RdfProperty[Text]):
+class ticketNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('ticketNumber', 'http://schema.org/ticketNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class accountOverdraftLimit(RdfProperty[schemaorg.MonetaryAmount]):
     term = RdfTerm('accountOverdraftLimit', 'http://schema.org/accountOverdraftLimit', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class measurementMethod(RdfProperty[schemaorg.DefinedTerm | URL | schemaorg.MeasurementMethodEnum | Text]):
+class measurementMethod(RdfProperty[schemaorg.DefinedTerm | schemaorg.URL | schemaorg.MeasurementMethodEnum | schemaorg.Text]):
     term = RdfTerm('measurementMethod', 'http://schema.org/measurementMethod', ['1.2-DRAFT'])
 
 class relatedStructure(RdfProperty[schemaorg.AnatomicalStructure]):
@@ -6470,25 +6506,25 @@ class relatedStructure(RdfProperty[schemaorg.AnatomicalStructure]):
 class publisher(RdfProperty[schemaorg.Organization | schemaorg.Person]):
     term = RdfTerm('publisher', 'http://schema.org/publisher', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class applicationStartDate(RdfProperty[Date]):
+class applicationStartDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('applicationStartDate', 'http://schema.org/applicationStartDate', ['1.1', '1.2-DRAFT'])
 
-class inChIKey(RdfProperty[Text]):
+class inChIKey(RdfProperty[schemaorg.Text]):
     term = RdfTerm('inChIKey', 'http://schema.org/inChIKey', ['1.2-DRAFT'])
 
 class fiberContent(RdfProperty[schemaorg.Mass]):
     term = RdfTerm('fiberContent', 'http://schema.org/fiberContent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class knownVehicleDamages(RdfProperty[Text]):
+class knownVehicleDamages(RdfProperty[schemaorg.Text]):
     term = RdfTerm('knownVehicleDamages', 'http://schema.org/knownVehicleDamages', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class accommodationCategory(RdfProperty[Text]):
+class accommodationCategory(RdfProperty[schemaorg.Text]):
     term = RdfTerm('accommodationCategory', 'http://schema.org/accommodationCategory', ['1.0', '1.1', '1.2-DRAFT'])
 
 class originAddress(RdfProperty[schemaorg.PostalAddress]):
     term = RdfTerm('originAddress', 'http://schema.org/originAddress', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class costCurrency(RdfProperty[Text]):
+class costCurrency(RdfProperty[schemaorg.Text]):
     term = RdfTerm('costCurrency', 'http://schema.org/costCurrency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class episodes(RdfProperty[schemaorg.Episode]):
@@ -6500,22 +6536,22 @@ class rangeIncludes(RdfProperty[schemaorg.Class]):
 class relatedAnatomy(RdfProperty[schemaorg.AnatomicalSystem | schemaorg.AnatomicalStructure]):
     term = RdfTerm('relatedAnatomy', 'http://schema.org/relatedAnatomy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class guidelineDate(RdfProperty[Date]):
+class guidelineDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('guidelineDate', 'http://schema.org/guidelineDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class httpMethod(RdfProperty[Text]):
+class httpMethod(RdfProperty[schemaorg.Text]):
     term = RdfTerm('httpMethod', 'http://schema.org/httpMethod', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class repetitions(RdfProperty[schemaorg.QuantitativeValue | Number]):
+class repetitions(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Number]):
     term = RdfTerm('repetitions', 'http://schema.org/repetitions', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class nsn(RdfProperty[Text]):
+class nsn(RdfProperty[schemaorg.Text]):
     term = RdfTerm('nsn', 'http://schema.org/nsn', ['1.0', '1.1', '1.2-DRAFT'])
 
 class foodEstablishment(RdfProperty[schemaorg.FoodEstablishment | schemaorg.Place]):
     term = RdfTerm('foodEstablishment', 'http://schema.org/foodEstablishment', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class positiveNotes(RdfProperty[schemaorg.WebContent | Text | schemaorg.ItemList | schemaorg.ListItem]):
+class positiveNotes(RdfProperty[schemaorg.WebContent | schemaorg.Text | schemaorg.ItemList | schemaorg.ListItem]):
     term = RdfTerm('positiveNotes', 'http://schema.org/positiveNotes', ['1.2-DRAFT'])
 
 class softwareHelp(RdfProperty[schemaorg.CreativeWork]):
@@ -6524,40 +6560,40 @@ class softwareHelp(RdfProperty[schemaorg.CreativeWork]):
 class publishedOn(RdfProperty[schemaorg.BroadcastService]):
     term = RdfTerm('publishedOn', 'http://schema.org/publishedOn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class assesses(RdfProperty[Text | schemaorg.DefinedTerm]):
+class assesses(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm]):
     term = RdfTerm('assesses', 'http://schema.org/assesses', ['1.1', '1.2-DRAFT'])
 
-class ingredients(RdfProperty[Text]):
+class ingredients(RdfProperty[schemaorg.Text]):
     term = RdfTerm('ingredients', 'http://schema.org/ingredients', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class appliesToDeliveryMethod(RdfProperty[schemaorg.DeliveryMethod]):
     term = RdfTerm('appliesToDeliveryMethod', 'http://schema.org/appliesToDeliveryMethod', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class repeatFrequency(RdfProperty[schemaorg.Duration | Text]):
+class repeatFrequency(RdfProperty[schemaorg.Duration | schemaorg.Text]):
     term = RdfTerm('repeatFrequency', 'http://schema.org/repeatFrequency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberedPosition(RdfProperty[Number]):
+class numberedPosition(RdfProperty[schemaorg.Number]):
     term = RdfTerm('numberedPosition', 'http://schema.org/numberedPosition', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class energyEfficiencyScaleMax(RdfProperty[schemaorg.EUEnergyEfficiencyEnumeration]):
     term = RdfTerm('energyEfficiencyScaleMax', 'http://schema.org/energyEfficiencyScaleMax', ['1.1', '1.2-DRAFT'])
 
-class postalCode(RdfProperty[Text]):
+class postalCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('postalCode', 'http://schema.org/postalCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gameLocation(RdfProperty[URL | schemaorg.Place | schemaorg.PostalAddress]):
+class gameLocation(RdfProperty[schemaorg.URL | schemaorg.Place | schemaorg.PostalAddress]):
     term = RdfTerm('gameLocation', 'http://schema.org/gameLocation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class foodWarning(RdfProperty[Text]):
+class foodWarning(RdfProperty[schemaorg.Text]):
     term = RdfTerm('foodWarning', 'http://schema.org/foodWarning', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class exifData(RdfProperty[Text | schemaorg.PropertyValue]):
+class exifData(RdfProperty[schemaorg.Text | schemaorg.PropertyValue]):
     term = RdfTerm('exifData', 'http://schema.org/exifData', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class spatialCoverage(RdfProperty[schemaorg.Place]):
     term = RdfTerm('spatialCoverage', 'http://schema.org/spatialCoverage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class size(RdfProperty[schemaorg.QuantitativeValue | schemaorg.DefinedTerm | schemaorg.SizeSpecification | Text]):
+class size(RdfProperty[schemaorg.QuantitativeValue | schemaorg.DefinedTerm | schemaorg.SizeSpecification | schemaorg.Text]):
     term = RdfTerm('size', 'http://schema.org/size', ['1.1', '1.2-DRAFT'])
 
 class includesObject(RdfProperty[schemaorg.TypeAndQuantityNode]):
@@ -6566,40 +6602,40 @@ class includesObject(RdfProperty[schemaorg.TypeAndQuantityNode]):
 class loanPaymentAmount(RdfProperty[schemaorg.MonetaryAmount]):
     term = RdfTerm('loanPaymentAmount', 'http://schema.org/loanPaymentAmount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class recipeYield(RdfProperty[Text | schemaorg.QuantitativeValue]):
+class recipeYield(RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue]):
     term = RdfTerm('recipeYield', 'http://schema.org/recipeYield', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class healthPlanDrugTier(RdfProperty[Text]):
+class healthPlanDrugTier(RdfProperty[schemaorg.Text]):
     term = RdfTerm('healthPlanDrugTier', 'http://schema.org/healthPlanDrugTier', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class postalCodeEnd(RdfProperty[Text]):
+class postalCodeEnd(RdfProperty[schemaorg.Text]):
     term = RdfTerm('postalCodeEnd', 'http://schema.org/postalCodeEnd', ['1.1', '1.2-DRAFT'])
 
 class track(RdfProperty[schemaorg.MusicRecording | schemaorg.ItemList]):
     term = RdfTerm('track', 'http://schema.org/track', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class image(RdfProperty[schemaorg.ImageObject | URL]):
+class image(RdfProperty[schemaorg.ImageObject | schemaorg.URL]):
     term = RdfTerm('image', 'http://schema.org/image', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class messageAttachment(RdfProperty[schemaorg.CreativeWork]):
     term = RdfTerm('messageAttachment', 'http://schema.org/messageAttachment', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class priceCurrency(RdfProperty[Text]):
+class priceCurrency(RdfProperty[schemaorg.Text]):
     term = RdfTerm('priceCurrency', 'http://schema.org/priceCurrency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class maximumEnrollment(RdfProperty[Integer]):
+class maximumEnrollment(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('maximumEnrollment', 'http://schema.org/maximumEnrollment', ['1.1', '1.2-DRAFT'])
 
 class participant(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('participant', 'http://schema.org/participant', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class sizeGroup(RdfProperty[schemaorg.SizeGroupEnumeration | Text]):
+class sizeGroup(RdfProperty[schemaorg.SizeGroupEnumeration | schemaorg.Text]):
     term = RdfTerm('sizeGroup', 'http://schema.org/sizeGroup', ['1.2-DRAFT'])
 
 class memberOf(RdfProperty[schemaorg.Organization | schemaorg.ProgramMembership | schemaorg.MemberProgramTier]):
     term = RdfTerm('memberOf', 'http://schema.org/memberOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class contentRating(RdfProperty[Text | schemaorg.Rating]):
+class contentRating(RdfProperty[schemaorg.Text | schemaorg.Rating]):
     term = RdfTerm('contentRating', 'http://schema.org/contentRating', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class expressedIn(RdfProperty[schemaorg.AnatomicalStructure | schemaorg.BioChemEntity | schemaorg.DefinedTerm | schemaorg.AnatomicalSystem]):
@@ -6608,10 +6644,10 @@ class expressedIn(RdfProperty[schemaorg.AnatomicalStructure | schemaorg.BioChemE
 class hasOfferCatalog(RdfProperty[schemaorg.OfferCatalog]):
     term = RdfTerm('hasOfferCatalog', 'http://schema.org/hasOfferCatalog', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class accessMode(RdfProperty[Text]):
+class accessMode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('accessMode', 'http://schema.org/accessMode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class valueRequired(RdfProperty[Boolean]):
+class valueRequired(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('valueRequired', 'http://schema.org/valueRequired', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class partOfSeries(RdfProperty[schemaorg.CreativeWorkSeries]):
@@ -6620,7 +6656,7 @@ class partOfSeries(RdfProperty[schemaorg.CreativeWorkSeries]):
 class tracks(RdfProperty[schemaorg.MusicRecording]):
     term = RdfTerm('tracks', 'http://schema.org/tracks', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class documentation(RdfProperty[URL | schemaorg.CreativeWork]):
+class documentation(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('documentation', 'http://schema.org/documentation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class creator(RdfProperty[schemaorg.Person | schemaorg.Organization]):
@@ -6635,7 +6671,7 @@ class jobLocation(RdfProperty[schemaorg.Place]):
 class deliveryMethod(RdfProperty[schemaorg.DeliveryMethod]):
     term = RdfTerm('deliveryMethod', 'http://schema.org/deliveryMethod', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class numberOfPages(RdfProperty[Integer]):
+class numberOfPages(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('numberOfPages', 'http://schema.org/numberOfPages', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class arrivalAirport(RdfProperty[schemaorg.Airport]):
@@ -6647,76 +6683,76 @@ class nonEqual(RdfProperty[schemaorg.QualitativeValue]):
 class produces(RdfProperty[schemaorg.Thing]):
     term = RdfTerm('produces', 'http://schema.org/produces', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class expectedArrivalFrom(RdfProperty[DateTime | Date]):
+class expectedArrivalFrom(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('expectedArrivalFrom', 'http://schema.org/expectedArrivalFrom', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class healthPlanCopayOption(RdfProperty[Text]):
+class healthPlanCopayOption(RdfProperty[schemaorg.Text]):
     term = RdfTerm('healthPlanCopayOption', 'http://schema.org/healthPlanCopayOption', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class vehicleSeatingCapacity(RdfProperty[schemaorg.QuantitativeValue | Number]):
+class vehicleSeatingCapacity(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Number]):
     term = RdfTerm('vehicleSeatingCapacity', 'http://schema.org/vehicleSeatingCapacity', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class carrier(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('carrier', 'http://schema.org/carrier', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class smokingAllowed(RdfProperty[Boolean]):
+class smokingAllowed(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('smokingAllowed', 'http://schema.org/smokingAllowed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class breadcrumb(RdfProperty[Text | schemaorg.BreadcrumbList]):
+class breadcrumb(RdfProperty[schemaorg.Text | schemaorg.BreadcrumbList]):
     term = RdfTerm('breadcrumb', 'http://schema.org/breadcrumb', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class normalRange(RdfProperty[Text | schemaorg.MedicalEnumeration]):
+class normalRange(RdfProperty[schemaorg.Text | schemaorg.MedicalEnumeration]):
     term = RdfTerm('normalRange', 'http://schema.org/normalRange', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class ineligibleRegion(RdfProperty[Text | schemaorg.GeoShape | schemaorg.Place]):
+class ineligibleRegion(RdfProperty[schemaorg.Text | schemaorg.GeoShape | schemaorg.Place]):
     term = RdfTerm('ineligibleRegion', 'http://schema.org/ineligibleRegion', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class ownedThrough(RdfProperty[DateTime]):
+class ownedThrough(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('ownedThrough', 'http://schema.org/ownedThrough', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class aircraft(RdfProperty[Text | schemaorg.Vehicle]):
+class aircraft(RdfProperty[schemaorg.Text | schemaorg.Vehicle]):
     term = RdfTerm('aircraft', 'http://schema.org/aircraft', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class accountMinimumInflow(RdfProperty[schemaorg.MonetaryAmount]):
     term = RdfTerm('accountMinimumInflow', 'http://schema.org/accountMinimumInflow', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumC19HOPats(RdfProperty[Number]):
+class cvdNumC19HOPats(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumC19HOPats', 'http://schema.org/cvdNumC19HOPats', ['1.1', '1.2-DRAFT'])
 
 class hasEnergyConsumptionDetails(RdfProperty[schemaorg.EnergyConsumptionDetails]):
     term = RdfTerm('hasEnergyConsumptionDetails', 'http://schema.org/hasEnergyConsumptionDetails', ['1.1', '1.2-DRAFT'])
 
-class trackingUrl(RdfProperty[URL]):
+class trackingUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('trackingUrl', 'http://schema.org/trackingUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class unitCode(RdfProperty[URL | Text]):
+class unitCode(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('unitCode', 'http://schema.org/unitCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class returnPolicySeasonalOverride(RdfProperty[schemaorg.MerchantReturnPolicySeasonalOverride]):
     term = RdfTerm('returnPolicySeasonalOverride', 'http://schema.org/returnPolicySeasonalOverride', ['1.2-DRAFT'])
 
-class healthPlanPharmacyCategory(RdfProperty[Text]):
+class healthPlanPharmacyCategory(RdfProperty[schemaorg.Text]):
     term = RdfTerm('healthPlanPharmacyCategory', 'http://schema.org/healthPlanPharmacyCategory', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class previousItem(RdfProperty[schemaorg.ListItem]):
     term = RdfTerm('previousItem', 'http://schema.org/previousItem', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class requiredCollateral(RdfProperty[schemaorg.Thing | Text]):
+class requiredCollateral(RdfProperty[schemaorg.Thing | schemaorg.Text]):
     term = RdfTerm('requiredCollateral', 'http://schema.org/requiredCollateral', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cashBack(RdfProperty[Boolean | Number]):
+class cashBack(RdfProperty[schemaorg.Boolean | schemaorg.Number]):
     term = RdfTerm('cashBack', 'http://schema.org/cashBack', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class diversityStaffingReport(RdfProperty[URL | schemaorg.Article]):
+class diversityStaffingReport(RdfProperty[schemaorg.URL | schemaorg.Article]):
     term = RdfTerm('diversityStaffingReport', 'http://schema.org/diversityStaffingReport', ['1.0', '1.1', '1.2-DRAFT'])
 
-class datasetTimeInterval(RdfProperty[DateTime]):
+class datasetTimeInterval(RdfProperty[schemaorg.DateTime]):
     term = RdfTerm('datasetTimeInterval', 'http://schema.org/datasetTimeInterval', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class awayTeam(RdfProperty[schemaorg.Person | schemaorg.SportsTeam]):
     term = RdfTerm('awayTeam', 'http://schema.org/awayTeam', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class discount(RdfProperty[Number | Text]):
+class discount(RdfProperty[schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('discount', 'http://schema.org/discount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class priceComponentType(RdfProperty[schemaorg.PriceComponentTypeEnumeration]):
@@ -6725,7 +6761,7 @@ class priceComponentType(RdfProperty[schemaorg.PriceComponentTypeEnumeration]):
 class productionCompany(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('productionCompany', 'http://schema.org/productionCompany', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class claimReviewed(RdfProperty[Text]):
+class claimReviewed(RdfProperty[schemaorg.Text]):
     term = RdfTerm('claimReviewed', 'http://schema.org/claimReviewed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class supplyTo(RdfProperty[schemaorg.AnatomicalStructure]):
@@ -6734,7 +6770,7 @@ class supplyTo(RdfProperty[schemaorg.AnatomicalStructure]):
 class workload(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Energy]):
     term = RdfTerm('workload', 'http://schema.org/workload', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gtin14(RdfProperty[Text]):
+class gtin14(RdfProperty[schemaorg.Text]):
     term = RdfTerm('gtin14', 'http://schema.org/gtin14', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class height(RdfProperty[schemaorg.Distance | schemaorg.QuantitativeValue]):
@@ -6743,40 +6779,40 @@ class height(RdfProperty[schemaorg.Distance | schemaorg.QuantitativeValue]):
 class trailerWeight(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('trailerWeight', 'http://schema.org/trailerWeight', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class exerciseType(RdfProperty[Text]):
+class exerciseType(RdfProperty[schemaorg.Text]):
     term = RdfTerm('exerciseType', 'http://schema.org/exerciseType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class issn(RdfProperty[Text]):
+class issn(RdfProperty[schemaorg.Text]):
     term = RdfTerm('issn', 'http://schema.org/issn', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class readonlyValue(RdfProperty[Boolean]):
+class readonlyValue(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('readonlyValue', 'http://schema.org/readonlyValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class duns(RdfProperty[Text]):
+class duns(RdfProperty[schemaorg.Text]):
     term = RdfTerm('duns', 'http://schema.org/duns', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class ethicsPolicy(RdfProperty[URL | schemaorg.CreativeWork]):
+class ethicsPolicy(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('ethicsPolicy', 'http://schema.org/ethicsPolicy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class stage(RdfProperty[schemaorg.MedicalConditionStage]):
     term = RdfTerm('stage', 'http://schema.org/stage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class downvoteCount(RdfProperty[Integer]):
+class downvoteCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('downvoteCount', 'http://schema.org/downvoteCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class releasedEvent(RdfProperty[schemaorg.PublicationEvent]):
     term = RdfTerm('releasedEvent', 'http://schema.org/releasedEvent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class longitude(RdfProperty[Number | Text]):
+class longitude(RdfProperty[schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('longitude', 'http://schema.org/longitude', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class prescribingInfo(RdfProperty[URL]):
+class prescribingInfo(RdfProperty[schemaorg.URL]):
     term = RdfTerm('prescribingInfo', 'http://schema.org/prescribingInfo', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class applicationDeadline(RdfProperty[Text | Date]):
+class applicationDeadline(RdfProperty[schemaorg.Text | schemaorg.Date]):
     term = RdfTerm('applicationDeadline', 'http://schema.org/applicationDeadline', ['1.1', '1.2-DRAFT'])
 
-class taxonRank(RdfProperty[URL | Text | schemaorg.PropertyValue]):
+class taxonRank(RdfProperty[schemaorg.URL | schemaorg.Text | schemaorg.PropertyValue]):
     term = RdfTerm('taxonRank', 'http://schema.org/taxonRank', ['1.2-DRAFT'])
 
 class subReservation(RdfProperty[schemaorg.Reservation]):
@@ -6791,37 +6827,37 @@ class shippingDestination(RdfProperty[schemaorg.DefinedRegion]):
 class mainContentOfPage(RdfProperty[schemaorg.WebPageElement]):
     term = RdfTerm('mainContentOfPage', 'http://schema.org/mainContentOfPage', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class familyName(RdfProperty[Text]):
+class familyName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('familyName', 'http://schema.org/familyName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class titleEIDR(RdfProperty[URL | Text]):
+class titleEIDR(RdfProperty[schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('titleEIDR', 'http://schema.org/titleEIDR', ['1.1', '1.2-DRAFT'])
 
 class musicGroupMember(RdfProperty[schemaorg.Person]):
     term = RdfTerm('musicGroupMember', 'http://schema.org/musicGroupMember', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class sensoryRequirement(RdfProperty[schemaorg.DefinedTerm | URL | Text]):
+class sensoryRequirement(RdfProperty[schemaorg.DefinedTerm | schemaorg.URL | schemaorg.Text]):
     term = RdfTerm('sensoryRequirement', 'http://schema.org/sensoryRequirement', ['1.1', '1.2-DRAFT'])
 
-class actionableFeedbackPolicy(RdfProperty[URL | schemaorg.CreativeWork]):
+class actionableFeedbackPolicy(RdfProperty[schemaorg.URL | schemaorg.CreativeWork]):
     term = RdfTerm('actionableFeedbackPolicy', 'http://schema.org/actionableFeedbackPolicy', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class supply(RdfProperty[schemaorg.HowToSupply | Text]):
+class supply(RdfProperty[schemaorg.HowToSupply | schemaorg.Text]):
     term = RdfTerm('supply', 'http://schema.org/supply', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class accessibilitySummary(RdfProperty[Text]):
+class accessibilitySummary(RdfProperty[schemaorg.Text]):
     term = RdfTerm('accessibilitySummary', 'http://schema.org/accessibilitySummary', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class translationOfWork(RdfProperty[schemaorg.CreativeWork]):
     term = RdfTerm('translationOfWork', 'http://schema.org/translationOfWork', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class roleName(RdfProperty[Text | URL]):
+class roleName(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('roleName', 'http://schema.org/roleName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class significantLinks(RdfProperty[URL]):
+class significantLinks(RdfProperty[schemaorg.URL]):
     term = RdfTerm('significantLinks', 'http://schema.org/significantLinks', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class purchaseDate(RdfProperty[Date]):
+class purchaseDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('purchaseDate', 'http://schema.org/purchaseDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class interactionService(RdfProperty[schemaorg.SoftwareApplication | schemaorg.WebSite]):
@@ -6833,31 +6869,31 @@ class fulfillmentType(RdfProperty[schemaorg.FulfillmentTypeEnumeration]):
 class typicalTest(RdfProperty[schemaorg.MedicalTest]):
     term = RdfTerm('typicalTest', 'http://schema.org/typicalTest', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class areaServed(RdfProperty[Text | schemaorg.AdministrativeArea | schemaorg.GeoShape | schemaorg.Place]):
+class areaServed(RdfProperty[schemaorg.Text | schemaorg.AdministrativeArea | schemaorg.GeoShape | schemaorg.Place]):
     term = RdfTerm('areaServed', 'http://schema.org/areaServed', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class serviceAudience(RdfProperty[schemaorg.Audience]):
     term = RdfTerm('serviceAudience', 'http://schema.org/serviceAudience', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class recipeCategory(RdfProperty[Text]):
+class recipeCategory(RdfProperty[schemaorg.Text]):
     term = RdfTerm('recipeCategory', 'http://schema.org/recipeCategory', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class employerOverview(RdfProperty[Text]):
+class employerOverview(RdfProperty[schemaorg.Text]):
     term = RdfTerm('employerOverview', 'http://schema.org/employerOverview', ['1.1', '1.2-DRAFT'])
 
-class cvdNumC19OverflowPats(RdfProperty[Number]):
+class cvdNumC19OverflowPats(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumC19OverflowPats', 'http://schema.org/cvdNumC19OverflowPats', ['1.1', '1.2-DRAFT'])
 
-class incentives(RdfProperty[Text]):
+class incentives(RdfProperty[schemaorg.Text]):
     term = RdfTerm('incentives', 'http://schema.org/incentives', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class smiles(RdfProperty[Text]):
+class smiles(RdfProperty[schemaorg.Text]):
     term = RdfTerm('smiles', 'http://schema.org/smiles', ['1.2-DRAFT'])
 
-class proficiencyLevel(RdfProperty[Text]):
+class proficiencyLevel(RdfProperty[schemaorg.Text]):
     term = RdfTerm('proficiencyLevel', 'http://schema.org/proficiencyLevel', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class pathophysiology(RdfProperty[Text]):
+class pathophysiology(RdfProperty[schemaorg.Text]):
     term = RdfTerm('pathophysiology', 'http://schema.org/pathophysiology', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class geoDisjoint(RdfProperty[schemaorg.Place | schemaorg.GeospatialGeometry]):
@@ -6872,7 +6908,7 @@ class medicalAudience(RdfProperty[schemaorg.MedicalAudienceType | schemaorg.Medi
 class worksFor(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('worksFor', 'http://schema.org/worksFor', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class reviewAspect(RdfProperty[Text]):
+class reviewAspect(RdfProperty[schemaorg.Text]):
     term = RdfTerm('reviewAspect', 'http://schema.org/reviewAspect', ['1.0', '1.1', '1.2-DRAFT'])
 
 class minimumPaymentDue(RdfProperty[schemaorg.PriceSpecification | schemaorg.MonetaryAmount]):
@@ -6881,10 +6917,10 @@ class minimumPaymentDue(RdfProperty[schemaorg.PriceSpecification | schemaorg.Mon
 class members(RdfProperty[schemaorg.Organization | schemaorg.Person]):
     term = RdfTerm('members', 'http://schema.org/members', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class postalCodePrefix(RdfProperty[Text]):
+class postalCodePrefix(RdfProperty[schemaorg.Text]):
     term = RdfTerm('postalCodePrefix', 'http://schema.org/postalCodePrefix', ['1.1', '1.2-DRAFT'])
 
-class strengthValue(RdfProperty[Number]):
+class strengthValue(RdfProperty[schemaorg.Number]):
     term = RdfTerm('strengthValue', 'http://schema.org/strengthValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class legislationLegalForce(RdfProperty[schemaorg.LegalForceStatus]):
@@ -6893,7 +6929,7 @@ class legislationLegalForce(RdfProperty[schemaorg.LegalForceStatus]):
 class publisherImprint(RdfProperty[schemaorg.Organization]):
     term = RdfTerm('publisherImprint', 'http://schema.org/publisherImprint', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class typicalAgeRange(RdfProperty[Text]):
+class typicalAgeRange(RdfProperty[schemaorg.Text]):
     term = RdfTerm('typicalAgeRange', 'http://schema.org/typicalAgeRange', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class legislationPassedBy(RdfProperty[schemaorg.Organization | schemaorg.Person]):
@@ -6914,10 +6950,10 @@ class governmentBenefitsInfo(RdfProperty[schemaorg.GovernmentService]):
 class practicesAt(RdfProperty[schemaorg.MedicalOrganization]):
     term = RdfTerm('practicesAt', 'http://schema.org/practicesAt', [])
 
-class bitrate(RdfProperty[Text]):
+class bitrate(RdfProperty[schemaorg.Text]):
     term = RdfTerm('bitrate', 'http://schema.org/bitrate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class musicalKey(RdfProperty[Text]):
+class musicalKey(RdfProperty[schemaorg.Text]):
     term = RdfTerm('musicalKey', 'http://schema.org/musicalKey', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class boardingPolicy(RdfProperty[schemaorg.BoardingPolicyType]):
@@ -6926,43 +6962,43 @@ class boardingPolicy(RdfProperty[schemaorg.BoardingPolicyType]):
 class encoding(RdfProperty[schemaorg.MediaObject]):
     term = RdfTerm('encoding', 'http://schema.org/encoding', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class userInteractionCount(RdfProperty[Integer]):
+class userInteractionCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('userInteractionCount', 'http://schema.org/userInteractionCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class bookingAgent(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('bookingAgent', 'http://schema.org/bookingAgent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class minValue(RdfProperty[Number]):
+class minValue(RdfProperty[schemaorg.Number]):
     term = RdfTerm('minValue', 'http://schema.org/minValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class enginePower(RdfProperty[schemaorg.QuantitativeValue]):
     term = RdfTerm('enginePower', 'http://schema.org/enginePower', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class discussionUrl(RdfProperty[URL]):
+class discussionUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('discussionUrl', 'http://schema.org/discussionUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class lowPrice(RdfProperty[Text | Number]):
+class lowPrice(RdfProperty[schemaorg.Text | schemaorg.Number]):
     term = RdfTerm('lowPrice', 'http://schema.org/lowPrice', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class competencyRequired(RdfProperty[Text | schemaorg.DefinedTerm | URL]):
+class competencyRequired(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm | schemaorg.URL]):
     term = RdfTerm('competencyRequired', 'http://schema.org/competencyRequired', ['1.0', '1.1', '1.2-DRAFT'])
 
-class title(RdfProperty[Text]):
+class title(RdfProperty[schemaorg.Text]):
     term = RdfTerm('title', 'http://schema.org/title', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class layoutImage(RdfProperty[schemaorg.ImageObject | URL]):
+class layoutImage(RdfProperty[schemaorg.ImageObject | schemaorg.URL]):
     term = RdfTerm('layoutImage', 'http://schema.org/layoutImage', ['1.1', '1.2-DRAFT'])
 
 class proteinContent(RdfProperty[schemaorg.Mass]):
     term = RdfTerm('proteinContent', 'http://schema.org/proteinContent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class checkoutPageURLTemplate(RdfProperty[Text]):
+class checkoutPageURLTemplate(RdfProperty[schemaorg.Text]):
     term = RdfTerm('checkoutPageURLTemplate', 'http://schema.org/checkoutPageURLTemplate', ['1.2-DRAFT'])
 
 class member(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('member', 'http://schema.org/member', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class healthPlanNetworkTier(RdfProperty[Text]):
+class healthPlanNetworkTier(RdfProperty[schemaorg.Text]):
     term = RdfTerm('healthPlanNetworkTier', 'http://schema.org/healthPlanNetworkTier', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class transitTime(RdfProperty[schemaorg.ServicePeriod | schemaorg.QuantitativeValue]):
@@ -6971,7 +7007,7 @@ class transitTime(RdfProperty[schemaorg.ServicePeriod | schemaorg.QuantitativeVa
 class predecessorOf(RdfProperty[schemaorg.ProductModel]):
     term = RdfTerm('predecessorOf', 'http://schema.org/predecessorOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class legislationDateVersion(RdfProperty[Date]):
+class legislationDateVersion(RdfProperty[schemaorg.Date]):
     term = RdfTerm('legislationDateVersion', 'http://schema.org/legislationDateVersion', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class geoCovers(RdfProperty[schemaorg.Place | schemaorg.GeospatialGeometry]):
@@ -6986,37 +7022,37 @@ class albumProductionType(RdfProperty[schemaorg.MusicAlbumProductionType]):
 class inPlaylist(RdfProperty[schemaorg.MusicPlaylist]):
     term = RdfTerm('inPlaylist', 'http://schema.org/inPlaylist', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class billingStart(RdfProperty[Number]):
+class billingStart(RdfProperty[schemaorg.Number]):
     term = RdfTerm('billingStart', 'http://schema.org/billingStart', ['1.2-DRAFT'])
 
-class cvdCollectionDate(RdfProperty[DateTime | Text]):
+class cvdCollectionDate(RdfProperty[schemaorg.DateTime | schemaorg.Text]):
     term = RdfTerm('cvdCollectionDate', 'http://schema.org/cvdCollectionDate', ['1.1', '1.2-DRAFT'])
 
-class confirmationNumber(RdfProperty[Text]):
+class confirmationNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('confirmationNumber', 'http://schema.org/confirmationNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class targetDescription(RdfProperty[Text]):
+class targetDescription(RdfProperty[schemaorg.Text]):
     term = RdfTerm('targetDescription', 'http://schema.org/targetDescription', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class superEvent(RdfProperty[schemaorg.Event]):
     term = RdfTerm('superEvent', 'http://schema.org/superEvent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class transitTimeLabel(RdfProperty[Text]):
+class transitTimeLabel(RdfProperty[schemaorg.Text]):
     term = RdfTerm('transitTimeLabel', 'http://schema.org/transitTimeLabel', ['1.1', '1.2-DRAFT'])
 
 class timeRequired(RdfProperty[schemaorg.Duration]):
     term = RdfTerm('timeRequired', 'http://schema.org/timeRequired', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class dissolutionDate(RdfProperty[Date]):
+class dissolutionDate(RdfProperty[schemaorg.Date]):
     term = RdfTerm('dissolutionDate', 'http://schema.org/dissolutionDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class acceptedPaymentMethod(RdfProperty[schemaorg.PaymentMethod | Text | schemaorg.LoanOrCredit]):
+class acceptedPaymentMethod(RdfProperty[schemaorg.PaymentMethod | schemaorg.Text | schemaorg.LoanOrCredit]):
     term = RdfTerm('acceptedPaymentMethod', 'http://schema.org/acceptedPaymentMethod', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class realEstateAgent(RdfProperty[schemaorg.RealEstateAgent]):
     term = RdfTerm('realEstateAgent', 'http://schema.org/realEstateAgent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class beforeMedia(RdfProperty[schemaorg.MediaObject | URL]):
+class beforeMedia(RdfProperty[schemaorg.MediaObject | schemaorg.URL]):
     term = RdfTerm('beforeMedia', 'http://schema.org/beforeMedia', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class follows(RdfProperty[schemaorg.Person]):
@@ -7025,7 +7061,7 @@ class follows(RdfProperty[schemaorg.Person]):
 class isVariantOf(RdfProperty[schemaorg.ProductModel | schemaorg.ProductGroup]):
     term = RdfTerm('isVariantOf', 'http://schema.org/isVariantOf', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class busName(RdfProperty[Text]):
+class busName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('busName', 'http://schema.org/busName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class reservationFor(RdfProperty[schemaorg.Thing]):
@@ -7040,13 +7076,13 @@ class founder(RdfProperty[schemaorg.Person | schemaorg.Organization]):
 class providesService(RdfProperty[schemaorg.Service]):
     term = RdfTerm('providesService', 'http://schema.org/providesService', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isAccessibleForFree(RdfProperty[Boolean]):
+class isAccessibleForFree(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('isAccessibleForFree', 'http://schema.org/isAccessibleForFree', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumVent(RdfProperty[Number]):
+class cvdNumVent(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumVent', 'http://schema.org/cvdNumVent', ['1.1', '1.2-DRAFT'])
 
-class storageRequirements(RdfProperty[Text | URL]):
+class storageRequirements(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('storageRequirements', 'http://schema.org/storageRequirements', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class occupancy(RdfProperty[schemaorg.QuantitativeValue]):
@@ -7058,16 +7094,16 @@ class procedureType(RdfProperty[schemaorg.MedicalProcedureType]):
 class earlyPrepaymentPenalty(RdfProperty[schemaorg.MonetaryAmount]):
     term = RdfTerm('earlyPrepaymentPenalty', 'http://schema.org/earlyPrepaymentPenalty', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class softwareRequirements(RdfProperty[Text | URL]):
+class softwareRequirements(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('softwareRequirements', 'http://schema.org/softwareRequirements', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class photo(RdfProperty[schemaorg.ImageObject | schemaorg.Photograph]):
     term = RdfTerm('photo', 'http://schema.org/photo', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gtin8(RdfProperty[Text]):
+class gtin8(RdfProperty[schemaorg.Text]):
     term = RdfTerm('gtin8', 'http://schema.org/gtin8', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class industry(RdfProperty[Text | schemaorg.DefinedTerm]):
+class industry(RdfProperty[schemaorg.Text | schemaorg.DefinedTerm]):
     term = RdfTerm('industry', 'http://schema.org/industry', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class audio(RdfProperty[schemaorg.AudioObject | schemaorg.MusicRecording | schemaorg.Clip]):
@@ -7076,10 +7112,10 @@ class audio(RdfProperty[schemaorg.AudioObject | schemaorg.MusicRecording | schem
 class program(RdfProperty[schemaorg.MemberProgram]):
     term = RdfTerm('program', 'http://schema.org/program', [])
 
-class courseCode(RdfProperty[Text]):
+class courseCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('courseCode', 'http://schema.org/courseCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class startOffset(RdfProperty[schemaorg.HyperTocEntry | Number]):
+class startOffset(RdfProperty[schemaorg.HyperTocEntry | schemaorg.Number]):
     term = RdfTerm('startOffset', 'http://schema.org/startOffset', ['1.0', '1.1', '1.2-DRAFT'])
 
 class characterAttribute(RdfProperty[schemaorg.Thing]):
@@ -7088,13 +7124,13 @@ class characterAttribute(RdfProperty[schemaorg.Thing]):
 class availableAtOrFrom(RdfProperty[schemaorg.Place]):
     term = RdfTerm('availableAtOrFrom', 'http://schema.org/availableAtOrFrom', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class correction(RdfProperty[schemaorg.CorrectionComment | Text | URL]):
+class correction(RdfProperty[schemaorg.CorrectionComment | schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('correction', 'http://schema.org/correction', ['1.0', '1.1', '1.2-DRAFT'])
 
 class includesHealthPlanFormulary(RdfProperty[schemaorg.HealthPlanFormulary]):
     term = RdfTerm('includesHealthPlanFormulary', 'http://schema.org/includesHealthPlanFormulary', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class faxNumber(RdfProperty[Text]):
+class faxNumber(RdfProperty[schemaorg.Text]):
     term = RdfTerm('faxNumber', 'http://schema.org/faxNumber', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class foodEvent(RdfProperty[schemaorg.FoodEvent]):
@@ -7103,22 +7139,22 @@ class foodEvent(RdfProperty[schemaorg.FoodEvent]):
 class contactPoint(RdfProperty[schemaorg.ContactPoint]):
     term = RdfTerm('contactPoint', 'http://schema.org/contactPoint', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class muscleAction(RdfProperty[Text]):
+class muscleAction(RdfProperty[schemaorg.Text]):
     term = RdfTerm('muscleAction', 'http://schema.org/muscleAction', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class salaryCurrency(RdfProperty[Text]):
+class salaryCurrency(RdfProperty[schemaorg.Text]):
     term = RdfTerm('salaryCurrency', 'http://schema.org/salaryCurrency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class cvdNumC19OFMechVentPats(RdfProperty[Number]):
+class cvdNumC19OFMechVentPats(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumC19OFMechVentPats', 'http://schema.org/cvdNumC19OFMechVentPats', ['1.1', '1.2-DRAFT'])
 
-class bestRating(RdfProperty[Number | Text]):
+class bestRating(RdfProperty[schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('bestRating', 'http://schema.org/bestRating', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class broadcastFrequencyValue(RdfProperty[Number | schemaorg.QuantitativeValue]):
+class broadcastFrequencyValue(RdfProperty[schemaorg.Number | schemaorg.QuantitativeValue]):
     term = RdfTerm('broadcastFrequencyValue', 'http://schema.org/broadcastFrequencyValue', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class applicableCountry(RdfProperty[schemaorg.Country | Text]):
+class applicableCountry(RdfProperty[schemaorg.Country | schemaorg.Text]):
     term = RdfTerm('applicableCountry', 'http://schema.org/applicableCountry', ['1.2-DRAFT'])
 
 class chemicalRole(RdfProperty[schemaorg.DefinedTerm]):
@@ -7127,22 +7163,22 @@ class chemicalRole(RdfProperty[schemaorg.DefinedTerm]):
 class author(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('author', 'http://schema.org/author', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class iataCode(RdfProperty[Text]):
+class iataCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('iataCode', 'http://schema.org/iataCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class fatContent(RdfProperty[schemaorg.Mass]):
     term = RdfTerm('fatContent', 'http://schema.org/fatContent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class branchCode(RdfProperty[Text]):
+class branchCode(RdfProperty[schemaorg.Text]):
     term = RdfTerm('branchCode', 'http://schema.org/branchCode', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class clinicalPharmacology(RdfProperty[Text]):
+class clinicalPharmacology(RdfProperty[schemaorg.Text]):
     term = RdfTerm('clinicalPharmacology', 'http://schema.org/clinicalPharmacology', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class travelBans(RdfProperty[URL | schemaorg.WebContent]):
+class travelBans(RdfProperty[schemaorg.URL | schemaorg.WebContent]):
     term = RdfTerm('travelBans', 'http://schema.org/travelBans', ['1.1', '1.2-DRAFT'])
 
-class safetyConsideration(RdfProperty[Text]):
+class safetyConsideration(RdfProperty[schemaorg.Text]):
     term = RdfTerm('safetyConsideration', 'http://schema.org/safetyConsideration', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class carbohydrateContent(RdfProperty[schemaorg.Mass]):
@@ -7154,7 +7190,7 @@ class eligibleWithSupplier(RdfProperty[schemaorg.Organization]):
 class itemOffered(RdfProperty[schemaorg.Trip | schemaorg.Product | schemaorg.AggregateOffer | schemaorg.MenuItem | schemaorg.Service | schemaorg.Event | schemaorg.CreativeWork]):
     term = RdfTerm('itemOffered', 'http://schema.org/itemOffered', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class serviceType(RdfProperty[Text | schemaorg.GovernmentBenefitsType]):
+class serviceType(RdfProperty[schemaorg.Text | schemaorg.GovernmentBenefitsType]):
     term = RdfTerm('serviceType', 'http://schema.org/serviceType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class availableTest(RdfProperty[schemaorg.MedicalTest]):
@@ -7163,10 +7199,10 @@ class availableTest(RdfProperty[schemaorg.MedicalTest]):
 class pickupLocation(RdfProperty[schemaorg.Place]):
     term = RdfTerm('pickupLocation', 'http://schema.org/pickupLocation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class restockingFee(RdfProperty[schemaorg.MonetaryAmount | Number]):
+class restockingFee(RdfProperty[schemaorg.MonetaryAmount | schemaorg.Number]):
     term = RdfTerm('restockingFee', 'http://schema.org/restockingFee', ['1.2-DRAFT'])
 
-class masthead(RdfProperty[schemaorg.CreativeWork | URL]):
+class masthead(RdfProperty[schemaorg.CreativeWork | schemaorg.URL]):
     term = RdfTerm('masthead', 'http://schema.org/masthead', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class code(RdfProperty[schemaorg.MedicalCode]):
@@ -7175,49 +7211,49 @@ class code(RdfProperty[schemaorg.MedicalCode]):
 class saturatedFatContent(RdfProperty[schemaorg.Mass]):
     term = RdfTerm('saturatedFatContent', 'http://schema.org/saturatedFatContent', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class productReturnDays(RdfProperty[Integer]):
+class productReturnDays(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('productReturnDays', 'http://schema.org/productReturnDays', ['1.0', '1.1', '1.2-DRAFT'])
 
 class byArtist(RdfProperty[schemaorg.MusicGroup | schemaorg.Person]):
     term = RdfTerm('byArtist', 'http://schema.org/byArtist', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class musicCompositionForm(RdfProperty[Text]):
+class musicCompositionForm(RdfProperty[schemaorg.Text]):
     term = RdfTerm('musicCompositionForm', 'http://schema.org/musicCompositionForm', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class assembly(RdfProperty[Text]):
+class assembly(RdfProperty[schemaorg.Text]):
     term = RdfTerm('assembly', 'http://schema.org/assembly', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class isUnlabelledFallback(RdfProperty[Boolean]):
+class isUnlabelledFallback(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('isUnlabelledFallback', 'http://schema.org/isUnlabelledFallback', ['1.1', '1.2-DRAFT'])
 
-class cvdNumC19MechVentPats(RdfProperty[Number]):
+class cvdNumC19MechVentPats(RdfProperty[schemaorg.Number]):
     term = RdfTerm('cvdNumC19MechVentPats', 'http://schema.org/cvdNumC19MechVentPats', ['1.1', '1.2-DRAFT'])
 
-class significantLink(RdfProperty[URL]):
+class significantLink(RdfProperty[schemaorg.URL]):
     term = RdfTerm('significantLink', 'http://schema.org/significantLink', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class steeringPosition(RdfProperty[schemaorg.SteeringPositionValue]):
     term = RdfTerm('steeringPosition', 'http://schema.org/steeringPosition', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class observationPeriod(RdfProperty[Text]):
+class observationPeriod(RdfProperty[schemaorg.Text]):
     term = RdfTerm('observationPeriod', 'http://schema.org/observationPeriod', ['1.2-DRAFT'])
 
-class honorificSuffix(RdfProperty[Text]):
+class honorificSuffix(RdfProperty[schemaorg.Text]):
     term = RdfTerm('honorificSuffix', 'http://schema.org/honorificSuffix', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class underName(RdfProperty[schemaorg.Person | schemaorg.Organization]):
     term = RdfTerm('underName', 'http://schema.org/underName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class availabilityEnds(RdfProperty[Date | Time | DateTime]):
+class availabilityEnds(RdfProperty[schemaorg.Date | schemaorg.Time | schemaorg.DateTime]):
     term = RdfTerm('availabilityEnds', 'http://schema.org/availabilityEnds', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class paymentUrl(RdfProperty[URL]):
+class paymentUrl(RdfProperty[schemaorg.URL]):
     term = RdfTerm('paymentUrl', 'http://schema.org/paymentUrl', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class annualPercentageRate(RdfProperty[Number | schemaorg.QuantitativeValue]):
+class annualPercentageRate(RdfProperty[schemaorg.Number | schemaorg.QuantitativeValue]):
     term = RdfTerm('annualPercentageRate', 'http://schema.org/annualPercentageRate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class actionOption(RdfProperty[schemaorg.Thing | Text]):
+class actionOption(RdfProperty[schemaorg.Thing | schemaorg.Text]):
     term = RdfTerm('actionOption', 'http://schema.org/actionOption', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class subOrganization(RdfProperty[schemaorg.Organization]):
@@ -7226,10 +7262,10 @@ class subOrganization(RdfProperty[schemaorg.Organization]):
 class director(RdfProperty[schemaorg.Person]):
     term = RdfTerm('director', 'http://schema.org/director', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class currency(RdfProperty[Text]):
+class currency(RdfProperty[schemaorg.Text]):
     term = RdfTerm('currency', 'http://schema.org/currency', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class postalCodeBegin(RdfProperty[Text]):
+class postalCodeBegin(RdfProperty[schemaorg.Text]):
     term = RdfTerm('postalCodeBegin', 'http://schema.org/postalCodeBegin', ['1.1', '1.2-DRAFT'])
 
 class isAccessoryOrSparePartFor(RdfProperty[schemaorg.Product]):
@@ -7241,10 +7277,10 @@ class openingHoursSpecification(RdfProperty[schemaorg.OpeningHoursSpecification]
 class events(RdfProperty[schemaorg.Event]):
     term = RdfTerm('events', 'http://schema.org/events', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class upvoteCount(RdfProperty[Integer]):
+class upvoteCount(RdfProperty[schemaorg.Integer]):
     term = RdfTerm('upvoteCount', 'http://schema.org/upvoteCount', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class costPerUnit(RdfProperty[schemaorg.QualitativeValue | Number | Text]):
+class costPerUnit(RdfProperty[schemaorg.QualitativeValue | schemaorg.Number | schemaorg.Text]):
     term = RdfTerm('costPerUnit', 'http://schema.org/costPerUnit', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class geoEquals(RdfProperty[schemaorg.GeospatialGeometry | schemaorg.Place]):
@@ -7256,10 +7292,10 @@ class performerIn(RdfProperty[schemaorg.Event]):
 class interactingDrug(RdfProperty[schemaorg.Drug]):
     term = RdfTerm('interactingDrug', 'http://schema.org/interactingDrug', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class expertConsiderations(RdfProperty[Text]):
+class expertConsiderations(RdfProperty[schemaorg.Text]):
     term = RdfTerm('expertConsiderations', 'http://schema.org/expertConsiderations', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class renegotiableLoan(RdfProperty[Boolean]):
+class renegotiableLoan(RdfProperty[schemaorg.Boolean]):
     term = RdfTerm('renegotiableLoan', 'http://schema.org/renegotiableLoan', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class domainIncludes(RdfProperty[schemaorg.Class]):
@@ -7274,10 +7310,10 @@ class reservedTicket(RdfProperty[schemaorg.Ticket]):
 class hasShippingService(RdfProperty[schemaorg.ShippingService]):
     term = RdfTerm('hasShippingService', 'http://schema.org/hasShippingService', [])
 
-class genre(RdfProperty[Text | URL]):
+class genre(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm('genre', 'http://schema.org/genre', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class exceptDate(RdfProperty[DateTime | Date]):
+class exceptDate(RdfProperty[schemaorg.DateTime | schemaorg.Date]):
     term = RdfTerm('exceptDate', 'http://schema.org/exceptDate', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class exerciseCourse(RdfProperty[schemaorg.Place]):
@@ -7286,16 +7322,16 @@ class exerciseCourse(RdfProperty[schemaorg.Place]):
 class termDuration(RdfProperty[schemaorg.Duration]):
     term = RdfTerm('termDuration', 'http://schema.org/termDuration', ['1.1', '1.2-DRAFT'])
 
-class email(RdfProperty[Text]):
+class email(RdfProperty[schemaorg.Text]):
     term = RdfTerm('email', 'http://schema.org/email', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class workLocation(RdfProperty[schemaorg.Place | schemaorg.ContactPoint]):
     term = RdfTerm('workLocation', 'http://schema.org/workLocation', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class contentSize(RdfProperty[Text]):
+class contentSize(RdfProperty[schemaorg.Text]):
     term = RdfTerm('contentSize', 'http://schema.org/contentSize', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class videoFormat(RdfProperty[Text]):
+class videoFormat(RdfProperty[schemaorg.Text]):
     term = RdfTerm('videoFormat', 'http://schema.org/videoFormat', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
 class associatedClaimReview(RdfProperty[schemaorg.Review]):
@@ -7304,16 +7340,16 @@ class associatedClaimReview(RdfProperty[schemaorg.Review]):
 class trialDesign(RdfProperty[schemaorg.MedicalTrialDesign]):
     term = RdfTerm('trialDesign', 'http://schema.org/trialDesign', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class broadcastDisplayName(RdfProperty[Text]):
+class broadcastDisplayName(RdfProperty[schemaorg.Text]):
     term = RdfTerm('broadcastDisplayName', 'http://schema.org/broadcastDisplayName', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class gender(RdfProperty[Text | schemaorg.GenderType]):
+class gender(RdfProperty[schemaorg.Text | schemaorg.GenderType]):
     term = RdfTerm('gender', 'http://schema.org/gender', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class variableMeasured(RdfProperty[schemaorg.Property | schemaorg.StatisticalVariable | schemaorg.PropertyValue | Text]):
+class variableMeasured(RdfProperty[schemaorg.Property | schemaorg.StatisticalVariable | schemaorg.PropertyValue | schemaorg.Text]):
     term = RdfTerm('variableMeasured', 'http://schema.org/variableMeasured', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
 
-class percentile10(RdfProperty[Number]):
+class percentile10(RdfProperty[schemaorg.Number]):
     term = RdfTerm('percentile10', 'http://schema.org/percentile10', ['1.0', '1.1', '1.2-DRAFT'])
 
 class serviceOutput(RdfProperty[schemaorg.Thing]):
@@ -7327,39 +7363,3 @@ class episode(RdfProperty[schemaorg.Episode]):
 
 class insertion(RdfProperty[schemaorg.AnatomicalStructure]):
     term = RdfTerm('insertion', 'http://schema.org/insertion', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class Date(RdfDataType):
-    term = RdfTerm('Date', 'http://schema.org/Date', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class Text(RdfDataType):
-    term = RdfTerm('Text', 'http://schema.org/Text', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class URL(RdfDataType):
-    term = RdfTerm('URL', 'http://schema.org/URL', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class CssSelectorType(RdfDataType):
-    term = RdfTerm('CssSelectorType', 'http://schema.org/CssSelectorType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class PronounceableText(RdfDataType):
-    term = RdfTerm('PronounceableText', 'http://schema.org/PronounceableText', ['1.1', '1.2-DRAFT'])
-
-class XPathType(RdfDataType):
-    term = RdfTerm('XPathType', 'http://schema.org/XPathType', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class DateTime(RdfDataType):
-    term = RdfTerm('DateTime', 'http://schema.org/DateTime', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class Number(RdfDataType):
-    term = RdfTerm('Number', 'http://schema.org/Number', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class Float(RdfDataType):
-    term = RdfTerm('Float', 'http://schema.org/Float', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class Integer(RdfDataType):
-    term = RdfTerm('Integer', 'http://schema.org/Integer', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class Boolean(RdfDataType):
-    term = RdfTerm('Boolean', 'http://schema.org/Boolean', ['0.2', '1.0', '1.1', '1.2-DRAFT'])
-
-class Time(RdfDataType):
-    term = RdfTerm('Time', 'http://schema.org/Time', ['0.2', '1.0', '1.1', '1.2-DRAFT'])

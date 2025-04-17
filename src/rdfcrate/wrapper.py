@@ -66,7 +66,9 @@ class RoCrate(metaclass=ABCMeta):
                 # Skip terms that are already in the RO-Crate context
                 self.context.add_term(term.label, term.uri)
 
-    def add_entity(self, iri: str, type: type[EntityClass], *args: EntityArgs) -> EntityClass:
+    def add_entity(
+        self, iri: str, type: type[EntityClass], *args: EntityArgs
+    ) -> EntityClass:
         """
         Adds any type of entity to the crate
 

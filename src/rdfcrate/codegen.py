@@ -114,6 +114,7 @@ def find_datatypes(graph: Graph) -> Iterable[URIRef]:
         ):
             yield cls_id
 
+
 def find_properties(graph: Graph) -> Iterable[URIRef]:
     """
     Yields all properties that aren't classes
@@ -299,8 +300,9 @@ class CodegenState:
                         # Set T to the range of the property
                         ast.Subscript(
                             value=ast.Name("RdfProperty"),
-                            slice=self.property_range(prop)
-                    )],
+                            slice=self.property_range(prop),
+                        )
+                    ],
                     keywords=[],
                     body=[
                         ast.Assign(
@@ -309,7 +311,7 @@ class CodegenState:
                             type_comment=None,
                         )
                     ],
-                    decorator_list=[]
+                    decorator_list=[],
                 )
             )
 

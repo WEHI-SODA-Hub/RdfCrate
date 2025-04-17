@@ -49,6 +49,10 @@ class RoCrate(metaclass=ABCMeta):
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
     "Version of the RO-Crate specification to use"
 
+    def __post_init__(self):
+        # This is safe to do, as there are no mandated properties on the metadata descriptor
+        self.add_metadata_entity()
+
     @property
     @abstractmethod
     def root_data_entity(self) -> schemaorg.Dataset:
@@ -246,6 +250,11 @@ class RoCrate(metaclass=ABCMeta):
         """
         Compiles the RO-Crate to a JSON-LD string
         """
+        if self.root_data_entity not in self.graph.subjects():
+            raise ValueError(
+                "Root data entity not found. Did you call `add_root_entity`?"
+            )
+
         extra_context = self.context.to_dict()
         if len(extra_context) > 0:
             context = [

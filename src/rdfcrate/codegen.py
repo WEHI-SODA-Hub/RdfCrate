@@ -355,11 +355,23 @@ class CodegenState:
         """
         names: list[ast.expr] = []
         uris: list[URIRef] = []
-        for superclass_uri in self.graph.objects(
-            subject=cls_uri, predicate=RDFS.subClassOf
+        # We order superclasses with the "deepest" class first, so that Python won't complain about the MRO
+        for result in self.graph.query(
+            """
+            SELECT ?superclass (COUNT(?supersuperclass) as ?depth) 
+            WHERE {
+                ?cls rdfs:subClassOf ?superclass .
+                ?superclass rdfs:subClassOf* ?supersuperclass .
+            }
+            GROUP BY ?superclass
+            ORDER BY DESC(?depth)
+        """,
+            initBindings={"cls": cls_uri},
+            initNs={"rdfs": RDFS},
         ):
-            if not isinstance(superclass_uri, URIRef):
-                # Skip blank node superclasses
+            result = cast(ResultRow, result)
+            if not isinstance(superclass_uri := result["superclass"], URIRef):
+                # Skip None results, when there are no superclasses
                 continue
             _, _, superclass_term = self.graph.compute_qname(superclass_uri)
             superclass_name = sanitize_cls_name(superclass_term)
@@ -369,8 +381,6 @@ class CodegenState:
             elif (superclass_uri, RDF.type, RDFS.Class) in self.graph:
                 names.append(ast.Name(superclass_name))
                 uris.append(superclass_uri)
-                # Update dependencies, but only if it's in the current class
-                # class_deps[cls_uri].append(superclass_uri)
 
         if len(names) == 0:
             # If no superclasses are found, use the default

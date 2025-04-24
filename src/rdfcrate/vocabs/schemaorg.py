@@ -4,7 +4,6 @@ from rdfcrate.rdfdatatype import RdfDataType
 from rdfcrate.rdfclass import RdfClass
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
-from dataclasses import dataclass
 from rdfcrate.vocabs import rdfs
 from rdfcrate.vocabs import schemaorg
 

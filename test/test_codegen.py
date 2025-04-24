@@ -1,4 +1,4 @@
-from rdflib import RDFS, Graph, RDF, URIRef, PROV, Namespace
+from rdflib import RDFS, Graph, RDF, URIRef, PROV
 
 from rdfcrate.codegen import find_classes, find_datatypes, find_enum_values, find_properties, SDO
 

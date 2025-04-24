@@ -1,10 +1,6 @@
 from __future__ import annotations
-from rdflib.term import Identifier
-from rdfcrate.rdfdatatype import RdfDataType
-from rdfcrate.rdfclass import RdfClass
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
-from dataclasses import dataclass
 from rdfcrate.vocabs import schemaorg
 from rdfcrate.vocabs import bioschemas
 

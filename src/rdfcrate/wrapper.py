@@ -288,7 +288,9 @@ class AttachedCrate(RoCrate):
         """
         The metadata entity of the RO-Crate
         """
-        return schemaorg.CreativeWork(self._resolve_path(self._metadata_path)[1])
+        return schemaorg.CreativeWork(
+            self._resolve_path(self._metadata_path, existing=False)[1]
+        )
 
     @property
     def root_data_entity(self) -> schemaorg.Dataset:
@@ -307,9 +309,14 @@ class AttachedCrate(RoCrate):
         """
         self._metadata_path.write_text(self.compile())
 
-    def _resolve_path(self, path: Path | str) -> tuple[Path, URIRef]:
+    def _resolve_path(
+        self, path: Path | str, existing: bool = True
+    ) -> tuple[Path, URIRef]:
         """
         Converts a crate path to a platform independent path compatible with RO-Crate
+
+        Params:
+            existing: If true, the path must exist, and an exception will be raised if it does not
 
         Returns:
             A tuple of:
@@ -330,7 +337,7 @@ class AttachedCrate(RoCrate):
             # Relative paths are assumed to be relative to the crate root
             path = self.root / path
 
-        if not path.exists():
+        if existing and not path.exists():
             raise ValueError(f"Path {path} does not exist")
 
         return path.resolve(), URIRef(path.relative_to(self.root).as_posix())

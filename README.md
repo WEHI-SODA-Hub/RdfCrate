@@ -5,9 +5,6 @@
 `rdfcrate` is a Python package for working with RO-Crates which treats
 RO-Crates as RDF graphs rather than JSON objects.
 
-**[Detailed documentation available
-here](https://wehi-soda-hub.github.io/RdfCrate/)**.
-
 ## Advantages
 
 - Simple API that doesn’t require understanding JSON-LD
@@ -32,21 +29,19 @@ from rdfcrate import AttachedCrate, sdo
 from datetime import date
 
 crate = AttachedCrate("crate/")
-print(crate.root)
 crate.register_file(
-    "salvatore.jpg", 
-    sdo.name(sdo.Text("Salvatore the Seal"))
+    "monty.jpg", 
+    sdo.name(sdo.Text("Montague Street Bridge"))
 )
 crate.add_root_entity(
-    sdo.name(sdo.Text("Melbourne Photos")),
-    sdo.description(sdo.Text("Photo gallery of iconic things in Melbourne")),
+    sdo.name(sdo.Text("Melbourne Bridges")),
+    sdo.description(sdo.Text("Photo gallery of iconic bridges in Melbourne")),
     sdo.datePublished(sdo.Date(date.today())),
     sdo.license(sdo.URL("https://creativecommons.org/licenses/by/4.0/"))
 )
 print(crate.compile())
 ```
 
-    /Users/milton.m/Programming/RdfCrate/crate
     {
       "@context": "https://w3id.org/ro/crate/1.1/context",
       "@graph": [
@@ -55,20 +50,20 @@ print(crate.compile())
           "@type": "Dataset",
           "datePublished": {
             "@type": "http://www.w3.org/2001/XMLSchema#date",
-            "@value": "2025-04-17"
+            "@value": "2025-04-24"
           },
-          "description": "Photo gallery of iconic things in Melbourne",
+          "description": "Photo gallery of iconic bridges in Melbourne",
           "hasPart": {
-            "@id": "salvatore.jpg"
+            "@id": "monty.jpg"
           },
           "license": "https://creativecommons.org/licenses/by/4.0/",
-          "name": "Melbourne Photos"
+          "name": "Melbourne Bridges"
         },
         {
-          "@id": "salvatore.jpg",
+          "@id": "monty.jpg",
           "@type": "File",
           "encodingFormat": "image/jpeg",
-          "name": "Salvatore the Seal"
+          "name": "Montague Street Bridge"
         }
       ]
     }

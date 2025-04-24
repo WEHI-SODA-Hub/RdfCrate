@@ -31,12 +31,12 @@ from datetime import date
 
 crate = AttachedCrate("crate/")
 crate.register_file(
-    "salvatore.jpg", 
-    sdo.name(sdo.Text("Salvatore the Seal"))
+    "monty.jpg", 
+    sdo.name(sdo.Text("Montague Street Bridge"))
 )
 crate.add_root_entity(
-    sdo.name(sdo.Text("Melbourne Photos")),
-    sdo.description(sdo.Text("Photo gallery of iconic things in Melbourne")),
+    sdo.name(sdo.Text("Melbourne Bridges")),
+    sdo.description(sdo.Text("Photo gallery of iconic bridges in Melbourne")),
     sdo.datePublished(sdo.Date(date.today())),
     sdo.license(sdo.URL("https://creativecommons.org/licenses/by/4.0/"))
 )

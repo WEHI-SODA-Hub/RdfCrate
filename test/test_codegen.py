@@ -53,6 +53,6 @@ def test_classes_bioschemas():
     graph = Graph()
     graph.parse("https://bioschemas.org/types/bioschemas_draft_types.jsonld")
     classes = set(str(x) for x in find_classes(graph))    
-    assert URIRef("https://bioschemas.org/draft_terms/LabProtocol") in classes
+    assert "https://bioschemas.org/draft_terms/LabProtocol" in classes
     # See https://github.com/BioSchemas/specifications/issues/706
     # assert URIRef("https://bioschemas.org/draft_terms/LabProcess") in classes

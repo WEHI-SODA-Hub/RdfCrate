@@ -2,12 +2,11 @@
 
 ```bash
 quarto render README.qmd
-quarto render docs/guide.qmd
 mkdocs build
 ```
 
-## Regenerating URIs
+## Regenerating Vocabs
 
-* Comment out the contents of `__init__.py`
-* `doit`
-* Uncomment out the contents of `__init__.py`
+```bash
+uv run src/rdfcrate/codegen.py
+```

@@ -1,38 +1,63 @@
 from pathlib import Path
 
 import pytest
-from rdfcrate import uris, AttachedCrate, spec_version
-from rdflib import RDF, Literal, URIRef, Graph
+from rdfcrate import AttachedCrate
+from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts
+from rdflib import Literal, Graph
 import json
 from datetime import datetime
-from itertools import chain
 from rocrate_validator import services, models
+from rocrate_validator.utils import URI
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
-def test_crate(recursive: bool = False):
-    return AttachedCrate(
-        name="Test Crate",
-        description="Crate for validating RdfCrate",
-        license="MIT",
-        path=TEST_CRATE,
-        recursive_init=recursive,
-        version=spec_version.ROCrate1_1
+MIT = sdo.CreativeWork("https://opensource.org/license/mit")
+ME = sdo.Person("https://orcid.org/0000-0002-8965-2595")
+WEHI_RCP = sdo.Organization("https://github.com/WEHI-ResearchComputing")
+
+BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
+
+def make_test_crate(recursive: bool = False):
+    crate = AttachedCrate(
+        TEST_CRATE
     )
+
+    crate.add_root_entity(
+        sdo.name(sdo.Text("Test Crate")),
+        sdo.description(sdo.Text("Crate for validating RdfCrate")),
+        sdo.datePublished(sdo.DateTime(datetime.now().isoformat())),
+        sdo.license(crate.add_entity(MIT, sdo.CreativeWork, sdo.name(sdo.Text("MIT License")))),
+        sdo.version(sdo.Text("1.0")),
+        sdo.publisher(wehi:=crate.add_entity(
+            WEHI_RCP,
+            sdo.Organization,
+            sdo.name(sdo.Text("WEHI Research Computing Platform")),
+            sdo.url(sdo.URL(WEHI_RCP))
+        )),
+        sdo.author(crate.add_entity(
+            ME,
+            sdo.Person,
+            sdo.name(sdo.Text("Michael")),
+            sdo.affiliation(wehi)
+        )),
+        recursive=recursive
+    )
+    crate.add_metadata_entity()
+    return crate
 
 def validate(crate: AttachedCrate):
     crate.write()
     result = services.validate(services.ValidationSettings(
-        rocrate_uri=str(crate.root),
+        rocrate_uri=URI(crate.root),
         profile_identifier="ro-crate-1.1",
-        requirement_severity=models.Severity.REQUIRED
+        requirement_severity=models.Severity.RECOMMENDED
     ))
     for issue in result.get_issues():
         pytest.fail(f"Detected issue of severity {issue.severity.name} with check \"{issue.check.identifier}\": {issue.message}")
 
 
 def test_spec_conformant():
-    crate = test_crate(recursive=True)
+    crate = make_test_crate(recursive=True)
     
     # Normally checking JSON-LD using JSON is a bad idea, but RO-Crate mandates a specific structure that
     # goes beyond standard JSON-LD
@@ -61,17 +86,18 @@ def test_spec_conformant():
     assert found_root
 
 def test_single_file():
-    crate = test_crate(recursive=False)
+    crate = make_test_crate(recursive=False)
     crate.register_file("text.txt")
 
     # Check that the graph has the expected structure
     assert set(crate.graph.subjects()) == {
-        URIRef("./"),
-        URIRef("ro-crate-metadata.json"),
-        URIRef("text.txt"),
+        sdo.Dataset("./"),
+        sdo.CreativeWork("ro-crate-metadata.json"),
+        roc.File("text.txt"),
+        *BASE_SUBJECTS
     }
-    assert set(crate.graph.predicates()) >= {RDF.type, uris.about, uris.conformsTo}
-    assert set(crate.graph.objects()) >= {uris.File, uris.Dataset}
+    assert set(crate.graph.predicates()) >= {rdf.type.term.uri, sdo.about.term.uri, dc.conformsTo.term.uri}
+    assert set(crate.graph.objects()) >= {roc.File.term.uri, sdo.Dataset.term.uri}
 
     validate(crate)
 
@@ -80,22 +106,38 @@ def test_single_file():
 
 
 def test_recursive_add():
-    crate = test_crate(recursive=True)
+    crate = make_test_crate(recursive=True)
     assert set(crate.graph.subjects()) == {
-        URIRef("./"),
-        URIRef("ro-crate-metadata.json"),
-        URIRef("text.txt"),
-        URIRef("binary.bin"),
-        URIRef("subdir/"),
-        URIRef("subdir/more_text.txt"),
+        sdo.Dataset("./"),
+        sdo.CreativeWork("ro-crate-metadata.json"),
+        roc.File("text.txt"),
+        roc.File("binary.bin"),
+        sdo.Dataset("subdir/"),
+        roc.File("subdir/more_text.txt"),
+        *BASE_SUBJECTS
     }, "All files and directories should be in the crate"
-    assert crate.graph.value(predicate=uris.hasPart, object=URIRef("subdir/more_text.txt")) == URIRef("subdir/"), "Recursive add should link the immediate child and parent via hasPart"
+    assert crate.graph.value(predicate=sdo.hasPart.term.uri, object=roc.File("subdir/more_text.txt")) == sdo.Dataset("subdir/"), "Recursive add should link the immediate child and parent via hasPart"
     validate(crate)
 
 
 def test_mime_type():
-    crate = test_crate(recursive=True)
+    crate = make_test_crate(recursive=True)
 
-    assert crate.graph.value(URIRef("text.txt"), uris.encodingFormat) == Literal(
+    assert crate.graph.value(roc.File("text.txt"), sdo.encodingFormat.term.uri) == Literal(
         "text/plain"
     )
+
+def test_bioschemas():
+    crate = make_test_crate(recursive=False)
+    crate.add_entity(
+        "#some_protocol",
+        bioschemas_drafts.LabProtocol,
+        sdo.name(sdo.Text("Some Protocol")),
+    )
+    crate_json = json.loads(crate.compile())
+    assert crate_json["@context"] == [
+        "https://w3id.org/ro/crate/1.1/context",
+        {
+            "LabProtocol": str(bioschemas_drafts.LabProtocol.term.uri)
+        }
+    ], "Only the terms that are used in the crate should be in the context"

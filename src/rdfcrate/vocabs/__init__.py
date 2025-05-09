@@ -1,7 +1,7 @@
-from rdfcrate.wrapper import AttachedCrate, DetatchedCrate
 from rdfcrate.vocabs import (
     bioschemas,
     bioschemas_drafts,
+    rocrate,
     dc,
     geo,
     owl,
@@ -11,17 +11,16 @@ from rdfcrate.vocabs import (
     prov,
     rdf,
     rdfs,
-    roc,
-    rocrate,
     schemaorg,
-    sdo,
 )
 
+sdo = schemaorg
+roc = rocrate
+
 __all__ = [
-    "DetatchedCrate",
-    "AttachedCrate",
     "bioschemas",
     "bioschemas_drafts",
+    "rocrate",
     "dc",
     "geo",
     "owl",
@@ -31,8 +30,7 @@ __all__ = [
     "prov",
     "rdf",
     "rdfs",
-    "roc",
-    "rocrate",
     "schemaorg",
     "sdo",
+    "roc",
 ]

@@ -430,7 +430,7 @@ class AttachedCrate(RoCrate):
         """
         Raises an exception if the RO-Crate is not valid.
         """
-        for issue in self.validate():
+        for issue in self.get_issues():
             raise Exception(f"Detected issue of severity {issue.severity.name} with check \"{issue.check.identifier}\": {issue.message}")
 
 

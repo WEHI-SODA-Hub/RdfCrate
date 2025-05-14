@@ -1,13 +1,10 @@
 from pathlib import Path
 
-import pytest
 from rdfcrate import AttachedCrate
 from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts
 from rdflib import Literal, Graph
 import json
 from datetime import datetime
-from rocrate_validator import services, models
-from rocrate_validator.utils import URI
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
@@ -44,17 +41,6 @@ def make_test_crate(recursive: bool = False):
     )
     crate.add_metadata_entity()
     return crate
-
-def validate(crate: AttachedCrate):
-    crate.write()
-    result = services.validate(services.ValidationSettings(
-        rocrate_uri=URI(crate.root),
-        profile_identifier="ro-crate-1.1",
-        requirement_severity=models.Severity.RECOMMENDED
-    ))
-    for issue in result.get_issues():
-        pytest.fail(f"Detected issue of severity {issue.severity.name} with check \"{issue.check.identifier}\": {issue.message}")
-
 
 def test_spec_conformant():
     crate = make_test_crate(recursive=True)
@@ -99,7 +85,7 @@ def test_single_file():
     assert set(crate.graph.predicates()) >= {rdf.type.term.uri, sdo.about.term.uri, dc.conformsTo.term.uri}
     assert set(crate.graph.objects()) >= {roc.File.term.uri, sdo.Dataset.term.uri}
 
-    validate(crate)
+    crate.validate()
 
     # Check that we can round-trip the graph
     Graph().parse(data=crate.compile(), format="json-ld")
@@ -117,7 +103,7 @@ def test_recursive_add():
         *BASE_SUBJECTS
     }, "All files and directories should be in the crate"
     assert crate.graph.value(predicate=sdo.hasPart.term.uri, object=roc.File("subdir/more_text.txt")) == sdo.Dataset("subdir/"), "Recursive add should link the immediate child and parent via hasPart"
-    validate(crate)
+    crate.validate()
 
 
 def test_mime_type():

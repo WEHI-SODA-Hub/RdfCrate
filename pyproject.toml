@@ -11,6 +11,11 @@ dependencies = [
     "rdflib>=7.1.2"
 ]
 
+[project.optional-dependencies]
+validation = [
+    "roc-validator>=0.5.0",
+]
+
 [project.scripts]
 rdfcrate-codegen = "rdfcrate.codegen:main"
 
@@ -30,7 +35,6 @@ dev-dependencies = [
     "pandas>=2.2.3",
     "tabulate>=0.9.0",
     "requests>=2.32.3",
-    "roc-validator>=0.6.3",
     "roc-validator>=0.5.0",
     "ruff>=0.11.5",
 ]

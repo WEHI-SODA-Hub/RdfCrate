@@ -1,6 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
 from typing import Annotated, Any, Iterable, TypeVar
+from rocrate_validator.models import CheckIssue
 from typing_extensions import Doc
 from rdflib import Graph, URIRef, IdentifiedNode
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
@@ -403,6 +404,34 @@ class AttachedCrate(RoCrate):
                 else:
                     self.register_file(child, dataset=id)
         return id
+
+    def get_issues(self) -> list[CheckIssue]:
+        """
+        Returns a list of issues found in the RO-Crate using the `rocrate-validator` package.
+        """
+        try:
+            from rocrate_validator import services, models
+            from rocrate_validator.utils import URI
+        except ImportError:
+            raise ImportError(
+                "rocrate-validator is not installed. Please use the `validation` extra, e.g. `pip install rdfcrate[validation]`."
+            )
+
+        self.write()
+        result = services.validate(services.ValidationSettings(
+            rocrate_uri=URI(self.root),
+            # TODO: Support other profiles
+            profile_identifier="ro-crate-1.1",
+            requirement_severity=models.Severity.RECOMMENDED
+        ))
+        return result.get_issues()
+
+    def validate(self) -> None:
+        """
+        Raises an exception if the RO-Crate is not valid.
+        """
+        for issue in self.validate():
+            raise Exception(f"Detected issue of severity {issue.severity.name} with check \"{issue.check.identifier}\": {issue.message}")
 
 
 @dataclass

@@ -120,7 +120,11 @@ def test_bioschemas():
         bioschemas_drafts.LabProtocol,
         sdo.name(sdo.Text("Some Protocol")),
     )
+    crate.validate()
     crate_json = json.loads(crate.compile())
+    for entity in crate_json["@graph"]:
+        assert "http" not in entity["@type"], "All terms should be shortened"
+
     assert crate_json["@context"] == [
         "https://w3id.org/ro/crate/1.1/context",
         {

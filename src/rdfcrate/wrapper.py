@@ -69,7 +69,7 @@ class RoCrate(metaclass=ABCMeta):
         for term in terms:
             if self.version.version not in term.specs:
                 # Skip terms that are already in the RO-Crate context
-                self.context.add_term(term.label, term.uri)
+                self.context.add_term(term.label, str(term.uri))
 
     def add_entity(
         self, iri: str, type: type[EntityClass], *args: EntityArgs

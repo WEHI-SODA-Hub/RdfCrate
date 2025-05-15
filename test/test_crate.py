@@ -5,7 +5,6 @@ from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts
 from rdflib import Literal, Graph
 import json
 from datetime import datetime
-from rocrate_validator.models import Severity
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 

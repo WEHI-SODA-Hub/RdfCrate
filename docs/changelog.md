@@ -18,6 +18,7 @@
 - All IRIs now have an associated label, which is better compatible with RO-Crate's requirement to not use raw IRIs
 - Relaxed the requirement for IRIs to be provided as `URIRef()` when creating entities
 - Added `ruff` linter
+- Added `.validate()` and `.get_issues()` methods for easy validation of the crate [[#22](https://github.com/WEHI-SODA-Hub/RdfCrate/pull/22)]
 
 ## 0.3.0
 

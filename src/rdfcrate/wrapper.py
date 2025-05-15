@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from typing import Annotated, Any, Iterable, TypeVar
+from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
 from rocrate_validator.models import CheckIssue
 from typing_extensions import Doc
 from rdflib import Graph, URIRef, IdentifiedNode
@@ -14,6 +14,10 @@ from os import stat
 from abc import ABCMeta, abstractmethod
 from rdflib.plugins.shared.jsonld.context import Context
 from rdfcrate.vocabs import dc, schemaorg, rocrate
+import warnings
+
+if TYPE_CHECKING:
+    from rocrate_validator.models import Severity
 
 EntityType = Annotated[
     type[RdfClass],
@@ -426,13 +430,19 @@ class AttachedCrate(RoCrate):
         ))
         return result.get_issues()
 
-    def validate(self) -> None:
+    def validate(self, threshold: Severity | None = None) -> None:
         """
         Raises an exception if the RO-Crate is not valid.
         """
+        if threshold is None:
+            from rocrate_validator.models import Severity
+            threshold = Severity.RECOMMENDED
         for issue in self.get_issues():
-            raise Exception(f"Detected issue of severity {issue.severity.name} with check \"{issue.check.identifier}\": {issue.message}")
-
+            msg = f"Detected issue of severity {issue.severity.name} with check \"{issue.check.identifier}\": {issue.message}"
+            if issue.severity >= threshold:
+                raise Exception(msg)
+            else:
+                warnings.warn(msg)
 
 @dataclass
 class DetatchedCrate(RoCrate):

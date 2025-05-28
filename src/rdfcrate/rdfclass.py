@@ -3,7 +3,7 @@ from abc import ABCMeta
 from typing import Annotated, Any, ClassVar, cast
 from typing_extensions import Doc, Self
 
-from rdflib import Graph, URIRef, RDF
+from rdflib import Graph, URIRef, RDF, IdentifiedNode
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 
 from rdfcrate.rdfterm import RdfTerm
@@ -60,7 +60,10 @@ class RdfClass(URIRef, metaclass=RdfClassMeta):
         Returns:
             A URIRef subclass for this RDF type
         """
-        uri = cls(uri)
+        if not isinstance(uri, IdentifiedNode):
+            # If the ID is not specifically a URI, BNode etc, we assume it's a string URI
+            uri = URIRef(uri)
+
         if not isinstance(cls.term, RdfTerm):
             raise ValueError(
                 "The `term` class variable must be an instance of `RdfTerm`."

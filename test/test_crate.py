@@ -2,7 +2,7 @@ from pathlib import Path
 
 from rdfcrate import AttachedCrate
 from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts
-from rdflib import Literal, Graph
+from rdflib import Literal, Graph, BNode
 import json
 from datetime import datetime
 
@@ -131,3 +131,11 @@ def test_bioschemas():
             "LabProtocol": str(bioschemas_drafts.LabProtocol.term.uri)
         }
     ], "Only the terms that are used in the crate should be in the context"
+
+def test_bnode():
+    crate = make_test_crate(recursive=False)
+    crate.add_entity(
+        BNode(),
+        bioschemas_drafts.LabProtocol
+    )
+    assert any(isinstance(id, BNode) for id in crate.graph.subjects())

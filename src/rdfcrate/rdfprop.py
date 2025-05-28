@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from typing import ClassVar, Generic, TypeVar
-from rdflib import URIRef
-from rdflib.term import Identifier
+from rdflib import Graph, URIRef, IdentifiedNode, Literal
 
 from rdfcrate.rdfterm import RdfTerm
 
+GraphId = IdentifiedNode | Literal
 
 @dataclass
 class ReverseProperty:
@@ -13,13 +13,13 @@ class ReverseProperty:
     """
 
     term: RdfTerm
-    subject: URIRef
+    subject: GraphId
 
-    def add_to_graph(self, graph, object: URIRef):
+    def add_to_graph(self, graph, object: GraphId):
         graph.add((self.subject, self.term.uri, object))
 
 
-T = TypeVar("T", bound=Identifier)
+T = TypeVar("T", bound=GraphId)
 
 
 @dataclass(frozen=True)
@@ -33,8 +33,8 @@ class RdfProperty(Generic[T]):
     object: T
 
     @classmethod
-    def reverse(cls, subject: URIRef):
+    def reverse(cls, subject: GraphId):
         return ReverseProperty(cls.term, subject)
 
-    def add_to_graph(self, graph, subject: URIRef):
+    def add_to_graph(self, graph: Graph, subject: GraphId):
         graph.add((subject, self.term.uri, self.object))

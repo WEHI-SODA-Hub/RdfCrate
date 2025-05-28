@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
 from rocrate_validator.models import CheckIssue
 from typing_extensions import Doc
-from rdflib import Graph, URIRef, IdentifiedNode
+from rdflib import Graph, URIRef, IdentifiedNode, RDF
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdfclass import RdfClass, EntityArgs
@@ -71,8 +71,9 @@ class RoCrate(metaclass=ABCMeta):
         Adds custom terms to the crate context
         """
         for term in terms:
-            if self.version.version not in term.specs:
-                # Skip terms that are already in the RO-Crate context
+            # Skip terms that are already in the RO-Crate context
+            # Also skip RDF.type, as this should never be re-defined
+            if self.version.version not in term.specs and term.uri != RDF.type:
                 self.context.add_term(term.label, str(term.uri))
 
     def add_entity(

@@ -21,17 +21,6 @@ from graphlib import TopologicalSorter
 SDO = Namespace("http://schema.org/")
 
 
-def frozen_dataclass_decorator() -> ast.expr:
-    """
-    Returns the frozen dataclass decorator
-    """
-    return ast.Call(
-        func=ast.Name("dataclass"),
-        args=[],
-        keywords=[ast.keyword(arg="frozen", value=ast.Constant(value=True))],
-    )
-
-
 def find_classes(graph: Graph) -> Iterable[URIRef]:
     """
     Yields all classes that aren't Literals
@@ -173,7 +162,6 @@ class CodegenState:
         self.imports = [
             "__future__.annotations",
             "rdflib.term.Identifier",
-            "rdfcrate.rdfdatatype.RdfDataType",
             "rdfcrate.rdfclass.RdfClass",
             "rdfcrate.rdfprop.RdfProperty",
             "rdfcrate.rdfterm.RdfTerm",
@@ -629,7 +617,3 @@ def core_vocab():
         "rdfcrate.vocabs",
         Path("src/rdfcrate/vocabs"),
     )
-
-
-if __name__ == "__main__":
-    core_vocab()

@@ -1,9 +1,11 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar, Generic, TypeVar
-from rdflib import Graph, URIRef, IdentifiedNode, Literal
+from rdflib import Graph
 
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.types import GraphId
+from rdfcrate.rdfclass import RdfClass
 
 @dataclass
 class ReverseProperty:
@@ -18,7 +20,7 @@ class ReverseProperty:
         graph.add((self.subject, self.term.uri, object))
 
 
-T = TypeVar("T", bound=GraphId)
+T = TypeVar("T", bound=RdfClass)
 
 
 @dataclass(frozen=True)

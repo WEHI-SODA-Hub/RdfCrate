@@ -2,15 +2,15 @@ from pathlib import Path
 
 from rdfcrate import AttachedCrate
 from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts
-from rdflib import Literal, Graph, BNode
+from rdflib import Literal, Graph, BNode, URIRef
 import json
 from datetime import datetime
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
-MIT = sdo.CreativeWork("https://opensource.org/license/mit")
-ME = sdo.Person("https://orcid.org/0000-0002-8965-2595")
-WEHI_RCP = sdo.Organization("https://github.com/WEHI-ResearchComputing")
+MIT = URIRef("https://opensource.org/license/mit")
+ME = URIRef("https://orcid.org/0000-0002-8965-2595")
+WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
 
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
 
@@ -23,17 +23,15 @@ def make_test_crate(recursive: bool = False):
         sdo.name(sdo.Text("Test Crate")),
         sdo.description(sdo.Text("Crate for validating RdfCrate")),
         sdo.datePublished(sdo.DateTime(datetime.now().isoformat())),
-        sdo.license(crate.add_entity(MIT, sdo.CreativeWork, sdo.name(sdo.Text("MIT License")))),
+        sdo.license(crate.add_entity(sdo.CreativeWork(MIT), sdo.name(sdo.Text("MIT License")))),
         sdo.version(sdo.Text("1.0")),
         sdo.publisher(wehi:=crate.add_entity(
-            WEHI_RCP,
-            sdo.Organization,
+            sdo.Organization(WEHI_RCP),
             sdo.name(sdo.Text("WEHI Research Computing Platform")),
             sdo.url(sdo.URL(WEHI_RCP))
         )),
         sdo.author(crate.add_entity(
-            ME,
-            sdo.Person,
+            sdo.Person(ME),
             sdo.name(sdo.Text("Michael")),
             sdo.affiliation(wehi)
         )),
@@ -77,9 +75,9 @@ def test_single_file():
 
     # Check that the graph has the expected structure
     assert set(crate.graph.subjects()) == {
-        sdo.Dataset("./"),
-        sdo.CreativeWork("ro-crate-metadata.json"),
-        roc.File("text.txt"),
+        URIRef("./"),
+        URIRef("ro-crate-metadata.json"),
+        URIRef("text.txt"),
         *BASE_SUBJECTS
     }
     assert set(crate.graph.predicates()) >= {rdf.type.term.uri, sdo.about.term.uri, dc.conformsTo.term.uri}
@@ -94,30 +92,29 @@ def test_single_file():
 def test_recursive_add():
     crate = make_test_crate(recursive=True)
     assert set(crate.graph.subjects()) == {
-        sdo.Dataset("./"),
-        sdo.CreativeWork("ro-crate-metadata.json"),
-        roc.File("text.txt"),
-        roc.File("binary.bin"),
-        sdo.Dataset("subdir/"),
-        roc.File("subdir/more_text.txt"),
+        URIRef("./"),
+        URIRef("ro-crate-metadata.json"),
+        URIRef("text.txt"),
+        URIRef("binary.bin"),
+        URIRef("subdir/"),
+        URIRef("subdir/more_text.txt"),
         *BASE_SUBJECTS
     }, "All files and directories should be in the crate"
-    assert crate.graph.value(predicate=sdo.hasPart.term.uri, object=roc.File("subdir/more_text.txt")) == sdo.Dataset("subdir/"), "Recursive add should link the immediate child and parent via hasPart"
+    assert crate.graph.value(predicate=sdo.hasPart.term.uri, object=URIRef("subdir/more_text.txt")) == URIRef("subdir/"), "Recursive add should link the immediate child and parent via hasPart"
     crate.validate()
 
 
 def test_mime_type():
     crate = make_test_crate(recursive=True)
 
-    assert crate.graph.value(roc.File("text.txt"), sdo.encodingFormat.term.uri) == Literal(
+    assert crate.graph.value(URIRef("text.txt"), sdo.encodingFormat.term.uri) == Literal(
         "text/plain"
     )
 
 def test_bioschemas():
     crate = make_test_crate(recursive=False)
     crate.add_entity(
-        "#some_protocol",
-        bioschemas_drafts.LabProtocol,
+        bioschemas_drafts.LabProtocol("#some_protocol"),
         sdo.name(sdo.Text("Some Protocol")),
     )
     crate.validate()
@@ -135,7 +132,6 @@ def test_bioschemas():
 def test_bnode():
     crate = make_test_crate(recursive=False)
     crate.add_entity(
-        BNode(),
-        bioschemas_drafts.LabProtocol
+        bioschemas_drafts.LabProtocol(BNode())
     )
     assert any(isinstance(id, BNode) for id in crate.graph.subjects())

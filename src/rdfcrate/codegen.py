@@ -330,7 +330,7 @@ class CodegenState:
                 ast.ClassDef(
                     name=sanitize_cls_name(name),
                     type_params=[],
-                    bases=[ast.Name("RdfDataType")],
+                    bases=[ast.Name("RdfClass")],
                     keywords=[],
                     body=[
                         ast.Assign(
@@ -502,7 +502,7 @@ class CodegenState:
                                 simple=1,
                             ),
                         ],
-                        decorator_list=[frozen_dataclass_decorator()],
+                        decorator_list=[],
                     )
                 )
 

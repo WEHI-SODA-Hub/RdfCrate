@@ -1,32 +1,12 @@
 from __future__ import annotations
-from abc import ABCMeta
-from typing import Annotated, Any, ClassVar, cast
-from typing_extensions import Doc, Self
+from typing import Annotated, ClassVar
+from typing_extensions import Doc
 
 from rdflib import Graph, URIRef, RDF, IdentifiedNode
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 
 from rdfcrate.rdfterm import RdfTerm
-
-
-class RdfClassMeta(ABCMeta):
-    """
-    Metaclass which picks the first base class of the class being created.
-    This is needed to avoid the MRO issues with multiple inheritance, which we aren't actually using for method resolution.
-    Its only purpose is static type checking
-    """
-
-    def __new__(
-        mcls,
-        name: str,
-        bases: tuple[type, ...],
-        namespace: dict[str, Any],
-        /,
-        **kwargs: Any,
-    ):
-        if len(bases) > 1:
-            bases = (bases[0],)
-        return super().__new__(mcls, name, bases, namespace, **kwargs)
+from rdfcrate.types import GraphId
 
 
 EntityUri = Annotated[
@@ -42,41 +22,36 @@ EntityArgs = Annotated[
     ),
 ]
 
-
-class RdfClass(URIRef, metaclass=RdfClassMeta):
+class RdfClass:
     """
-    A class that represents an RDF type.
-    """
+    An entity within the RDF graph.
 
+    This is a thin wrapper around an `rdflib.IdentifiedNode` such as a `URIRef` or `BNode`, but which allows for static type checking.
+    This is not a subclass of `URIRef` so that the ID can be either a URI or blank node.
+    """
+    id: GraphId
     term: ClassVar[RdfTerm]
 
-    @classmethod
-    def add(cls, graph: Graph, uri: EntityUri, *args: EntityArgs) -> Self:
+    def __init__(self, id: GraphId | str):
+        if not isinstance(id, IdentifiedNode):
+            # Assume an untagged string is an IRI
+            self.id = URIRef(id)
+        else:
+            self.id = id
+
+    def add(self, graph: Graph, *args: EntityArgs) -> None:
         """
-        Creates a new entity in the graph with the given URI and adds triples to it.
+        Adds triples to the graph with this entity as the subject.
 
         Params:
             graph: The graph to which the triples will be added
         Returns:
             A URIRef subclass for this RDF type
         """
-        if not isinstance(uri, IdentifiedNode):
-            # If the ID is not specifically a URI, BNode etc, we assume it's a string URI
-            uri = URIRef(uri)
-
-        if not isinstance(cls.term, RdfTerm):
+        if not isinstance(self.term, RdfTerm):
             raise ValueError(
                 "The `term` class variable must be an instance of `RdfTerm`."
             )
-        graph.add((uri, RDF.type, cls.term.uri))
+        graph.add((self.id, RDF.type, self.term.uri))
         for arg in args:
-            arg.add_to_graph(graph, uri)
-
-        # See https://github.com/RDFLib/rdflib/issues/3107
-        return super().__new__(cls, uri)  # type: ignore
-
-    def __new__(cls, uri: str) -> Self:
-        """
-        Casts the given URI to the class type.
-        """
-        return cast(Self, super().__new__(cls, uri))
+            arg.add_to_graph(graph, self.id)

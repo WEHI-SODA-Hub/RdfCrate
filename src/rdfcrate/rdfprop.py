@@ -3,8 +3,7 @@ from typing import ClassVar, Generic, TypeVar
 from rdflib import Graph, URIRef, IdentifiedNode, Literal
 
 from rdfcrate.rdfterm import RdfTerm
-
-GraphId = IdentifiedNode | Literal
+from rdfcrate.types import GraphId
 
 @dataclass
 class ReverseProperty:

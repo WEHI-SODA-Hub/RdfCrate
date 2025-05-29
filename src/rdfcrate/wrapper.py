@@ -64,9 +64,8 @@ class RoCrate(metaclass=ABCMeta):
         """
         The root entity of the RO-Crate
         """
-        pass
 
-    def _register_terms(self, terms: Iterable[RdfTerm]) -> None:
+    def register_terms(self, terms: Iterable[RdfTerm]) -> None:
         """
         Adds custom terms to the crate context
         """
@@ -76,7 +75,7 @@ class RoCrate(metaclass=ABCMeta):
                 self.context.add_term(term.label, str(term.uri))
 
     def add_entity(
-        self, iri: str, type: type[EntityClass], *args: EntityArgs
+        self, entity: EntityClass, *args: EntityArgs
     ) -> EntityClass:
         """
         Adds any type of entity to the crate
@@ -96,8 +95,9 @@ class RoCrate(metaclass=ABCMeta):
             )
             ```
         """
-        self._register_terms([arg.term for arg in args] + [type.term])
-        return type.add(self.graph, iri, *args)
+        self.register_terms([arg.term for arg in args] + [entity.term])
+        entity.add(self.graph, *args)
+        return entity
 
     def add_root_entity(
         self,
@@ -112,7 +112,6 @@ class RoCrate(metaclass=ABCMeta):
         """
         return self.add_entity(
             self.root_data_entity,
-            schemaorg.Dataset,
             name,
             description,
             date_published,
@@ -127,13 +126,12 @@ class RoCrate(metaclass=ABCMeta):
         The metadata entity of the RO-Crate
         """
 
-    def add_metadata_entity(self, *props: EntityArgs) -> schemaorg.CreativeWork:
+    def add_metadata_entity(self, *props: EntityArgs) -> None:
         """
         Creates the `ro-crate-metadata.json` record.
         """
-        return self.add_entity(
+        self.add_entity(
             self.metadata_entity,
-            schemaorg.CreativeWork,
             schemaorg.about(self.root_data_entity),
             dc.conformsTo(self.version.conforms_to_url),
             *props,
@@ -183,7 +181,8 @@ class RoCrate(metaclass=ABCMeta):
             AttachedCrate(".").register_file("./some/data.txt", sdo.description(sdo.Text("This is a file with some data")))
             ```
         """
-        file_id = self.add_entity(path, rocrate.File, *args)
+        file_id = rocrate.File(path)
+        self.add_entity(file_id, *args)
 
         if guess_mime:
             if any(isinstance(arg, schemaorg.encodingFormat) for arg in args):
@@ -231,13 +230,14 @@ class RoCrate(metaclass=ABCMeta):
         if not path.endswith("/"):
             # Directories must end with a slash in RO-Crate
             path += "/"
-        dir_id = self.add_entity(path, schemaorg.Dataset, *props)
+        dir_id = schemaorg.Dataset(path)
+        self.add_entity(dir_id, *props)
         if self.root_data_entity != dir_id:
             # The root dataset is not linked to itself
             self.link_to_dataset(dir_id, dataset)
         return dir_id
 
-    def add_metadata(self, uri: URIRef, *args: EntityArgs) -> IdentifiedNode:
+    def add_metadata(self, entity: RdfClass, *args: EntityArgs) -> None:
         """
         Add metadata for an existing entity.
 
@@ -248,14 +248,13 @@ class RoCrate(metaclass=ABCMeta):
             uri: ID of the entity being described
         """
         for arg in args:
-            arg.add_to_graph(self.graph, uri)
-        return uri
+            arg.add_to_graph(self.graph, entity.id)
 
     def compile(self) -> str:
         """
         Compiles the RO-Crate to a JSON-LD string
         """
-        if self.root_data_entity not in self.graph.subjects():
+        if self.root_data_entity.id not in self.graph.subjects():
             raise ValueError(
                 "Root data entity not found. Did you call `add_root_entity`?"
             )
@@ -380,8 +379,8 @@ class AttachedCrate(RoCrate):
         license: schemaorg.license,
         *props: RdfProperty | ReverseProperty,
         recursive: Recursive = False,
-    ) -> schemaorg.Dataset:
-        return self.register_dir(
+    ) -> None:
+        self.register_dir(
             ".", name, description, date_published, license, *props, recursive=recursive
         )
 

@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
 from rocrate_validator.models import CheckIssue
 from typing_extensions import Doc
-from rdflib import Graph, URIRef, IdentifiedNode
+from rdflib import Graph, URIRef, IdentifiedNode, RDF
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfClass, EntityArgs

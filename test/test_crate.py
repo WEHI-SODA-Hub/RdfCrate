@@ -1,10 +1,11 @@
 from pathlib import Path
 
 from rdfcrate import AttachedCrate
-from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts
 from rdflib import Literal, Graph, BNode, URIRef
+from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts, rdfs
 import json
 from datetime import datetime
+import tempfile
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
@@ -129,9 +130,23 @@ def test_bioschemas():
         }
     ], "Only the terms that are used in the crate should be in the context"
 
+<<<<<<< HEAD
 def test_bnode():
     crate = make_test_crate(recursive=False)
     crate.add_entity(
         bioschemas_drafts.LabProtocol(BNode())
     )
     assert any(isinstance(id, BNode) for id in crate.graph.subjects())
+=======
+def test_multi_type():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        crate = AttachedCrate(tmpdir)
+        crate.add_entity(
+            "#multi_type_entity",
+            bioschemas_drafts.LabProtocol,
+            rdf.type(rdfs.Class("https://example.org/SomeOtherType")),
+        )
+
+        # We never want to redefine rdf:type
+        assert str(rdf.type.term.uri) not in crate.context.to_dict().values()
+>>>>>>> c1009bccb991d23615be419b1beb39707101bc4d

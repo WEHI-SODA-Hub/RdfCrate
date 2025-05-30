@@ -16,7 +16,7 @@ from rdfcrate.vocabs import (
     schemaorg,
     sdo,
 )
-from rdfcrate.rdfclass import RdfClass
+from rdfcrate.rdftype import RdfClass
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 

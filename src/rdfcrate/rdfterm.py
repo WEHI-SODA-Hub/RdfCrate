@@ -1,5 +1,5 @@
 from rdflib import URIRef
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qsl
 
 def guess_term_from_uri(uri: str) -> str:
     """
@@ -9,9 +9,9 @@ def guess_term_from_uri(uri: str) -> str:
     if parsed.fragment:
         return parsed.fragment
     elif parsed.query:
-        return parsed.query
-    elif parsed.path:
-        return parsed.path.split("/")[-1]
+        return parse_qsl(parsed.query)[-1][-1]
+    elif split := parsed.path.split("/")[-1]:
+        return split
     raise ValueError(f"Cannot guess term from URI: {uri}")
 
 

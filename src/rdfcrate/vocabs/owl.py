@@ -1,398 +1,234 @@
 from __future__ import annotations
 from rdflib.term import Identifier
-from rdfcrate.rdfclass import RdfClass
+from rdfcrate.rdftype import RdfClass
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import rdfs
 from rdfcrate.vocabs import rdf
+from rdfcrate.rdftype import RdfType
 from rdfcrate.vocabs import owl
 
-
 class DataRange(rdfs.Datatype):
-    term = RdfTerm("DataRange", "http://www.w3.org/2002/07/owl#DataRange", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#DataRange', 'DataRange')
 
 class Class(rdfs.Class):
-    term = RdfTerm("Class", "http://www.w3.org/2002/07/owl#Class", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#Class', 'Class')
 
 class DeprecatedClass(rdfs.Class):
-    term = RdfTerm(
-        "DeprecatedClass", "http://www.w3.org/2002/07/owl#DeprecatedClass", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#DeprecatedClass', 'DeprecatedClass')
 
 class AnnotationProperty(rdf.Property):
-    term = RdfTerm(
-        "AnnotationProperty", "http://www.w3.org/2002/07/owl#AnnotationProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#AnnotationProperty', 'AnnotationProperty')
 
 class DatatypeProperty(rdf.Property):
-    term = RdfTerm(
-        "DatatypeProperty", "http://www.w3.org/2002/07/owl#DatatypeProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#DatatypeProperty', 'DatatypeProperty')
 
 class DeprecatedProperty(rdf.Property):
-    term = RdfTerm(
-        "DeprecatedProperty", "http://www.w3.org/2002/07/owl#DeprecatedProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#DeprecatedProperty', 'DeprecatedProperty')
 
 class FunctionalProperty(rdf.Property):
-    term = RdfTerm(
-        "FunctionalProperty", "http://www.w3.org/2002/07/owl#FunctionalProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#FunctionalProperty', 'FunctionalProperty')
 
 class ObjectProperty(rdf.Property):
-    term = RdfTerm("ObjectProperty", "http://www.w3.org/2002/07/owl#ObjectProperty", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#ObjectProperty', 'ObjectProperty')
 
 class OntologyProperty(rdf.Property):
-    term = RdfTerm(
-        "OntologyProperty", "http://www.w3.org/2002/07/owl#OntologyProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#OntologyProperty', 'OntologyProperty')
 
 class AllDifferent(rdfs.Resource):
-    term = RdfTerm("AllDifferent", "http://www.w3.org/2002/07/owl#AllDifferent", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#AllDifferent', 'AllDifferent')
 
 class AllDisjointClasses(rdfs.Resource):
-    term = RdfTerm(
-        "AllDisjointClasses", "http://www.w3.org/2002/07/owl#AllDisjointClasses", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#AllDisjointClasses', 'AllDisjointClasses')
 
 class AllDisjointProperties(rdfs.Resource):
-    term = RdfTerm(
-        "AllDisjointProperties",
-        "http://www.w3.org/2002/07/owl#AllDisjointProperties",
-        [],
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#AllDisjointProperties', 'AllDisjointProperties')
 
 class Annotation(rdfs.Resource):
-    term = RdfTerm("Annotation", "http://www.w3.org/2002/07/owl#Annotation", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#Annotation', 'Annotation')
 
 class Axiom(rdfs.Resource):
-    term = RdfTerm("Axiom", "http://www.w3.org/2002/07/owl#Axiom", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#Axiom', 'Axiom')
 
 class NegativePropertyAssertion(rdfs.Resource):
-    term = RdfTerm(
-        "NegativePropertyAssertion",
-        "http://www.w3.org/2002/07/owl#NegativePropertyAssertion",
-        [],
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#NegativePropertyAssertion', 'NegativePropertyAssertion')
 
 class Ontology(rdfs.Resource):
-    term = RdfTerm("Ontology", "http://www.w3.org/2002/07/owl#Ontology", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#Ontology', 'Ontology')
 
 class NamedIndividual(RdfClass):
-    term = RdfTerm(
-        "NamedIndividual", "http://www.w3.org/2002/07/owl#NamedIndividual", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#NamedIndividual', 'NamedIndividual')
 
 class Restriction(Class):
-    term = RdfTerm("Restriction", "http://www.w3.org/2002/07/owl#Restriction", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#Restriction', 'Restriction')
 
 class AsymmetricProperty(ObjectProperty):
-    term = RdfTerm(
-        "AsymmetricProperty", "http://www.w3.org/2002/07/owl#AsymmetricProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#AsymmetricProperty', 'AsymmetricProperty')
 
 class InverseFunctionalProperty(ObjectProperty):
-    term = RdfTerm(
-        "InverseFunctionalProperty",
-        "http://www.w3.org/2002/07/owl#InverseFunctionalProperty",
-        [],
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#InverseFunctionalProperty', 'InverseFunctionalProperty')
 
 class IrreflexiveProperty(ObjectProperty):
-    term = RdfTerm(
-        "IrreflexiveProperty", "http://www.w3.org/2002/07/owl#IrreflexiveProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#IrreflexiveProperty', 'IrreflexiveProperty')
 
 class ReflexiveProperty(ObjectProperty):
-    term = RdfTerm(
-        "ReflexiveProperty", "http://www.w3.org/2002/07/owl#ReflexiveProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#ReflexiveProperty', 'ReflexiveProperty')
 
 class SymmetricProperty(ObjectProperty):
-    term = RdfTerm(
-        "SymmetricProperty", "http://www.w3.org/2002/07/owl#SymmetricProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#SymmetricProperty', 'SymmetricProperty')
 
 class TransitiveProperty(ObjectProperty):
-    term = RdfTerm(
-        "TransitiveProperty", "http://www.w3.org/2002/07/owl#TransitiveProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#TransitiveProperty', 'TransitiveProperty')
 
 class allValuesFrom(RdfProperty[rdfs.Class]):
-    term = RdfTerm("allValuesFrom", "http://www.w3.org/2002/07/owl#allValuesFrom", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#allValuesFrom', 'allValuesFrom')
 
 class annotatedProperty(RdfProperty[rdfs.Resource]):
-    term = RdfTerm(
-        "annotatedProperty", "http://www.w3.org/2002/07/owl#annotatedProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#annotatedProperty', 'annotatedProperty')
 
 class annotatedSource(RdfProperty[rdfs.Resource]):
-    term = RdfTerm(
-        "annotatedSource", "http://www.w3.org/2002/07/owl#annotatedSource", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#annotatedSource', 'annotatedSource')
 
 class annotatedTarget(RdfProperty[rdfs.Resource]):
-    term = RdfTerm(
-        "annotatedTarget", "http://www.w3.org/2002/07/owl#annotatedTarget", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#annotatedTarget', 'annotatedTarget')
 
 class assertionProperty(RdfProperty[rdf.Property]):
-    term = RdfTerm(
-        "assertionProperty", "http://www.w3.org/2002/07/owl#assertionProperty", []
-    )
+    term = RdfTerm('http://www.w3.org/2002/07/owl#assertionProperty', 'assertionProperty')
 
-
-class cardinality(RdfProperty[Identifier]):
-    term = RdfTerm("cardinality", "http://www.w3.org/2002/07/owl#cardinality", [])
-
+class cardinality(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#cardinality', 'cardinality')
 
 class complementOf(RdfProperty[owl.Class]):
-    term = RdfTerm("complementOf", "http://www.w3.org/2002/07/owl#complementOf", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#complementOf', 'complementOf')
 
 class datatypeComplementOf(RdfProperty[rdfs.Datatype]):
-    term = RdfTerm(
-        "datatypeComplementOf", "http://www.w3.org/2002/07/owl#datatypeComplementOf", []
-    )
+    term = RdfTerm('http://www.w3.org/2002/07/owl#datatypeComplementOf', 'datatypeComplementOf')
 
-
-class differentFrom(RdfProperty[Identifier]):
-    term = RdfTerm("differentFrom", "http://www.w3.org/2002/07/owl#differentFrom", [])
-
+class differentFrom(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#differentFrom', 'differentFrom')
 
 class disjointUnionOf(RdfProperty[rdf.List]):
-    term = RdfTerm(
-        "disjointUnionOf", "http://www.w3.org/2002/07/owl#disjointUnionOf", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#disjointUnionOf', 'disjointUnionOf')
 
 class disjointWith(RdfProperty[owl.Class]):
-    term = RdfTerm("disjointWith", "http://www.w3.org/2002/07/owl#disjointWith", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#disjointWith', 'disjointWith')
 
 class distinctMembers(RdfProperty[rdf.List]):
-    term = RdfTerm(
-        "distinctMembers", "http://www.w3.org/2002/07/owl#distinctMembers", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#distinctMembers', 'distinctMembers')
 
 class equivalentClass(RdfProperty[rdfs.Class]):
-    term = RdfTerm(
-        "equivalentClass", "http://www.w3.org/2002/07/owl#equivalentClass", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#equivalentClass', 'equivalentClass')
 
 class equivalentProperty(RdfProperty[rdf.Property]):
-    term = RdfTerm(
-        "equivalentProperty", "http://www.w3.org/2002/07/owl#equivalentProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#equivalentProperty', 'equivalentProperty')
 
 class hasKey(RdfProperty[rdf.List]):
-    term = RdfTerm("hasKey", "http://www.w3.org/2002/07/owl#hasKey", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#hasKey', 'hasKey')
 
 class hasSelf(RdfProperty[rdfs.Resource]):
-    term = RdfTerm("hasSelf", "http://www.w3.org/2002/07/owl#hasSelf", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#hasSelf', 'hasSelf')
 
 class hasValue(RdfProperty[rdfs.Resource]):
-    term = RdfTerm("hasValue", "http://www.w3.org/2002/07/owl#hasValue", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#hasValue', 'hasValue')
 
 class intersectionOf(RdfProperty[rdf.List]):
-    term = RdfTerm("intersectionOf", "http://www.w3.org/2002/07/owl#intersectionOf", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#intersectionOf', 'intersectionOf')
 
 class inverseOf(RdfProperty[owl.ObjectProperty]):
-    term = RdfTerm("inverseOf", "http://www.w3.org/2002/07/owl#inverseOf", [])
+    term = RdfTerm('http://www.w3.org/2002/07/owl#inverseOf', 'inverseOf')
 
+class maxCardinality(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#maxCardinality', 'maxCardinality')
 
-class maxCardinality(RdfProperty[Identifier]):
-    term = RdfTerm("maxCardinality", "http://www.w3.org/2002/07/owl#maxCardinality", [])
-
-
-class maxQualifiedCardinality(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "maxQualifiedCardinality",
-        "http://www.w3.org/2002/07/owl#maxQualifiedCardinality",
-        [],
-    )
-
+class maxQualifiedCardinality(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#maxQualifiedCardinality', 'maxQualifiedCardinality')
 
 class members(RdfProperty[rdf.List]):
-    term = RdfTerm("members", "http://www.w3.org/2002/07/owl#members", [])
+    term = RdfTerm('http://www.w3.org/2002/07/owl#members', 'members')
 
+class minCardinality(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#minCardinality', 'minCardinality')
 
-class minCardinality(RdfProperty[Identifier]):
-    term = RdfTerm("minCardinality", "http://www.w3.org/2002/07/owl#minCardinality", [])
-
-
-class minQualifiedCardinality(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "minQualifiedCardinality",
-        "http://www.w3.org/2002/07/owl#minQualifiedCardinality",
-        [],
-    )
-
+class minQualifiedCardinality(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#minQualifiedCardinality', 'minQualifiedCardinality')
 
 class onClass(RdfProperty[owl.Class]):
-    term = RdfTerm("onClass", "http://www.w3.org/2002/07/owl#onClass", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#onClass', 'onClass')
 
 class onDataRange(RdfProperty[rdfs.Datatype]):
-    term = RdfTerm("onDataRange", "http://www.w3.org/2002/07/owl#onDataRange", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#onDataRange', 'onDataRange')
 
 class onDatatype(RdfProperty[rdfs.Datatype]):
-    term = RdfTerm("onDatatype", "http://www.w3.org/2002/07/owl#onDatatype", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#onDatatype', 'onDatatype')
 
 class oneOf(RdfProperty[rdf.List]):
-    term = RdfTerm("oneOf", "http://www.w3.org/2002/07/owl#oneOf", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#oneOf', 'oneOf')
 
 class onProperties(RdfProperty[rdf.List]):
-    term = RdfTerm("onProperties", "http://www.w3.org/2002/07/owl#onProperties", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#onProperties', 'onProperties')
 
 class onProperty(RdfProperty[rdf.Property]):
-    term = RdfTerm("onProperty", "http://www.w3.org/2002/07/owl#onProperty", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#onProperty', 'onProperty')
 
 class propertyChainAxiom(RdfProperty[rdf.List]):
-    term = RdfTerm(
-        "propertyChainAxiom", "http://www.w3.org/2002/07/owl#propertyChainAxiom", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#propertyChainAxiom', 'propertyChainAxiom')
 
 class propertyDisjointWith(RdfProperty[rdf.Property]):
-    term = RdfTerm(
-        "propertyDisjointWith", "http://www.w3.org/2002/07/owl#propertyDisjointWith", []
-    )
+    term = RdfTerm('http://www.w3.org/2002/07/owl#propertyDisjointWith', 'propertyDisjointWith')
 
+class qualifiedCardinality(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#qualifiedCardinality', 'qualifiedCardinality')
 
-class qualifiedCardinality(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "qualifiedCardinality", "http://www.w3.org/2002/07/owl#qualifiedCardinality", []
-    )
-
-
-class sameAs(RdfProperty[Identifier]):
-    term = RdfTerm("sameAs", "http://www.w3.org/2002/07/owl#sameAs", [])
-
+class sameAs(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#sameAs', 'sameAs')
 
 class someValuesFrom(RdfProperty[rdfs.Class]):
-    term = RdfTerm("someValuesFrom", "http://www.w3.org/2002/07/owl#someValuesFrom", [])
+    term = RdfTerm('http://www.w3.org/2002/07/owl#someValuesFrom', 'someValuesFrom')
 
+class sourceIndividual(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#sourceIndividual', 'sourceIndividual')
 
-class sourceIndividual(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "sourceIndividual", "http://www.w3.org/2002/07/owl#sourceIndividual", []
-    )
-
-
-class targetIndividual(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "targetIndividual", "http://www.w3.org/2002/07/owl#targetIndividual", []
-    )
-
+class targetIndividual(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#targetIndividual', 'targetIndividual')
 
 class targetValue(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("targetValue", "http://www.w3.org/2002/07/owl#targetValue", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#targetValue', 'targetValue')
 
 class unionOf(RdfProperty[rdf.List]):
-    term = RdfTerm("unionOf", "http://www.w3.org/2002/07/owl#unionOf", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#unionOf', 'unionOf')
 
 class withRestrictions(RdfProperty[rdf.List]):
-    term = RdfTerm(
-        "withRestrictions", "http://www.w3.org/2002/07/owl#withRestrictions", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#withRestrictions', 'withRestrictions')
 
 class backwardCompatibleWith(RdfProperty[owl.Ontology]):
-    term = RdfTerm(
-        "backwardCompatibleWith",
-        "http://www.w3.org/2002/07/owl#backwardCompatibleWith",
-        [],
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#backwardCompatibleWith', 'backwardCompatibleWith')
 
 class deprecated(RdfProperty[rdfs.Resource]):
-    term = RdfTerm("deprecated", "http://www.w3.org/2002/07/owl#deprecated", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#deprecated', 'deprecated')
 
 class incompatibleWith(RdfProperty[owl.Ontology]):
-    term = RdfTerm(
-        "incompatibleWith", "http://www.w3.org/2002/07/owl#incompatibleWith", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#incompatibleWith', 'incompatibleWith')
 
 class priorVersion(RdfProperty[owl.Ontology]):
-    term = RdfTerm("priorVersion", "http://www.w3.org/2002/07/owl#priorVersion", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#priorVersion', 'priorVersion')
 
 class versionInfo(RdfProperty[rdfs.Resource]):
-    term = RdfTerm("versionInfo", "http://www.w3.org/2002/07/owl#versionInfo", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#versionInfo', 'versionInfo')
 
 class bottomDataProperty(RdfProperty[rdfs.Literal]):
-    term = RdfTerm(
-        "bottomDataProperty", "http://www.w3.org/2002/07/owl#bottomDataProperty", []
-    )
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#bottomDataProperty', 'bottomDataProperty')
 
 class topDataProperty(RdfProperty[rdfs.Literal]):
-    term = RdfTerm(
-        "topDataProperty", "http://www.w3.org/2002/07/owl#topDataProperty", []
-    )
+    term = RdfTerm('http://www.w3.org/2002/07/owl#topDataProperty', 'topDataProperty')
 
+class bottomObjectProperty(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#bottomObjectProperty', 'bottomObjectProperty')
 
-class bottomObjectProperty(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "bottomObjectProperty", "http://www.w3.org/2002/07/owl#bottomObjectProperty", []
-    )
-
-
-class topObjectProperty(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "topObjectProperty", "http://www.w3.org/2002/07/owl#topObjectProperty", []
-    )
-
+class topObjectProperty(RdfProperty[RdfType]):
+    term = RdfTerm('http://www.w3.org/2002/07/owl#topObjectProperty', 'topObjectProperty')
 
 class imports(RdfProperty[owl.Ontology]):
-    term = RdfTerm("imports", "http://www.w3.org/2002/07/owl#imports", [])
-
+    term = RdfTerm('http://www.w3.org/2002/07/owl#imports', 'imports')
 
 class versionIRI(RdfProperty[owl.Ontology]):
-    term = RdfTerm("versionIRI", "http://www.w3.org/2002/07/owl#versionIRI", [])
+    term = RdfTerm('http://www.w3.org/2002/07/owl#versionIRI', 'versionIRI')

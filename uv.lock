@@ -290,7 +290,7 @@ name = "click"
 version = "8.1.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "platform_system == 'Windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b9/2e/0090cbf739cee7d23781ad4b89a9894a41538e4fcf4c31dcdd705b78eb8b/click-8.1.8.tar.gz", hash = "sha256:ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a", size = 226593 }
 wheels = [
@@ -630,7 +630,7 @@ name = "ipykernel"
 version = "6.29.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "appnope", marker = "sys_platform == 'darwin'" },
+    { name = "appnope", marker = "platform_system == 'Darwin'" },
     { name = "comm" },
     { name = "debugpy" },
     { name = "ipython" },
@@ -1116,7 +1116,7 @@ version = "1.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "platform_system == 'Windows'" },
     { name = "ghp-import" },
     { name = "jinja2" },
     { name = "markdown" },
@@ -1916,6 +1916,11 @@ dependencies = [
     { name = "rdflib" },
 ]
 
+[package.optional-dependencies]
+validation = [
+    { name = "roc-validator" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "doit" },
@@ -1933,7 +1938,10 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "rdflib", specifier = ">=7.1.2" }]
+requires-dist = [
+    { name = "rdflib", specifier = ">=7.1.2" },
+    { name = "roc-validator", marker = "extra == 'validation'", specifier = ">=0.5.0" },
+]
 
 [package.metadata.requires-dev]
 dev = [
@@ -1947,7 +1955,6 @@ dev = [
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "roc-validator", specifier = ">=0.5.0" },
-    { name = "roc-validator", specifier = ">=0.6.3" },
     { name = "ruff", specifier = ">=0.11.5" },
     { name = "tabulate", specifier = ">=0.9.0" },
 ]

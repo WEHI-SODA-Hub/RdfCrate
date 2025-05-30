@@ -6,7 +6,7 @@ from typing_extensions import Doc
 from rdflib import Graph, URIRef, IdentifiedNode
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.rdfclass import RdfClass, EntityArgs
+from rdfcrate.rdftype import RdfClass, EntityArgs
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
 from dataclasses import InitVar, dataclass, field
 import mimetypes
@@ -49,14 +49,17 @@ class RoCrate(metaclass=ABCMeta):
 
     graph: Graph = field(init=False, default_factory=Graph)
     "`rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available."
-    context: Context = field(init=False, default_factory=Context)
-    "Collection of custom terms used in the RO-Crate. This is used to generate the JSON-LD context when serializing the crate."
+    custom_terms: dict[str, str] = field(init=False, default_factory=dict)
+    "Set of custom terms not in the standard RO-Crate context that need to be in the final JSON-LD context."
+    context: Context = field(init=False)
+    "Dynamically updated version of the JSON-LD context. By default, this contains the current RO-Crate spec's context, but additional terms are added as they are added to the graph."
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
     "Version of the RO-Crate specification to use"
 
     def __post_init__(self):
-        # This is safe to do, as there are no mandated properties on the metadata descriptor
-        self.add_metadata_entity()
+        self.context = Context(
+            self.version.context_url
+        )
 
     @property
     @abstractmethod
@@ -70,9 +73,14 @@ class RoCrate(metaclass=ABCMeta):
         Adds custom terms to the crate context
         """
         for term in terms:
-            if self.version.version not in term.specs:
+            if self.context.expand(term.label) == str(term.uri):
                 # Skip terms that are already in the RO-Crate context
-                self.context.add_term(term.label, str(term.uri))
+                continue
+
+            # The context keeps track of all terms, including the base RO-Crate terms.
+            self.context.add_term(term.label, str(term.uri))
+            # Custom terms only tracks the non-standard terms
+            self.custom_terms[term.label] = str(term.uri)
 
     def add_entity(
         self, entity: EntityClass, *args: EntityArgs
@@ -133,7 +141,7 @@ class RoCrate(metaclass=ABCMeta):
         self.add_entity(
             self.metadata_entity,
             schemaorg.about(self.root_data_entity),
-            dc.conformsTo(self.version.conforms_to_url),
+            dc.conformsTo(dc.Standard(self.version.conforms_to_url)),
             *props,
         )
 
@@ -216,7 +224,6 @@ class RoCrate(metaclass=ABCMeta):
             path: Path to the directory, which must be within the crate root
             attrs: Attributes used to describe the `Dataset` entity
             dataset: Dataset entity that the file should be linked to. If not provided, the file will be linked to the root dataset.
-                Note that
             kwargs: Available for subclasses to extend the functionality.
 
         Example:
@@ -259,14 +266,13 @@ class RoCrate(metaclass=ABCMeta):
                 "Root data entity not found. Did you call `add_root_entity`?"
             )
 
-        extra_context = self.context.to_dict()
-        if len(extra_context) > 0:
+        if len(self.custom_terms) == 0:
+            context = self.version.context_url
+        else:
             context = [
                 self.version.context_url,
-                extra_context,
+                self.custom_terms
             ]
-        else:
-            context = self.version.context_url
 
         # Serializer kwargs are annoyingly not listed in the docs.
         # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
@@ -286,6 +292,7 @@ class AttachedCrate(RoCrate):
 
     def __post_init__(self, path: str | Path):
         self.root = Path(path).resolve()
+        super().__post_init__()
 
     @property
     def metadata_entity(self) -> schemaorg.CreativeWork:
@@ -379,8 +386,8 @@ class AttachedCrate(RoCrate):
         license: schemaorg.license,
         *props: RdfProperty | ReverseProperty,
         recursive: Recursive = False,
-    ) -> None:
-        self.register_dir(
+    ) -> schemaorg.Dataset:
+        return self.register_dir(
             ".", name, description, date_published, license, *props, recursive=recursive
         )
 
@@ -390,7 +397,7 @@ class AttachedCrate(RoCrate):
         *props: EntityArgs,
         recursive: Recursive = False,
         **kwargs: Any,
-    ):
+    ) -> schemaorg.Dataset:
         """
         See [`RoCrate.register_dir`][rdfcrate.wrapper.RoCrate.register_dir].
         """

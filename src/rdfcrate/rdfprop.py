@@ -1,11 +1,13 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import ClassVar, Generic, TypeVar
+from typing import ClassVar, Generic, TypeVar, TYPE_CHECKING
 from rdflib import Graph
 
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.types import GraphId
-from rdfcrate.rdfclass import RdfClass
+
+if TYPE_CHECKING:
+    from rdfcrate.rdftype import RdfClass
 
 @dataclass
 class ReverseProperty:
@@ -16,11 +18,11 @@ class ReverseProperty:
     term: RdfTerm
     subject: GraphId
 
-    def add_to_graph(self, graph, object: GraphId):
+    def add_to_graph(self, graph, object: GraphId) -> None:
         graph.add((self.subject, self.term.uri, object))
 
 
-T = TypeVar("T", bound=RdfClass)
+T = TypeVar("T", bound="RdfClass")
 
 
 @dataclass(frozen=True)
@@ -34,8 +36,8 @@ class RdfProperty(Generic[T]):
     object: T
 
     @classmethod
-    def reverse(cls, subject: GraphId):
+    def reverse(cls, subject: GraphId) -> ReverseProperty:
         return ReverseProperty(cls.term, subject)
 
-    def add_to_graph(self, graph: Graph, subject: GraphId):
-        graph.add((subject, self.term.uri, self.object))
+    def add_to_graph(self, graph: Graph, subject: GraphId) -> None:
+        graph.add((subject, self.term.uri, self.object.id))

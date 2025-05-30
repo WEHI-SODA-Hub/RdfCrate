@@ -57,9 +57,7 @@ class RoCrate(metaclass=ABCMeta):
     "Version of the RO-Crate specification to use"
 
     def __post_init__(self):
-        self.context = Context(
-            self.version.context_url
-        )
+        self.context = Context(self.version.context_url)
 
     @property
     @abstractmethod
@@ -82,9 +80,7 @@ class RoCrate(metaclass=ABCMeta):
             # Custom terms only tracks the non-standard terms
             self.custom_terms[term.label] = str(term.uri)
 
-    def add_entity(
-        self, entity: EntityClass, *args: EntityArgs
-    ) -> EntityClass:
+    def add_entity(self, entity: EntityClass, *args: EntityArgs) -> EntityClass:
         """
         Adds any type of entity to the crate
 
@@ -269,10 +265,7 @@ class RoCrate(metaclass=ABCMeta):
         if len(self.custom_terms) == 0:
             context = self.version.context_url
         else:
-            context = [
-                self.version.context_url,
-                self.custom_terms
-            ]
+            context = [self.version.context_url, self.custom_terms]
 
         # Serializer kwargs are annoyingly not listed in the docs.
         # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
@@ -428,12 +421,14 @@ class AttachedCrate(RoCrate):
             )
 
         self.write()
-        result = services.validate(services.ValidationSettings(
-            rocrate_uri=URI(self.root),
-            # TODO: Support other profiles
-            profile_identifier="ro-crate-1.1",
-            requirement_severity=models.Severity.RECOMMENDED
-        ))
+        result = services.validate(
+            services.ValidationSettings(
+                rocrate_uri=URI(self.root),
+                # TODO: Support other profiles
+                profile_identifier="ro-crate-1.1",
+                requirement_severity=models.Severity.RECOMMENDED,
+            )
+        )
         return result.get_issues()
 
     def validate(self, threshold: Severity | None = None) -> None:
@@ -442,13 +437,15 @@ class AttachedCrate(RoCrate):
         """
         if threshold is None:
             from rocrate_validator.models import Severity
+
             threshold = Severity.RECOMMENDED
         for issue in self.get_issues():
-            msg = f"Detected issue of severity {issue.severity.name} with check \"{issue.check.identifier}\": {issue.message}"
+            msg = f'Detected issue of severity {issue.severity.name} with check "{issue.check.identifier}": {issue.message}'
             if issue.severity >= threshold:
                 raise Exception(msg)
             else:
                 warnings.warn(msg)
+
 
 @dataclass
 class DetatchedCrate(RoCrate):

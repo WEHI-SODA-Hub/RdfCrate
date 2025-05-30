@@ -1,6 +1,7 @@
 from rdflib import URIRef
 from urllib.parse import urlparse, parse_qsl
 
+
 def guess_term_from_uri(uri: str) -> str:
     """
     Guess the term from a URI by extracting the last part of the path.
@@ -28,7 +29,9 @@ class RdfTerm:
     #: List of RO-Crate versions numbers for which this term is automatically included in the context
     specs: list[str]
 
-    def __init__(self, uri: str, term: str | None = None, specs: list[str] = []) -> None:
+    def __init__(
+        self, uri: str, term: str | None = None, specs: list[str] = []
+    ) -> None:
         self.uri = URIRef(uri)
         if term is None:
             self.label = guess_term_from_uri(uri)

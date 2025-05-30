@@ -204,7 +204,9 @@ class CodegenState:
         for range_ in itertools.chain(
             self.graph.objects(subject=prop, predicate=RDFS.range),
             self.graph.objects(subject=prop, predicate=SDO.rangeIncludes),
-            self.graph.objects(subject=prop, predicate=URIRef("http://purl.org/dc/dcam/rangeIncludes")),
+            self.graph.objects(
+                subject=prop, predicate=URIRef("http://purl.org/dc/dcam/rangeIncludes")
+            ),
         ):
             if isinstance(range_, BNode):
                 # Skip blank node ranges

@@ -9,6 +9,7 @@ from rdfcrate.types import GraphId
 if TYPE_CHECKING:
     from rdfcrate.rdftype import RdfClass
 
+
 @dataclass
 class ReverseProperty:
     """

@@ -7,7 +7,7 @@ from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.types import GraphId
 
 if TYPE_CHECKING:
-    from rdfcrate.rdftype import RdfClass
+    from rdfcrate.rdftype import RdfType
 
 
 @dataclass
@@ -23,7 +23,7 @@ class ReverseProperty:
         graph.add((self.subject, self.term.uri, object))
 
 
-T = TypeVar("T", bound="RdfClass")
+T = TypeVar("T", bound="RdfType")
 
 
 @dataclass(frozen=True)

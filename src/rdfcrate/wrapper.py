@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
 from rocrate_validator.models import CheckIssue
 from typing_extensions import Doc
-from rdflib import Graph, URIRef
+from rdflib import RDF, Graph, URIRef
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfClass, EntityArgs
@@ -73,6 +73,10 @@ class RoCrate(metaclass=ABCMeta):
         for term in terms:
             if self.context.expand(term.label) == str(term.uri):
                 # Skip terms that are already in the RO-Crate context
+                continue
+
+            if term.uri == RDF.type:
+                # rdf:type should never be re-defined
                 continue
 
             # The context keeps track of all terms, including the base RO-Crate terms.

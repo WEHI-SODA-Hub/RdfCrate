@@ -3,10 +3,10 @@ from pathlib import Path
 from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
 from rocrate_validator.models import CheckIssue
 from typing_extensions import Doc
-from rdflib import Graph, URIRef, IdentifiedNode, RDF
+from rdflib import RDF, Graph, URIRef
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.rdfclass import RdfClass, EntityArgs
+from rdfcrate.rdftype import RdfClass, EntityArgs
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
 from dataclasses import InitVar, dataclass, field
 import mimetypes
@@ -49,14 +49,15 @@ class RoCrate(metaclass=ABCMeta):
 
     graph: Graph = field(init=False, default_factory=Graph)
     "`rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available."
-    context: Context = field(init=False, default_factory=Context)
-    "Collection of custom terms used in the RO-Crate. This is used to generate the JSON-LD context when serializing the crate."
+    custom_terms: dict[str, str] = field(init=False, default_factory=dict)
+    "Set of custom terms not in the standard RO-Crate context that need to be in the final JSON-LD context."
+    context: Context = field(init=False)
+    "Dynamically updated version of the JSON-LD context. By default, this contains the current RO-Crate spec's context, but additional terms are added as they are added to the graph."
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
     "Version of the RO-Crate specification to use"
 
     def __post_init__(self):
-        # This is safe to do, as there are no mandated properties on the metadata descriptor
-        self.add_metadata_entity()
+        self.context = Context(self.version.context_url)
 
     @property
     @abstractmethod
@@ -64,21 +65,26 @@ class RoCrate(metaclass=ABCMeta):
         """
         The root entity of the RO-Crate
         """
-        pass
 
-    def _register_terms(self, terms: Iterable[RdfTerm]) -> None:
+    def register_terms(self, terms: Iterable[RdfTerm]) -> None:
         """
         Adds custom terms to the crate context
         """
         for term in terms:
-            # Skip terms that are already in the RO-Crate context
-            # Also skip RDF.type, as this should never be re-defined
-            if self.version.version not in term.specs and term.uri != RDF.type:
-                self.context.add_term(term.label, str(term.uri))
+            if self.context.expand(term.label) == str(term.uri):
+                # Skip terms that are already in the RO-Crate context
+                continue
 
-    def add_entity(
-        self, iri: str, type: type[EntityClass], *args: EntityArgs
-    ) -> EntityClass:
+            if term.uri == RDF.type:
+                # rdf:type should never be re-defined
+                continue
+
+            # The context keeps track of all terms, including the base RO-Crate terms.
+            self.context.add_term(term.label, str(term.uri))
+            # Custom terms only tracks the non-standard terms
+            self.custom_terms[term.label] = str(term.uri)
+
+    def add_entity(self, entity: EntityClass, *args: EntityArgs) -> EntityClass:
         """
         Adds any type of entity to the crate
 
@@ -97,8 +103,9 @@ class RoCrate(metaclass=ABCMeta):
             )
             ```
         """
-        self._register_terms([arg.term for arg in args] + [type.term])
-        return type.add(self.graph, iri, *args)
+        self.register_terms([arg.term for arg in args] + [entity.term])
+        entity.add(self.graph, *args)
+        return entity
 
     def add_root_entity(
         self,
@@ -113,7 +120,6 @@ class RoCrate(metaclass=ABCMeta):
         """
         return self.add_entity(
             self.root_data_entity,
-            schemaorg.Dataset,
             name,
             description,
             date_published,
@@ -128,15 +134,14 @@ class RoCrate(metaclass=ABCMeta):
         The metadata entity of the RO-Crate
         """
 
-    def add_metadata_entity(self, *props: EntityArgs) -> schemaorg.CreativeWork:
+    def add_metadata_entity(self, *props: EntityArgs) -> None:
         """
         Creates the `ro-crate-metadata.json` record.
         """
-        return self.add_entity(
+        self.add_entity(
             self.metadata_entity,
-            schemaorg.CreativeWork,
             schemaorg.about(self.root_data_entity),
-            dc.conformsTo(self.version.conforms_to_url),
+            dc.conformsTo(dc.Standard(self.version.conforms_to_url)),
             *props,
         )
 
@@ -184,7 +189,8 @@ class RoCrate(metaclass=ABCMeta):
             AttachedCrate(".").register_file("./some/data.txt", sdo.description(sdo.Text("This is a file with some data")))
             ```
         """
-        file_id = self.add_entity(path, rocrate.File, *args)
+        file_id = rocrate.File(path)
+        self.add_entity(file_id, *args)
 
         if guess_mime:
             if any(isinstance(arg, schemaorg.encodingFormat) for arg in args):
@@ -218,7 +224,6 @@ class RoCrate(metaclass=ABCMeta):
             path: Path to the directory, which must be within the crate root
             attrs: Attributes used to describe the `Dataset` entity
             dataset: Dataset entity that the file should be linked to. If not provided, the file will be linked to the root dataset.
-                Note that
             kwargs: Available for subclasses to extend the functionality.
 
         Example:
@@ -232,13 +237,14 @@ class RoCrate(metaclass=ABCMeta):
         if not path.endswith("/"):
             # Directories must end with a slash in RO-Crate
             path += "/"
-        dir_id = self.add_entity(path, schemaorg.Dataset, *props)
+        dir_id = schemaorg.Dataset(path)
+        self.add_entity(dir_id, *props)
         if self.root_data_entity != dir_id:
             # The root dataset is not linked to itself
             self.link_to_dataset(dir_id, dataset)
         return dir_id
 
-    def add_metadata(self, uri: URIRef, *args: EntityArgs) -> IdentifiedNode:
+    def add_metadata(self, entity: RdfClass, *args: EntityArgs) -> None:
         """
         Add metadata for an existing entity.
 
@@ -249,26 +255,21 @@ class RoCrate(metaclass=ABCMeta):
             uri: ID of the entity being described
         """
         for arg in args:
-            arg.add_to_graph(self.graph, uri)
-        return uri
+            arg.add_to_graph(self.graph, entity.id)
 
     def compile(self) -> str:
         """
         Compiles the RO-Crate to a JSON-LD string
         """
-        if self.root_data_entity not in self.graph.subjects():
+        if self.root_data_entity.id not in self.graph.subjects():
             raise ValueError(
                 "Root data entity not found. Did you call `add_root_entity`?"
             )
 
-        extra_context = self.context.to_dict()
-        if len(extra_context) > 0:
-            context = [
-                self.version.context_url,
-                extra_context,
-            ]
-        else:
+        if len(self.custom_terms) == 0:
             context = self.version.context_url
+        else:
+            context = [self.version.context_url, self.custom_terms]
 
         # Serializer kwargs are annoyingly not listed in the docs.
         # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
@@ -288,6 +289,7 @@ class AttachedCrate(RoCrate):
 
     def __post_init__(self, path: str | Path):
         self.root = Path(path).resolve()
+        super().__post_init__()
 
     @property
     def metadata_entity(self) -> schemaorg.CreativeWork:
@@ -392,7 +394,7 @@ class AttachedCrate(RoCrate):
         *props: EntityArgs,
         recursive: Recursive = False,
         **kwargs: Any,
-    ):
+    ) -> schemaorg.Dataset:
         """
         See [`RoCrate.register_dir`][rdfcrate.wrapper.RoCrate.register_dir].
         """
@@ -423,12 +425,14 @@ class AttachedCrate(RoCrate):
             )
 
         self.write()
-        result = services.validate(services.ValidationSettings(
-            rocrate_uri=URI(self.root),
-            # TODO: Support other profiles
-            profile_identifier="ro-crate-1.1",
-            requirement_severity=models.Severity.RECOMMENDED
-        ))
+        result = services.validate(
+            services.ValidationSettings(
+                rocrate_uri=URI(self.root),
+                # TODO: Support other profiles
+                profile_identifier="ro-crate-1.1",
+                requirement_severity=models.Severity.RECOMMENDED,
+            )
+        )
         return result.get_issues()
 
     def validate(self, threshold: Severity | None = None) -> None:
@@ -437,13 +441,15 @@ class AttachedCrate(RoCrate):
         """
         if threshold is None:
             from rocrate_validator.models import Severity
+
             threshold = Severity.RECOMMENDED
         for issue in self.get_issues():
-            msg = f"Detected issue of severity {issue.severity.name} with check \"{issue.check.identifier}\": {issue.message}"
+            msg = f'Detected issue of severity {issue.severity.name} with check "{issue.check.identifier}": {issue.message}'
             if issue.severity >= threshold:
                 raise Exception(msg)
             else:
                 warnings.warn(msg)
+
 
 @dataclass
 class DetatchedCrate(RoCrate):

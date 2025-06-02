@@ -1,74 +1,71 @@
 from __future__ import annotations
-from rdflib.term import Identifier
-from rdfcrate.rdfclass import RdfClass
+from rdfcrate.rdftype import RdfClass
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import rdfs
+from rdfcrate.rdftype import RdfType
 
 
 class Resource(RdfClass):
-    term = RdfTerm("Resource", "http://www.w3.org/2000/01/rdf-schema#Resource", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#Resource", "Resource")
 
 
 class ContainerMembershipProperty(RdfClass):
     term = RdfTerm(
-        "ContainerMembershipProperty",
         "http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty",
-        [],
+        "ContainerMembershipProperty",
     )
 
 
 class Class(Resource):
-    term = RdfTerm("Class", "http://www.w3.org/2000/01/rdf-schema#Class", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#Class", "Class")
 
 
 class Literal(Resource):
-    term = RdfTerm("Literal", "http://www.w3.org/2000/01/rdf-schema#Literal", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#Literal", "Literal")
 
 
 class Container(Resource):
-    term = RdfTerm("Container", "http://www.w3.org/2000/01/rdf-schema#Container", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#Container", "Container")
 
 
 class Datatype(Class):
-    term = RdfTerm("Datatype", "http://www.w3.org/2000/01/rdf-schema#Datatype", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#Datatype", "Datatype")
 
 
 class subClassOf(RdfProperty[rdfs.Class]):
-    term = RdfTerm("subClassOf", "http://www.w3.org/2000/01/rdf-schema#subClassOf", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#subClassOf", "subClassOf")
 
 
-class subPropertyOf(RdfProperty[Identifier]):
+class subPropertyOf(RdfProperty[RdfType]):
     term = RdfTerm(
-        "subPropertyOf", "http://www.w3.org/2000/01/rdf-schema#subPropertyOf", []
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf", "subPropertyOf"
     )
 
 
 class comment(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("comment", "http://www.w3.org/2000/01/rdf-schema#comment", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#comment", "comment")
 
 
 class label(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("label", "http://www.w3.org/2000/01/rdf-schema#label", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#label", "label")
 
 
 class domain(RdfProperty[rdfs.Class]):
-    term = RdfTerm("domain", "http://www.w3.org/2000/01/rdf-schema#domain", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#domain", "domain")
 
 
 class range(RdfProperty[rdfs.Class]):
-    term = RdfTerm("range", "http://www.w3.org/2000/01/rdf-schema#range", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#range", "range")
 
 
 class seeAlso(RdfProperty[rdfs.Resource]):
-    term = RdfTerm("seeAlso", "http://www.w3.org/2000/01/rdf-schema#seeAlso", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#seeAlso", "seeAlso")
 
 
 class isDefinedBy(RdfProperty[rdfs.Resource]):
-    term = RdfTerm(
-        "isDefinedBy", "http://www.w3.org/2000/01/rdf-schema#isDefinedBy", []
-    )
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#isDefinedBy", "isDefinedBy")
 
 
 class member(RdfProperty[rdfs.Resource]):
-    term = RdfTerm("member", "http://www.w3.org/2000/01/rdf-schema#member", [])
+    term = RdfTerm("http://www.w3.org/2000/01/rdf-schema#member", "member")

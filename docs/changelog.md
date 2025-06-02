@@ -5,10 +5,11 @@
 ### Breaking
 
 - Refactored the way types and properties are specified.
-    - Creating a new entity is done using `crate.add_entity(ID, ClassType, *properties)`
+    - Creating a new entity is done using `crate.add_entity(ClassType(IRI), *properties)`
     - Rather than being tuples of `(predicate, object)`, properties themselves are now also classes that you instantiate: `sdo.name(sdo.Text("WEHI Research Computing Platform"))`
     - Mandatory fields are no longer keyword arguments
-- The root data entity and `ro-crate-metadata.json` entity are no longer added automatically, and instead should be created using `crate.add_root_entity` and `crate.add_metadata_entity`
+- `RdfClass` and `RdfDataType` are classes that capture a single IRI with its inheritance hierarchy and terms. Typically you pre-generate them from a vocabulary or use the built-in classes, and then call its constructor with an IRI to make an instance of that class. For example: `sdo.Thing("#my_iri")`
+- The root data entity entity is no longer added automatically, and instead should be created using `crate.add_root_entity`
 - The bundled vocabularies have been moved from `rdfcrate.uris` and `rdfcrate.bioschemas` into `rdfcrate.vocabs`. There are quite a number more now, including Dublin Core, `prof`, etc
 
 ### Miscellaneous

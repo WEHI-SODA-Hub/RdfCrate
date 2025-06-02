@@ -1,50 +1,40 @@
 from __future__ import annotations
-from rdflib.term import Identifier
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import dc
+from rdfcrate.rdftype import RdfType
 from rdfcrate.vocabs import prof
 
 
 class Profile(dc.Standard):
-    term = RdfTerm("Profile", "http://www.w3.org/ns/dx/prof/Profile", ["1.2-DRAFT"])
+    term = RdfTerm("http://www.w3.org/ns/dx/prof/Profile", "Profile")
 
 
-class hasToken(RdfProperty[Identifier]):
-    term = RdfTerm("hasToken", "http://www.w3.org/ns/dx/prof/hasToken", ["1.2-DRAFT"])
+class hasToken(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/dx/prof/hasToken", "hasToken")
 
 
-class hasArtifact(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "hasArtifact", "http://www.w3.org/ns/dx/prof/hasArtifact", ["1.2-DRAFT"]
-    )
+class hasArtifact(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/dx/prof/hasArtifact", "hasArtifact")
 
 
 class isInheritedFrom(RdfProperty[prof.Profile]):
-    term = RdfTerm(
-        "isInheritedFrom", "http://www.w3.org/ns/dx/prof/isInheritedFrom", []
-    )
+    term = RdfTerm("http://www.w3.org/ns/dx/prof/isInheritedFrom", "isInheritedFrom")
 
 
 class isProfileOf(RdfProperty[dc.Standard]):
-    term = RdfTerm(
-        "isProfileOf", "http://www.w3.org/ns/dx/prof/isProfileOf", ["1.2-DRAFT"]
-    )
+    term = RdfTerm("http://www.w3.org/ns/dx/prof/isProfileOf", "isProfileOf")
 
 
 class isTransitiveProfileOf(RdfProperty[dc.Standard]):
     term = RdfTerm(
-        "isTransitiveProfileOf",
-        "http://www.w3.org/ns/dx/prof/isTransitiveProfileOf",
-        [],
+        "http://www.w3.org/ns/dx/prof/isTransitiveProfileOf", "isTransitiveProfileOf"
     )
 
 
-class hasResource(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "hasResource", "http://www.w3.org/ns/dx/prof/hasResource", ["1.2-DRAFT"]
-    )
+class hasResource(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/dx/prof/hasResource", "hasResource")
 
 
-class hasRole(RdfProperty[Identifier]):
-    term = RdfTerm("hasRole", "http://www.w3.org/ns/dx/prof/hasRole", ["1.2-DRAFT"])
+class hasRole(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/dx/prof/hasRole", "hasRole")

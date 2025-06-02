@@ -5,331 +5,310 @@ from rdfcrate.vocabs import schemaorg
 from rdfcrate.vocabs import bioschemas
 
 
-class Protein(schemaorg.BioChemEntity):
-    term = RdfTerm("Protein", "https://bioschemas.org/terms/Protein", [])
-
-
 class ChemicalSubstance(schemaorg.BioChemEntity):
     term = RdfTerm(
-        "ChemicalSubstance", "https://bioschemas.org/terms/ChemicalSubstance", []
+        "https://bioschemas.org/terms/ChemicalSubstance", "ChemicalSubstance"
     )
 
 
-class MolecularEntity(schemaorg.BioChemEntity):
-    term = RdfTerm(
-        "MolecularEntity", "https://bioschemas.org/terms/MolecularEntity", []
-    )
-
-
-class BioSample(schemaorg.BioChemEntity):
-    term = RdfTerm("BioSample", "https://bioschemas.org/terms/BioSample", [])
+class Protein(schemaorg.BioChemEntity):
+    term = RdfTerm("https://bioschemas.org/terms/Protein", "Protein")
 
 
 class Gene(schemaorg.BioChemEntity):
-    term = RdfTerm("Gene", "https://bioschemas.org/terms/Gene", [])
+    term = RdfTerm("https://bioschemas.org/terms/Gene", "Gene")
+
+
+class MolecularEntity(schemaorg.BioChemEntity):
+    term = RdfTerm("https://bioschemas.org/terms/MolecularEntity", "MolecularEntity")
+
+
+class BioSample(schemaorg.BioChemEntity):
+    term = RdfTerm("https://bioschemas.org/terms/BioSample", "BioSample")
+
+
+class FormalParameter(schemaorg.Intangible):
+    term = RdfTerm("https://bioschemas.org/terms/FormalParameter", "FormalParameter")
 
 
 class ComputationalWorkflow(schemaorg.SoftwareSourceCode):
     term = RdfTerm(
-        "ComputationalWorkflow",
-        "https://bioschemas.org/terms/ComputationalWorkflow",
-        [],
+        "https://bioschemas.org/terms/ComputationalWorkflow", "ComputationalWorkflow"
     )
 
 
 class TaxonName(schemaorg.CreativeWork):
-    term = RdfTerm("TaxonName", "https://bioschemas.org/terms/TaxonName", [])
-
-
-class FormalParameter(schemaorg.Intangible):
-    term = RdfTerm(
-        "FormalParameter", "https://bioschemas.org/terms/FormalParameter", []
-    )
-
-
-class Taxon(schemaorg.Thing):
-    term = RdfTerm("Taxon", "https://bioschemas.org/terms/Taxon", [])
+    term = RdfTerm("https://bioschemas.org/terms/TaxonName", "TaxonName")
 
 
 class BioChemEntity(schemaorg.Thing):
-    term = RdfTerm("BioChemEntity", "https://bioschemas.org/terms/BioChemEntity", [])
+    term = RdfTerm("https://bioschemas.org/terms/BioChemEntity", "BioChemEntity")
+
+
+class Taxon(schemaorg.Thing):
+    term = RdfTerm("https://bioschemas.org/terms/Taxon", "Taxon")
 
 
 class bioChemInteraction(RdfProperty[bioschemas.BioChemEntity]):
     term = RdfTerm(
-        "bioChemInteraction", "https://bioschemas.org/terms/bioChemInteraction", []
+        "https://bioschemas.org/terms/bioChemInteraction", "bioChemInteraction"
     )
 
 
-class childTaxon(RdfProperty[schemaorg.URL | schemaorg.Text | schemaorg.Taxon]):
-    term = RdfTerm("childTaxon", "https://bioschemas.org/terms/childTaxon", [])
+class childTaxon(RdfProperty[schemaorg.Text | schemaorg.Taxon | schemaorg.URL]):
+    term = RdfTerm("https://bioschemas.org/terms/childTaxon", "childTaxon")
 
 
 class samplingAge(RdfProperty[schemaorg.Integer]):
-    term = RdfTerm("samplingAge", "https://bioschemas.org/terms/samplingAge", [])
+    term = RdfTerm("https://bioschemas.org/terms/samplingAge", "samplingAge")
 
 
 class hasStatus(RdfProperty[schemaorg.Text]):
-    term = RdfTerm("hasStatus", "https://bioschemas.org/terms/hasStatus", [])
+    term = RdfTerm("https://bioschemas.org/terms/hasStatus", "hasStatus")
 
 
 class additionalProperty(RdfProperty[schemaorg.PropertyValue]):
     term = RdfTerm(
-        "additionalProperty", "https://bioschemas.org/terms/additionalProperty", []
+        "https://bioschemas.org/terms/additionalProperty", "additionalProperty"
     )
 
 
 class monoisotopicMolecularWeight(
-    RdfProperty[schemaorg.QuantitativeValue | schemaorg.Text]
+    RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue]
 ):
     term = RdfTerm(
-        "monoisotopicMolecularWeight",
         "https://bioschemas.org/terms/monoisotopicMolecularWeight",
-        [],
+        "monoisotopicMolecularWeight",
     )
 
 
 class parentTaxon(RdfProperty[schemaorg.URL | schemaorg.Text | schemaorg.Taxon]):
-    term = RdfTerm("parentTaxon", "https://bioschemas.org/terms/parentTaxon", [])
+    term = RdfTerm("https://bioschemas.org/terms/parentTaxon", "parentTaxon")
 
 
-class collector(RdfProperty[schemaorg.Person | schemaorg.Organization]):
-    term = RdfTerm("collector", "https://bioschemas.org/terms/collector", [])
+class collector(RdfProperty[schemaorg.Organization | schemaorg.Person]):
+    term = RdfTerm("https://bioschemas.org/terms/collector", "collector")
 
 
 class gender(RdfProperty[schemaorg.GenderType | schemaorg.Text]):
-    term = RdfTerm("gender", "https://bioschemas.org/terms/gender", [])
+    term = RdfTerm("https://bioschemas.org/terms/gender", "gender")
 
 
 class associatedDisease(
-    RdfProperty[schemaorg.MedicalCondition | schemaorg.PropertyValue | schemaorg.URL]
+    RdfProperty[schemaorg.PropertyValue | schemaorg.MedicalCondition | schemaorg.URL]
 ):
     term = RdfTerm(
-        "associatedDisease", "https://bioschemas.org/terms/associatedDisease", []
+        "https://bioschemas.org/terms/associatedDisease", "associatedDisease"
     )
 
 
 class inChI(RdfProperty[schemaorg.Text]):
-    term = RdfTerm("inChI", "https://bioschemas.org/terms/inChI", [])
+    term = RdfTerm("https://bioschemas.org/terms/inChI", "inChI")
 
 
-class molecularWeight(RdfProperty[schemaorg.QuantitativeValue | schemaorg.Text]):
-    term = RdfTerm(
-        "molecularWeight", "https://bioschemas.org/terms/molecularWeight", []
-    )
+class molecularWeight(RdfProperty[schemaorg.Text | schemaorg.QuantitativeValue]):
+    term = RdfTerm("https://bioschemas.org/terms/molecularWeight", "molecularWeight")
 
 
-class custodian(RdfProperty[schemaorg.Organization | schemaorg.Person]):
-    term = RdfTerm("custodian", "https://bioschemas.org/terms/custodian", [])
+class custodian(RdfProperty[schemaorg.Person | schemaorg.Organization]):
+    term = RdfTerm("https://bioschemas.org/terms/custodian", "custodian")
 
 
 class potentialUse(RdfProperty[schemaorg.DefinedTerm]):
-    term = RdfTerm("potentialUse", "https://bioschemas.org/terms/potentialUse", [])
+    term = RdfTerm("https://bioschemas.org/terms/potentialUse", "potentialUse")
 
 
 class molecularFormula(RdfProperty[schemaorg.Text]):
-    term = RdfTerm(
-        "molecularFormula", "https://bioschemas.org/terms/molecularFormula", []
-    )
+    term = RdfTerm("https://bioschemas.org/terms/molecularFormula", "molecularFormula")
 
 
 class chemicalComposition(RdfProperty[schemaorg.Text]):
     term = RdfTerm(
-        "chemicalComposition", "https://bioschemas.org/terms/chemicalComposition", []
+        "https://bioschemas.org/terms/chemicalComposition", "chemicalComposition"
     )
 
 
 class expressedIn(
     RdfProperty[
-        schemaorg.BioChemEntity
-        | schemaorg.DefinedTerm
-        | schemaorg.AnatomicalSystem
+        schemaorg.AnatomicalSystem
+        | schemaorg.BioChemEntity
         | schemaorg.AnatomicalStructure
+        | schemaorg.DefinedTerm
     ]
 ):
-    term = RdfTerm("expressedIn", "https://bioschemas.org/terms/expressedIn", [])
+    term = RdfTerm("https://bioschemas.org/terms/expressedIn", "expressedIn")
 
 
 class isInvolvedInBiologicalProcess(
     RdfProperty[schemaorg.URL | schemaorg.PropertyValue | schemaorg.DefinedTerm]
 ):
     term = RdfTerm(
-        "isInvolvedInBiologicalProcess",
         "https://bioschemas.org/terms/isInvolvedInBiologicalProcess",
-        [],
+        "isInvolvedInBiologicalProcess",
     )
 
 
 class smiles(RdfProperty[schemaorg.Text]):
-    term = RdfTerm("smiles", "https://bioschemas.org/terms/smiles", [])
+    term = RdfTerm("https://bioschemas.org/terms/smiles", "smiles")
 
 
 class isEncodedByBioChemEntity(RdfProperty[bioschemas.Gene]):
     term = RdfTerm(
-        "isEncodedByBioChemEntity",
         "https://bioschemas.org/terms/isEncodedByBioChemEntity",
-        [],
+        "isEncodedByBioChemEntity",
     )
 
 
 class dateCreated(RdfProperty[schemaorg.Date]):
-    term = RdfTerm("dateCreated", "https://bioschemas.org/terms/dateCreated", [])
+    term = RdfTerm("https://bioschemas.org/terms/dateCreated", "dateCreated")
 
 
 class documentation(RdfProperty[schemaorg.CreativeWork | schemaorg.URL]):
-    term = RdfTerm("documentation", "https://bioschemas.org/terms/documentation", [])
+    term = RdfTerm("https://bioschemas.org/terms/documentation", "documentation")
 
 
 class isPartOfBioChemEntity(RdfProperty[bioschemas.BioChemEntity]):
     term = RdfTerm(
-        "isPartOfBioChemEntity",
-        "https://bioschemas.org/terms/isPartOfBioChemEntity",
-        [],
+        "https://bioschemas.org/terms/isPartOfBioChemEntity", "isPartOfBioChemEntity"
     )
 
 
 class isLocatedInSubcellularLocation(
-    RdfProperty[schemaorg.URL | schemaorg.PropertyValue | schemaorg.DefinedTerm]
+    RdfProperty[schemaorg.DefinedTerm | schemaorg.URL | schemaorg.PropertyValue]
 ):
     term = RdfTerm(
-        "isLocatedInSubcellularLocation",
         "https://bioschemas.org/terms/isLocatedInSubcellularLocation",
-        [],
+        "isLocatedInSubcellularLocation",
     )
 
 
 class hasBioPolymerSequence(RdfProperty[schemaorg.Text]):
     term = RdfTerm(
-        "hasBioPolymerSequence",
-        "https://bioschemas.org/terms/hasBioPolymerSequence",
-        [],
+        "https://bioschemas.org/terms/hasBioPolymerSequence", "hasBioPolymerSequence"
     )
 
 
 class hasMolecularFunction(
-    RdfProperty[schemaorg.URL | schemaorg.PropertyValue | schemaorg.DefinedTerm]
+    RdfProperty[schemaorg.PropertyValue | schemaorg.DefinedTerm | schemaorg.URL]
 ):
     term = RdfTerm(
-        "hasMolecularFunction", "https://bioschemas.org/terms/hasMolecularFunction", []
+        "https://bioschemas.org/terms/hasMolecularFunction", "hasMolecularFunction"
     )
 
 
 class taxonomicRange(
     RdfProperty[
-        schemaorg.PropertyValue
-        | schemaorg.URL
+        schemaorg.URL
+        | schemaorg.PropertyValue
         | schemaorg.DefinedTerm
         | bioschemas.Taxon
     ]
 ):
-    term = RdfTerm("taxonomicRange", "https://bioschemas.org/terms/taxonomicRange", [])
+    term = RdfTerm("https://bioschemas.org/terms/taxonomicRange", "taxonomicRange")
 
 
 class hasBioChemEntityPart(RdfProperty[bioschemas.BioChemEntity]):
     term = RdfTerm(
-        "hasBioChemEntityPart", "https://bioschemas.org/terms/hasBioChemEntityPart", []
+        "https://bioschemas.org/terms/hasBioChemEntityPart", "hasBioChemEntityPart"
     )
 
 
 class scientificName(
-    RdfProperty[bioschemas.TaxonName | schemaorg.URL | schemaorg.Text]
+    RdfProperty[schemaorg.URL | schemaorg.Text | bioschemas.TaxonName]
 ):
-    term = RdfTerm("scientificName", "https://bioschemas.org/terms/scientificName", [])
+    term = RdfTerm("https://bioschemas.org/terms/scientificName", "scientificName")
 
 
 class alternativeOf(RdfProperty[schemaorg.Gene]):
-    term = RdfTerm("alternativeOf", "https://bioschemas.org/terms/alternativeOf", [])
+    term = RdfTerm("https://bioschemas.org/terms/alternativeOf", "alternativeOf")
 
 
-class taxonRank(RdfProperty[schemaorg.PropertyValue | schemaorg.URL | schemaorg.Text]):
-    term = RdfTerm("taxonRank", "https://bioschemas.org/terms/taxonRank", [])
+class taxonRank(RdfProperty[schemaorg.URL | schemaorg.PropertyValue | schemaorg.Text]):
+    term = RdfTerm("https://bioschemas.org/terms/taxonRank", "taxonRank")
 
 
-class encodingFormat(RdfProperty[schemaorg.URL | schemaorg.Text]):
-    term = RdfTerm("encodingFormat", "https://bioschemas.org/terms/encodingFormat", [])
+class encodingFormat(RdfProperty[schemaorg.Text | schemaorg.URL]):
+    term = RdfTerm("https://bioschemas.org/terms/encodingFormat", "encodingFormat")
 
 
 class valueRequired(RdfProperty[schemaorg.Boolean]):
-    term = RdfTerm("valueRequired", "https://bioschemas.org/terms/valueRequired", [])
+    term = RdfTerm("https://bioschemas.org/terms/valueRequired", "valueRequired")
 
 
 class locationCreated(RdfProperty[schemaorg.Place]):
-    term = RdfTerm(
-        "locationCreated", "https://bioschemas.org/terms/locationCreated", []
-    )
+    term = RdfTerm("https://bioschemas.org/terms/locationCreated", "locationCreated")
 
 
 class bioChemSimilarity(RdfProperty[bioschemas.BioChemEntity]):
     term = RdfTerm(
-        "bioChemSimilarity", "https://bioschemas.org/terms/bioChemSimilarity", []
+        "https://bioschemas.org/terms/bioChemSimilarity", "bioChemSimilarity"
     )
 
 
 class alternateScientificName(
-    RdfProperty[bioschemas.TaxonName | schemaorg.URL | schemaorg.Text]
+    RdfProperty[schemaorg.Text | bioschemas.TaxonName | schemaorg.URL]
 ):
     term = RdfTerm(
-        "alternateScientificName",
         "https://bioschemas.org/terms/alternateScientificName",
-        [],
+        "alternateScientificName",
     )
 
 
 class encodesBioChemEntity(RdfProperty[schemaorg.BioChemEntity]):
     term = RdfTerm(
-        "encodesBioChemEntity", "https://bioschemas.org/terms/encodesBioChemEntity", []
+        "https://bioschemas.org/terms/encodesBioChemEntity", "encodesBioChemEntity"
     )
 
 
 class isControl(RdfProperty[schemaorg.Boolean]):
-    term = RdfTerm("isControl", "https://bioschemas.org/terms/isControl", [])
+    term = RdfTerm("https://bioschemas.org/terms/isControl", "isControl")
 
 
 class defaultValue(RdfProperty[schemaorg.Text | schemaorg.Thing]):
-    term = RdfTerm("defaultValue", "https://bioschemas.org/terms/defaultValue", [])
+    term = RdfTerm("https://bioschemas.org/terms/defaultValue", "defaultValue")
 
 
-class softwareRequirements(RdfProperty[schemaorg.URL | schemaorg.Text]):
+class softwareRequirements(RdfProperty[schemaorg.Text | schemaorg.URL]):
     term = RdfTerm(
-        "softwareRequirements", "https://bioschemas.org/terms/softwareRequirements", []
+        "https://bioschemas.org/terms/softwareRequirements", "softwareRequirements"
     )
 
 
 class chemicalRole(RdfProperty[schemaorg.DefinedTerm]):
-    term = RdfTerm("chemicalRole", "https://bioschemas.org/terms/chemicalRole", [])
+    term = RdfTerm("https://bioschemas.org/terms/chemicalRole", "chemicalRole")
 
 
 class funding(RdfProperty[schemaorg.Grant]):
-    term = RdfTerm("funding", "https://bioschemas.org/terms/funding", [])
+    term = RdfTerm("https://bioschemas.org/terms/funding", "funding")
 
 
 class iupacName(RdfProperty[schemaorg.Text]):
-    term = RdfTerm("iupacName", "https://bioschemas.org/terms/iupacName", [])
+    term = RdfTerm("https://bioschemas.org/terms/iupacName", "iupacName")
 
 
 class itemLocation(
     RdfProperty[schemaorg.Place | schemaorg.Text | schemaorg.PostalAddress]
 ):
-    term = RdfTerm("itemLocation", "https://bioschemas.org/terms/itemLocation", [])
+    term = RdfTerm("https://bioschemas.org/terms/itemLocation", "itemLocation")
 
 
 class output(RdfProperty[bioschemas.FormalParameter]):
-    term = RdfTerm("output", "https://bioschemas.org/terms/output", [])
+    term = RdfTerm("https://bioschemas.org/terms/output", "output")
 
 
 class input(RdfProperty[bioschemas.FormalParameter]):
-    term = RdfTerm("input", "https://bioschemas.org/terms/input", [])
+    term = RdfTerm("https://bioschemas.org/terms/input", "input")
 
 
 class hasRepresentation(RdfProperty[bioschemas.BioChemEntity]):
     term = RdfTerm(
-        "hasRepresentation", "https://bioschemas.org/terms/hasRepresentation", []
+        "https://bioschemas.org/terms/hasRepresentation", "hasRepresentation"
     )
 
 
 class biologicalRole(RdfProperty[schemaorg.DefinedTerm]):
-    term = RdfTerm("biologicalRole", "https://bioschemas.org/terms/biologicalRole", [])
+    term = RdfTerm("https://bioschemas.org/terms/biologicalRole", "biologicalRole")
 
 
 class inChIKey(RdfProperty[schemaorg.Text]):
-    term = RdfTerm("inChIKey", "https://bioschemas.org/terms/inChIKey", [])
+    term = RdfTerm("https://bioschemas.org/terms/inChIKey", "inChIKey")

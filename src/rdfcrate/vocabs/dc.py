@@ -1,334 +1,328 @@
 from __future__ import annotations
-from rdflib.term import Identifier
-from rdfcrate.rdfclass import RdfClass
+from rdfcrate.rdftype import RdfClass
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import rdfs
+from rdfcrate.rdftype import RdfType
+from rdfcrate.vocabs import dc
 
 
 class AgentClass(rdfs.Class):
-    term = RdfTerm("AgentClass", "http://purl.org/dc/terms/AgentClass", [])
+    term = RdfTerm("http://purl.org/dc/terms/AgentClass", "AgentClass")
 
 
 class Agent(RdfClass):
-    term = RdfTerm("Agent", "http://purl.org/dc/terms/Agent", [])
+    term = RdfTerm("http://purl.org/dc/terms/Agent", "Agent")
 
 
 class BibliographicResource(RdfClass):
     term = RdfTerm(
-        "BibliographicResource", "http://purl.org/dc/terms/BibliographicResource", []
+        "http://purl.org/dc/terms/BibliographicResource", "BibliographicResource"
     )
 
 
 class Frequency(RdfClass):
-    term = RdfTerm("Frequency", "http://purl.org/dc/terms/Frequency", [])
+    term = RdfTerm("http://purl.org/dc/terms/Frequency", "Frequency")
 
 
 class LocationPeriodOrJurisdiction(RdfClass):
     term = RdfTerm(
-        "LocationPeriodOrJurisdiction",
         "http://purl.org/dc/terms/LocationPeriodOrJurisdiction",
-        [],
+        "LocationPeriodOrJurisdiction",
     )
 
 
 class RightsStatement(RdfClass):
-    term = RdfTerm("RightsStatement", "http://purl.org/dc/terms/RightsStatement", [])
+    term = RdfTerm("http://purl.org/dc/terms/RightsStatement", "RightsStatement")
 
 
 class LinguisticSystem(RdfClass):
-    term = RdfTerm("LinguisticSystem", "http://purl.org/dc/terms/LinguisticSystem", [])
+    term = RdfTerm("http://purl.org/dc/terms/LinguisticSystem", "LinguisticSystem")
 
 
 class MediaTypeOrExtent(RdfClass):
-    term = RdfTerm(
-        "MediaTypeOrExtent", "http://purl.org/dc/terms/MediaTypeOrExtent", []
-    )
+    term = RdfTerm("http://purl.org/dc/terms/MediaTypeOrExtent", "MediaTypeOrExtent")
 
 
 class MethodOfAccrual(RdfClass):
-    term = RdfTerm("MethodOfAccrual", "http://purl.org/dc/terms/MethodOfAccrual", [])
+    term = RdfTerm("http://purl.org/dc/terms/MethodOfAccrual", "MethodOfAccrual")
 
 
 class MethodOfInstruction(RdfClass):
     term = RdfTerm(
-        "MethodOfInstruction", "http://purl.org/dc/terms/MethodOfInstruction", []
+        "http://purl.org/dc/terms/MethodOfInstruction", "MethodOfInstruction"
     )
 
 
 class PhysicalResource(RdfClass):
-    term = RdfTerm("PhysicalResource", "http://purl.org/dc/terms/PhysicalResource", [])
+    term = RdfTerm("http://purl.org/dc/terms/PhysicalResource", "PhysicalResource")
 
 
 class Policy(RdfClass):
-    term = RdfTerm("Policy", "http://purl.org/dc/terms/Policy", [])
+    term = RdfTerm("http://purl.org/dc/terms/Policy", "Policy")
 
 
 class ProvenanceStatement(RdfClass):
     term = RdfTerm(
-        "ProvenanceStatement", "http://purl.org/dc/terms/ProvenanceStatement", []
+        "http://purl.org/dc/terms/ProvenanceStatement", "ProvenanceStatement"
     )
 
 
 class Standard(RdfClass):
-    term = RdfTerm("Standard", "http://purl.org/dc/terms/Standard", ["1.2-DRAFT"])
+    term = RdfTerm("http://purl.org/dc/terms/Standard", "Standard")
 
 
 class Jurisdiction(LocationPeriodOrJurisdiction):
-    term = RdfTerm("Jurisdiction", "http://purl.org/dc/terms/Jurisdiction", [])
+    term = RdfTerm("http://purl.org/dc/terms/Jurisdiction", "Jurisdiction")
 
 
 class Location(LocationPeriodOrJurisdiction):
-    term = RdfTerm("Location", "http://purl.org/dc/terms/Location", [])
+    term = RdfTerm("http://purl.org/dc/terms/Location", "Location")
 
 
 class PeriodOfTime(LocationPeriodOrJurisdiction):
-    term = RdfTerm("PeriodOfTime", "http://purl.org/dc/terms/PeriodOfTime", [])
+    term = RdfTerm("http://purl.org/dc/terms/PeriodOfTime", "PeriodOfTime")
 
 
 class LicenseDocument(RightsStatement):
-    term = RdfTerm("LicenseDocument", "http://purl.org/dc/terms/LicenseDocument", [])
+    term = RdfTerm("http://purl.org/dc/terms/LicenseDocument", "LicenseDocument")
 
 
 class MediaType(MediaTypeOrExtent):
-    term = RdfTerm("MediaType", "http://purl.org/dc/terms/MediaType", [])
+    term = RdfTerm("http://purl.org/dc/terms/MediaType", "MediaType")
 
 
 class SizeOrDuration(MediaTypeOrExtent):
-    term = RdfTerm("SizeOrDuration", "http://purl.org/dc/terms/SizeOrDuration", [])
+    term = RdfTerm("http://purl.org/dc/terms/SizeOrDuration", "SizeOrDuration")
 
 
 class FileFormat(MediaType):
-    term = RdfTerm("FileFormat", "http://purl.org/dc/terms/FileFormat", [])
+    term = RdfTerm("http://purl.org/dc/terms/FileFormat", "FileFormat")
 
 
 class PhysicalMedium(MediaType):
-    term = RdfTerm("PhysicalMedium", "http://purl.org/dc/terms/PhysicalMedium", [])
+    term = RdfTerm("http://purl.org/dc/terms/PhysicalMedium", "PhysicalMedium")
 
 
-class abstract(RdfProperty[Identifier]):
-    term = RdfTerm("abstract", "http://purl.org/dc/terms/abstract", [])
+class abstract(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/abstract", "abstract")
 
 
-class accessRights(RdfProperty[Identifier]):
-    term = RdfTerm("accessRights", "http://purl.org/dc/terms/accessRights", [])
+class accessRights(RdfProperty[dc.RightsStatement]):
+    term = RdfTerm("http://purl.org/dc/terms/accessRights", "accessRights")
 
 
-class accrualMethod(RdfProperty[Identifier]):
-    term = RdfTerm("accrualMethod", "http://purl.org/dc/terms/accrualMethod", [])
+class accrualMethod(RdfProperty[dc.MethodOfAccrual]):
+    term = RdfTerm("http://purl.org/dc/terms/accrualMethod", "accrualMethod")
 
 
-class accrualPeriodicity(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "accrualPeriodicity", "http://purl.org/dc/terms/accrualPeriodicity", []
-    )
+class accrualPeriodicity(RdfProperty[dc.Frequency]):
+    term = RdfTerm("http://purl.org/dc/terms/accrualPeriodicity", "accrualPeriodicity")
 
 
-class accrualPolicy(RdfProperty[Identifier]):
-    term = RdfTerm("accrualPolicy", "http://purl.org/dc/terms/accrualPolicy", [])
+class accrualPolicy(RdfProperty[dc.Policy]):
+    term = RdfTerm("http://purl.org/dc/terms/accrualPolicy", "accrualPolicy")
 
 
 class alternative(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("alternative", "http://purl.org/dc/terms/alternative", [])
+    term = RdfTerm("http://purl.org/dc/terms/alternative", "alternative")
 
 
-class audience(RdfProperty[Identifier]):
-    term = RdfTerm("audience", "http://purl.org/dc/terms/audience", [])
+class audience(RdfProperty[dc.AgentClass]):
+    term = RdfTerm("http://purl.org/dc/terms/audience", "audience")
 
 
 class available(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("available", "http://purl.org/dc/terms/available", [])
+    term = RdfTerm("http://purl.org/dc/terms/available", "available")
 
 
 class bibliographicCitation(RdfProperty[rdfs.Literal]):
     term = RdfTerm(
-        "bibliographicCitation", "http://purl.org/dc/terms/bibliographicCitation", []
+        "http://purl.org/dc/terms/bibliographicCitation", "bibliographicCitation"
     )
 
 
-class conformsTo(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "conformsTo", "http://purl.org/dc/terms/conformsTo", ["1.0", "1.1", "1.2-DRAFT"]
-    )
+class conformsTo(RdfProperty[dc.Standard]):
+    term = RdfTerm("http://purl.org/dc/terms/conformsTo", "conformsTo")
 
 
-class contributor(RdfProperty[Identifier]):
-    term = RdfTerm("contributor", "http://purl.org/dc/terms/contributor", [])
+class contributor(RdfProperty[dc.Agent]):
+    term = RdfTerm("http://purl.org/dc/terms/contributor", "contributor")
 
 
-class coverage(RdfProperty[Identifier]):
-    term = RdfTerm("coverage", "http://purl.org/dc/terms/coverage", [])
+class coverage(RdfProperty[dc.Jurisdiction | dc.Location]):
+    term = RdfTerm("http://purl.org/dc/terms/coverage", "coverage")
 
 
 class created(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("created", "http://purl.org/dc/terms/created", [])
+    term = RdfTerm("http://purl.org/dc/terms/created", "created")
 
 
-class creator(RdfProperty[Identifier]):
-    term = RdfTerm("creator", "http://purl.org/dc/terms/creator", [])
+class creator(RdfProperty[dc.Agent]):
+    term = RdfTerm("http://purl.org/dc/terms/creator", "creator")
 
 
 class date(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("date", "http://purl.org/dc/terms/date", [])
+    term = RdfTerm("http://purl.org/dc/terms/date", "date")
 
 
 class dateAccepted(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("dateAccepted", "http://purl.org/dc/terms/dateAccepted", [])
+    term = RdfTerm("http://purl.org/dc/terms/dateAccepted", "dateAccepted")
 
 
 class dateCopyrighted(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("dateCopyrighted", "http://purl.org/dc/terms/dateCopyrighted", [])
+    term = RdfTerm("http://purl.org/dc/terms/dateCopyrighted", "dateCopyrighted")
 
 
 class dateSubmitted(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("dateSubmitted", "http://purl.org/dc/terms/dateSubmitted", [])
+    term = RdfTerm("http://purl.org/dc/terms/dateSubmitted", "dateSubmitted")
 
 
-class description(RdfProperty[Identifier]):
-    term = RdfTerm("description", "http://purl.org/dc/terms/description", [])
+class description(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/description", "description")
 
 
-class educationLevel(RdfProperty[Identifier]):
-    term = RdfTerm("educationLevel", "http://purl.org/dc/terms/educationLevel", [])
+class educationLevel(RdfProperty[dc.AgentClass]):
+    term = RdfTerm("http://purl.org/dc/terms/educationLevel", "educationLevel")
 
 
-class extent(RdfProperty[Identifier]):
-    term = RdfTerm("extent", "http://purl.org/dc/terms/extent", [])
+class extent(RdfProperty[dc.SizeOrDuration]):
+    term = RdfTerm("http://purl.org/dc/terms/extent", "extent")
 
 
-class format(RdfProperty[Identifier]):
-    term = RdfTerm("format", "http://purl.org/dc/terms/format", [])
+class format(RdfProperty[dc.MediaType]):
+    term = RdfTerm("http://purl.org/dc/terms/format", "format")
 
 
-class hasFormat(RdfProperty[Identifier]):
-    term = RdfTerm("hasFormat", "http://purl.org/dc/terms/hasFormat", [])
+class hasFormat(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/hasFormat", "hasFormat")
 
 
-class hasPart(RdfProperty[Identifier]):
-    term = RdfTerm("hasPart", "http://purl.org/dc/terms/hasPart", [])
+class hasPart(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/hasPart", "hasPart")
 
 
-class hasVersion(RdfProperty[Identifier]):
-    term = RdfTerm("hasVersion", "http://purl.org/dc/terms/hasVersion", [])
+class hasVersion(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/hasVersion", "hasVersion")
 
 
 class identifier(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("identifier", "http://purl.org/dc/terms/identifier", [])
+    term = RdfTerm("http://purl.org/dc/terms/identifier", "identifier")
 
 
-class instructionalMethod(RdfProperty[Identifier]):
+class instructionalMethod(RdfProperty[dc.MethodOfInstruction]):
     term = RdfTerm(
-        "instructionalMethod", "http://purl.org/dc/terms/instructionalMethod", []
+        "http://purl.org/dc/terms/instructionalMethod", "instructionalMethod"
     )
 
 
-class isFormatOf(RdfProperty[Identifier]):
-    term = RdfTerm("isFormatOf", "http://purl.org/dc/terms/isFormatOf", [])
+class isFormatOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/isFormatOf", "isFormatOf")
 
 
-class isPartOf(RdfProperty[Identifier]):
-    term = RdfTerm("isPartOf", "http://purl.org/dc/terms/isPartOf", [])
+class isPartOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/isPartOf", "isPartOf")
 
 
-class isReferencedBy(RdfProperty[Identifier]):
-    term = RdfTerm("isReferencedBy", "http://purl.org/dc/terms/isReferencedBy", [])
+class isReferencedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/isReferencedBy", "isReferencedBy")
 
 
-class isReplacedBy(RdfProperty[Identifier]):
-    term = RdfTerm("isReplacedBy", "http://purl.org/dc/terms/isReplacedBy", [])
+class isReplacedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/isReplacedBy", "isReplacedBy")
 
 
-class isRequiredBy(RdfProperty[Identifier]):
-    term = RdfTerm("isRequiredBy", "http://purl.org/dc/terms/isRequiredBy", [])
+class isRequiredBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/isRequiredBy", "isRequiredBy")
 
 
-class isVersionOf(RdfProperty[Identifier]):
-    term = RdfTerm("isVersionOf", "http://purl.org/dc/terms/isVersionOf", [])
+class isVersionOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/isVersionOf", "isVersionOf")
 
 
 class issued(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("issued", "http://purl.org/dc/terms/issued", [])
+    term = RdfTerm("http://purl.org/dc/terms/issued", "issued")
 
 
-class language(RdfProperty[Identifier]):
-    term = RdfTerm("language", "http://purl.org/dc/terms/language", [])
+class language(RdfProperty[dc.LinguisticSystem]):
+    term = RdfTerm("http://purl.org/dc/terms/language", "language")
 
 
-class license(RdfProperty[Identifier]):
-    term = RdfTerm("license", "http://purl.org/dc/terms/license", [])
+class license(RdfProperty[dc.LicenseDocument]):
+    term = RdfTerm("http://purl.org/dc/terms/license", "license")
 
 
-class mediator(RdfProperty[Identifier]):
-    term = RdfTerm("mediator", "http://purl.org/dc/terms/mediator", [])
+class mediator(RdfProperty[dc.AgentClass]):
+    term = RdfTerm("http://purl.org/dc/terms/mediator", "mediator")
 
 
-class medium(RdfProperty[Identifier]):
-    term = RdfTerm("medium", "http://purl.org/dc/terms/medium", [])
+class medium(RdfProperty[dc.PhysicalMedium]):
+    term = RdfTerm("http://purl.org/dc/terms/medium", "medium")
 
 
 class modified(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("modified", "http://purl.org/dc/terms/modified", [])
+    term = RdfTerm("http://purl.org/dc/terms/modified", "modified")
 
 
-class provenance(RdfProperty[Identifier]):
-    term = RdfTerm("provenance", "http://purl.org/dc/terms/provenance", [])
+class provenance(RdfProperty[dc.ProvenanceStatement]):
+    term = RdfTerm("http://purl.org/dc/terms/provenance", "provenance")
 
 
-class publisher(RdfProperty[Identifier]):
-    term = RdfTerm("publisher", "http://purl.org/dc/terms/publisher", [])
+class publisher(RdfProperty[dc.Agent]):
+    term = RdfTerm("http://purl.org/dc/terms/publisher", "publisher")
 
 
-class references(RdfProperty[Identifier]):
-    term = RdfTerm("references", "http://purl.org/dc/terms/references", [])
+class references(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/references", "references")
 
 
-class relation(RdfProperty[Identifier]):
-    term = RdfTerm("relation", "http://purl.org/dc/terms/relation", [])
+class relation(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/relation", "relation")
 
 
-class replaces(RdfProperty[Identifier]):
-    term = RdfTerm("replaces", "http://purl.org/dc/terms/replaces", [])
+class replaces(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/replaces", "replaces")
 
 
-class requires(RdfProperty[Identifier]):
-    term = RdfTerm("requires", "http://purl.org/dc/terms/requires", [])
+class requires(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/requires", "requires")
 
 
-class rights(RdfProperty[Identifier]):
-    term = RdfTerm("rights", "http://purl.org/dc/terms/rights", [])
+class rights(RdfProperty[dc.RightsStatement]):
+    term = RdfTerm("http://purl.org/dc/terms/rights", "rights")
 
 
-class rightsHolder(RdfProperty[Identifier]):
-    term = RdfTerm("rightsHolder", "http://purl.org/dc/terms/rightsHolder", [])
+class rightsHolder(RdfProperty[dc.Agent]):
+    term = RdfTerm("http://purl.org/dc/terms/rightsHolder", "rightsHolder")
 
 
-class source(RdfProperty[Identifier]):
-    term = RdfTerm("source", "http://purl.org/dc/terms/source", [])
+class source(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/source", "source")
 
 
-class spatial(RdfProperty[Identifier]):
-    term = RdfTerm("spatial", "http://purl.org/dc/terms/spatial", [])
+class spatial(RdfProperty[dc.Location]):
+    term = RdfTerm("http://purl.org/dc/terms/spatial", "spatial")
 
 
-class subject(RdfProperty[Identifier]):
-    term = RdfTerm("subject", "http://purl.org/dc/terms/subject", [])
+class subject(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/subject", "subject")
 
 
-class tableOfContents(RdfProperty[Identifier]):
-    term = RdfTerm("tableOfContents", "http://purl.org/dc/terms/tableOfContents", [])
+class tableOfContents(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/tableOfContents", "tableOfContents")
 
 
-class temporal(RdfProperty[Identifier]):
-    term = RdfTerm("temporal", "http://purl.org/dc/terms/temporal", [])
+class temporal(RdfProperty[dc.PeriodOfTime]):
+    term = RdfTerm("http://purl.org/dc/terms/temporal", "temporal")
 
 
 class title(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("title", "http://purl.org/dc/terms/title", [])
+    term = RdfTerm("http://purl.org/dc/terms/title", "title")
 
 
-class type(RdfProperty[Identifier]):
-    term = RdfTerm("type", "http://purl.org/dc/terms/type", [])
+class type(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/dc/terms/type", "type")
 
 
 class valid(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("valid", "http://purl.org/dc/terms/valid", [])
+    term = RdfTerm("http://purl.org/dc/terms/valid", "valid")

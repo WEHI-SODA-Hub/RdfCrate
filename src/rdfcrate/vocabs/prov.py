@@ -1,385 +1,365 @@
 from __future__ import annotations
-from rdflib.term import Identifier
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
+from rdfcrate.rdftype import RdfType
 from rdfcrate.vocabs import rdfs
 
 
-class aq(RdfProperty[Identifier]):
-    term = RdfTerm("aq", "http://www.w3.org/ns/prov#aq", [])
+class aq(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#aq", "aq")
 
 
-class category(RdfProperty[Identifier]):
-    term = RdfTerm("category", "http://www.w3.org/ns/prov#category", [])
+class category(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#category", "category")
 
 
-class component(RdfProperty[Identifier]):
-    term = RdfTerm("component", "http://www.w3.org/ns/prov#component", [])
+class component(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#component", "component")
 
 
-class constraints(RdfProperty[Identifier]):
-    term = RdfTerm("constraints", "http://www.w3.org/ns/prov#constraints", [])
+class constraints(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#constraints", "constraints")
 
 
-class definition(RdfProperty[Identifier]):
-    term = RdfTerm("definition", "http://www.w3.org/ns/prov#definition", [])
+class definition(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#definition", "definition")
 
 
-class dm(RdfProperty[Identifier]):
-    term = RdfTerm("dm", "http://www.w3.org/ns/prov#dm", [])
+class dm(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#dm", "dm")
 
 
-class editorialNote(RdfProperty[Identifier]):
-    term = RdfTerm("editorialNote", "http://www.w3.org/ns/prov#editorialNote", [])
+class editorialNote(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#editorialNote", "editorialNote")
 
 
-class editorsDefinition(RdfProperty[Identifier]):
+class editorsDefinition(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#editorsDefinition", "editorsDefinition")
+
+
+class inverse(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#inverse", "inverse")
+
+
+class n(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#n", "n")
+
+
+class order(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#order", "order")
+
+
+class qualifiedForm(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#qualifiedForm", "qualifiedForm")
+
+
+class sharesDefinitionWith(RdfProperty[RdfType]):
     term = RdfTerm(
-        "editorsDefinition", "http://www.w3.org/ns/prov#editorsDefinition", []
+        "http://www.w3.org/ns/prov#sharesDefinitionWith", "sharesDefinitionWith"
     )
 
 
-class inverse(RdfProperty[Identifier]):
-    term = RdfTerm("inverse", "http://www.w3.org/ns/prov#inverse", [])
+class specializationOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#specializationOf", "specializationOf")
 
 
-class n(RdfProperty[Identifier]):
-    term = RdfTerm("n", "http://www.w3.org/ns/prov#n", [])
+class todo(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#todo", "todo")
 
 
-class order(RdfProperty[Identifier]):
-    term = RdfTerm("order", "http://www.w3.org/ns/prov#order", [])
+class unqualifiedForm(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#unqualifiedForm", "unqualifiedForm")
 
 
-class qualifiedForm(RdfProperty[Identifier]):
-    term = RdfTerm("qualifiedForm", "http://www.w3.org/ns/prov#qualifiedForm", [])
+class wasRevisionOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasRevisionOf", "wasRevisionOf")
 
 
-class sharesDefinitionWith(RdfProperty[Identifier]):
+class atTime(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#atTime", "atTime")
+
+
+class endedAtTime(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#endedAtTime", "endedAtTime")
+
+
+class generatedAtTime(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#generatedAtTime", "generatedAtTime")
+
+
+class invalidatedAtTime(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#invalidatedAtTime", "invalidatedAtTime")
+
+
+class startedAtTime(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#startedAtTime", "startedAtTime")
+
+
+class value(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#value", "value")
+
+
+class provenanceUriTemplate(RdfProperty[RdfType]):
     term = RdfTerm(
-        "sharesDefinitionWith", "http://www.w3.org/ns/prov#sharesDefinitionWith", []
-    )
-
-
-class specializationOf(RdfProperty[Identifier]):
-    term = RdfTerm("specializationOf", "http://www.w3.org/ns/prov#specializationOf", [])
-
-
-class todo(RdfProperty[Identifier]):
-    term = RdfTerm("todo", "http://www.w3.org/ns/prov#todo", [])
-
-
-class unqualifiedForm(RdfProperty[Identifier]):
-    term = RdfTerm("unqualifiedForm", "http://www.w3.org/ns/prov#unqualifiedForm", [])
-
-
-class wasRevisionOf(RdfProperty[Identifier]):
-    term = RdfTerm("wasRevisionOf", "http://www.w3.org/ns/prov#wasRevisionOf", [])
-
-
-class atTime(RdfProperty[Identifier]):
-    term = RdfTerm("atTime", "http://www.w3.org/ns/prov#atTime", [])
-
-
-class endedAtTime(RdfProperty[Identifier]):
-    term = RdfTerm("endedAtTime", "http://www.w3.org/ns/prov#endedAtTime", [])
-
-
-class generatedAtTime(RdfProperty[Identifier]):
-    term = RdfTerm("generatedAtTime", "http://www.w3.org/ns/prov#generatedAtTime", [])
-
-
-class invalidatedAtTime(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "invalidatedAtTime", "http://www.w3.org/ns/prov#invalidatedAtTime", []
-    )
-
-
-class startedAtTime(RdfProperty[Identifier]):
-    term = RdfTerm("startedAtTime", "http://www.w3.org/ns/prov#startedAtTime", [])
-
-
-class value(RdfProperty[Identifier]):
-    term = RdfTerm("value", "http://www.w3.org/ns/prov#value", [])
-
-
-class provenanceUriTemplate(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "provenanceUriTemplate", "http://www.w3.org/ns/prov#provenanceUriTemplate", []
+        "http://www.w3.org/ns/prov#provenanceUriTemplate", "provenanceUriTemplate"
     )
 
 
 class pairKey(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("pairKey", "http://www.w3.org/ns/prov#pairKey", [])
+    term = RdfTerm("http://www.w3.org/ns/prov#pairKey", "pairKey")
 
 
 class removedKey(RdfProperty[rdfs.Literal]):
-    term = RdfTerm("removedKey", "http://www.w3.org/ns/prov#removedKey", [])
+    term = RdfTerm("http://www.w3.org/ns/prov#removedKey", "removedKey")
 
 
-class pairEntity(RdfProperty[Identifier]):
-    term = RdfTerm("pairEntity", "http://www.w3.org/ns/prov#pairEntity", [])
+class pairEntity(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#pairEntity", "pairEntity")
 
 
-class actedOnBehalfOf(RdfProperty[Identifier]):
-    term = RdfTerm("actedOnBehalfOf", "http://www.w3.org/ns/prov#actedOnBehalfOf", [])
+class actedOnBehalfOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#actedOnBehalfOf", "actedOnBehalfOf")
 
 
-class activity(RdfProperty[Identifier]):
-    term = RdfTerm("activity", "http://www.w3.org/ns/prov#activity", [])
+class activity(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#activity", "activity")
 
 
-class agent(RdfProperty[Identifier]):
-    term = RdfTerm("agent", "http://www.w3.org/ns/prov#agent", [])
+class agent(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#agent", "agent")
 
 
-class alternateOf(RdfProperty[Identifier]):
-    term = RdfTerm("alternateOf", "http://www.w3.org/ns/prov#alternateOf", [])
+class alternateOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#alternateOf", "alternateOf")
 
 
-class atLocation(RdfProperty[Identifier]):
-    term = RdfTerm("atLocation", "http://www.w3.org/ns/prov#atLocation", [])
+class atLocation(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#atLocation", "atLocation")
 
 
-class entity(RdfProperty[Identifier]):
-    term = RdfTerm("entity", "http://www.w3.org/ns/prov#entity", [])
+class entity(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#entity", "entity")
 
 
-class generated(RdfProperty[Identifier]):
-    term = RdfTerm("generated", "http://www.w3.org/ns/prov#generated", [])
+class generated(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#generated", "generated")
 
 
-class hadActivity(RdfProperty[Identifier]):
-    term = RdfTerm("hadActivity", "http://www.w3.org/ns/prov#hadActivity", [])
+class hadActivity(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#hadActivity", "hadActivity")
 
 
-class hadGeneration(RdfProperty[Identifier]):
-    term = RdfTerm("hadGeneration", "http://www.w3.org/ns/prov#hadGeneration", [])
+class hadGeneration(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#hadGeneration", "hadGeneration")
 
 
-class hadMember(RdfProperty[Identifier]):
-    term = RdfTerm("hadMember", "http://www.w3.org/ns/prov#hadMember", [])
+class hadMember(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#hadMember", "hadMember")
 
 
-class hadPlan(RdfProperty[Identifier]):
-    term = RdfTerm("hadPlan", "http://www.w3.org/ns/prov#hadPlan", [])
+class hadPlan(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#hadPlan", "hadPlan")
 
 
-class hadPrimarySource(RdfProperty[Identifier]):
-    term = RdfTerm("hadPrimarySource", "http://www.w3.org/ns/prov#hadPrimarySource", [])
+class hadPrimarySource(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#hadPrimarySource", "hadPrimarySource")
 
 
-class hadRole(RdfProperty[Identifier]):
-    term = RdfTerm("hadRole", "http://www.w3.org/ns/prov#hadRole", [])
+class hadRole(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#hadRole", "hadRole")
 
 
-class hadUsage(RdfProperty[Identifier]):
-    term = RdfTerm("hadUsage", "http://www.w3.org/ns/prov#hadUsage", [])
+class hadUsage(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#hadUsage", "hadUsage")
 
 
-class influenced(RdfProperty[Identifier]):
-    term = RdfTerm("influenced", "http://www.w3.org/ns/prov#influenced", [])
+class influenced(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#influenced", "influenced")
 
 
-class influencer(RdfProperty[Identifier]):
-    term = RdfTerm("influencer", "http://www.w3.org/ns/prov#influencer", [])
+class influencer(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#influencer", "influencer")
 
 
-class invalidated(RdfProperty[Identifier]):
-    term = RdfTerm("invalidated", "http://www.w3.org/ns/prov#invalidated", [])
+class invalidated(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#invalidated", "invalidated")
 
 
-class qualifiedAssociation(RdfProperty[Identifier]):
+class qualifiedAssociation(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedAssociation", "http://www.w3.org/ns/prov#qualifiedAssociation", []
+        "http://www.w3.org/ns/prov#qualifiedAssociation", "qualifiedAssociation"
     )
 
 
-class qualifiedAttribution(RdfProperty[Identifier]):
+class qualifiedAttribution(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedAttribution", "http://www.w3.org/ns/prov#qualifiedAttribution", []
+        "http://www.w3.org/ns/prov#qualifiedAttribution", "qualifiedAttribution"
     )
 
 
-class qualifiedCommunication(RdfProperty[Identifier]):
+class qualifiedCommunication(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedCommunication", "http://www.w3.org/ns/prov#qualifiedCommunication", []
+        "http://www.w3.org/ns/prov#qualifiedCommunication", "qualifiedCommunication"
     )
 
 
-class qualifiedDelegation(RdfProperty[Identifier]):
+class qualifiedDelegation(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedDelegation", "http://www.w3.org/ns/prov#qualifiedDelegation", []
+        "http://www.w3.org/ns/prov#qualifiedDelegation", "qualifiedDelegation"
     )
 
 
-class qualifiedDerivation(RdfProperty[Identifier]):
+class qualifiedDerivation(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedDerivation", "http://www.w3.org/ns/prov#qualifiedDerivation", []
+        "http://www.w3.org/ns/prov#qualifiedDerivation", "qualifiedDerivation"
     )
 
 
-class qualifiedEnd(RdfProperty[Identifier]):
-    term = RdfTerm("qualifiedEnd", "http://www.w3.org/ns/prov#qualifiedEnd", [])
+class qualifiedEnd(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#qualifiedEnd", "qualifiedEnd")
 
 
-class qualifiedGeneration(RdfProperty[Identifier]):
+class qualifiedGeneration(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedGeneration", "http://www.w3.org/ns/prov#qualifiedGeneration", []
+        "http://www.w3.org/ns/prov#qualifiedGeneration", "qualifiedGeneration"
     )
 
 
-class qualifiedInfluence(RdfProperty[Identifier]):
+class qualifiedInfluence(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#qualifiedInfluence", "qualifiedInfluence")
+
+
+class qualifiedInvalidation(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedInfluence", "http://www.w3.org/ns/prov#qualifiedInfluence", []
+        "http://www.w3.org/ns/prov#qualifiedInvalidation", "qualifiedInvalidation"
     )
 
 
-class qualifiedInvalidation(RdfProperty[Identifier]):
+class qualifiedPrimarySource(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedInvalidation", "http://www.w3.org/ns/prov#qualifiedInvalidation", []
+        "http://www.w3.org/ns/prov#qualifiedPrimarySource", "qualifiedPrimarySource"
     )
 
 
-class qualifiedPrimarySource(RdfProperty[Identifier]):
+class qualifiedQuotation(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#qualifiedQuotation", "qualifiedQuotation")
+
+
+class qualifiedRevision(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#qualifiedRevision", "qualifiedRevision")
+
+
+class qualifiedStart(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#qualifiedStart", "qualifiedStart")
+
+
+class qualifiedUsage(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#qualifiedUsage", "qualifiedUsage")
+
+
+class used(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#used", "used")
+
+
+class wasAssociatedWith(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasAssociatedWith", "wasAssociatedWith")
+
+
+class wasAttributedTo(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasAttributedTo", "wasAttributedTo")
+
+
+class wasDerivedFrom(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasDerivedFrom", "wasDerivedFrom")
+
+
+class wasEndedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasEndedBy", "wasEndedBy")
+
+
+class wasGeneratedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasGeneratedBy", "wasGeneratedBy")
+
+
+class wasInfluencedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasInfluencedBy", "wasInfluencedBy")
+
+
+class wasInformedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasInformedBy", "wasInformedBy")
+
+
+class wasInvalidatedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasInvalidatedBy", "wasInvalidatedBy")
+
+
+class wasQuotedFrom(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasQuotedFrom", "wasQuotedFrom")
+
+
+class wasStartedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#wasStartedBy", "wasStartedBy")
+
+
+class has_anchor(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#has_anchor", "has_anchor")
+
+
+class has_provenance(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#has_provenance", "has_provenance")
+
+
+class has_query_service(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#has_query_service", "has_query_service")
+
+
+class describesService(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#describesService", "describesService")
+
+
+class pingback(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#pingback", "pingback")
+
+
+class dictionary(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#dictionary", "dictionary")
+
+
+class derivedByInsertionFrom(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedPrimarySource", "http://www.w3.org/ns/prov#qualifiedPrimarySource", []
+        "http://www.w3.org/ns/prov#derivedByInsertionFrom", "derivedByInsertionFrom"
     )
 
 
-class qualifiedQuotation(RdfProperty[Identifier]):
+class derivedByRemovalFrom(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedQuotation", "http://www.w3.org/ns/prov#qualifiedQuotation", []
+        "http://www.w3.org/ns/prov#derivedByRemovalFrom", "derivedByRemovalFrom"
     )
 
 
-class qualifiedRevision(RdfProperty[Identifier]):
+class insertedKeyEntityPair(RdfProperty[RdfType]):
     term = RdfTerm(
-        "qualifiedRevision", "http://www.w3.org/ns/prov#qualifiedRevision", []
+        "http://www.w3.org/ns/prov#insertedKeyEntityPair", "insertedKeyEntityPair"
     )
 
 
-class qualifiedStart(RdfProperty[Identifier]):
-    term = RdfTerm("qualifiedStart", "http://www.w3.org/ns/prov#qualifiedStart", [])
-
-
-class qualifiedUsage(RdfProperty[Identifier]):
-    term = RdfTerm("qualifiedUsage", "http://www.w3.org/ns/prov#qualifiedUsage", [])
-
-
-class used(RdfProperty[Identifier]):
-    term = RdfTerm("used", "http://www.w3.org/ns/prov#used", [])
-
-
-class wasAssociatedWith(RdfProperty[Identifier]):
+class hadDictionaryMember(RdfProperty[RdfType]):
     term = RdfTerm(
-        "wasAssociatedWith", "http://www.w3.org/ns/prov#wasAssociatedWith", []
+        "http://www.w3.org/ns/prov#hadDictionaryMember", "hadDictionaryMember"
     )
 
 
-class wasAttributedTo(RdfProperty[Identifier]):
-    term = RdfTerm("wasAttributedTo", "http://www.w3.org/ns/prov#wasAttributedTo", [])
+class qualifiedInsertion(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#qualifiedInsertion", "qualifiedInsertion")
 
 
-class wasDerivedFrom(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "wasDerivedFrom",
-        "http://www.w3.org/ns/prov#wasDerivedFrom",
-        ["0.2", "1.0", "1.1", "1.2-DRAFT"],
-    )
+class qualifiedRemoval(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#qualifiedRemoval", "qualifiedRemoval")
 
 
-class wasEndedBy(RdfProperty[Identifier]):
-    term = RdfTerm("wasEndedBy", "http://www.w3.org/ns/prov#wasEndedBy", [])
+class asInBundle(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#asInBundle", "asInBundle")
 
 
-class wasGeneratedBy(RdfProperty[Identifier]):
-    term = RdfTerm("wasGeneratedBy", "http://www.w3.org/ns/prov#wasGeneratedBy", [])
-
-
-class wasInfluencedBy(RdfProperty[Identifier]):
-    term = RdfTerm("wasInfluencedBy", "http://www.w3.org/ns/prov#wasInfluencedBy", [])
-
-
-class wasInformedBy(RdfProperty[Identifier]):
-    term = RdfTerm("wasInformedBy", "http://www.w3.org/ns/prov#wasInformedBy", [])
-
-
-class wasInvalidatedBy(RdfProperty[Identifier]):
-    term = RdfTerm("wasInvalidatedBy", "http://www.w3.org/ns/prov#wasInvalidatedBy", [])
-
-
-class wasQuotedFrom(RdfProperty[Identifier]):
-    term = RdfTerm("wasQuotedFrom", "http://www.w3.org/ns/prov#wasQuotedFrom", [])
-
-
-class wasStartedBy(RdfProperty[Identifier]):
-    term = RdfTerm("wasStartedBy", "http://www.w3.org/ns/prov#wasStartedBy", [])
-
-
-class has_anchor(RdfProperty[Identifier]):
-    term = RdfTerm("has_anchor", "http://www.w3.org/ns/prov#has_anchor", [])
-
-
-class has_provenance(RdfProperty[Identifier]):
-    term = RdfTerm("has_provenance", "http://www.w3.org/ns/prov#has_provenance", [])
-
-
-class has_query_service(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "has_query_service", "http://www.w3.org/ns/prov#has_query_service", []
-    )
-
-
-class describesService(RdfProperty[Identifier]):
-    term = RdfTerm("describesService", "http://www.w3.org/ns/prov#describesService", [])
-
-
-class pingback(RdfProperty[Identifier]):
-    term = RdfTerm("pingback", "http://www.w3.org/ns/prov#pingback", [])
-
-
-class dictionary(RdfProperty[Identifier]):
-    term = RdfTerm("dictionary", "http://www.w3.org/ns/prov#dictionary", [])
-
-
-class derivedByInsertionFrom(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "derivedByInsertionFrom", "http://www.w3.org/ns/prov#derivedByInsertionFrom", []
-    )
-
-
-class derivedByRemovalFrom(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "derivedByRemovalFrom", "http://www.w3.org/ns/prov#derivedByRemovalFrom", []
-    )
-
-
-class insertedKeyEntityPair(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "insertedKeyEntityPair", "http://www.w3.org/ns/prov#insertedKeyEntityPair", []
-    )
-
-
-class hadDictionaryMember(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "hadDictionaryMember", "http://www.w3.org/ns/prov#hadDictionaryMember", []
-    )
-
-
-class qualifiedInsertion(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "qualifiedInsertion", "http://www.w3.org/ns/prov#qualifiedInsertion", []
-    )
-
-
-class qualifiedRemoval(RdfProperty[Identifier]):
-    term = RdfTerm("qualifiedRemoval", "http://www.w3.org/ns/prov#qualifiedRemoval", [])
-
-
-class asInBundle(RdfProperty[Identifier]):
-    term = RdfTerm("asInBundle", "http://www.w3.org/ns/prov#asInBundle", [])
-
-
-class mentionOf(RdfProperty[Identifier]):
-    term = RdfTerm("mentionOf", "http://www.w3.org/ns/prov#mentionOf", [])
+class mentionOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#mentionOf", "mentionOf")

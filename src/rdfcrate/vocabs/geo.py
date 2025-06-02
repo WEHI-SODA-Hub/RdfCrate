@@ -1,319 +1,293 @@
 from __future__ import annotations
-from rdflib.term import Identifier
-from rdfcrate.rdfclass import RdfClass
+from rdfcrate.rdftype import RdfClass
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import rdfs
 from rdfcrate.vocabs import geo
+from rdfcrate.rdftype import RdfType
 
 
 class SpatialObjectCollection(rdfs.Container):
     term = RdfTerm(
-        "SpatialObjectCollection",
         "http://www.opengis.net/ont/geosparql#SpatialObjectCollection",
-        [],
+        "SpatialObjectCollection",
     )
 
 
 class SpatialObject(RdfClass):
     term = RdfTerm(
-        "SpatialObject", "http://www.opengis.net/ont/geosparql#SpatialObject", []
+        "http://www.opengis.net/ont/geosparql#SpatialObject", "SpatialObject"
     )
 
 
 class FeatureCollection(SpatialObjectCollection):
     term = RdfTerm(
-        "FeatureCollection",
-        "http://www.opengis.net/ont/geosparql#FeatureCollection",
-        [],
+        "http://www.opengis.net/ont/geosparql#FeatureCollection", "FeatureCollection"
     )
 
 
 class GeometryCollection(SpatialObjectCollection):
     term = RdfTerm(
-        "GeometryCollection",
-        "http://www.opengis.net/ont/geosparql#GeometryCollection",
-        [],
+        "http://www.opengis.net/ont/geosparql#GeometryCollection", "GeometryCollection"
     )
 
 
 class Feature(SpatialObject):
-    term = RdfTerm("Feature", "http://www.opengis.net/ont/geosparql#Feature", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#Feature", "Feature")
 
 
 class Geometry(SpatialObject):
-    term = RdfTerm(
-        "Geometry", "http://www.opengis.net/ont/geosparql#Geometry", ["1.2-DRAFT"]
-    )
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#Geometry", "Geometry")
 
 
 class defaultGeometry(RdfProperty[geo.Geometry]):
     term = RdfTerm(
-        "defaultGeometry", "http://www.opengis.net/ont/geosparql#defaultGeometry", []
+        "http://www.opengis.net/ont/geosparql#defaultGeometry", "defaultGeometry"
     )
 
 
 class hasDefaultGeometry(RdfProperty[geo.Geometry]):
     term = RdfTerm(
-        "hasDefaultGeometry",
-        "http://www.opengis.net/ont/geosparql#hasDefaultGeometry",
-        [],
+        "http://www.opengis.net/ont/geosparql#hasDefaultGeometry", "hasDefaultGeometry"
     )
 
 
 class ehContains(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("ehContains", "http://www.opengis.net/ont/geosparql#ehContains", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#ehContains", "ehContains")
 
 
 class ehCoveredBy(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm(
-        "ehCoveredBy", "http://www.opengis.net/ont/geosparql#ehCoveredBy", []
-    )
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#ehCoveredBy", "ehCoveredBy")
 
 
 class ehCovers(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("ehCovers", "http://www.opengis.net/ont/geosparql#ehCovers", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#ehCovers", "ehCovers")
 
 
 class ehDisjoint(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("ehDisjoint", "http://www.opengis.net/ont/geosparql#ehDisjoint", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#ehDisjoint", "ehDisjoint")
 
 
 class ehEquals(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("ehEquals", "http://www.opengis.net/ont/geosparql#ehEquals", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#ehEquals", "ehEquals")
 
 
 class ehInside(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("ehInside", "http://www.opengis.net/ont/geosparql#ehInside", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#ehInside", "ehInside")
 
 
 class ehMeet(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("ehMeet", "http://www.opengis.net/ont/geosparql#ehMeet", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#ehMeet", "ehMeet")
 
 
 class ehOverlap(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("ehOverlap", "http://www.opengis.net/ont/geosparql#ehOverlap", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#ehOverlap", "ehOverlap")
 
 
 class hasGeometry(RdfProperty[geo.Geometry]):
-    term = RdfTerm(
-        "hasGeometry", "http://www.opengis.net/ont/geosparql#hasGeometry", []
-    )
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#hasGeometry", "hasGeometry")
 
 
 class hasBoundingBox(RdfProperty[geo.Geometry]):
     term = RdfTerm(
-        "hasBoundingBox", "http://www.opengis.net/ont/geosparql#hasBoundingBox", []
+        "http://www.opengis.net/ont/geosparql#hasBoundingBox", "hasBoundingBox"
     )
 
 
 class hasCentroid(RdfProperty[geo.Geometry]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#hasCentroid", "hasCentroid")
+
+
+class hasLength(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#hasLength", "hasLength")
+
+
+class hasPerimeterLength(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasCentroid", "http://www.opengis.net/ont/geosparql#hasCentroid", []
+        "http://www.opengis.net/ont/geosparql#hasPerimeterLength", "hasPerimeterLength"
     )
 
 
-class hasLength(RdfProperty[Identifier]):
-    term = RdfTerm("hasLength", "http://www.opengis.net/ont/geosparql#hasLength", [])
+class hasArea(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#hasArea", "hasArea")
 
 
-class hasPerimeterLength(RdfProperty[Identifier]):
+class hasVolume(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#hasVolume", "hasVolume")
+
+
+class hasSpatialResolution(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasPerimeterLength",
-        "http://www.opengis.net/ont/geosparql#hasPerimeterLength",
-        [],
-    )
-
-
-class hasArea(RdfProperty[Identifier]):
-    term = RdfTerm("hasArea", "http://www.opengis.net/ont/geosparql#hasArea", [])
-
-
-class hasVolume(RdfProperty[Identifier]):
-    term = RdfTerm("hasVolume", "http://www.opengis.net/ont/geosparql#hasVolume", [])
-
-
-class hasSpatialResolution(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "hasSpatialResolution",
         "http://www.opengis.net/ont/geosparql#hasSpatialResolution",
-        [],
+        "hasSpatialResolution",
     )
 
 
-class hasSpatialAccuracy(RdfProperty[Identifier]):
+class hasSpatialAccuracy(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasSpatialAccuracy",
-        "http://www.opengis.net/ont/geosparql#hasSpatialAccuracy",
-        [],
+        "http://www.opengis.net/ont/geosparql#hasSpatialAccuracy", "hasSpatialAccuracy"
     )
 
 
 class rcc8dc(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("rcc8dc", "http://www.opengis.net/ont/geosparql#rcc8dc", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#rcc8dc", "rcc8dc")
 
 
 class rcc8ec(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("rcc8ec", "http://www.opengis.net/ont/geosparql#rcc8ec", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#rcc8ec", "rcc8ec")
 
 
 class rcc8eq(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("rcc8eq", "http://www.opengis.net/ont/geosparql#rcc8eq", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#rcc8eq", "rcc8eq")
 
 
 class rcc8ntpp(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("rcc8ntpp", "http://www.opengis.net/ont/geosparql#rcc8ntpp", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#rcc8ntpp", "rcc8ntpp")
 
 
 class rcc8ntppi(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("rcc8ntppi", "http://www.opengis.net/ont/geosparql#rcc8ntppi", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#rcc8ntppi", "rcc8ntppi")
 
 
 class rcc8po(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("rcc8po", "http://www.opengis.net/ont/geosparql#rcc8po", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#rcc8po", "rcc8po")
 
 
 class rcc8tpp(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("rcc8tpp", "http://www.opengis.net/ont/geosparql#rcc8tpp", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#rcc8tpp", "rcc8tpp")
 
 
 class rcc8tppi(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("rcc8tppi", "http://www.opengis.net/ont/geosparql#rcc8tppi", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#rcc8tppi", "rcc8tppi")
 
 
 class sfContains(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("sfContains", "http://www.opengis.net/ont/geosparql#sfContains", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#sfContains", "sfContains")
 
 
 class sfCrosses(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("sfCrosses", "http://www.opengis.net/ont/geosparql#sfCrosses", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#sfCrosses", "sfCrosses")
 
 
 class sfDisjoint(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("sfDisjoint", "http://www.opengis.net/ont/geosparql#sfDisjoint", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#sfDisjoint", "sfDisjoint")
 
 
 class sfEquals(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("sfEquals", "http://www.opengis.net/ont/geosparql#sfEquals", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#sfEquals", "sfEquals")
 
 
 class sfIntersects(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm(
-        "sfIntersects", "http://www.opengis.net/ont/geosparql#sfIntersects", []
-    )
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#sfIntersects", "sfIntersects")
 
 
 class sfOverlaps(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("sfOverlaps", "http://www.opengis.net/ont/geosparql#sfOverlaps", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#sfOverlaps", "sfOverlaps")
 
 
 class sfTouches(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("sfTouches", "http://www.opengis.net/ont/geosparql#sfTouches", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#sfTouches", "sfTouches")
 
 
 class sfWithin(RdfProperty[geo.SpatialObject]):
-    term = RdfTerm("sfWithin", "http://www.opengis.net/ont/geosparql#sfWithin", [])
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#sfWithin", "sfWithin")
 
 
-class hasSize(RdfProperty[Identifier]):
-    term = RdfTerm("hasSize", "http://www.opengis.net/ont/geosparql#hasSize", [])
+class hasSize(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#hasSize", "hasSize")
 
 
-class asGML(RdfProperty[Identifier]):
-    term = RdfTerm("asGML", "http://www.opengis.net/ont/geosparql#asGML", [])
+class asGML(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#asGML", "asGML")
 
 
-class asWKT(RdfProperty[Identifier]):
-    term = RdfTerm("asWKT", "http://www.opengis.net/ont/geosparql#asWKT", ["1.2-DRAFT"])
+class asWKT(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#asWKT", "asWKT")
 
 
-class asGeoJSON(RdfProperty[Identifier]):
-    term = RdfTerm("asGeoJSON", "http://www.opengis.net/ont/geosparql#asGeoJSON", [])
+class asGeoJSON(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#asGeoJSON", "asGeoJSON")
 
 
-class asKML(RdfProperty[Identifier]):
-    term = RdfTerm("asKML", "http://www.opengis.net/ont/geosparql#asKML", [])
+class asKML(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#asKML", "asKML")
 
 
-class asDGGS(RdfProperty[Identifier]):
-    term = RdfTerm("asDGGS", "http://www.opengis.net/ont/geosparql#asDGGS", [])
+class asDGGS(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#asDGGS", "asDGGS")
 
 
-class coordinateDimension(RdfProperty[Identifier]):
+class coordinateDimension(RdfProperty[RdfType]):
     term = RdfTerm(
-        "coordinateDimension",
         "http://www.opengis.net/ont/geosparql#coordinateDimension",
-        [],
+        "coordinateDimension",
     )
 
 
-class dimension(RdfProperty[Identifier]):
-    term = RdfTerm("dimension", "http://www.opengis.net/ont/geosparql#dimension", [])
+class dimension(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#dimension", "dimension")
 
 
 class hasSerialization(RdfProperty[rdfs.Literal]):
     term = RdfTerm(
-        "hasSerialization", "http://www.opengis.net/ont/geosparql#hasSerialization", []
+        "http://www.opengis.net/ont/geosparql#hasSerialization", "hasSerialization"
     )
 
 
-class isEmpty(RdfProperty[Identifier]):
-    term = RdfTerm("isEmpty", "http://www.opengis.net/ont/geosparql#isEmpty", [])
+class isEmpty(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#isEmpty", "isEmpty")
 
 
-class isSimple(RdfProperty[Identifier]):
-    term = RdfTerm("isSimple", "http://www.opengis.net/ont/geosparql#isSimple", [])
+class isSimple(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#isSimple", "isSimple")
 
 
-class spatialDimension(RdfProperty[Identifier]):
+class spatialDimension(RdfProperty[RdfType]):
     term = RdfTerm(
-        "spatialDimension", "http://www.opengis.net/ont/geosparql#spatialDimension", []
+        "http://www.opengis.net/ont/geosparql#spatialDimension", "spatialDimension"
     )
 
 
-class hasMetricSpatialResolution(RdfProperty[Identifier]):
+class hasMetricSpatialResolution(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasMetricSpatialResolution",
         "http://www.opengis.net/ont/geosparql#hasMetricSpatialResolution",
-        [],
+        "hasMetricSpatialResolution",
     )
 
 
-class hasMetricSpatialAccuracy(RdfProperty[Identifier]):
+class hasMetricSpatialAccuracy(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasMetricSpatialAccuracy",
         "http://www.opengis.net/ont/geosparql#hasMetricSpatialAccuracy",
-        [],
+        "hasMetricSpatialAccuracy",
     )
 
 
-class hasMetricLength(RdfProperty[Identifier]):
+class hasMetricLength(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasMetricLength", "http://www.opengis.net/ont/geosparql#hasMetricLength", []
+        "http://www.opengis.net/ont/geosparql#hasMetricLength", "hasMetricLength"
     )
 
 
-class hasMetricPerimeterLength(RdfProperty[Identifier]):
+class hasMetricPerimeterLength(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasMetricPerimeterLength",
         "http://www.opengis.net/ont/geosparql#hasMetricPerimeterLength",
-        [],
+        "hasMetricPerimeterLength",
     )
 
 
-class hasMetricArea(RdfProperty[Identifier]):
+class hasMetricArea(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasMetricArea", "http://www.opengis.net/ont/geosparql#hasMetricArea", []
+        "http://www.opengis.net/ont/geosparql#hasMetricArea", "hasMetricArea"
     )
 
 
-class hasMetricVolume(RdfProperty[Identifier]):
+class hasMetricVolume(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasMetricVolume", "http://www.opengis.net/ont/geosparql#hasMetricVolume", []
+        "http://www.opengis.net/ont/geosparql#hasMetricVolume", "hasMetricVolume"
     )
 
 
-class hasMetricSize(RdfProperty[Identifier]):
+class hasMetricSize(RdfProperty[RdfType]):
     term = RdfTerm(
-        "hasMetricSize", "http://www.opengis.net/ont/geosparql#hasMetricSize", []
+        "http://www.opengis.net/ont/geosparql#hasMetricSize", "hasMetricSize"
     )

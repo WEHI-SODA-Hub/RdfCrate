@@ -21,17 +21,6 @@ from graphlib import TopologicalSorter
 SDO = Namespace("http://schema.org/")
 
 
-def frozen_dataclass_decorator() -> ast.expr:
-    """
-    Returns the frozen dataclass decorator
-    """
-    return ast.Call(
-        func=ast.Name("dataclass"),
-        args=[],
-        keywords=[ast.keyword(arg="frozen", value=ast.Constant(value=True))],
-    )
-
-
 def find_classes(graph: Graph) -> Iterable[URIRef]:
     """
     Yields all classes that aren't Literals
@@ -150,6 +139,7 @@ class CodegenState:
     #: List of class definitions. Functions should append to this to define new classes.
     classes: list[ast.ClassDef] = field(init=False)
     #: List of imports, which can be appended to.
+    #: This is a list because we want to preserve the order of imports.
     imports: list[str] = field(init=False)
     #: Keeps track of which terms have already been defined. This helps when processing contexts, which duplicate many terms from the vocabs
     terms: set[tuple[str, str]] = field(init=False, default_factory=set)
@@ -172,27 +162,30 @@ class CodegenState:
         self.classes = []
         self.imports = [
             "__future__.annotations",
-            "rdflib.term.Identifier",
-            "rdfcrate.rdfdatatype.RdfDataType",
-            "rdfcrate.rdfclass.RdfClass",
+            "rdfcrate.rdftype.RdfClass",
             "rdfcrate.rdfprop.RdfProperty",
             "rdfcrate.rdfterm.RdfTerm",
-            "dataclasses.dataclass",
         ]
 
-    def add_import(self, uri: str) -> str:
+    def add_import(self, path: str) -> None:
+        """
+        Adds a string of the form `module.submodule.objectname` to the list of imports if it isn't already present.
+        """
+        if path not in self.imports:
+            self.imports.append(path)
+
+    def import_iri(self, iri: str) -> str:
         """
         Given a URI, looks up the module it's defined in.
         This might e.g. return `rdfcrate.vocabs.schemaorg.CoverArt`.
         Then, we add an import to `rdfcrate.vocabs.schemaorg`.
         Finally, we return `schemaorg.CoverArt` to allow for use in the code
         """
-        imp = self.module_map[uri]
+        imp = self.module_map[iri]
         *a, b, c = imp.split(".")
 
         base = ".".join([*a, b])
-        if base not in self.imports:
-            self.imports.append(base)
+        self.add_import(base)
         return f"{b}.{c}"
 
     def import_stmts(self) -> Iterable[ast.ImportFrom]:
@@ -211,6 +204,9 @@ class CodegenState:
         for range_ in itertools.chain(
             self.graph.objects(subject=prop, predicate=RDFS.range),
             self.graph.objects(subject=prop, predicate=SDO.rangeIncludes),
+            self.graph.objects(
+                subject=prop, predicate=URIRef("http://purl.org/dc/dcam/rangeIncludes")
+            ),
         ):
             if isinstance(range_, BNode):
                 # Skip blank node ranges
@@ -219,14 +215,15 @@ class CodegenState:
             _, _, range_name = self.graph.compute_qname(range_)
             if range_ in self.module_map:
                 # Import the range type from the other module
-                range_options.append(self.add_import(range_))
+                range_options.append(self.import_iri(range_))
             elif (range_, RDF.type, RDFS.Class) in self.graph:
                 # If the range is a class in the current graph, use it directly
                 range_options.append(range_name)
 
         if len(range_options) == 0:
-            # If no range is found, use the default
-            return ast.Name("Identifier")
+            # If no range is found, use RdfType which allows any RDF entity
+            self.add_import("rdfcrate.rdftype.RdfType")
+            return ast.Name("RdfType")
         elif len(range_options) == 1:
             # If one range is found, use it
             return ast.Name(range_options[0])
@@ -254,16 +251,8 @@ class CodegenState:
         return ast.Call(
             func=ast.Name("RdfTerm"),
             args=[
-                ast.Constant(term),
                 ast.Constant(str(uri)),
-                ast.List(
-                    [
-                        # Add RO-Crate specs that this term is defined in
-                        ast.Constant(spec.version)
-                        for spec, ctx in self.context_map.items()
-                        if ctx.get(term) == str(uri)
-                    ]
-                ),
+                ast.Constant(term),
             ],
             keywords=[],
         )
@@ -326,11 +315,12 @@ class CodegenState:
             _, _, name = self.graph.compute_qname(datatype)
             # Register this URI as being defined in this module
             self.module_map[datatype] = f"{module_base}.{name}"
+            self.add_import("rdfcrate.rdftype.RdfLiteral")
             self.classes.append(
                 ast.ClassDef(
                     name=sanitize_cls_name(name),
                     type_params=[],
-                    bases=[ast.Name("RdfDataType")],
+                    bases=[ast.Name("RdfLiteral")],
                     keywords=[],
                     body=[
                         ast.Assign(
@@ -377,7 +367,7 @@ class CodegenState:
             superclass_name = sanitize_cls_name(superclass_term)
             if superclass_uri in self.module_map:
                 # If we find a previously defined superclass, we need to import it
-                names.append(ast.Name(self.add_import(superclass_uri)))
+                names.append(ast.Name(self.import_iri(superclass_uri)))
             elif (superclass_uri, RDF.type, RDFS.Class) in self.graph:
                 names.append(ast.Name(superclass_name))
                 uris.append(superclass_uri)
@@ -502,7 +492,7 @@ class CodegenState:
                                 simple=1,
                             ),
                         ],
-                        decorator_list=[frozen_dataclass_decorator()],
+                        decorator_list=[],
                     )
                 )
 
@@ -629,7 +619,3 @@ def core_vocab():
         "rdfcrate.vocabs",
         Path("src/rdfcrate/vocabs"),
     )
-
-
-if __name__ == "__main__":
-    core_vocab()

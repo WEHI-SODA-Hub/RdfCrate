@@ -1,162 +1,136 @@
 from __future__ import annotations
-from rdflib.term import Identifier
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
+from rdfcrate.rdftype import RdfType
 
 
-class isPrimaryTopicOf(RdfProperty[Identifier]):
-    term = RdfTerm("isPrimaryTopicOf", "http://xmlns.com/foaf/0.1/isPrimaryTopicOf", [])
+class isPrimaryTopicOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://xmlns.com/foaf/0.1/isPrimaryTopicOf", "isPrimaryTopicOf")
 
 
-class name(RdfProperty[Identifier]):
-    term = RdfTerm("name", "http://xmlns.com/foaf/0.1/name", [])
+class name(RdfProperty[RdfType]):
+    term = RdfTerm("http://xmlns.com/foaf/0.1/name", "name")
 
 
-class authoredOn(RdfProperty[Identifier]):
-    term = RdfTerm("authoredOn", "http://purl.org/pav/authoredOn", [])
+class authoredOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/authoredOn", "authoredOn")
 
 
-class contributedOn(RdfProperty[Identifier]):
-    term = RdfTerm("contributedOn", "http://purl.org/pav/contributedOn", [])
+class contributedOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/contributedOn", "contributedOn")
 
 
-class createdOn(RdfProperty[Identifier]):
-    term = RdfTerm("createdOn", "http://purl.org/pav/createdOn", [])
+class createdOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/createdOn", "createdOn")
 
 
-class curatedOn(RdfProperty[Identifier]):
-    term = RdfTerm("curatedOn", "http://purl.org/pav/curatedOn", [])
+class curatedOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/curatedOn", "curatedOn")
 
 
-class importedOn(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "importedOn",
-        "http://purl.org/pav/importedOn",
-        ["0.2", "1.0", "1.1", "1.2-DRAFT"],
-    )
+class importedOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/importedOn", "importedOn")
 
 
-class lastRefreshedOn(RdfProperty[Identifier]):
-    term = RdfTerm("lastRefreshedOn", "http://purl.org/pav/lastRefreshedOn", [])
+class lastRefreshedOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/lastRefreshedOn", "lastRefreshedOn")
 
 
-class lastUpdateOn(RdfProperty[Identifier]):
-    term = RdfTerm("lastUpdateOn", "http://purl.org/pav/lastUpdateOn", [])
+class lastUpdateOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/lastUpdateOn", "lastUpdateOn")
 
 
-class retrievedOn(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "retrievedOn",
-        "http://purl.org/pav/retrievedOn",
-        ["0.2", "1.0", "1.1", "1.2-DRAFT"],
-    )
+class retrievedOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/retrievedOn", "retrievedOn")
 
 
-class sourceAccessedOn(RdfProperty[Identifier]):
-    term = RdfTerm("sourceAccessedOn", "http://purl.org/pav/sourceAccessedOn", [])
+class sourceAccessedOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/sourceAccessedOn", "sourceAccessedOn")
 
 
-class sourceLastAccessedOn(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "sourceLastAccessedOn", "http://purl.org/pav/sourceLastAccessedOn", []
-    )
+class sourceLastAccessedOn(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/sourceLastAccessedOn", "sourceLastAccessedOn")
 
 
-class version(RdfProperty[Identifier]):
-    term = RdfTerm("version", "http://purl.org/pav/version", [])
+class version(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/version", "version")
 
 
-class authoredBy(RdfProperty[Identifier]):
-    term = RdfTerm("authoredBy", "http://purl.org/pav/authoredBy", [])
+class authoredBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/authoredBy", "authoredBy")
 
 
-class contributedBy(RdfProperty[Identifier]):
-    term = RdfTerm("contributedBy", "http://purl.org/pav/contributedBy", [])
+class contributedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/contributedBy", "contributedBy")
 
 
-class createdAt(RdfProperty[Identifier]):
-    term = RdfTerm("createdAt", "http://purl.org/pav/createdAt", [])
+class createdAt(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/createdAt", "createdAt")
 
 
-class createdBy(RdfProperty[Identifier]):
-    term = RdfTerm("createdBy", "http://purl.org/pav/createdBy", [])
+class createdBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/createdBy", "createdBy")
 
 
-class createdWith(RdfProperty[Identifier]):
-    term = RdfTerm("createdWith", "http://purl.org/pav/createdWith", [])
+class createdWith(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/createdWith", "createdWith")
 
 
-class curatedBy(RdfProperty[Identifier]):
-    term = RdfTerm("curatedBy", "http://purl.org/pav/curatedBy", [])
+class curatedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/curatedBy", "curatedBy")
 
 
-class curates(RdfProperty[Identifier]):
-    term = RdfTerm("curates", "http://purl.org/pav/curates", [])
+class curates(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/curates", "curates")
 
 
-class derivedFrom(RdfProperty[Identifier]):
-    term = RdfTerm("derivedFrom", "http://purl.org/pav/derivedFrom", [])
+class derivedFrom(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/derivedFrom", "derivedFrom")
 
 
-class hasCurrentVersion(RdfProperty[Identifier]):
-    term = RdfTerm("hasCurrentVersion", "http://purl.org/pav/hasCurrentVersion", [])
+class hasCurrentVersion(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/hasCurrentVersion", "hasCurrentVersion")
 
 
-class hasEarlierVersion(RdfProperty[Identifier]):
-    term = RdfTerm("hasEarlierVersion", "http://purl.org/pav/hasEarlierVersion", [])
+class hasEarlierVersion(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/hasEarlierVersion", "hasEarlierVersion")
 
 
-class hasVersion(RdfProperty[Identifier]):
-    term = RdfTerm("hasVersion", "http://purl.org/pav/hasVersion", [])
+class hasVersion(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/hasVersion", "hasVersion")
 
 
-class importedBy(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "importedBy",
-        "http://purl.org/pav/importedBy",
-        ["0.2", "1.0", "1.1", "1.2-DRAFT"],
-    )
+class importedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/importedBy", "importedBy")
 
 
-class importedFrom(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "importedFrom",
-        "http://purl.org/pav/importedFrom",
-        ["0.2", "1.0", "1.1", "1.2-DRAFT"],
-    )
+class importedFrom(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/importedFrom", "importedFrom")
 
 
-class previousVersion(RdfProperty[Identifier]):
-    term = RdfTerm("previousVersion", "http://purl.org/pav/previousVersion", [])
+class previousVersion(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/previousVersion", "previousVersion")
 
 
-class providedBy(RdfProperty[Identifier]):
-    term = RdfTerm("providedBy", "http://purl.org/pav/providedBy", [])
+class providedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/providedBy", "providedBy")
 
 
-class retrievedBy(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "retrievedBy",
-        "http://purl.org/pav/retrievedBy",
-        ["0.2", "1.0", "1.1", "1.2-DRAFT"],
-    )
+class retrievedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/retrievedBy", "retrievedBy")
 
 
-class retrievedFrom(RdfProperty[Identifier]):
-    term = RdfTerm(
-        "retrievedFrom",
-        "http://purl.org/pav/retrievedFrom",
-        ["0.2", "1.0", "1.1", "1.2-DRAFT"],
-    )
+class retrievedFrom(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/retrievedFrom", "retrievedFrom")
 
 
-class sourceAccessedAt(RdfProperty[Identifier]):
-    term = RdfTerm("sourceAccessedAt", "http://purl.org/pav/sourceAccessedAt", [])
+class sourceAccessedAt(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/sourceAccessedAt", "sourceAccessedAt")
 
 
-class sourceAccessedBy(RdfProperty[Identifier]):
-    term = RdfTerm("sourceAccessedBy", "http://purl.org/pav/sourceAccessedBy", [])
+class sourceAccessedBy(RdfProperty[RdfType]):
+    term = RdfTerm("http://purl.org/pav/sourceAccessedBy", "sourceAccessedBy")
 
 
-class generalizationOf(RdfProperty[Identifier]):
-    term = RdfTerm("generalizationOf", "http://www.w3.org/ns/prov#generalizationOf", [])
+class generalizationOf(RdfProperty[RdfType]):
+    term = RdfTerm("http://www.w3.org/ns/prov#generalizationOf", "generalizationOf")

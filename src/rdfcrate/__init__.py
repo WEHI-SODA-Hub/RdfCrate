@@ -16,6 +16,9 @@ from rdfcrate.vocabs import (
     schemaorg,
     sdo,
 )
+from rdfcrate.rdftype import RdfClass, RdfLiteral
+from rdfcrate.rdfterm import RdfTerm
+from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 
 __all__ = [
     "DetatchedCrate",
@@ -35,4 +38,9 @@ __all__ = [
     "rocrate",
     "schemaorg",
     "sdo",
+    "RdfClass",
+    "RdfTerm",
+    "RdfProperty",
+    "ReverseProperty",
+    "RdfLiteral",
 ]

@@ -20,6 +20,7 @@
 - Relaxed the requirement for IRIs to be provided as `URIRef()` when creating entities
 - Added `ruff` linter
 - Added `.validate()` and `.get_issues()` methods for easy validation of the crate [[#22](https://github.com/WEHI-SODA-Hub/RdfCrate/pull/22)]
+- Added `.to_type_property()` to `RdfType` subclasses, to facilitate multi-class entities (see `test_multi_type`)
 
 ## 0.3.0
 

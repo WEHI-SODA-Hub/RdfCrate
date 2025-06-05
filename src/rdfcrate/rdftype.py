@@ -1,13 +1,12 @@
 from __future__ import annotations
-from typing import Annotated, Any, ClassVar, Generic, TypeVar
+from typing import Annotated, Any, ClassVar, Generic, TypeVar, TYPE_CHECKING, Union
 from typing_extensions import Doc
 
 from rdflib import Graph, Literal, URIRef, RDF, IdentifiedNode
-from rdfcrate.rdfprop import RdfProperty, ReverseProperty
-
-from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.types import GraphId
 
+if TYPE_CHECKING:
+    from rdfcrate import RdfProperty, ReverseProperty, RdfTerm, rdf, rdfs
 
 EntityUri = Annotated[
     str,
@@ -16,7 +15,7 @@ EntityUri = Annotated[
     ),
 ]
 EntityArgs = Annotated[
-    RdfProperty | ReverseProperty,
+    Union["RdfProperty", "ReverseProperty"],
     Doc(
         "Additional properties to add to the entity. Instances of `RdfProperty` will create triples with this new entity as the subject. Instances of `ReverseProperty` will create triples with this new entity as the object."
     ),
@@ -48,6 +47,8 @@ class RdfType(Generic[T]):
         Returns:
             A URIRef subclass for this RDF type
         """
+        from rdfcrate import RdfTerm
+
         if not isinstance(self.term, RdfTerm):
             raise ValueError(
                 "The `term` class variable must be an instance of `RdfTerm`."
@@ -56,6 +57,17 @@ class RdfType(Generic[T]):
         for arg in args:
             arg.add_to_graph(graph, self.id)
 
+    @classmethod
+    def to_type_property(cls) -> rdf.type:
+        """
+        Converts this class wrapper to an instance of `RdfProperty` that can be used to tag entities with this type.
+        """
+        from rdfcrate import rdf, rdfs
+
+        # TODO: use the specific metaclass such as owl.Class where appropriate
+        # Create a new class dynamically with the same name as this class, but inheriting from `rdfs.Class`
+        cls = type(cls.__name__, (rdfs.Class,), {"term": cls.term})
+        return rdf.type(cls(cls.term.uri))
 
 class RdfClass(RdfType[IdentifiedNode]):
     """

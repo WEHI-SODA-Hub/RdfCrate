@@ -2,6 +2,7 @@ from pathlib import Path
 
 from rdfcrate import AttachedCrate
 from rdflib import Literal, Graph, BNode, URIRef
+from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts, rdfs
 import json
 from datetime import datetime
@@ -138,12 +139,17 @@ def test_bnode():
     assert any(isinstance(id, BNode) for id in crate.graph.subjects())
 
 def test_multi_type():
+    class CustomType(rdfs.Class):
+        term = RdfTerm("https://example.org/SomeOtherType")
+
     with tempfile.TemporaryDirectory() as tmpdir:
         crate = AttachedCrate(tmpdir)
         crate.add_entity(
             bioschemas_drafts.LabProtocol("#multi_type_entity"),
-            rdf.type(rdfs.Class("https://example.org/SomeOtherType")),
+            CustomType.to_type_property()
         )
 
         # We never want to redefine rdf:type
         assert str(rdf.type.term.uri) not in crate.context.to_dict().values()
+        # But we should have the custom type in the context
+        assert "https://example.org/SomeOtherType" in crate.context.to_dict().values()

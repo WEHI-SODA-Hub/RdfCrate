@@ -6,7 +6,7 @@ from rdflib import Graph, Literal, URIRef, RDF, IdentifiedNode
 from rdfcrate.types import GraphId
 
 if TYPE_CHECKING:
-    from rdfcrate import RdfProperty, ReverseProperty, RdfTerm, rdf, rdfs
+    from rdfcrate import RdfProperty, ReverseProperty, RdfTerm, rdf
 
 EntityUri = Annotated[
     str,
@@ -68,6 +68,7 @@ class RdfType(Generic[T]):
         # Create a new class dynamically with the same name as this class, but inheriting from `rdfs.Class`
         cls = type(cls.__name__, (rdfs.Class,), {"term": cls.term})
         return rdf.type(cls(cls.term.uri))
+
 
 class RdfClass(RdfType[IdentifiedNode]):
     """

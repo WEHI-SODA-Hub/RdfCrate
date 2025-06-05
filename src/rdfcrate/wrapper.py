@@ -105,10 +105,11 @@ class RoCrate(metaclass=ABCMeta):
         """
         self.register_terms(
             # Register property terms
-            [prop.term for prop in args] +
+            [prop.term for prop in args]
+            +
             # Register object terms
-            [entity.term] +
-            [prop.object.term for prop in args if isinstance(prop, RdfProperty)]
+            [entity.term]
+            + [prop.object.term for prop in args if isinstance(prop, RdfProperty)]
         )
         entity.add(self.graph, *args)
         return entity

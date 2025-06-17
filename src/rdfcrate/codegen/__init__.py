@@ -477,20 +477,20 @@ class CodegenState:
                     ast.ClassDef(
                         name=sanitize_cls_name(term),
                         type_params=[],
-                        bases=[ast.Name("RdfProperty")],
+                        bases=[
+                            # Set T to the range of the property
+                            ast.Subscript(
+                                value=ast.Name("RdfProperty"),
+                                slice=self.property_range(URIRef(uri)),
+                            )
+                        ],
                         keywords=[],
                         body=[
                             ast.Assign(
                                 targets=[ast.Name("term")],
                                 value=self.term_with_specs(term, str(uri)),
                                 type_comment=None,
-                            ),
-                            ast.AnnAssign(
-                                target=ast.Name("object"),
-                                annotation=self.property_range(URIRef(uri)),
-                                value=None,
-                                simple=1,
-                            ),
+                            )
                         ],
                         decorator_list=[],
                     )

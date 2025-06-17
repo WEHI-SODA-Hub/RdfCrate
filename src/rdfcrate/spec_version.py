@@ -44,8 +44,8 @@ ROCrate1_1: SpecVersion = SpecVersion(
 )
 ROCrate1_2: SpecVersion = SpecVersion(
     "1.2-DRAFT",
-    context_url="https://w3id.org/ro/crate/1.2-DRAFT/context",
-    conforms_to_url="https://w3id.org/ro/crate/1.2-DRAFT",
+    context_url="https://w3id.org/ro/crate/1.2/context",
+    conforms_to_url="https://w3id.org/ro/crate/1.2",
 )
 
 all_specs = [ROCrate0_2, ROCrate1_0, ROCrate1_1, ROCrate1_2]

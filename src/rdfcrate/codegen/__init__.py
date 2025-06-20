@@ -30,8 +30,9 @@ def find_classes(graph: Graph) -> Iterable[URIRef]:
         SELECT DISTINCT ?class
         WHERE {
             # Follow any super class relationships
+            ?metaclass rdfs:subClassOf* rdfs:Class .
             ?class rdfs:subClassOf* ?superclass .
-            ?superclass a rdfs:Class .
+            ?superclass a ?metaclass .
             FILTER NOT EXISTS {
                 ?class rdfs:subClassOf* ?literal_superclass .
                 ?literal_superclass rdfs:subClassOf rdfs:Literal .
@@ -196,6 +197,24 @@ class CodegenState:
             module, name = imp.rsplit(".", 1)
             yield ast.ImportFrom(module=module, names=[ast.alias(name)], level=0)
 
+    def class_known(self, cls_uri: URIRef) -> bool:
+        """
+        Returns True if the class is known in the current graph.
+        """
+        return cast(
+            bool,
+            self.graph.query(
+                """
+                ASK {
+                    ?metaclass rdfs:subClassOf* rdfs:Class .
+                    ?class a ?metaclass .
+                }
+                """,
+                initBindings={"class": cls_uri},
+                initNs={"rdfs": RDFS},
+            ).askAnswer,
+        )
+
     def property_range(self, prop: URIRef) -> ast.expr:
         """
         Returns the range of a property, as a type annotation
@@ -208,7 +227,7 @@ class CodegenState:
                 subject=prop, predicate=URIRef("http://purl.org/dc/dcam/rangeIncludes")
             ),
         ):
-            if isinstance(range_, BNode):
+            if not isinstance(range_, URIRef):
                 # Skip blank node ranges
                 continue
 
@@ -216,7 +235,7 @@ class CodegenState:
             if range_ in self.module_map:
                 # Import the range type from the other module
                 range_options.append(self.import_iri(range_))
-            elif (range_, RDF.type, RDFS.Class) in self.graph:
+            elif self.class_known(range_):
                 # If the range is a class in the current graph, use it directly
                 range_options.append(range_name)
 
@@ -368,7 +387,8 @@ class CodegenState:
             if superclass_uri in self.module_map:
                 # If we find a previously defined superclass, we need to import it
                 names.append(ast.Name(self.import_iri(superclass_uri)))
-            elif (superclass_uri, RDF.type, RDFS.Class) in self.graph:
+            elif self.class_known(superclass_uri):
+                # Don't inherit from parent classes that we don't know about
                 names.append(ast.Name(superclass_name))
                 uris.append(superclass_uri)
 

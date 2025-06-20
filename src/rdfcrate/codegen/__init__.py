@@ -6,7 +6,8 @@ import ast
 from dataclasses import dataclass, field
 import itertools
 from pathlib import Path
-from typing import Any, Iterable, cast
+import re
+from typing import Any, Iterable, Literal, cast
 import keyword
 from rdflib import BNode, Graph, RDFS, RDF, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
@@ -231,7 +232,7 @@ class CodegenState:
                 # Skip blank node ranges
                 continue
 
-            _, _, range_name = self.graph.compute_qname(range_)
+            range_name = self.get_entity_name(range_)
             if range_ in self.module_map:
                 # Import the range type from the other module
                 range_options.append(self.import_iri(range_))
@@ -281,7 +282,7 @@ class CodegenState:
         Processes the enums in the graph
         """
         for enum in find_enum_values(self.graph):
-            _, _, name = self.graph.compute_qname(enum)
+            name = self.get_entity_name(enum)
             # Ignore enums for now
             self.terms.add((name, str(enum)))
 
@@ -294,7 +295,7 @@ class CodegenState:
                 # Skip properties that are already defined
                 continue
 
-            _, _, name = self.graph.compute_qname(prop)
+            name = self.get_entity_name(prop, "property")
 
             # Register this URI as being defined in this module
             self.module_map[prop] = f"{module_base}.{name}"
@@ -331,7 +332,7 @@ class CodegenState:
                 # Skip datatypes that are already defined
                 continue
 
-            _, _, name = self.graph.compute_qname(datatype)
+            name = self.get_entity_name(datatype)
             # Register this URI as being defined in this module
             self.module_map[datatype] = f"{module_base}.{name}"
             self.add_import("rdfcrate.rdftype.RdfLiteral")
@@ -351,6 +352,23 @@ class CodegenState:
                     decorator_list=[],
                 )
             )
+
+    def get_entity_name(self, entity: URIRef, mode: Literal["class", "property"] = "class") -> str:
+        """
+        Returns the name of the entity, as a Python identifier.
+        This is used for class names and property names.
+        """
+        # First try to get the label of the entity, if it has one
+        for label in self.graph.objects(subject=entity, predicate=RDFS.label):
+            # Remove underscores and spaces, and capitalize each word
+            label = "".join([word.title() for word in re.split("[\s_]", label)])
+            if mode == "property":
+                # Make properties camelCase rather than PascalCase
+                label = label[0].lower() + label[1:]
+            return sanitize_cls_name(label)
+        # If no label is found, use the last part of the URI
+        _, _, term_name = self.graph.compute_qname(entity)
+        return sanitize_cls_name(term_name)
 
     def _find_superclasses(
         self, cls_uri: URIRef
@@ -382,8 +400,7 @@ class CodegenState:
             if not isinstance(superclass_uri := result["superclass"], URIRef):
                 # Skip None results, when there are no superclasses
                 continue
-            _, _, superclass_term = self.graph.compute_qname(superclass_uri)
-            superclass_name = sanitize_cls_name(superclass_term)
+            superclass_name = self.get_entity_name(superclass_uri)
             if superclass_uri in self.module_map:
                 # If we find a previously defined superclass, we need to import it
                 names.append(ast.Name(self.import_iri(superclass_uri)))
@@ -411,8 +428,7 @@ class CodegenState:
                 continue
 
             # Compute the short term name by removing the base URI
-            _, _, term_name = self.graph.compute_qname(cls_uri)
-            cls_name = sanitize_cls_name(term_name)
+            cls_name = self.get_entity_name(cls_uri)
 
             # Determine the base classes from rdfs:subClassOf
             class_deps[cls_uri] = []
@@ -428,7 +444,7 @@ class CodegenState:
                 body=[
                     ast.Assign(
                         targets=[ast.Name("term")],
-                        value=self.term_with_specs(term_name, cls_uri),
+                        value=self.term_with_specs(cls_name, cls_uri),
                         type_comment=None,
                     )
                 ],

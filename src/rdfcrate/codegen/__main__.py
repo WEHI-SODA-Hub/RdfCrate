@@ -48,11 +48,7 @@ def custom_vocabs(
     ],
 ):
     """
-    Generates a Python file that contains classes for the given context.
-
-    Params:
-        vocab: Path to the vocabulary file to generate code for.
-        ontologies: List of ontology files to include in the context. Currently not implemented.
+    Generates a Python file that contains classes and properties for the given vocabularies.
     """
     generate_modules(
         vocabs={vocab.stem: str(vocab) for vocab in vocabs},

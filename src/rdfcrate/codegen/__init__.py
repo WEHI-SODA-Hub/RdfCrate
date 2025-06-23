@@ -9,7 +9,7 @@ from pathlib import Path
 import re
 from typing import Any, Iterable, Literal, cast
 import keyword
-from rdflib import BNode, Graph, RDFS, RDF, URIRef
+from rdflib import Graph, RDFS, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from rdflib.query import ResultRow
 from rdflib.graph import _TripleType

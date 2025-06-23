@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 import itertools
 from pathlib import Path
 import re
-from typing import Any, Iterable, Literal, cast
+from typing import Any, Iterable, Literal, Sequence, cast
 import keyword
 from rdflib import Graph, RDFS, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
@@ -374,7 +374,7 @@ class CodegenState:
 
     def _find_superclasses(
         self, cls_uri: URIRef
-    ) -> tuple[list[ast.Name], list[URIRef]]:
+    ) -> tuple[list[ast.expr], list[URIRef]]:
         """
         Finds all the superclasses of a class
 
@@ -382,7 +382,8 @@ class CodegenState:
             - names: A list of ast.Name objects that can be used to define a child class
             - uris: A list of URIs for these base classes
         """
-        names: list[ast.Name] = []
+        # We need to use this type so that 
+        names: list[ast.expr] = []
         uris: list[URIRef] = []
         # We order superclasses with the "deepest" class first, so that Python won't complain about the MRO
         for result in self.graph.query(
@@ -434,6 +435,7 @@ class CodegenState:
 
             # Determine the base classes from rdfs:subClassOf
             class_deps[cls_uri] = []
+            superclass_names: list[ast.expr]
             superclass_names, superclass_uris = self._find_superclasses(cls_uri)
             for superclass_uri in superclass_uris:
                 class_deps[cls_uri].append(superclass_uri)

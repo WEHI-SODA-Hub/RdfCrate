@@ -1,3 +1,4 @@
+import ast
 from rdflib import RDFS, Graph, RDF, PROV, URIRef
 
 from rdfcrate.codegen import find_classes, find_datatypes, find_enum_values, find_properties, SDO, CodegenState
@@ -64,5 +65,5 @@ def test_obi_codegen():
     # Check that Microscope's superclass is found to be ImageCreationDevice.
     # This checks that we can find classes defined as owl:Class
     (name,), (uri,) = state._find_superclasses(URIRef("http://purl.obolibrary.org/obo/OBI_0400169"))
-    assert name.id == "ImageCreationDevice"
+    assert isinstance(name, ast.Name) and name.id == "ImageCreationDevice"
     assert str(uri) == "http://purl.obolibrary.org/obo/OBI_0000398"

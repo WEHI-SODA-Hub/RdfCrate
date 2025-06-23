@@ -1,6 +1,4 @@
-import ast
 from rdflib import RDFS, Graph, RDF, PROV, URIRef
-import tempfile
 
 from rdfcrate.codegen import find_classes, find_datatypes, find_enum_values, find_properties, SDO, CodegenState
 

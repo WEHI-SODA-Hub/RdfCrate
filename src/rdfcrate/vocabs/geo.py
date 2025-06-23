@@ -20,6 +20,28 @@ class SpatialObject(RdfClass):
     )
 
 
+class gmlLiteral(RdfClass):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#gmlLiteral", "gmlLiteral")
+
+
+class wktLiteral(RdfClass):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#wktLiteral", "wktLiteral")
+
+
+class geoJSONLiteral(RdfClass):
+    term = RdfTerm(
+        "http://www.opengis.net/ont/geosparql#geoJSONLiteral", "geoJSONLiteral"
+    )
+
+
+class kmlLiteral(RdfClass):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#kmlLiteral", "kmlLiteral")
+
+
+class dggsLiteral(RdfClass):
+    term = RdfTerm("http://www.opengis.net/ont/geosparql#dggsLiteral", "dggsLiteral")
+
+
 class FeatureCollection(SpatialObjectCollection):
     term = RdfTerm(
         "http://www.opengis.net/ont/geosparql#FeatureCollection", "FeatureCollection"
@@ -197,23 +219,23 @@ class hasSize(RdfProperty[RdfType]):
     term = RdfTerm("http://www.opengis.net/ont/geosparql#hasSize", "hasSize")
 
 
-class asGML(RdfProperty[RdfType]):
+class asGML(RdfProperty[geo.gmlLiteral]):
     term = RdfTerm("http://www.opengis.net/ont/geosparql#asGML", "asGML")
 
 
-class asWKT(RdfProperty[RdfType]):
+class asWKT(RdfProperty[geo.wktLiteral]):
     term = RdfTerm("http://www.opengis.net/ont/geosparql#asWKT", "asWKT")
 
 
-class asGeoJSON(RdfProperty[RdfType]):
+class asGeoJSON(RdfProperty[geo.geoJSONLiteral]):
     term = RdfTerm("http://www.opengis.net/ont/geosparql#asGeoJSON", "asGeoJSON")
 
 
-class asKML(RdfProperty[RdfType]):
+class asKML(RdfProperty[geo.kmlLiteral]):
     term = RdfTerm("http://www.opengis.net/ont/geosparql#asKML", "asKML")
 
 
-class asDGGS(RdfProperty[RdfType]):
+class asDGGS(RdfProperty[geo.dggsLiteral]):
     term = RdfTerm("http://www.opengis.net/ont/geosparql#asDGGS", "asDGGS")
 
 

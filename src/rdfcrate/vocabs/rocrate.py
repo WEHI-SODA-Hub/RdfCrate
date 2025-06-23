@@ -27,14 +27,12 @@ class _True(RdfClass):
     term = RdfTerm("http://schema.org/True", "True")
 
 
-class path(RdfProperty):
+class path(RdfProperty[schemaorg.URL]):
     term = RdfTerm("http://schema.org/contentUrl", "path")
-    object: schemaorg.URL
 
 
-class cite_as(RdfProperty):
+class cite_as(RdfProperty[RdfType]):
     term = RdfTerm("http://www.iana.org/assignments/relation/cite-as", "cite-as")
-    object: RdfType
 
 
 class RepositoryCollection(RdfClass):
@@ -55,91 +53,68 @@ class ComputationalWorkflow(RdfClass):
     )
 
 
-class input(RdfProperty):
+class input(RdfProperty[RdfType]):
     term = RdfTerm("https://bioschemas.org/properties/input", "input")
-    object: RdfType
 
 
-class output(RdfProperty):
+class output(RdfProperty[RdfType]):
     term = RdfTerm("https://bioschemas.org/properties/output", "output")
-    object: RdfType
 
 
 class FormalParameter(RdfClass):
     term = RdfTerm("https://bioschemas.org/FormalParameter", "FormalParameter")
 
 
-class ResourceDescriptor(RdfClass):
-    term = RdfTerm(
-        "http://www.w3.org/ns/dx/prof/ResourceDescriptor", "ResourceDescriptor"
-    )
-
-
-class ResourceRole(RdfClass):
-    term = RdfTerm("http://www.w3.org/ns/dx/prof/ResourceRole", "ResourceRole")
-
-
-class softwareSuggestions(RdfProperty):
+class softwareSuggestions(RdfProperty[RdfType]):
     term = RdfTerm(
         "https://codemeta.github.io/terms/softwareSuggestions", "softwareSuggestions"
     )
-    object: RdfType
 
 
-class continuousIntegration(RdfProperty):
+class continuousIntegration(RdfProperty[RdfType]):
     term = RdfTerm(
         "https://codemeta.github.io/terms/continuousIntegration",
         "continuousIntegration",
     )
-    object: RdfType
 
 
-class buildInstructions(RdfProperty):
+class buildInstructions(RdfProperty[RdfType]):
     term = RdfTerm(
         "https://codemeta.github.io/terms/buildInstructions", "buildInstructions"
     )
-    object: RdfType
 
 
-class developmentStatus(RdfProperty):
+class developmentStatus(RdfProperty[RdfType]):
     term = RdfTerm(
         "https://codemeta.github.io/terms/developmentStatus", "developmentStatus"
     )
-    object: RdfType
 
 
-class embargoEndDate(RdfProperty):
+class embargoEndDate(RdfProperty[RdfType]):
     term = RdfTerm("https://codemeta.github.io/terms/embargoEndDate", "embargoEndDate")
-    object: RdfType
 
 
-class readme(RdfProperty):
+class readme(RdfProperty[RdfType]):
     term = RdfTerm("https://codemeta.github.io/terms/readme", "readme")
-    object: RdfType
 
 
-class issueTracker(RdfProperty):
+class issueTracker(RdfProperty[RdfType]):
     term = RdfTerm("https://codemeta.github.io/terms/issueTracker", "issueTracker")
-    object: RdfType
 
 
-class referencePublication(RdfProperty):
+class referencePublication(RdfProperty[RdfType]):
     term = RdfTerm(
         "https://codemeta.github.io/terms/referencePublication", "referencePublication"
     )
-    object: RdfType
 
 
-class hasSourceCode(RdfProperty):
+class hasSourceCode(RdfProperty[RdfType]):
     term = RdfTerm("https://codemeta.github.io/terms/hasSourceCode", "hasSourceCode")
-    object: RdfType
 
 
-class isSourceCodeOf(RdfProperty):
+class isSourceCodeOf(RdfProperty[RdfType]):
     term = RdfTerm("https://codemeta.github.io/terms/isSourceCodeOf", "isSourceCodeOf")
-    object: RdfType
 
 
-class localPath(RdfProperty):
+class localPath(RdfProperty[RdfType]):
     term = RdfTerm("https://w3id.org/ro/terms#localPath", "localPath")
-    object: RdfType

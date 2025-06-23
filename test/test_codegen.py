@@ -1,6 +1,7 @@
-from rdflib import RDFS, Graph, RDF, PROV
+import ast
+from rdflib import RDFS, Graph, RDF, PROV, URIRef
 
-from rdfcrate.codegen import find_classes, find_datatypes, find_enum_values, find_properties, SDO
+from rdfcrate.codegen import find_classes, find_datatypes, find_enum_values, find_properties, SDO, CodegenState
 
 
 def test_find_classes_sdo():
@@ -54,5 +55,15 @@ def test_classes_bioschemas():
     graph.parse("https://bioschemas.org/types/bioschemas_draft_types.jsonld")
     classes = set(str(x) for x in find_classes(graph))    
     assert "https://bioschemas.org/draft_terms/LabProtocol" in classes
-    # See https://github.com/BioSchemas/specifications/issues/706
-    # assert URIRef("https://bioschemas.org/draft_terms/LabProcess") in classes
+
+def test_obi_codegen():
+    graph = Graph()
+    graph.parse("https://www.w3.org/2002/07/owl")
+    graph.parse("http://purl.obolibrary.org/obo/obi.owl")
+    state = CodegenState(graph)
+
+    # Check that Microscope's superclass is found to be ImageCreationDevice.
+    # This checks that we can find classes defined as owl:Class
+    (name,), (uri,) = state._find_superclasses(URIRef("http://purl.obolibrary.org/obo/OBI_0400169"))
+    assert isinstance(name, ast.Name) and name.id == "ImageCreationDevice"
+    assert str(uri) == "http://purl.obolibrary.org/obo/OBI_0000398"

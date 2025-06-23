@@ -353,7 +353,9 @@ class CodegenState:
                 )
             )
 
-    def get_entity_name(self, entity: URIRef, mode: Literal["class", "property"] = "class") -> str:
+    def get_entity_name(
+        self, entity: URIRef, mode: Literal["class", "property"] = "class"
+    ) -> str:
         """
         Returns the name of the entity, as a Python identifier.
         This is used for class names and property names.

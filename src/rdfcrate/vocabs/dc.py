@@ -72,6 +72,54 @@ class Standard(RdfClass):
     term = RdfTerm("http://purl.org/dc/terms/Standard", "Standard")
 
 
+class Box(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/Box", "Box")
+
+
+class ISO3166(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/ISO3166", "ISO3166")
+
+
+class ISO639_2(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/ISO639-2", "ISO639-2")
+
+
+class ISO639_3(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/ISO639-3", "ISO639-3")
+
+
+class Period(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/Period", "Period")
+
+
+class Point(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/Point", "Point")
+
+
+class RFC1766(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/RFC1766", "RFC1766")
+
+
+class RFC3066(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/RFC3066", "RFC3066")
+
+
+class RFC4646(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/RFC4646", "RFC4646")
+
+
+class RFC5646(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/RFC5646", "RFC5646")
+
+
+class URI(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/URI", "URI")
+
+
+class W3CDTF(RdfClass):
+    term = RdfTerm("http://purl.org/dc/terms/W3CDTF", "W3CDTF")
+
+
 class Jurisdiction(LocationPeriodOrJurisdiction):
     term = RdfTerm("http://purl.org/dc/terms/Jurisdiction", "Jurisdiction")
 
@@ -150,7 +198,7 @@ class contributor(RdfProperty[dc.Agent]):
     term = RdfTerm("http://purl.org/dc/terms/contributor", "contributor")
 
 
-class coverage(RdfProperty[dc.Jurisdiction | dc.Location]):
+class coverage(RdfProperty[dc.Jurisdiction | dc.Location | dc.Period]):
     term = RdfTerm("http://purl.org/dc/terms/coverage", "coverage")
 
 

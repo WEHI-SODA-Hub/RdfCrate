@@ -85,8 +85,8 @@ class Ontology(rdfs.Resource):
     term = RdfTerm("http://www.w3.org/2002/07/owl#Ontology", "Ontology")
 
 
-class NamedIndividual(RdfClass):
-    term = RdfTerm("http://www.w3.org/2002/07/owl#NamedIndividual", "NamedIndividual")
+class Thing(RdfClass):
+    term = RdfTerm("http://www.w3.org/2002/07/owl#Thing", "Thing")
 
 
 class Restriction(Class):
@@ -130,6 +130,14 @@ class TransitiveProperty(ObjectProperty):
     )
 
 
+class NamedIndividual(Thing):
+    term = RdfTerm("http://www.w3.org/2002/07/owl#NamedIndividual", "NamedIndividual")
+
+
+class Nothing(Thing):
+    term = RdfTerm("http://www.w3.org/2002/07/owl#Nothing", "Nothing")
+
+
 class allValuesFrom(RdfProperty[rdfs.Class]):
     term = RdfTerm("http://www.w3.org/2002/07/owl#allValuesFrom", "allValuesFrom")
 
@@ -168,7 +176,7 @@ class datatypeComplementOf(RdfProperty[rdfs.Datatype]):
     )
 
 
-class differentFrom(RdfProperty[RdfType]):
+class differentFrom(RdfProperty[owl.Thing]):
     term = RdfTerm("http://www.w3.org/2002/07/owl#differentFrom", "differentFrom")
 
 
@@ -282,7 +290,7 @@ class qualifiedCardinality(RdfProperty[RdfType]):
     )
 
 
-class sameAs(RdfProperty[RdfType]):
+class sameAs(RdfProperty[owl.Thing]):
     term = RdfTerm("http://www.w3.org/2002/07/owl#sameAs", "sameAs")
 
 
@@ -290,11 +298,11 @@ class someValuesFrom(RdfProperty[rdfs.Class]):
     term = RdfTerm("http://www.w3.org/2002/07/owl#someValuesFrom", "someValuesFrom")
 
 
-class sourceIndividual(RdfProperty[RdfType]):
+class sourceIndividual(RdfProperty[owl.Thing]):
     term = RdfTerm("http://www.w3.org/2002/07/owl#sourceIndividual", "sourceIndividual")
 
 
-class targetIndividual(RdfProperty[RdfType]):
+class targetIndividual(RdfProperty[owl.Thing]):
     term = RdfTerm("http://www.w3.org/2002/07/owl#targetIndividual", "targetIndividual")
 
 
@@ -342,13 +350,13 @@ class topDataProperty(RdfProperty[rdfs.Literal]):
     term = RdfTerm("http://www.w3.org/2002/07/owl#topDataProperty", "topDataProperty")
 
 
-class bottomObjectProperty(RdfProperty[RdfType]):
+class bottomObjectProperty(RdfProperty[owl.Thing]):
     term = RdfTerm(
         "http://www.w3.org/2002/07/owl#bottomObjectProperty", "bottomObjectProperty"
     )
 
 
-class topObjectProperty(RdfProperty[RdfType]):
+class topObjectProperty(RdfProperty[owl.Thing]):
     term = RdfTerm(
         "http://www.w3.org/2002/07/owl#topObjectProperty", "topObjectProperty"
     )

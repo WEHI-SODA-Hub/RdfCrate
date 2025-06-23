@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 import itertools
 from pathlib import Path
 import re
-from typing import Any, Iterable, Literal, Sequence, cast
+from typing import Any, Iterable, Literal, cast
 import keyword
 from rdflib import Graph, RDFS, URIRef
 from rdflib.plugins.shared.jsonld.context import Context

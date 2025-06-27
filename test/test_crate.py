@@ -1,12 +1,13 @@
 from pathlib import Path
 
-from rdfcrate import AttachedCrate
+from rdfcrate import AttachedCrate, RdfProperty
 from rdflib import Literal, Graph, BNode, URIRef
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts, rdfs
 import json
 from datetime import datetime
 import tempfile
+import pytest
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
@@ -15,6 +16,11 @@ ME = URIRef("https://orcid.org/0000-0002-8965-2595")
 WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
 
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
+
+@pytest.fixture()
+def empty_crate():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        yield AttachedCrate(tmpdir)
 
 def make_test_crate(recursive: bool = False):
     crate = AttachedCrate(
@@ -153,3 +159,33 @@ def test_multi_type():
         assert str(rdf.type.term.uri) not in crate.context.to_dict().values()
         # But we should have the custom type in the context
         assert "https://example.org/SomeOtherType" in crate.context.to_dict().values()
+
+
+def test_redefine_term(empty_crate: AttachedCrate):
+    with pytest.raises(ValueError):
+        empty_crate.register_terms([
+            RdfTerm("https://example.org/Thing", "Thing"),
+        ])
+
+def test_reverse_prop(empty_crate: AttachedCrate):
+    """
+    Test that we can add a reverse property to an entity.
+    """
+    empty_crate.add_entity(
+        sdo.Thing("#thing"),
+        sdo.hasPart.reverse(empty_crate.root_data_entity)
+    )
+    assert (empty_crate.root_data_entity.id,  sdo.hasPart.term.uri, URIRef("#thing")) in empty_crate.graph
+
+def test_adhoc_term(empty_crate: AttachedCrate):
+    """
+    Test that we can define terms on the fly and use them in properties.
+    """
+    thing = empty_crate.add_entity(
+        sdo.Thing("#thing"),
+        RdfProperty.adhoc(
+            term=RdfTerm("https://example.org/myProp"),
+            object=sdo.Text("value")
+        )
+    )
+    assert (thing.id, URIRef("https://example.org/myProp"), Literal("value")) in empty_crate.graph

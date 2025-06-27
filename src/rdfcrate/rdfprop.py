@@ -17,10 +17,10 @@ class ReverseProperty:
     """
 
     term: RdfTerm
-    subject: GraphId
+    subject: RdfType
 
-    def add_to_graph(self, graph, object: GraphId) -> None:
-        graph.add((self.subject, self.term.uri, object))
+    def add_to_graph(self, graph: Graph, object: GraphId) -> None:
+        graph.add((self.subject.id, self.term.uri, object))
 
 
 T = TypeVar("T", bound="RdfType")
@@ -36,8 +36,18 @@ class RdfProperty(Generic[T]):
     term: ClassVar[RdfTerm]
     object: T
 
+    @staticmethod
+    def adhoc(term: RdfTerm, object: T) -> RdfProperty:
+        """
+        Makes an ad-hoc property class from a term.
+        """
+        subclass = type(term.label, (RdfProperty,), {
+            "term": term
+        })
+        return subclass(object=object)
+
     @classmethod
-    def reverse(cls, subject: GraphId) -> ReverseProperty:
+    def reverse(cls, subject: RdfType) -> ReverseProperty:
         return ReverseProperty(cls.term, subject)
 
     def add_to_graph(self, graph: Graph, subject: GraphId) -> None:

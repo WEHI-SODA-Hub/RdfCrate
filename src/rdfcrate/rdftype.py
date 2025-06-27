@@ -69,6 +69,18 @@ class RdfType(Generic[T]):
         cls = type(cls.__name__, (rdfs.Class,), {"term": cls.term})
         return rdf.type(cls(cls.term.uri))
 
+    @classmethod
+    def with_term_label(cls, label: str) -> type[RdfType]:
+        """
+        Creates a new instance of this class with the given label.
+        This is useful in cases where the term label is already defined by another vocabulary
+        """
+        from rdfcrate import RdfTerm
+
+        # Create a new term with the given label
+        term = RdfTerm(cls.term.uri, label)
+        return type(cls.__name__, (cls,), {"term": term})
+
 
 class RdfClass(RdfType[IdentifiedNode]):
     """

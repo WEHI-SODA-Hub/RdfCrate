@@ -17,10 +17,10 @@ class ReverseProperty:
     """
 
     term: RdfTerm
-    subject: GraphId
+    subject: RdfType
 
-    def add_to_graph(self, graph, object: GraphId) -> None:
-        graph.add((self.subject, self.term.uri, object))
+    def add_to_graph(self, graph: Graph, object: GraphId) -> None:
+        graph.add((self.subject.id, self.term.uri, object))
 
 
 T = TypeVar("T", bound="RdfType")
@@ -37,7 +37,7 @@ class RdfProperty(Generic[T]):
     object: T
 
     @classmethod
-    def reverse(cls, subject: GraphId) -> ReverseProperty:
+    def reverse(cls, subject: RdfType) -> ReverseProperty:
         return ReverseProperty(cls.term, subject)
 
     def add_to_graph(self, graph: Graph, subject: GraphId) -> None:

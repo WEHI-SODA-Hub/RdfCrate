@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from rdfcrate import AttachedCrate
+from rdfcrate import AttachedCrate, RdfProperty
 from rdflib import Literal, Graph, BNode, URIRef
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts, rdfs
@@ -176,3 +176,16 @@ def test_reverse_prop(empty_crate: AttachedCrate):
         sdo.hasPart.reverse(empty_crate.root_data_entity)
     )
     assert (empty_crate.root_data_entity.id,  sdo.hasPart.term.uri, URIRef("#thing")) in empty_crate.graph
+
+def test_adhoc_term(empty_crate: AttachedCrate):
+    """
+    Test that we can define terms on the fly and use them in properties.
+    """
+    thing = empty_crate.add_entity(
+        sdo.Thing("#thing"),
+        RdfProperty.adhoc(
+            term=RdfTerm("https://example.org/myProp"),
+            object=sdo.Text("value")
+        )
+    )
+    assert (thing.id, URIRef("https://example.org/myProp"), Literal("value")) in empty_crate.graph

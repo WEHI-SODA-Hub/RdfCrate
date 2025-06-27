@@ -71,9 +71,12 @@ class RoCrate(metaclass=ABCMeta):
         Adds custom terms to the crate context
         """
         for term in terms:
-            if self.context.expand(term.label) == str(term.uri):
+            existing = self.context.expand(term.label)
+            if existing == str(term.uri):
                 # Skip terms that are already in the RO-Crate context
                 continue
+            if existing is not None:
+                raise ValueError('Term "{term.label}" is already defined to mean {existing}. Cannot redefine to {term.uri}.')
 
             if term.uri == RDF.type:
                 # rdf:type should never be re-defined

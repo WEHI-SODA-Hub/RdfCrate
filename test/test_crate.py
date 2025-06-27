@@ -7,6 +7,7 @@ from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts, rdfs
 import json
 from datetime import datetime
 import tempfile
+import pytest
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
@@ -153,3 +154,13 @@ def test_multi_type():
         assert str(rdf.type.term.uri) not in crate.context.to_dict().values()
         # But we should have the custom type in the context
         assert "https://example.org/SomeOtherType" in crate.context.to_dict().values()
+
+
+def test_redefine_term():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        crate = AttachedCrate(tmpdir)
+        # Attempting to redefine an existing term should raise a ValueError
+        with pytest.raises(ValueError):
+            crate.register_terms([
+                RdfTerm("https://example.org/Thing", "Thing"),
+            ])

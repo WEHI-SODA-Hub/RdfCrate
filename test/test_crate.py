@@ -17,6 +17,11 @@ WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
 
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
 
+@pytest.fixture()
+def empty_crate():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        yield AttachedCrate(tmpdir)
+
 def make_test_crate(recursive: bool = False):
     crate = AttachedCrate(
         TEST_CRATE
@@ -156,11 +161,18 @@ def test_multi_type():
         assert "https://example.org/SomeOtherType" in crate.context.to_dict().values()
 
 
-def test_redefine_term():
-    with tempfile.TemporaryDirectory() as tmpdir:
-        crate = AttachedCrate(tmpdir)
-        # Attempting to redefine an existing term should raise a ValueError
-        with pytest.raises(ValueError):
-            crate.register_terms([
-                RdfTerm("https://example.org/Thing", "Thing"),
-            ])
+def test_redefine_term(empty_crate: AttachedCrate):
+    with pytest.raises(ValueError):
+        empty_crate.register_terms([
+            RdfTerm("https://example.org/Thing", "Thing"),
+        ])
+
+def test_reverse_prop(empty_crate: AttachedCrate):
+    """
+    Test that we can add a reverse property to an entity.
+    """
+    empty_crate.add_entity(
+        sdo.Thing("#thing"),
+        sdo.hasPart.reverse(empty_crate.root_data_entity)
+    )
+    assert (empty_crate.root_data_entity.id,  sdo.hasPart.term.uri, URIRef("#thing")) in empty_crate.graph

@@ -1,6 +1,6 @@
 from __future__ import annotations
-from typing import Annotated, Any, ClassVar, Generic, Self, TypeVar, TYPE_CHECKING, Union, cast
-from typing_extensions import Doc
+from typing import Annotated, Any, ClassVar, Generic, TypeVar, TYPE_CHECKING, Union, cast
+from typing_extensions import Doc, Self
 
 from rdflib import Graph, Literal, URIRef, RDF, IdentifiedNode
 from rdfcrate.types import GraphId

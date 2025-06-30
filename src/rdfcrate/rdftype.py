@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Annotated, Any, ClassVar, Generic, TypeVar, TYPE_CHECKING, Union
+from typing import Annotated, Any, ClassVar, Generic, Self, TypeVar, TYPE_CHECKING, Union, cast
 from typing_extensions import Doc
 
 from rdflib import Graph, Literal, URIRef, RDF, IdentifiedNode
@@ -56,6 +56,16 @@ class RdfType(Generic[T]):
         graph.add((self.id, RDF.type, self.term.uri))
         for arg in args:
             arg.add_to_graph(graph, self.id)
+
+    @classmethod
+    def adhoc(cls: type[Self], term: RdfTerm) -> type[Self]:
+        """
+        Makes an ad-hoc type class from a term.
+        """
+        subclass = type(term.label, (cls,), {
+            "term": term
+        })
+        return cast(type[Self], subclass)
 
     @classmethod
     def to_type_property(cls) -> rdf.type:

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from rdfcrate import AttachedCrate, RdfProperty, owl
+from rdfcrate import AttachedCrate, RdfProperty, owl, RdfClass
 from rdflib import RDF, Literal, Graph, BNode, URIRef
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts, rdfs
@@ -200,3 +200,13 @@ def test_with_term_label(empty_crate: AttachedCrate):
     )
     assert (thing.id, RDF.type, sdo.Class.term.uri) in empty_crate.graph
     assert (thing.id, RDF.type, owl.Class.term.uri) in empty_crate.graph
+
+def test_adhoc_class(empty_crate: AttachedCrate):
+    """
+    Test that we can use two types with the same term label, by renaming one of them.
+    """
+    ExampleClass = RdfClass.adhoc(RdfTerm("https://example.org/thing"))
+    empty_crate.add_entity(
+        ExampleClass("#thing"),
+    )
+    assert (URIRef("#thing"), RDF.type, ExampleClass.term.uri) in empty_crate.graph

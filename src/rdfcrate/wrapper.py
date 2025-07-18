@@ -14,6 +14,7 @@ from os import stat
 from abc import ABCMeta, abstractmethod
 from rdflib.plugins.shared.jsonld.context import Context
 from rdfcrate.vocabs import dc, schemaorg, rocrate
+from urllib.parse import quote
 import warnings
 
 if TYPE_CHECKING:
@@ -364,7 +365,7 @@ class AttachedCrate(RoCrate):
         if existing and not path.exists():
             raise ValueError(f"Path {path} does not exist")
 
-        return path.resolve(), URIRef(path.relative_to(self.root).as_posix())
+        return path.resolve(), URIRef(quote(path.relative_to(self.root).as_posix()))
 
     def register_file(
         self,

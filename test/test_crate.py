@@ -190,7 +190,7 @@ def test_adhoc_term(empty_crate: AttachedCrate):
     )
     assert (thing.id, URIRef("https://example.org/myProp"), Literal("value")) in empty_crate.graph
 
-def test_with_term_label(empty_crate: AttachedCrate):
+def test_cls_with_term_label(empty_crate: AttachedCrate):
     """
     Test that we can use two types with the same term label, by renaming one of them.
     """
@@ -200,6 +200,28 @@ def test_with_term_label(empty_crate: AttachedCrate):
     )
     assert (thing.id, RDF.type, sdo.Class.term.uri) in empty_crate.graph
     assert (thing.id, RDF.type, owl.Class.term.uri) in empty_crate.graph
+
+def test_prop_with_term_label(empty_crate: AttachedCrate):
+    """
+    Test that we can use two properties with the same term label, by renaming one of them.
+    """
+    class exHasPart(RdfProperty):
+        term = RdfTerm("https://example.org/hasPart", "hasPart")
+
+    part = sdo.CreativeWork("https://example.org/part")
+
+    with pytest.raises(ValueError):
+        empty_crate.add_entity(
+            sdo.Thing("#thing"),
+            sdo.hasPart(part),
+            exHasPart(part),
+        )
+        
+    empty_crate.add_entity(
+        sdo.Thing("#thing"),
+        sdo.hasPart(part),
+        exHasPart.with_term_label("exHasPart")(part)
+    )
 
 def test_adhoc_class(empty_crate: AttachedCrate):
     """

@@ -50,5 +50,17 @@ class RdfProperty(Generic[T]):
     def reverse(cls, subject: RdfType) -> ReverseProperty:
         return ReverseProperty(cls.term, subject)
 
+    @classmethod
+    def with_term_label(cls, label: str) -> type[RdfProperty[T]]:
+        """
+        Creates a new instance of this property with the given label.
+        This is useful in cases where the term label is already defined by another vocabulary
+        """
+        from rdfcrate import RdfTerm
+
+        # Create a new term with the given label
+        term = RdfTerm(cls.term.uri, label)
+        return type(cls.__name__, (cls,), {"term": term})
+
     def add_to_graph(self, graph: Graph, subject: GraphId) -> None:
         graph.add((subject, self.term.uri, self.object.id))

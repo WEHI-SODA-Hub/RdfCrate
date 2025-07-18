@@ -167,6 +167,18 @@ def test_redefine_term(empty_crate: AttachedCrate):
             RdfTerm("https://example.org/Thing", "Thing"),
         ])
 
+def test_add_metadata_term(empty_crate: AttachedCrate):
+    """
+    Test that terms used in `add_metadata` are registered in the context.
+    """
+    empty_crate.add_entity(
+        sdo.Thing("#thing"),
+        dc.valid(rdfs.Literal(Literal(True))),
+    )
+    # If valid can expand, it means it was correctly registered
+    assert empty_crate.context.expand("valid") == "http://purl.org/dc/terms/valid"
+
+
 def test_reverse_prop(empty_crate: AttachedCrate):
     """
     Test that we can add a reverse property to an entity.

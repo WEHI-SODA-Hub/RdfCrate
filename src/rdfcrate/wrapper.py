@@ -118,7 +118,7 @@ class RoCrate(metaclass=ABCMeta):
             + [
                 prop.object.term
                 for prop in args
-                if isinstance(prop, RdfProperty) and isinstance(prop, rdf.type)
+                if isinstance(prop, RdfProperty) and isinstance(prop.object, RdfClass)
             ]
         )
         entity.add(self.graph, *args)
@@ -271,6 +271,15 @@ class RoCrate(metaclass=ABCMeta):
         Params:
             uri: ID of the entity being described
         """
+        self.register_terms(
+            # Register property terms
+            [prop.term for prop in args]
+            + [
+                prop.object.term
+                for prop in args
+                if isinstance(prop, RdfProperty) and isinstance(prop, rdf.type)
+            ]
+        )
         for arg in args:
             arg.add_to_graph(self.graph, entity.id)
 

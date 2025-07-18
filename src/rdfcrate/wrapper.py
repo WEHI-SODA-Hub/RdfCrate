@@ -77,7 +77,9 @@ class RoCrate(metaclass=ABCMeta):
                 # Skip terms that are already in the RO-Crate context
                 continue
             if existing is not None:
-                raise ValueError(f'Term "{term.label}" is already defined to mean {existing}. Cannot redefine to {term.uri}.')
+                raise ValueError(
+                    f'Term "{term.label}" is already defined to mean {existing}. Cannot redefine to {term.uri}.'
+                )
 
             if term.uri == RDF.type:
                 # rdf:type should never be re-defined
@@ -107,7 +109,6 @@ class RoCrate(metaclass=ABCMeta):
             )
             ```
         """
-        from rdfcrate import rdf
 
         self.register_terms(
             # Register property terms

@@ -232,3 +232,12 @@ def test_adhoc_class(empty_crate: AttachedCrate):
         ExampleClass("#thing"),
     )
     assert (URIRef("#thing"), RDF.type, ExampleClass.term.uri) in empty_crate.graph
+
+def test_spaces_in_path(empty_crate: AttachedCrate):
+    """
+    Test that we can register a file with spaces in the path.
+    """
+    path = empty_crate.root / "file with spaces.txt"
+    path.touch()
+    empty_crate.register_file(path)
+    assert (URIRef("file%20with%20spaces.txt"), rdf.type.term.uri, roc.File.term.uri) in empty_crate.graph

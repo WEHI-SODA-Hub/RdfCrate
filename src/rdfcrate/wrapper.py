@@ -278,7 +278,7 @@ class RoCrate(metaclass=ABCMeta):
             + [
                 prop.object.term
                 for prop in args
-                if isinstance(prop, RdfProperty) and isinstance(prop, rdf.type)
+                if isinstance(prop, RdfProperty) and isinstance(prop.object, RdfClass)
             ]
         )
         for arg in args:

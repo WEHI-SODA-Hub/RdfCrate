@@ -4,6 +4,7 @@ from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
 from rocrate_validator.models import CheckIssue
 from typing_extensions import Doc
 from rdflib import RDF, Graph, URIRef
+from rdfcrate.vocabs import rdf
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfClass, EntityArgs
@@ -77,7 +78,9 @@ class RoCrate(metaclass=ABCMeta):
                 # Skip terms that are already in the RO-Crate context
                 continue
             if existing is not None:
-                raise ValueError(f'Term "{term.label}" is already defined to mean {existing}. Cannot redefine to {term.uri}.')
+                raise ValueError(
+                    f'Term "{term.label}" is already defined to mean {existing}. Cannot redefine to {term.uri}.'
+                )
 
             if term.uri == RDF.type:
                 # rdf:type should never be re-defined
@@ -107,17 +110,19 @@ class RoCrate(metaclass=ABCMeta):
             )
             ```
         """
-        from rdfcrate import rdf
 
         self.register_terms(
             # Register property terms
             [prop.term for prop in args]
             +
-            # Register object terms
+            # Register class terms
             [entity.term]
+            # Register supplementary class terms
             + [
                 prop.object.term
                 for prop in args
+                # rdf:type is a special case. All other objects do not need to be registered
+                # since they are allowed to be full IRIs
                 if isinstance(prop, RdfProperty) and isinstance(prop, rdf.type)
             ]
         )
@@ -271,6 +276,17 @@ class RoCrate(metaclass=ABCMeta):
         Params:
             uri: ID of the entity being described
         """
+        self.register_terms(
+            # Register property terms
+            [prop.term for prop in args]
+            + 
+            # Register supplementary class terms
+            [
+                prop.object.term
+                for prop in args
+                if isinstance(prop, RdfProperty) and isinstance(prop, rdf.type)
+            ]
+        )
         for arg in args:
             arg.add_to_graph(self.graph, entity.id)
 

@@ -23,8 +23,7 @@ class ReverseProperty:
         graph.add((self.subject.id, self.term.uri, object))
 
 
-T = TypeVar("T", bound="RdfType")
-
+T = TypeVar("T", bound="RdfType", covariant=True)
 
 @dataclass(frozen=True)
 class RdfProperty(Generic[T]):
@@ -41,9 +40,7 @@ class RdfProperty(Generic[T]):
         """
         Makes an ad-hoc property class from a term.
         """
-        subclass = type(term.label, (RdfProperty,), {
-            "term": term
-        })
+        subclass = type(term.label, (RdfProperty,), {"term": term})
         return subclass(object=object)
 
     @classmethod

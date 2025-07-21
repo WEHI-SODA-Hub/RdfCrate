@@ -1,5 +1,14 @@
 from __future__ import annotations
-from typing import Annotated, Any, ClassVar, Generic, TypeVar, TYPE_CHECKING, Union, cast
+from typing import (
+    Annotated,
+    Any,
+    ClassVar,
+    Generic,
+    TypeVar,
+    TYPE_CHECKING,
+    Union,
+    cast,
+)
 from typing_extensions import Doc, Self
 
 from rdflib import Graph, Literal, URIRef, RDF, IdentifiedNode
@@ -21,7 +30,8 @@ EntityArgs = Annotated[
     ),
 ]
 
-T = TypeVar("T", bound=GraphId)
+# Allow subclasses of GraphId
+T = TypeVar("T", bound=GraphId, covariant=True)
 
 
 class RdfType(Generic[T]):
@@ -62,9 +72,7 @@ class RdfType(Generic[T]):
         """
         Makes an ad-hoc type class from a term.
         """
-        subclass = type(term.label, (cls,), {
-            "term": term
-        })
+        subclass = type(term.label, (cls,), {"term": term})
         return cast(type[Self], subclass)
 
     @classmethod

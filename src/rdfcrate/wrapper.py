@@ -4,6 +4,7 @@ from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
 from rocrate_validator.models import CheckIssue
 from typing_extensions import Doc
 from rdflib import RDF, Graph, URIRef
+from rdfcrate.vocabs import rdf
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfClass, EntityArgs
@@ -114,12 +115,15 @@ class RoCrate(metaclass=ABCMeta):
             # Register property terms
             [prop.term for prop in args]
             +
-            # Register object terms
+            # Register class terms
             [entity.term]
+            # Register supplementary class terms
             + [
                 prop.object.term
                 for prop in args
-                if isinstance(prop, RdfProperty) and isinstance(prop.object, RdfClass)
+                # rdf:type is a special case. All other objects do not need to be registered
+                # since they are allowed to be full IRIs
+                if isinstance(prop, RdfProperty) and isinstance(prop, rdf.type)
             ]
         )
         entity.add(self.graph, *args)
@@ -275,7 +279,9 @@ class RoCrate(metaclass=ABCMeta):
         self.register_terms(
             # Register property terms
             [prop.term for prop in args]
-            + [
+            + 
+            # Register supplementary class terms
+            [
                 prop.object.term
                 for prop in args
                 if isinstance(prop, RdfProperty) and isinstance(prop, rdf.type)

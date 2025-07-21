@@ -1,4 +1,5 @@
 from pathlib import Path
+from unittest.mock import patch
 
 from rdfcrate import AttachedCrate, RdfProperty, owl, RdfClass
 from rdflib import RDF, Literal, Graph, BNode, URIRef
@@ -21,6 +22,20 @@ BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
 def empty_crate():
     with tempfile.TemporaryDirectory() as tmpdir:
         yield AttachedCrate(tmpdir)
+
+def fake_context(url: URIRef):
+    if str(url) == "https://w3id.org/ro/crate/1.1/context":
+        with (Path(__file__).parent / "context_1_1.json").open() as context_file:
+            return json.load(context_file), None
+    else:
+        raise ValueError(f"Unknown context URL: {url}")
+
+@pytest.fixture(autouse=True, scope="function")
+def mock_jsonld_load():
+    # This avoids loading the context from the network making it faster and more reliable
+    # Patch the usage location and not the definition location (util.py)
+    with patch("rdflib.plugins.shared.jsonld.context.source_to_json", new=fake_context):
+        yield
 
 def make_test_crate(recursive: bool = False):
     crate = AttachedCrate(

@@ -10,6 +10,7 @@ requires-python = ">=3.10"
 dependencies = [
     "rdflib>=7.1.2",
     "typer>=0.16.0",
+    "vcrpy>=7.0.0",
 ]
 
 [project.optional-dependencies]
@@ -19,6 +20,7 @@ validation = [
 
 [project.scripts]
 rdfcrate-codegen = "rdfcrate.codegen.__main__:app"
+regenerate-cassettes = "rdfcrate.test_helpers:generate_cassettes"
 
 [build-system]
 requires = ["hatchling"]

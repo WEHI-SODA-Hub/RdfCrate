@@ -1913,19 +1913,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pytest-recording"
-version = "0.13.4"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pytest" },
-    { name = "vcrpy" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/32/9c/f4027c5f1693847b06d11caf4b4f6bb09f22c1581ada4663877ec166b8c6/pytest_recording-0.13.4.tar.gz", hash = "sha256:568d64b2a85992eec4ae0a419c855d5fd96782c5fb016784d86f18053792768c", size = 26576 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/42/c2/ce34735972cc42d912173e79f200fe66530225190c06655c5632a9d88f1e/pytest_recording-0.13.4-py3-none-any.whl", hash = "sha256:ad49a434b51b1c4f78e85b1e6b74fdcc2a0a581ca16e52c798c6ace971f7f439", size = 13723 },
-]
-
-[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 source = { registry = "https://pypi.org/simple" }
@@ -2122,6 +2109,7 @@ source = { editable = "." }
 dependencies = [
     { name = "rdflib" },
     { name = "typer" },
+    { name = "vcrpy" },
 ]
 
 [package.optional-dependencies]
@@ -2139,7 +2127,6 @@ dev = [
     { name = "mkquartodocs" },
     { name = "pandas" },
     { name = "pytest" },
-    { name = "pytest-recording" },
     { name = "requests" },
     { name = "roc-validator" },
     { name = "ruff" },
@@ -2151,6 +2138,7 @@ requires-dist = [
     { name = "rdflib", specifier = ">=7.1.2" },
     { name = "roc-validator", marker = "extra == 'validation'", specifier = ">=0.5.0" },
     { name = "typer", specifier = ">=0.16.0" },
+    { name = "vcrpy", specifier = ">=7.0.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -2163,7 +2151,6 @@ dev = [
     { name = "mkquartodocs", specifier = ">=0.5.10" },
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "pytest", specifier = ">=8.3.4" },
-    { name = "pytest-recording", specifier = ">=0.13.4" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "roc-validator", specifier = ">=0.5.0" },
     { name = "ruff", specifier = ">=0.11.5" },

@@ -10,6 +10,7 @@ requires-python = ">=3.10"
 dependencies = [
     "rdflib>=7.1.2",
     "typer>=0.16.0",
+    "vcrpy>=7.0.0",
 ]
 
 [project.optional-dependencies]
@@ -39,7 +40,6 @@ dev-dependencies = [
     "requests>=2.32.3",
     "roc-validator>=0.5.0",
     "ruff>=0.11.5",
-    "pytest-recording>=0.13.4",
 ]
 
 [tool.pyright]

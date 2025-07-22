@@ -1,7 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
 from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
-from rocrate_validator.models import CheckIssue
 from typing_extensions import Doc
 from rdflib import RDF, Graph, URIRef
 from rdfcrate.vocabs import rdf
@@ -19,7 +18,7 @@ from urllib.parse import quote
 import warnings
 
 if TYPE_CHECKING:
-    from rocrate_validator.models import Severity
+    from rocrate_validator.models import Severity, CheckIssue
 
 EntityType = Annotated[
     type[RdfClass],

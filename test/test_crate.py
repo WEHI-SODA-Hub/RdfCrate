@@ -1,6 +1,4 @@
 from pathlib import Path
-from unittest.mock import patch
-
 from rdfcrate import AttachedCrate, RdfProperty, owl, RdfClass
 from rdflib import RDF, Literal, Graph, BNode, URIRef
 from rdfcrate.rdfterm import RdfTerm

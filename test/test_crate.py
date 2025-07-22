@@ -9,6 +9,7 @@ import json
 from datetime import datetime
 import tempfile
 import pytest
+from rdfcrate.test_helpers import patch_rocrate_context
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
@@ -18,25 +19,16 @@ WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
 
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
 
-
 @pytest.fixture()
 def empty_crate():
     with tempfile.TemporaryDirectory() as tmpdir:
         yield AttachedCrate(tmpdir)
 
-def fake_context(url: URIRef):
-    if str(url) == "https://w3id.org/ro/crate/1.1/context":
-        with (Path(__file__).parent / "context_1_1.json").open() as context_file:
-            return json.load(context_file), None
-    else:
-        raise ValueError(f"Unknown context URL: {url}")
-
-@pytest.fixture(autouse=True, scope="function")
-def mock_jsonld_load():
-    # This avoids loading the context from the network making it faster and more reliable
-    # Patch the usage location and not the definition location (util.py)
-    with patch("rdflib.plugins.shared.jsonld.context.source_to_json", new=fake_context):
+@pytest.fixture(scope="function", autouse=True)
+def rocrate_context():
+    with patch_rocrate_context():
         yield
+
 
 def make_test_crate(recursive: bool = False):
     crate = AttachedCrate(TEST_CRATE)

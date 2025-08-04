@@ -382,7 +382,7 @@ class CodegenState:
             - names: A list of ast.Name objects that can be used to define a child class
             - uris: A list of URIs for these base classes
         """
-        # We need to use this type so that 
+        # We need to use this type so that
         names: list[ast.expr] = []
         uris: list[URIRef] = []
         # We order superclasses with the "deepest" class first, so that Python won't complain about the MRO

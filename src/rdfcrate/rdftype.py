@@ -12,6 +12,7 @@ from typing import (
 from typing_extensions import Doc, Self
 
 from rdflib import Graph, Literal, URIRef, RDF, IdentifiedNode
+from rdfcrate.context_graph import EntityArgs, ContextGraph
 from rdfcrate.types import GraphId
 
 if TYPE_CHECKING:
@@ -23,12 +24,12 @@ EntityUri = Annotated[
         "The identifier of the new entity. This must be a valid IRI or a relative path within the crate root."
     ),
 ]
-EntityArgs = Annotated[
-    Union["RdfProperty", "ReverseProperty"],
-    Doc(
-        "Additional properties to add to the entity. Instances of `RdfProperty` will create triples with this new entity as the subject. Instances of `ReverseProperty` will create triples with this new entity as the object."
-    ),
-]
+# EntityArgs = Annotated[
+#     Union["RdfProperty", "ReverseProperty"],
+#     Doc(
+#         "Additional properties to add to the entity. Instances of `RdfProperty` will create triples with this new entity as the subject. Instances of `ReverseProperty` will create triples with this new entity as the object."
+#     ),
+# ]
 
 # Allow subclasses of GraphId
 T = TypeVar("T", bound=GraphId, covariant=True)
@@ -48,24 +49,26 @@ class RdfType(Generic[T]):
     def __init__(self, id: T):
         self.id = id
 
-    def add(self, graph: Graph, *args: EntityArgs) -> None:
+    def add(self, *args: EntityArgs, graph: ContextGraph = ContextGraph()) -> ContextGraph:
         """
-        Adds triples to the graph with this entity as the subject.
-
-        Params:
-            graph: The graph to which the triples will be added
-        Returns:
-            A URIRef subclass for this RDF type
+        Adds triples to a graph with this entity as the subject.
+        If the graph is not provided, an empty one will be created and returned.
         """
+        # The public add method is needed here rather than in `ContextGraph` so that subclasses can override it and mandate certain properties
         from rdfcrate import RdfTerm
 
         if not isinstance(self.term, RdfTerm):
             raise ValueError(
                 "The `term` class variable must be an instance of `RdfTerm`."
             )
-        graph.add((self.id, RDF.type, self.term.uri))
+
+        # Register everything
+        graph.register_term(self.term)
         for arg in args:
+            # The properties are responsible for registering their own terms
             arg.add_to_graph(graph, self.id)
+
+        return graph
 
     @classmethod
     def adhoc(cls: type[Self], term: RdfTerm) -> type[Self]:

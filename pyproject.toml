@@ -17,6 +17,9 @@ dependencies = [
 validation = [
     "roc-validator>=0.5.0",
 ]
+nav = [
+    "rdfnav; python_full_version >= '3.13'",
+]
 
 [project.scripts]
 rdfcrate-codegen = "rdfcrate.codegen.__main__:app"
@@ -41,6 +44,9 @@ dev-dependencies = [
     "roc-validator>=0.5.0",
     "ruff>=0.11.5",
 ]
+
+[tool.uv.sources]
+rdfnav = { git = "https://github.com/WEHI-SODA-Hub/RdfNav" }
 
 [tool.pyright]
 include = ["src"]

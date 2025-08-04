@@ -67,28 +67,28 @@ class RoCrate(metaclass=ABCMeta):
         The root entity of the RO-Crate
         """
 
-    def register_terms(self, terms: Iterable[RdfTerm]) -> None:
-        """
-        Adds custom terms to the crate context
-        """
-        for term in terms:
-            existing = self.context.expand(term.label)
-            if existing == str(term.uri):
-                # Skip terms that are already in the RO-Crate context
-                continue
-            if existing is not None:
-                raise ValueError(
-                    f'Term "{term.label}" is already defined to mean {existing}. Cannot redefine to {term.uri}.'
-                )
+    # def register_terms(self, terms: Iterable[RdfTerm]) -> None:
+    #     """
+    #     Adds custom terms to the crate context
+    #     """
+    #     for term in terms:
+    #         existing = self.context.expand(term.label)
+    #         if existing == str(term.uri):
+    #             # Skip terms that are already in the RO-Crate context
+    #             continue
+    #         if existing is not None:
+    #             raise ValueError(
+    #                 f'Term "{term.label}" is already defined to mean {existing}. Cannot redefine to {term.uri}.'
+    #             )
 
-            if term.uri == RDF.type:
-                # rdf:type should never be re-defined
-                continue
+    #         if term.uri == RDF.type:
+    #             # rdf:type should never be re-defined
+    #             continue
 
-            # The context keeps track of all terms, including the base RO-Crate terms.
-            self.context.add_term(term.label, str(term.uri))
-            # Custom terms only tracks the non-standard terms
-            self.custom_terms[term.label] = str(term.uri)
+    #         # The context keeps track of all terms, including the base RO-Crate terms.
+    #         self.context.add_term(term.label, str(term.uri))
+    #         # Custom terms only tracks the non-standard terms
+    #         self.custom_terms[term.label] = str(term.uri)
 
     def add_entity(self, entity: EntityClass, *args: EntityArgs) -> EntityClass:
         """

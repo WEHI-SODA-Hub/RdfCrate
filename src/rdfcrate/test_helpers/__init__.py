@@ -38,12 +38,13 @@ def patch_rocrate_context():
         import_path: The import path of the `urlopen` function to patch. Default is "rdflib._networking.urlopen".
     """
     # Intercept any HTTP requests to the RO-Crate context and return a local file instead
+    # TODO: change to using before_record_response to ignore other requests: https://vcrpy.readthedocs.io/en/latest/advanced.html#custom-response-filtering
     with (
         vcr.use_cassette(
             CONTEXT_CASSETTE,
             record_mode="none",
             match_on=['path'],
-            allow_playback_repeats=True
+            allow_playback_repeats=True,
         ),
         # Also force the validator to not cache requests, see https://github.com/kevin1024/vcrpy/issues/881
         patch("rocrate_validator.constants.DEFAULT_HTTP_CACHE_TIMEOUT", 0)

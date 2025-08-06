@@ -4,7 +4,14 @@
 
 ### Added
 
-* 
+* Added `ContextGraph`, a superclass of `RoCrate` which isn't tied to any RO-Crate specifics. This is designed to be a better API target for more general manipulations
+* Added `navigate()` and `navigate_to()` functions to `ContextGraph` which are therefore also accessible as `RoCrate` methods. These use the optional `rdfnav` dependency to allow for easy querying and mutation of the graph. Both will throw an exception if `rdfnav` is not installed.
+* Added `register_term()` method to `ContextGraph` and subclasses, for registering a single term. 
+* Both `register_term()` and `register_terms()` now support `rdflib` `Term` classes now
+* Created a `PropertyProtocol` which is implemented by both `RdfProperty` and `ReverseProperty`. This allows APIs to more easily target both simultaneously
+* `RdfProp` and `RdfType` subclasses are now responsible for registering their own terms. Previously this was the responsibility of `RoCrate`
+
+
 
 ## 1.0.0
 

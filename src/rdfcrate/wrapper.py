@@ -1,8 +1,9 @@
 from __future__ import annotations
 from pathlib import Path
 from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
-from typing_extensions import Doc
+from typing_extensions import Doc, deprecated
 from rdflib import RDF, Graph, URIRef
+from rdfcrate.context_graph import ContextGraph
 from rdfcrate.vocabs import rdf
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdfterm import RdfTerm
@@ -43,16 +44,16 @@ def has_prop(props: Iterable[EntityArgs], predicate: type[RdfProperty]) -> bool:
 
 
 @dataclass
-class RoCrate(metaclass=ABCMeta):
+class RoCrate(ContextGraph, metaclass=ABCMeta):
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """
 
-    graph: Graph = field(init=False, default_factory=Graph)
+    # graph: Graph = field(init=False, default_factory=Graph)
     "`rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available."
     custom_terms: dict[str, str] = field(init=False, default_factory=dict)
     "Set of custom terms not in the standard RO-Crate context that need to be in the final JSON-LD context."
-    context: Context = field(init=False)
+    # context: Context = field(init=False)
     "Dynamically updated version of the JSON-LD context. By default, this contains the current RO-Crate spec's context, but additional terms are added as they are added to the graph."
     version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
     "Version of the RO-Crate specification to use"
@@ -109,23 +110,10 @@ class RoCrate(metaclass=ABCMeta):
             )
             ```
         """
-
-        self.register_terms(
-            # Register property terms
-            [prop.term for prop in args]
-            +
-            # Register class terms
-            [entity.term]
-            # Register supplementary class terms
-            + [
-                prop.object.term
-                for prop in args
-                # rdf:type is a special case. All other objects do not need to be registered
-                # since they are allowed to be full IRIs
-                if isinstance(prop, RdfProperty) and isinstance(prop, rdf.type)
-            ]
-        )
-        entity.add(self.graph, *args)
+        # Note: The reason we have use the (entity, *args) signature is so that we can enforce certain properties and their types
+        # when we make specialized variants of the method like `add_root_entity` or `register_file`.
+        # `entity.add()` handles the term registration and the triple creation
+        entity.add(*args, graph=self)
         return entity
 
     def add_root_entity(

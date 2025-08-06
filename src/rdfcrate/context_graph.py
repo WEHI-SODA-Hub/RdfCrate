@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Iterable, TypeVar, Union, TYPE_CHECKING
 from typing_extensions import Annotated, Doc
 
-from rdflib import RDF, Graph
+from rdflib import RDF, Graph, IdentifiedNode
 from rdflib.plugins.shared.jsonld.context import Context, Term
 
 from rdfcrate.rdfprop import PropertyProtocol
@@ -10,7 +10,7 @@ from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfClass
 
 if TYPE_CHECKING:
-    from rdfnav import GraphNavigator
+    from rdfnav import GraphNavigator, UriNode
 
 
 EntityClass = TypeVar("EntityClass", bound=RdfClass)
@@ -47,9 +47,20 @@ class ContextGraph:
                 "The 'rdfnav' package is required for navigation. Please install it with 'pip install rdfnav'."
             )
 
+    def navigate_to(self, iri: IdentifiedNode | RdfClass) -> "UriNode":
+        """
+        Returns a navigator for the given IRI.
+        This lets you mutate and query the graph using the `rdfnav` package.
+        """
+        navigator = self.navigate()
+        if isinstance(iri, IdentifiedNode):
+            return navigator[iri]
+        elif isinstance(iri, RdfClass):
+            return navigator[iri.id]
+
     def register_term(self, term: RdfTerm | Term) -> None:
         """
-        Adds custom terms to the context
+        Adds a custom term to the context
         """
         # Supports our local `RdfTerm` and also the rdflib `Term`.
         # It is hoped that `Term` will become a public interface of `rdflib` in the future and we can remove `RdfTerm`.

@@ -58,6 +58,11 @@ class ContextGraph:
         elif isinstance(iri, RdfClass):
             return navigator[iri.id]
 
+    def register_terms(self, *terms: RdfTerm | Term) -> None:
+        # Added for backwards compatibility
+        for term in terms:
+            self.register_term(term)
+
     def register_term(self, term: RdfTerm | Term) -> None:
         """
         Adds a custom term to the context

@@ -10,10 +10,7 @@ from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfClass
 
 if TYPE_CHECKING:
-    try:
-        from rdfnav import GraphNavigator, UriNode
-    except ImportError:
-        pass
+    from rdfnav import GraphNavigator, UriNode # type: ignore
     from rdflib.graph import _TripleType
 
 

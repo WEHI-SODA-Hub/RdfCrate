@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
-from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING, Unpack
-from typing_extensions import Doc
+from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
+from typing_extensions import Doc, Unpack
 from rdflib import URIRef
 from rdfcrate.context_graph import ContextGraph, EntityArgs, ContextGraphKwargs
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty

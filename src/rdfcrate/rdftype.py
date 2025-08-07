@@ -23,12 +23,6 @@ EntityUri = Annotated[
         "The identifier of the new entity. This must be a valid IRI or a relative path within the crate root."
     ),
 ]
-# EntityArgs = Annotated[
-#     Union["RdfProperty", "ReverseProperty"],
-#     Doc(
-#         "Additional properties to add to the entity. Instances of `RdfProperty` will create triples with this new entity as the subject. Instances of `ReverseProperty` will create triples with this new entity as the object."
-#     ),
-# ]
 
 # Allow subclasses of GraphId
 T = TypeVar("T", bound=GraphId, covariant=True)

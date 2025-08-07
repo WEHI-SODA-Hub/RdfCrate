@@ -1,5 +1,5 @@
-from typing import Iterable, TypeVar, TYPE_CHECKING, TypedDict, Unpack
-from typing_extensions import Annotated, Doc
+from typing import Iterable, TypeVar, TYPE_CHECKING, TypedDict
+from typing_extensions import Annotated, Doc, Unpack
 
 from rdflib import RDF, Graph, IdentifiedNode
 from rdflib.plugins.shared.jsonld.context import Context, Term, _ContextSourceType

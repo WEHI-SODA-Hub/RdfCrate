@@ -6,16 +6,15 @@ from typing import (
     Generic,
     TypeVar,
     TYPE_CHECKING,
-    Union,
     cast,
 )
 from typing_extensions import Doc, Self
 
-from rdflib import Graph, Literal, URIRef, RDF, IdentifiedNode
+from rdflib import Literal, URIRef, RDF, IdentifiedNode
 from rdfcrate.types import GraphId
 
 if TYPE_CHECKING:
-    from rdfcrate import RdfProperty, ReverseProperty, RdfTerm, rdf
+    from rdfcrate import RdfTerm, rdf
     from rdfcrate.context_graph import EntityArgs, ContextGraph
 
 EntityUri = Annotated[
@@ -60,6 +59,7 @@ class RdfType(Generic[T]):
         if graph is None:
             # We have to import here to avoid circular imports
             from rdfcrate.context_graph import ContextGraph
+
             graph = ContextGraph()
 
         if not isinstance(self.term, RdfTerm):

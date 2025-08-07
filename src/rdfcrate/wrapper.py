@@ -1,18 +1,17 @@
 from __future__ import annotations
 from pathlib import Path
-from typing import Annotated, Any, Iterable, Required, TypeVar, TYPE_CHECKING, Unpack
+from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING, Unpack
 from typing_extensions import Doc
 from rdflib import URIRef
 from rdfcrate.context_graph import ContextGraph, EntityArgs, ContextGraphKwargs
-from rdfcrate.vocabs import rdf
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
 from rdfcrate.rdftype import RdfClass
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass
 import mimetypes
 from os import stat
 from abc import ABCMeta, abstractmethod
-from rdflib.plugins.shared.jsonld.context import Context, Term
+from rdflib.plugins.shared.jsonld.context import Context
 from rdfcrate.vocabs import dc, schemaorg, rocrate
 from urllib.parse import quote
 import warnings
@@ -41,13 +40,16 @@ def has_prop(props: Iterable[EntityArgs], predicate: type[RdfProperty]) -> bool:
     """
     return any(isinstance(prop, predicate) for prop in props)
 
+
 class RoCrateKwargs(ContextGraphKwargs, total=False):
     version: SpecVersion
+
 
 class RoCrate(ContextGraph, metaclass=ABCMeta):
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """
+
     version: SpecVersion
     "Version of the RO-Crate specification to use"
     _custom_terms: dict[str, Any]
@@ -258,6 +260,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
             )
 
         return super().compile()
+
 
 class AttachedCrate(RoCrate):
     """

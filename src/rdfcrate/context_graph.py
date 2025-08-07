@@ -1,8 +1,7 @@
-from dataclasses import dataclass, field
 from typing import Iterable, TypeVar, TYPE_CHECKING, TypedDict, Unpack
 from typing_extensions import Annotated, Doc
 
-from rdflib import RDF, Graph, IdentifiedNode, URIRef
+from rdflib import RDF, Graph, IdentifiedNode
 from rdflib.plugins.shared.jsonld.context import Context, Term, _ContextSourceType
 
 from rdfcrate.rdfprop import PropertyProtocol
@@ -22,10 +21,12 @@ EntityArgs = Annotated[
     ),
 ]
 
+
 class ContextGraphKwargs(TypedDict, total=False):
     graph: Graph
     unique_terms: bool
     require_terms: bool
+
 
 class ContextGraph:
     """
@@ -77,6 +78,7 @@ class ContextGraph:
         """
         try:
             from rdfnav import GraphNavigator
+
             return GraphNavigator(self.graph)
         except ImportError:
             raise ImportError(
@@ -103,12 +105,9 @@ class ContextGraph:
         """
         Adds a custom term to the context
         """
- 
+
         if isinstance(term, RdfTerm):
-            term = Term(
-                name=term.label,
-                id=str(term.uri)
-            )
+            term = Term(name=term.label, id=str(term.uri))
 
         existing = self.full_context.expand(term.name)
         if existing == str(term.id):

@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 
 T = TypeVar("T", bound="RdfType", covariant=True)
 
+
 class PropertyProtocol(Protocol):
     def add_to_graph(self, graph: ContextGraph, entity: GraphId):
         """
@@ -22,6 +23,7 @@ class PropertyProtocol(Protocol):
             graph: The graph to which the property will be added
             entity: The entity to which the property will be added
         """
+
 
 @dataclass(frozen=True)
 class RdfProperty(PropertyProtocol, Generic[T]):
@@ -63,6 +65,7 @@ class RdfProperty(PropertyProtocol, Generic[T]):
             # rdf:type is a special case, it should not be registered as a term
             graph.register_term(self.object.term)
         graph.graph.add((entity, self.term.uri, self.object.id))
+
 
 @dataclass
 class ReverseProperty(PropertyProtocol):

@@ -173,9 +173,9 @@ def test_multi_type():
         )
 
         # We never want to redefine rdf:type
-        assert str(rdf.type.term.uri) not in crate.context.to_dict().values()
+        assert str(rdf.type.term.uri) not in crate._custom_terms
         # But we should have the custom type in the context
-        assert "https://example.org/SomeOtherType" in crate.context.to_dict().values()
+        assert "https://example.org/SomeOtherType" in crate.full_context.to_dict().values()
 
 
 def test_redefine_term(empty_crate: AttachedCrate):
@@ -194,7 +194,7 @@ def test_add_metadata_term(empty_crate: AttachedCrate):
         dc.valid(rdfs.Literal(Literal(True))),
     )
     # If valid can expand, it means it was correctly registered
-    assert empty_crate.context.expand("valid") == "http://purl.org/dc/terms/valid"
+    assert empty_crate.full_context.expand("valid") == "http://purl.org/dc/terms/valid"
 
 
 def test_reverse_prop(empty_crate: AttachedCrate):

@@ -1,19 +1,18 @@
 from __future__ import annotations
 from pathlib import Path
-from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
-from typing_extensions import Doc, deprecated
-from rdflib import RDF, Graph, URIRef
-from rdfcrate.context_graph import ContextGraph
+from typing import Annotated, Any, Iterable, Required, TypeVar, TYPE_CHECKING, Unpack
+from typing_extensions import Doc
+from rdflib import URIRef
+from rdfcrate.context_graph import ContextGraph, EntityArgs, ContextGraphKwargs
 from rdfcrate.vocabs import rdf
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
-from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.rdftype import RdfClass, EntityArgs
+from rdfcrate.rdftype import RdfClass
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
 from dataclasses import InitVar, dataclass, field
 import mimetypes
 from os import stat
 from abc import ABCMeta, abstractmethod
-from rdflib.plugins.shared.jsonld.context import Context
+from rdflib.plugins.shared.jsonld.context import Context, Term
 from rdfcrate.vocabs import dc, schemaorg, rocrate
 from urllib.parse import quote
 import warnings
@@ -42,24 +41,30 @@ def has_prop(props: Iterable[EntityArgs], predicate: type[RdfProperty]) -> bool:
     """
     return any(isinstance(prop, predicate) for prop in props)
 
+class RoCrateKwargs(ContextGraphKwargs, total=False):
+    version: SpecVersion
 
-@dataclass
 class RoCrate(ContextGraph, metaclass=ABCMeta):
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """
-
-    # graph: Graph = field(init=False, default_factory=Graph)
-    "`rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available."
-    custom_terms: dict[str, str] = field(init=False, default_factory=dict)
-    "Set of custom terms not in the standard RO-Crate context that need to be in the final JSON-LD context."
-    # context: Context = field(init=False)
-    "Dynamically updated version of the JSON-LD context. By default, this contains the current RO-Crate spec's context, but additional terms are added as they are added to the graph."
-    version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
+    version: SpecVersion
     "Version of the RO-Crate specification to use"
+    _custom_terms: dict[str, Any]
 
-    def __post_init__(self):
-        self.context = Context(self.version.context_url)
+    def __init__(self, **kwargs: Unpack[RoCrateKwargs]):
+        super().__init__(**kwargs)
+        self.version = kwargs.get("version", ROCrate1_1)
+
+        # We resolve the RO-Crate context now so we can use it to resolve terms and check if they are already registered
+        self._roc_context = Context(self.version.context_url)
+
+    @property
+    def context_source(self):
+        if len(self._custom_terms) == 0:
+            return self.version.context_url
+        else:
+            return [self.version.context_url, self._custom_terms]
 
     @property
     @abstractmethod
@@ -67,29 +72,6 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         """
         The root entity of the RO-Crate
         """
-
-    # def register_terms(self, terms: Iterable[RdfTerm]) -> None:
-    #     """
-    #     Adds custom terms to the crate context
-    #     """
-    #     for term in terms:
-    #         existing = self.context.expand(term.label)
-    #         if existing == str(term.uri):
-    #             # Skip terms that are already in the RO-Crate context
-    #             continue
-    #         if existing is not None:
-    #             raise ValueError(
-    #                 f'Term "{term.label}" is already defined to mean {existing}. Cannot redefine to {term.uri}.'
-    #             )
-
-    #         if term.uri == RDF.type:
-    #             # rdf:type should never be re-defined
-    #             continue
-
-    #         # The context keeps track of all terms, including the base RO-Crate terms.
-    #         self.context.add_term(term.label, str(term.uri))
-    #         # Custom terms only tracks the non-standard terms
-    #         self.custom_terms[term.label] = str(term.uri)
 
     def add_entity(self, entity: EntityClass, *args: EntityArgs) -> EntityClass:
         """
@@ -263,19 +245,8 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         Params:
             uri: ID of the entity being described
         """
-        self.register_terms(
-            # Register property terms
-            [prop.term for prop in args]
-            + 
-            # Register supplementary class terms
-            [
-                prop.object.term
-                for prop in args
-                if isinstance(prop, RdfProperty) and isinstance(prop, rdf.type)
-            ]
-        )
         for arg in args:
-            arg.add_to_graph(self.graph, entity.id)
+            arg.add_to_graph(self, entity.id)
 
     def compile(self) -> str:
         """
@@ -286,30 +257,19 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
                 "Root data entity not found. Did you call `add_root_entity`?"
             )
 
-        if len(self.custom_terms) == 0:
-            context = self.version.context_url
-        else:
-            context = [self.version.context_url, self.custom_terms]
+        return super().compile()
 
-        # Serializer kwargs are annoyingly not listed in the docs.
-        # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
-        return self.graph.serialize(format="json-ld", context=context)
-
-
-@dataclass
 class AttachedCrate(RoCrate):
     """
     See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#attached-ro-crate>
     """
 
-    path: InitVar[str | Path]
-    "The RO-Crate directory"
-    root: Path = field(init=False)
+    root: Path
     "The RO-Crate directory"
 
-    def __post_init__(self, path: str | Path):
+    def __init__(self, path: str | Path, **kwargs: Unpack[RoCrateKwargs]):
+        super().__init__(**kwargs)
         self.root = Path(path).resolve()
-        super().__post_init__()
 
     @property
     def metadata_entity(self) -> schemaorg.CreativeWork:

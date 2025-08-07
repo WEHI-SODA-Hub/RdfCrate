@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Iterable, TypeVar, TYPE_CHECKING, TypedDict
 from typing_extensions import Annotated, Doc, Unpack
 
@@ -9,7 +10,10 @@ from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfClass
 
 if TYPE_CHECKING:
-    from rdfnav import GraphNavigator, UriNode
+    try:
+        from rdfnav import GraphNavigator, UriNode
+    except ImportError:
+        pass
     from rdflib.graph import _TripleType
 
 
@@ -72,7 +76,7 @@ class ContextGraph:
         """
         return Context(self.context_source)
 
-    def navigate(self) -> "GraphNavigator":
+    def navigate(self) -> GraphNavigator:
         """
         Returns a navigator that can be used to traverse and mutate the graph.
         """
@@ -85,7 +89,7 @@ class ContextGraph:
                 "The 'rdfnav' package is required for navigation. Please install it with 'pip install rdfnav'."
             )
 
-    def navigate_to(self, iri: IdentifiedNode | RdfClass) -> "UriNode":
+    def navigate_to(self, iri: IdentifiedNode | RdfClass) -> UriNode:
         """
         Returns a navigator for the given IRI.
         This lets you mutate and query the graph using the `rdfnav` package.
@@ -128,7 +132,7 @@ class ContextGraph:
         # Allows subclasses to override the registration process
         self._custom_terms[term.name] = Context()._term_dict(term)
 
-    def add(self, subgraph: "ContextGraph | Graph | _TripleType") -> None:
+    def add(self, subgraph: ContextGraph | Graph | _TripleType) -> None:
         """
         Adds a subgraph to this context graph.
         If the subgraph is a ContextGraph, it will also merge the context.

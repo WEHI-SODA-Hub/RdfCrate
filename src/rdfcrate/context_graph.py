@@ -10,7 +10,7 @@ from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfClass
 
 if TYPE_CHECKING:
-    from rdfnav import GraphNavigator, UriNode # type: ignore
+    from rdfnav import GraphNavigator, UriNode  # type: ignore
     from rdflib.graph import _TripleType
 
 
@@ -78,12 +78,12 @@ class ContextGraph:
         Returns a navigator that can be used to traverse and mutate the graph.
         """
         try:
-            from rdfnav import GraphNavigator
+            from rdfnav import GraphNavigator  # type: ignore
 
             return GraphNavigator(self.graph)
         except ImportError:
             raise ImportError(
-                "The 'rdfnav' package is required for navigation. Please install it with 'pip install rdfnav'."
+                "Please install the `nav` extra for rdfcrate if you want to use the `.navigate()` method."
             )
 
     def navigate_to(self, iri: IdentifiedNode | RdfClass) -> UriNode:

@@ -2,14 +2,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar, Generic, TypeVar, TYPE_CHECKING
 from typing_extensions import Protocol
-from rdflib import RDF, Graph
+from rdflib import RDF
 
-from rdfcrate.context_graph import ContextGraph
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.types import GraphId
 
 if TYPE_CHECKING:
     from rdfcrate.rdftype import RdfType
+    from rdfcrate.context_graph import ContextGraph
 
 T = TypeVar("T", bound="RdfType", covariant=True)
 
@@ -24,7 +24,7 @@ class PropertyProtocol(Protocol):
         """
 
 @dataclass(frozen=True)
-class RdfProperty(Generic[T], PropertyProtocol):
+class RdfProperty(PropertyProtocol, Generic[T]):
     """
     Represents the double of (predicate, object), with the subject being the class this is attached to.
     This is the normal way properties will be defined

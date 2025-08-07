@@ -20,7 +20,7 @@ BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
 @pytest.fixture()
 def empty_crate():
     with tempfile.TemporaryDirectory() as tmpdir:
-        yield AttachedCrate(tmpdir)
+        yield AttachedCrate(path=tmpdir)
 
 @pytest.fixture(scope="function", autouse=True)
 def rocrate_context():
@@ -180,10 +180,8 @@ def test_multi_type():
 
 def test_redefine_term(empty_crate: AttachedCrate):
     with pytest.raises(ValueError):
-        empty_crate.register_terms(
-            [
-                RdfTerm("https://example.org/Thing", "Thing"),
-            ]
+        empty_crate.register_term(
+            RdfTerm("https://example.org/Thing", "Thing"),
         )
 
 

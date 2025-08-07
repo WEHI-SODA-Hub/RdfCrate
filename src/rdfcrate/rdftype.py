@@ -12,11 +12,11 @@ from typing import (
 from typing_extensions import Doc, Self
 
 from rdflib import Graph, Literal, URIRef, RDF, IdentifiedNode
-from rdfcrate.context_graph import EntityArgs, ContextGraph
 from rdfcrate.types import GraphId
 
 if TYPE_CHECKING:
     from rdfcrate import RdfProperty, ReverseProperty, RdfTerm, rdf
+    from rdfcrate.context_graph import EntityArgs, ContextGraph
 
 EntityUri = Annotated[
     str,
@@ -49,7 +49,7 @@ class RdfType(Generic[T]):
     def __init__(self, id: T):
         self.id = id
 
-    def add(self, *args: EntityArgs, graph: ContextGraph = ContextGraph()) -> ContextGraph:
+    def add(self, *args: EntityArgs, graph: ContextGraph | None = None) -> ContextGraph:
         """
         Adds triples to a graph with this entity as the subject.
         If the graph is not provided, an empty one will be created and returned.
@@ -57,15 +57,22 @@ class RdfType(Generic[T]):
         # The public add method is needed here rather than in `ContextGraph` so that subclasses can override it and mandate certain properties
         from rdfcrate import RdfTerm
 
+        if graph is None:
+            # We have to import here to avoid circular imports
+            from rdfcrate.context_graph import ContextGraph
+            graph = ContextGraph()
+
         if not isinstance(self.term, RdfTerm):
             raise ValueError(
                 "The `term` class variable must be an instance of `RdfTerm`."
             )
 
-        # Register everything
+        # Add the "main" type and its term
         graph.register_term(self.term)
+        graph.add((self.id, RDF.type, self.term.uri))
+
+        # The properties are responsible for registering their own terms
         for arg in args:
-            # The properties are responsible for registering their own terms
             arg.add_to_graph(graph, self.id)
 
         return graph

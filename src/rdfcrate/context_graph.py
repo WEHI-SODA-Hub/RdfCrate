@@ -118,7 +118,7 @@ class ContextGraph:
                 f'Term "{term.name}" is already defined to mean {existing}. Cannot redefine to {term.id}.'
             )
 
-        if term.id == RDF.type:
+        if str(term.id) == str(RDF.type):
             # rdf:type should never be re-defined
             return
 

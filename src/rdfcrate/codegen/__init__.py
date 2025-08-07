@@ -363,7 +363,7 @@ class CodegenState:
         # First try to get the label of the entity, if it has one
         for label in self.graph.objects(subject=entity, predicate=RDFS.label):
             # Remove underscores and spaces, and capitalize each word
-            label = "".join([word.title() for word in re.split(r"[\W_]+", label)])
+            label = "".join([word.title() for word in re.split(r"[\W_]+", str(label))])
             if mode == "property":
                 # Make properties camelCase rather than PascalCase
                 label = label[0].lower() + label[1:]

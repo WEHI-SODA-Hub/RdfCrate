@@ -364,7 +364,7 @@ class AttachedCrate(RoCrate):
         description: schemaorg.description,
         date_published: schemaorg.datePublished,
         license: schemaorg.license,
-        *props: RdfProperty | ReverseProperty,
+        *props: EntityArgs,
         recursive: Recursive = False,
     ) -> schemaorg.Dataset:
         return self.register_dir(

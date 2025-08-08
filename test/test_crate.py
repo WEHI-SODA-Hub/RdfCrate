@@ -1,8 +1,7 @@
 from pathlib import Path
-from rdfcrate import AttachedCrate, RdfProperty, owl, RdfClass
-from rdflib import RDF, Literal, Graph, BNode, URIRef
-from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.vocabs import dc, sdo, roc, rdf, bioschemas_drafts, rdfs
+from rdfcrate import AttachedCrate
+from rdflib import Literal, Graph, URIRef
+from rdfcrate.vocabs import dc, sdo, roc, rdf
 import json
 from datetime import datetime
 import tempfile

@@ -208,4 +208,4 @@ def test_navigate_and_navigate_to():
     assert navigator.instance(sdo.Thing.term.uri).iri == thing.id
 
     node = graph.navigate_to(thing.id)
-    assert node.is_subclass_of(sdo.Thing.term.uri)
+    assert node.is_instance_of(sdo.Thing.term.uri)

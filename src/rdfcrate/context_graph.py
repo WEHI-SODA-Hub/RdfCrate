@@ -138,7 +138,7 @@ class ContextGraph:
             self.graph += subgraph.graph
             term: Term
             for term in subgraph.full_context.terms.values():
-                self.full_context.add_term(**term._asdict())
+                self.register_term(term)
         elif isinstance(subgraph, Graph):
             self.graph += subgraph
         elif isinstance(subgraph, tuple):

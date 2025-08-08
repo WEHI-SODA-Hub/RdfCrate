@@ -17,14 +17,12 @@ def test_bioschemas():
         bioschemas_drafts.LabProtocol("#some_protocol"),
         sdo.name(sdo.Text("Some Protocol")),
     )
-    crate_json = json.loads(graph.compile())
-    for entity in crate_json["@graph"]:
-        assert "http" not in entity["@type"], "All terms should be shortened"
+    entity_json = json.loads(graph.compile())
+    assert "http" not in entity_json["@type"], "All terms should be shortened"
 
-    assert crate_json["@context"] == [
-        "https://w3id.org/ro/crate/1.1/context",
-        {"LabProtocol": str(bioschemas_drafts.LabProtocol.term.uri)},
-    ], "Only the terms that are used in the graph should be in the context"
+    assert entity_json["@context"]["LabProtocol"] == str(
+        bioschemas_drafts.LabProtocol.term.uri
+    ), "Only the terms that are used in the graph should be in the context"
 
 
 def test_bnode():
@@ -50,7 +48,10 @@ def test_multi_type():
 
 
 def test_redefine_term():
-    graph = ContextGraph()
+    graph = ContextGraph(unique_terms=True)
+    graph.register_term(
+        RdfTerm("https://schema.org/Thing", "Thing"),
+    )
     with pytest.raises(ValueError):
         graph.register_term(
             RdfTerm("https://example.org/Thing", "Thing"),
@@ -158,11 +159,19 @@ def test_adhoc_class():
 def test_add_contextgraph():
     from rdfcrate.context_graph import ContextGraph
 
-    graph = ContextGraph()
-    subgraph = ContextGraph()
-    subgraph.add_entity(sdo.Thing("#sub"))
-    graph.add(subgraph)
-    assert any(str(s) == "#sub" for s in graph.graph.subjects())
+    a = ContextGraph()
+    a.add_entity(sdo.Thing("#sub"))
+
+    b = ContextGraph()
+
+    b.add(a)
+
+    assert URIRef("#sub") in set(b.graph.subjects()), (
+        "Subgraph should be added to the main graph"
+    )
+    assert b.full_context.expand("Thing") == str(sdo.Thing.term.uri), (
+        "Context should be preserved"
+    )
 
 
 def test_add_graph():

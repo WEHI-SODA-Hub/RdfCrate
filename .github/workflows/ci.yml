@@ -33,7 +33,7 @@ jobs:
 
     - name: Install optional rdfnav
       run: uv sync --extra nav
-      if: matrix.python-version >= '3.13'
+      if: matrix.python-version >= '3.12'
 
     - name: Run linter
       uses: astral-sh/ruff-action@v3

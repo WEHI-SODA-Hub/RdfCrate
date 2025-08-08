@@ -18,7 +18,7 @@ validation = [
     "roc-validator>=0.5.0",
 ]
 nav = [
-    "rdfnav; python_full_version >= '3.13'",
+    "rdfnav; python_version >= '3.12'",
 ]
 
 [project.scripts]

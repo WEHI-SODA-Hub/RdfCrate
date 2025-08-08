@@ -179,3 +179,16 @@ class ContextGraph:
         # `entity.add()` handles the term registration and the triple creation
         entity.add(*args, graph=self)
         return entity
+
+    def add_metadata(self, entity: RdfClass, *args: EntityArgs) -> None:
+        """
+        Add metadata for an existing entity.
+
+        Returns:
+            The ID of the updated entity
+
+        Params:
+            uri: ID of the entity being described
+        """
+        for arg in args:
+            arg.add_to_graph(self, entity.id)

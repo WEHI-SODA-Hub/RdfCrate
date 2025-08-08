@@ -19,6 +19,7 @@ from rdfcrate.vocabs import (
 from rdfcrate.rdftype import RdfClass, RdfLiteral
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdfprop import RdfProperty, ReverseProperty
+from rdfcrate.context_graph import ContextGraph
 
 __all__ = [
     "DetatchedCrate",
@@ -43,4 +44,5 @@ __all__ = [
     "RdfProperty",
     "ReverseProperty",
     "RdfLiteral",
+    "ContextGraph",
 ]

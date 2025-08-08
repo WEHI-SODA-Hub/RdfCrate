@@ -63,6 +63,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
 
     @property
     def context_source(self):
+        # Implements the requirements for context format according to the RO-Crate spec
         if len(self._custom_terms) == 0:
             return self.version.context_url
         else:
@@ -74,31 +75,6 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         """
         The root entity of the RO-Crate
         """
-
-    def add_entity(self, entity: EntityClass, *args: EntityArgs) -> EntityClass:
-        """
-        Adds any type of entity to the crate
-
-        Returns:
-            The ID of the new entity
-
-        Example:
-            ```python
-            from rdflib import BNode,
-            from rdfcrate.vocabs import schemaorg
-
-            crate.add_entity(
-                BNode(),
-                schemaorg.Person,
-                schemaorg.name("Alice")
-            )
-            ```
-        """
-        # Note: The reason we have use the (entity, *args) signature is so that we can enforce certain properties and their types
-        # when we make specialized variants of the method like `add_root_entity` or `register_file`.
-        # `entity.add()` handles the term registration and the triple creation
-        entity.add(*args, graph=self)
-        return entity
 
     def add_root_entity(
         self,

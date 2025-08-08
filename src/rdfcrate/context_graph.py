@@ -131,7 +131,7 @@ class ContextGraph:
 
     def add(self, subgraph: ContextGraph | Graph | _TripleType) -> None:
         """
-        Adds a subgraph to this context graph.
+        Adds a subgraph or triple to this context graph.
         If the subgraph is a ContextGraph, it will also merge the context.
         """
         if isinstance(subgraph, ContextGraph):
@@ -154,3 +154,28 @@ class ContextGraph:
         # Serializer kwargs are annoyingly not listed in the docs.
         # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
         return self.graph.serialize(format="json-ld", context=self.context_source)
+
+    def add_entity(self, entity: EntityClass, *args: EntityArgs) -> EntityClass:
+        """
+        Adds any type of entity to the crate
+
+        Returns:
+            The ID of the new entity
+
+        Example:
+            ```python
+            from rdflib import BNode,
+            from rdfcrate.vocabs import schemaorg
+
+            crate.add_entity(
+                BNode(),
+                schemaorg.Person,
+                schemaorg.name("Alice")
+            )
+            ```
+        """
+        # Note: The reason we have use the (entity, *args) signature is so that we can enforce certain properties and their types
+        # when we make specialized variants of the method like `add_root_entity` or `register_file`.
+        # `entity.add()` handles the term registration and the triple creation
+        entity.add(*args, graph=self)
+        return entity

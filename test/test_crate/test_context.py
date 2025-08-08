@@ -153,3 +153,50 @@ def test_adhoc_class():
         ExampleClass("#thing"),
     )
     assert (URIRef("#thing"), RDF.type, ExampleClass.term.uri) in graph.graph
+
+
+def test_add_contextgraph():
+    from rdfcrate.context_graph import ContextGraph
+
+    graph = ContextGraph()
+    subgraph = ContextGraph()
+    subgraph.add_entity(sdo.Thing("#sub"))
+    graph.add(subgraph)
+    assert any(str(s) == "#sub" for s in graph.graph.subjects())
+
+
+def test_add_graph():
+    from rdflib import Graph, URIRef
+    from rdfcrate.context_graph import ContextGraph
+
+    graph = ContextGraph()
+    g2 = Graph()
+    g2.add((URIRef("#g2"), RDF.type, sdo.Thing.term.uri))
+    graph.add(g2)
+    assert (URIRef("#g2"), RDF.type, sdo.Thing.term.uri) in graph.graph
+
+
+def test_add_triple():
+    from rdflib import URIRef
+    from rdfcrate.context_graph import ContextGraph
+
+    graph = ContextGraph()
+    triple = (URIRef("#triple"), RDF.type, sdo.Thing.term.uri)
+    graph.add(triple)
+    assert triple in graph.graph
+
+
+def test_navigate_and_navigate_to():
+    """
+    Test ContextGraph.navigate and navigate_to, skipping if rdfnav is not installed.
+    """
+    pytest.importorskip("rdfnav")
+
+    graph = ContextGraph()
+    thing = graph.add_entity(sdo.Thing("#thing"))
+
+    navigator = graph.navigate()
+    assert navigator.instance(sdo.Thing.term.uri).iri == thing.id
+
+    node = graph.navigate_to(thing.id)
+    assert node.is_subclass_of(sdo.Thing.term.uri)

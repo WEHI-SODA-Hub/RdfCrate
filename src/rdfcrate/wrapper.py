@@ -213,19 +213,6 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
             self.link_to_dataset(dir_id, dataset)
         return dir_id
 
-    def add_metadata(self, entity: RdfClass, *args: EntityArgs) -> None:
-        """
-        Add metadata for an existing entity.
-
-        Returns:
-            The ID of the updated entity
-
-        Params:
-            uri: ID of the entity being described
-        """
-        for arg in args:
-            arg.add_to_graph(self, entity.id)
-
     def compile(self) -> str:
         """
         Compiles the RO-Crate to a JSON-LD string

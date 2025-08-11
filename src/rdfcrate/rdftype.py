@@ -47,7 +47,7 @@ class RdfType(Generic[T]):
         Adds triples to a graph with this entity as the subject.
         If the graph is not provided, an empty one will be created and returned.
         """
-        # The public add method is needed here rather than in `ContextGraph` so that subclasses can override it and mandate certain properties
+        # The public add method is needed here rather than in `ContextGraph` so that subclasses of `RdfType` can override it and mandate certain properties
         from rdfcrate import RdfTerm
 
         if graph is None:

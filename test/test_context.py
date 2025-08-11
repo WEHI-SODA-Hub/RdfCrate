@@ -4,7 +4,7 @@ Tests for ContextGraph, ie those that aren't RO-Crate specific.
 
 from rdfcrate.context_graph import ContextGraph
 from rdfcrate import RdfProperty, owl, RdfClass
-from rdflib import RDF, Literal, BNode, URIRef
+from rdflib import RDF, Literal, BNode, URIRef, Graph
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import dc, sdo, rdf, bioschemas_drafts, rdfs
 import json
@@ -157,8 +157,6 @@ def test_adhoc_class():
 
 
 def test_add_contextgraph():
-    from rdfcrate.context_graph import ContextGraph
-
     a = ContextGraph()
     a.add_entity(sdo.Thing("#sub"))
 
@@ -175,9 +173,6 @@ def test_add_contextgraph():
 
 
 def test_add_graph():
-    from rdflib import Graph, URIRef
-    from rdfcrate.context_graph import ContextGraph
-
     graph = ContextGraph()
     g2 = Graph()
     g2.add((URIRef("#g2"), RDF.type, sdo.Thing.term.uri))
@@ -186,9 +181,6 @@ def test_add_graph():
 
 
 def test_add_triple():
-    from rdflib import URIRef
-    from rdfcrate.context_graph import ContextGraph
-
     graph = ContextGraph()
     triple = (URIRef("#triple"), RDF.type, sdo.Thing.term.uri)
     graph.add(triple)

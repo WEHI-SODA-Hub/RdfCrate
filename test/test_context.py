@@ -63,7 +63,7 @@ def test_add_metadata_term():
     Test that terms used in `add_metadata` are registered in the context.
     """
     graph = ContextGraph()
-    graph.add_entity(
+    graph.add_metadata(
         sdo.Thing("#thing"),
         dc.valid(rdfs.Literal(Literal(True))),
     )

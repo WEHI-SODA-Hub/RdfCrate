@@ -131,16 +131,16 @@ def test_prop_with_term_label():
     part = sdo.CreativeWork("https://example.org/part")
 
     with pytest.raises(ValueError):
-        graph.add_entity(
-            sdo.Thing("#thing"),
+        sdo.Thing("#thing").add(
             sdo.hasPart(part),
             exHasPart(part),
+            graph=graph
         )
 
-    graph.add_entity(
-        sdo.Thing("#thing"),
+    sdo.Thing("#thing").add(
         sdo.hasPart(part),
         exHasPart.with_term_label("exHasPart")(part),
+        graph=graph
     )
 
 
@@ -158,11 +158,8 @@ def test_adhoc_class():
 
 def test_add_contextgraph():
     a = ContextGraph()
-    a.add_entity(sdo.Thing("#sub"))
-
-    b = ContextGraph()
-
-    b.add(a)
+    b = sdo.Thing("#sub").add()
+    a.add(b)
 
     assert URIRef("#sub") in set(b.graph.subjects()), (
         "Subgraph should be added to the main graph"

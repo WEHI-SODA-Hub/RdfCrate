@@ -50,20 +50,33 @@ class RdfType(Generic[T]):
         # The public add method is needed here rather than in `ContextGraph` so that subclasses of `RdfType` can override it and mandate certain properties
         from rdfcrate import RdfTerm
 
-        if graph is None:
-            # We have to import here to avoid circular imports
-            from rdfcrate.context_graph import ContextGraph
-
-            graph = ContextGraph()
+        # Delegate to the `update` method to add properties
+        graph = self.update(*args, graph=graph)
 
         if not isinstance(self.term, RdfTerm):
             raise ValueError(
                 "The `term` class variable must be an instance of `RdfTerm`."
             )
 
-        # Add the "main" type and its term
+        # Add the entity type and its term, which is what distinguishes this from `.update`
         graph.register_term(self.term)
         graph.add((self.id, RDF.type, self.term.uri))
+
+        return graph
+
+    def update(
+        self, *args: EntityArgs, graph: ContextGraph | None = None
+    ) -> ContextGraph:
+        """
+        Updates this entity with the given properties, in a graph.
+
+        If the graph is not provided, an empty one will be created and returned.
+        """
+        if graph is None:
+            # We have to import here to avoid circular imports
+            from rdfcrate.context_graph import ContextGraph
+
+            graph = ContextGraph()
 
         # The properties are responsible for registering their own terms
         for arg in args:

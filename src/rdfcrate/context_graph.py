@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Iterable, TypeVar, TYPE_CHECKING, TypedDict
 from typing_extensions import Annotated, Doc, Unpack
+import warnings
 
 from rdflib import RDF, Graph, IdentifiedNode
 from rdflib.plugins.shared.jsonld.context import Context, Term, _ContextSourceType
@@ -155,6 +156,9 @@ class ContextGraph:
         # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
         return self.graph.serialize(format="json-ld", context=self.context_source)
 
+    @warnings.deprecated(
+        "The `add_entity` method is deprecated. Instead use `add` on instances of `RdfType` instead to add entities"
+    )
     def add_entity(self, entity: EntityClass, *args: EntityArgs) -> EntityClass:
         """
         Adds any type of entity to the crate
@@ -180,6 +184,9 @@ class ContextGraph:
         entity.add(*args, graph=self)
         return entity
 
+    @warnings.deprecated(
+        "The `add_metadata` method is deprecated. Instead use `update` on instances of `RdfType` instead"
+    )
     def add_metadata(self, entity: RdfClass, *args: EntityArgs) -> None:
         """
         Add metadata for an existing entity.

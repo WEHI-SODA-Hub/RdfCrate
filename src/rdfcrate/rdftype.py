@@ -11,7 +11,7 @@ from typing import (
 from typing_extensions import Doc, Self
 
 from rdflib import Literal, URIRef, RDF, IdentifiedNode
-from rdfcrate.types import GraphId
+from rdfcrate.types import Identifier
 
 if TYPE_CHECKING:
     from rdfcrate import RdfTerm, rdf
@@ -24,8 +24,8 @@ EntityUri = Annotated[
     ),
 ]
 
-# Allow subclasses of GraphId
-T = TypeVar("T", bound=GraphId, covariant=True)
+# Allow more precise identifier types like `URIRef` or `BNode`
+T = TypeVar("T", bound=Identifier, covariant=True)
 
 
 class RdfType(Generic[T]):

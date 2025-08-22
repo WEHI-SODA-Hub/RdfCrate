@@ -5,7 +5,7 @@ from typing_extensions import Protocol
 from rdflib import RDF
 
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.types import GraphId
+from rdfcrate.types import Identifier
 
 if TYPE_CHECKING:
     from rdfcrate.rdftype import RdfType
@@ -15,7 +15,7 @@ T = TypeVar("T", bound="RdfType", covariant=True)
 
 
 class PropertyProtocol(Protocol):
-    def add_to_graph(self, graph: ContextGraph, entity: GraphId):
+    def add_to_graph(self, graph: ContextGraph, entity: Identifier):
         """
         Adds the property to the graph and registers any terms if necessary.
 
@@ -59,7 +59,7 @@ class RdfProperty(PropertyProtocol, Generic[T]):
         term = RdfTerm(cls.term.uri, label)
         return type(cls.__name__, (cls,), {"term": term})
 
-    def add_to_graph(self, graph: ContextGraph, entity: GraphId) -> None:
+    def add_to_graph(self, graph: ContextGraph, entity: Identifier) -> None:
         graph.register_term(self.term)
         if self.term.uri == RDF.type:
             # rdf:type is a special case, it should not be registered as a term
@@ -76,6 +76,6 @@ class ReverseProperty(PropertyProtocol):
     term: RdfTerm
     subject: RdfType
 
-    def add_to_graph(self, graph: ContextGraph, entity: GraphId) -> None:
+    def add_to_graph(self, graph: ContextGraph, entity: Identifier) -> None:
         graph.register_term(self.term)
         graph.graph.add((self.subject.id, self.term.uri, entity))

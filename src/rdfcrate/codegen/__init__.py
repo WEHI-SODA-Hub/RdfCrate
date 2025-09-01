@@ -1,3 +1,5 @@
+# pyright: reportCallIssue=false
+# See https://github.com/python-compiler-tools/ast-compat/issues/5
 """
 Generates URIs for everything in the RO-Crate context
 """

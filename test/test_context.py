@@ -7,6 +7,7 @@ from rdfcrate import RdfProperty, owl, RdfClass
 from rdflib import RDF, Literal, BNode, URIRef, Graph
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import dc, sdo, rdf, bioschemas_drafts, rdfs
+import datetime
 import json
 import pytest
 
@@ -29,6 +30,37 @@ def test_bnode():
     graph = ContextGraph()
     graph.add_entity(bioschemas_drafts.LabProtocol(BNode()))
     assert any(isinstance(id, BNode) for id in graph.graph.subjects())
+
+
+def test_datatype():
+    """
+    Test that we handle datatypes correctly, including registering the datatype term in the context.
+    """
+    graph = ContextGraph()
+    sdo.Thing("#thing").add(
+        sdo.dateCreated(sdo.Date(datetime.date(2023, 1, 1))), graph=graph
+    )
+    assert graph.full_context.expand("Date") == "http://schema.org/Date", (
+        "The term for the Date data type should be registered"
+    )
+    date_value = graph.graph.value(URIRef("#thing"), sdo.dateCreated.term.uri)
+    assert isinstance(date_value, Literal), "The date value should be a Literal"
+    assert date_value.value == datetime.date(2023, 1, 1)
+
+
+def test_strip_datatypes():
+    """
+    Test that `context_graph.strip_datatypes()` works as expected.
+    """
+    graph = ContextGraph()
+    sdo.Thing("#thing").add(
+        sdo.dateCreated(sdo.Date(datetime.date(2023, 1, 1))), graph=graph
+    )
+    stripped_graph = graph.strip_datatypes()
+    date_value = stripped_graph.value(URIRef("#thing"), sdo.dateCreated.term.uri)
+    assert isinstance(date_value, Literal), "The date value should be a Literal"
+    assert date_value.value == datetime.date(2023, 1, 1)
+    assert date_value.datatype is None, "The date value should not have a datatype"
 
 
 def test_multi_type():
@@ -100,11 +132,9 @@ def test_adhoc_term():
             term=RdfTerm("https://example.org/myProp"), object=sdo.Text("value")
         ),
     )
-    assert (
-        thing.id,
-        URIRef("https://example.org/myProp"),
-        Literal("value"),
-    ) in graph.graph
+    object = graph.graph.value(thing.id, URIRef("https://example.org/myProp"))
+    assert isinstance(object, Literal)
+    assert object.value == "value"
 
 
 def test_cls_with_term_label():
@@ -131,16 +161,10 @@ def test_prop_with_term_label():
     part = sdo.CreativeWork("https://example.org/part")
 
     with pytest.raises(ValueError):
-        sdo.Thing("#thing").add(
-            sdo.hasPart(part),
-            exHasPart(part),
-            graph=graph
-        )
+        sdo.Thing("#thing").add(sdo.hasPart(part), exHasPart(part), graph=graph)
 
     sdo.Thing("#thing").add(
-        sdo.hasPart(part),
-        exHasPart.with_term_label("exHasPart")(part),
-        graph=graph
+        sdo.hasPart(part), exHasPart.with_term_label("exHasPart")(part), graph=graph
     )
 
 

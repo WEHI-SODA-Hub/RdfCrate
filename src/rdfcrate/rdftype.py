@@ -11,7 +11,7 @@ from typing import (
 from typing_extensions import Doc, Self
 
 from rdflib import Literal, URIRef, RDF, IdentifiedNode
-from rdfcrate.types import Identifier
+from rdfcrate.types import Identifier, Object, Predicate, Subject
 
 if TYPE_CHECKING:
     from rdfcrate import RdfTerm, rdf
@@ -28,19 +28,69 @@ EntityUri = Annotated[
 T = TypeVar("T", bound=Identifier, covariant=True)
 
 
-class RdfType(Generic[T]):
+class RdfType:
     """
     An entity within the RDF graph.
 
-    This is a thin wrapper around an `rdflib.IdentifiedNode` such as a `URIRef` or `BNode`, but which allows for static type checking.
-    This is not a subclass of `URIRef` so that the ID can be either a URI or blank node.
+    This is a thin wrapper around a `rdflib` `Identifier` such as a `URIRef` or `BNode`, but which allows for static type checking.
     """
 
-    id: T
     term: ClassVar[RdfTerm]
 
-    def __init__(self, id: T):
-        self.id = id
+    def as_subject(
+        self, graph: ContextGraph, predicate: Predicate, object: Object
+    ) -> Subject:
+        """
+        Converts this entity to a `Subject` that can be used in triples.
+        """
+        raise NotImplementedError()
+
+    def as_object(
+        self, graph: ContextGraph, subject: Subject, predicate: Predicate
+    ) -> Object:
+        """
+        Converts this entity to an `Object` that can be used in triples.
+        """
+        raise NotImplementedError()
+
+    def register(self, graph: ContextGraph) -> None:
+        graph.register_term(self.term)
+
+
+class RdfClass(RdfType):
+    """
+    An RDF entity that has a URI (or blank node).
+    Typically these are instance of rdfs:Class or owl:Class.
+    """
+
+    id: IdentifiedNode
+
+    def __init__(self, id: IdentifiedNode | str):
+        if not isinstance(id, IdentifiedNode):
+            # Assume an untagged string is an IRI
+            self.id = URIRef(id)
+        else:
+            self.id = id
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, RdfClass):
+            return False
+
+        return value.id == self.id
+
+    def as_subject(
+        self, graph: ContextGraph, predicate: URIRef, object: Identifier
+    ) -> IdentifiedNode:
+        return self.id
+
+    def as_object(
+        self, graph: ContextGraph, subject: Subject, predicate: Predicate
+    ) -> Object:
+        if predicate == RDF.type:
+            # rdf:type is a special case because we also need to register the class term
+            # the RdfType class does this for the primary type, but not for additional types
+            graph.register_term(self.term)
+        return self.id
 
     def add(self, *args: EntityArgs, graph: ContextGraph | None = None) -> ContextGraph:
         """
@@ -59,7 +109,7 @@ class RdfType(Generic[T]):
             )
 
         # Add the entity type and its term, which is what distinguishes this from `.update`
-        graph.register_term(self.term)
+        self.register(graph)
         graph.add((self.id, RDF.type, self.term.uri))
 
         return graph
@@ -105,7 +155,7 @@ class RdfType(Generic[T]):
         return rdf.type(cls(cls.term.uri))
 
     @classmethod
-    def with_term_label(cls, label: str) -> type[RdfType]:
+    def with_term_label(cls, label: str) -> type[RdfClass]:
         """
         Creates a new instance of this class with the given label.
         This is useful in cases where the term label is already defined by another vocabulary
@@ -117,35 +167,30 @@ class RdfType(Generic[T]):
         return type(cls.__name__, (cls,), {"term": term})
 
 
-class RdfClass(RdfType[IdentifiedNode]):
-    """
-    An RDF entity that has a URI (or blank node).
-    Typically these are instance of rdfs:Class or owl:Class.
-    """
-
-    def __init__(self, id: IdentifiedNode | str):
-        if not isinstance(id, IdentifiedNode):
-            # Assume an untagged string is an IRI
-            id = URIRef(id)
-        super().__init__(id)
-
-    def __eq__(self, value: object) -> bool:
-        if not isinstance(value, RdfClass):
-            return False
-
-        return value.id == self.id
-
-
-class RdfLiteral(RdfType[Literal]):
+class RdfLiteral(RdfType):
     """
     An RDF entity that is a literal value.
     Typically these are instances of `rdfs:Literal`
     """
 
+    value: Literal
+
     def __init__(self, value: Any):
         # Convert any argument to a Literal, since this is the only legal type.
         # Users can still pass in a `Literal` instance directly if they want to e.g. tag it with a language or datatype.
         if not isinstance(value, Literal):
-            value = Literal(value)
+            self.value = Literal(value)
+        else:
+            self.value = Literal(value, datatype=self.term.uri)
 
-        super().__init__(value)
+    def as_subject(
+        self, graph: ContextGraph, predicate: URIRef, object: Identifier
+    ) -> IdentifiedNode:
+        raise ValueError("Literals cannot be used as subjects.")
+
+    def as_object(
+        self, graph: ContextGraph, subject: Subject, predicate: Predicate
+    ) -> Object:
+        # We always need to register the literal datatype when it's used as an object
+        graph.register_term(self.term)
+        return self.value

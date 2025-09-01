@@ -12,8 +12,8 @@ import keyword
 from rdflib import Graph, RDFS, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from rdflib.query import ResultRow
-from rdflib.graph import _TripleType
 from rdflib.namespace import Namespace
+from rdfcrate.types import Triple
 
 from rdfcrate.spec_version import all_specs, SpecVersion, ROCrate1_2
 from graphlib import TopologicalSorter
@@ -608,7 +608,7 @@ def schema_org_https(graph: Graph):
         )
         if triple != new_triple:
             graph.remove(triple)
-            graph.add(cast(_TripleType, new_triple))
+            graph.add(cast(Triple, new_triple))
 
 
 def generate_modules(

@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar, Generic, TypeVar, TYPE_CHECKING
 from typing_extensions import Protocol
-from rdflib import RDF
+from rdflib import RDF, IdentifiedNode
 
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.types import Identifier
@@ -60,11 +60,14 @@ class RdfProperty(PropertyProtocol, Generic[T]):
         return type(cls.__name__, (cls,), {"term": term})
 
     def add_to_graph(self, graph: ContextGraph, entity: Identifier) -> None:
+        if not isinstance(entity, IdentifiedNode):
+            raise ValueError("Subjects must be URIs or blank nodes.")
+        # The property is responsible for registering its own term
         graph.register_term(self.term)
-        if self.term.uri == RDF.type:
-            # rdf:type is a special case, it should not be registered as a term
-            graph.register_term(self.object.term)
-        graph.graph.add((entity, self.term.uri, self.object.id))
+        predicate = self.term.uri
+        graph.graph.add(
+            (entity, self.term.uri, self.object.as_object(graph, entity, predicate))
+        )
 
 
 @dataclass
@@ -78,4 +81,6 @@ class ReverseProperty(PropertyProtocol):
 
     def add_to_graph(self, graph: ContextGraph, entity: Identifier) -> None:
         graph.register_term(self.term)
-        graph.graph.add((self.subject.id, self.term.uri, entity))
+        pred = self.term.uri
+        obj = entity
+        graph.graph.add((self.subject.as_subject(graph, pred, obj), pred, obj))

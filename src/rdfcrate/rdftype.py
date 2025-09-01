@@ -63,13 +63,22 @@ class RdfClass(RdfType):
     """
 
     id: IdentifiedNode
+    props: list[EntityArgs]
 
-    def __init__(self, id: IdentifiedNode | str):
+    def __init__(self, id: IdentifiedNode | str, *args: EntityArgs):
+        """
+        Params:
+            id: The identifier of the new entity. Either an IRI or blank node
+            args: Additional properties to add to the entity. Instances of `RdfProperty` will create triples with this new entity as the subject. Instances of `ReverseProperty` will create triples with this new entity as the object.
+        """
+        # args lives in the constructor so that subclasses can mandate certain properties, which isn't possible with
+        # any other method due to the substitution principle
         if not isinstance(id, IdentifiedNode):
             # Assume an untagged string is an IRI
             self.id = URIRef(id)
         else:
             self.id = id
+        self.props = list(args)
 
     def __eq__(self, value: object) -> bool:
         if not isinstance(value, RdfClass):
@@ -91,7 +100,7 @@ class RdfClass(RdfType):
             graph.register_term(self.term)
         return self.id
 
-    def add(self, *args: EntityArgs, graph: ContextGraph | None = None) -> ContextGraph:
+    def add(self, graph: ContextGraph | None = None) -> ContextGraph:
         """
         Adds triples to a graph with this entity as the subject.
         If the graph is not provided, an empty one will be created and returned.
@@ -100,7 +109,7 @@ class RdfClass(RdfType):
         from rdfcrate import RdfTerm
 
         # Delegate to the `update` method to add properties
-        graph = self.update(*args, graph=graph)
+        graph = self.update(graph=graph)
 
         if not isinstance(self.term, RdfTerm):
             raise ValueError(
@@ -113,9 +122,7 @@ class RdfClass(RdfType):
 
         return graph
 
-    def update(
-        self, *args: EntityArgs, graph: ContextGraph | None = None
-    ) -> ContextGraph:
+    def update(self, graph: ContextGraph | None = None) -> ContextGraph:
         """
         Updates this entity with the given properties, in a graph.
 
@@ -128,7 +135,7 @@ class RdfClass(RdfType):
             graph = ContextGraph()
 
         # The properties are responsible for registering their own terms
-        for arg in args:
+        for arg in self.props:
             arg.add_to_graph(graph, self.id)
 
         return graph

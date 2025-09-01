@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = [
+    "deprecated>=1.2.18",
     "rdflib>=7.1.2",
     "typer>=0.16.0",
     "vcrpy>=7.0.0",

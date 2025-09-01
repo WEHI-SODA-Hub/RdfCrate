@@ -1546,8 +1546,7 @@ name = "owlrl"
 version = "6.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "rdflib", version = "7.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "rdflib", version = "7.1.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "rdflib" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/7d/c7/208aece36279e4f1236e437119358786e39530ecc1719d4e1afeddba5288/owlrl-6.0.2.tar.gz", hash = "sha256:904e3310ff4df15101475776693d2427d1f8244ee9a6a9f9e13c3c57fae90b74", size = 57179, upload-time = "2021-10-10T12:52:04.161Z" }
 wheels = [
@@ -1891,8 +1890,7 @@ dependencies = [
     { name = "owlrl" },
     { name = "packaging" },
     { name = "prettytable" },
-    { name = "rdflib", version = "7.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "rdflib", version = "7.1.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "rdflib" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/e3/01/0c77a83e251753fda65b1b1126cbdfc201200ecd38d300f87281c86849a9/pyshacl-0.26.0.tar.gz", hash = "sha256:48d44f317cd9aad8e3fdb5df8aa5706fa92dc6b2746419698035e84a320fb89d", size = 1298227, upload-time = "2024-05-20T23:09:39.401Z" }
 wheels = [
@@ -2125,8 +2123,7 @@ version = "1.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "deprecated" },
-    { name = "rdflib", version = "7.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "rdflib", version = "7.1.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "rdflib" },
     { name = "typer" },
     { name = "vcrpy" },
 ]
@@ -2158,7 +2155,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "deprecated", specifier = ">=1.2.18" },
-    { name = "rdflib", specifier = ">=7.1.2" },
+    { name = "rdflib", specifier = ">=7.1.3" },
     { name = "rdfnav", marker = "python_full_version >= '3.12' and extra == 'nav'", git = "https://github.com/WEHI-SODA-Hub/RdfNav" },
     { name = "roc-validator", marker = "extra == 'validation'", specifier = ">=0.5.0" },
     { name = "typer", specifier = ">=0.16.0" },
@@ -2184,35 +2181,11 @@ dev = [
 
 [[package]]
 name = "rdflib"
-version = "7.1.2"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.11' and platform_python_implementation == 'PyPy'",
-    "python_full_version < '3.11' and platform_python_implementation != 'PyPy'",
-    "python_full_version == '3.11.*' and platform_python_implementation == 'PyPy'",
-    "python_full_version == '3.11.*' and platform_python_implementation != 'PyPy'",
-]
-dependencies = [
-    { name = "isodate", marker = "python_full_version < '3.11'" },
-    { name = "pyparsing", marker = "python_full_version < '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d4/0b/b6ba1bd99f028df962a55c9a2a28c9248f046fac4a82b565c8e2c87fc9ce/rdflib-7.1.2.tar.gz", hash = "sha256:4fc8f6d50b199dc38fbc5256370f038c1cedca6102ccbde4e37c0fd2b7f36e65", size = 505897, upload-time = "2025-01-10T13:06:01.793Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/3b/2f/064ebe3bf5d561fcf9f16d29517becdac5ad0a25ed2f3ad391977ca51a2d/rdflib-7.1.2-py3-none-any.whl", hash = "sha256:5a694a64f48a751079999c37dccf91a6210077d845d09adf7c3ce23a876265a7", size = 567031, upload-time = "2025-01-10T13:05:54.07Z" },
-]
-
-[[package]]
-name = "rdflib"
 version = "7.1.4"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.13' and platform_python_implementation == 'PyPy'",
-    "python_full_version == '3.12.*' and platform_python_implementation == 'PyPy'",
-    "python_full_version >= '3.13' and platform_python_implementation != 'PyPy'",
-    "python_full_version == '3.12.*' and platform_python_implementation != 'PyPy'",
-]
 dependencies = [
-    { name = "pyparsing", marker = "python_full_version >= '3.12'" },
+    { name = "isodate", marker = "python_full_version < '3.11'" },
+    { name = "pyparsing" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/e8/7e/cb2d74466bd8495051ebe2d241b1cb1d4acf9740d481126aef19ef2697f5/rdflib-7.1.4.tar.gz", hash = "sha256:fed46e24f26a788e2ab8e445f7077f00edcf95abb73bcef4b86cefa8b62dd174", size = 4692745, upload-time = "2025-03-29T02:23:02.386Z" }
 wheels = [
@@ -2224,7 +2197,7 @@ name = "rdfnav"
 version = "0.1.0"
 source = { git = "https://github.com/WEHI-SODA-Hub/RdfNav#5681f9c3919dd108c63a50d6c90a0118e7fd47f9" }
 dependencies = [
-    { name = "rdflib", version = "7.1.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "rdflib", marker = "python_full_version >= '3.12'" },
 ]
 
 [[package]]
@@ -2402,8 +2375,7 @@ dependencies = [
     { name = "enum-tools" },
     { name = "inquirerpy" },
     { name = "pyshacl" },
-    { name = "rdflib", version = "7.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "rdflib", version = "7.1.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "rdflib" },
     { name = "requests" },
     { name = "requests-cache" },
     { name = "rich" },

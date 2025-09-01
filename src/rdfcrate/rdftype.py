@@ -3,7 +3,6 @@ from typing import (
     Annotated,
     Any,
     ClassVar,
-    Generic,
     TypeVar,
     TYPE_CHECKING,
     cast,

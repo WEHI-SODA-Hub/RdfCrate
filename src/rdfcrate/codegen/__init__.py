@@ -410,7 +410,7 @@ class CodegenState:
                 names.append(ast.Name(self.import_iri(superclass_uri), ctx=ast.Load()))
             elif self.class_known(superclass_uri):
                 # Don't inherit from parent classes that we don't know about
-                names.append(ast.Name(superclass_name), ctx=ast.Load())
+                names.append(ast.Name(superclass_name, ctx=ast.Load()))
                 uris.append(superclass_uri)
 
         if len(names) == 0:

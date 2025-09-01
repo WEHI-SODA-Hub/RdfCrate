@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar, Generic, TypeVar, TYPE_CHECKING
 from typing_extensions import Protocol
-from rdflib import RDF, IdentifiedNode
+from rdflib import IdentifiedNode
 
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.types import Identifier

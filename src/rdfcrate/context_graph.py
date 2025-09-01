@@ -1,18 +1,18 @@
 from __future__ import annotations
-from typing import Iterable, TypeVar, TYPE_CHECKING, TypedDict
+from typing import Any, Iterable, TypeVar, TYPE_CHECKING, TypedDict
 from typing_extensions import Annotated, Doc, Unpack
 import warnings
 
-from rdflib import RDF, Graph, IdentifiedNode
+from rdflib import RDF, Graph, IdentifiedNode, Literal
 from rdflib.plugins.shared.jsonld.context import Context, Term, _ContextSourceType
 
 from rdfcrate.rdfprop import PropertyProtocol
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfClass
+from rdfcrate.types import Triple
 
 if TYPE_CHECKING:
     from rdfnav import GraphNavigator, UriNode  # type: ignore
-    from rdflib.graph import _TripleType
 
 
 EntityClass = TypeVar("EntityClass", bound=RdfClass)
@@ -55,8 +55,8 @@ class ContextGraph:
     unique_terms: bool
     #: If True, the context will require terms for all properties and classes
     require_terms: bool
-    # custom_terms: dict[str, str]
-    "Set of custom terms not in the standard RO-Crate context that need to be in the final JSON-LD context."
+    #: Set of custom terms not in the standard RO-Crate context that need to be in the final JSON-LD context.
+    _custom_terms: dict[str, Any]
 
     @property
     def context_source(self) -> _ContextSourceType:
@@ -130,7 +130,7 @@ class ContextGraph:
         # Allows subclasses to override the registration process
         self._custom_terms[term.name] = Context()._term_dict(term)
 
-    def add(self, subgraph: ContextGraph | Graph | _TripleType) -> None:
+    def add(self, subgraph: ContextGraph | Graph | Triple) -> None:
         """
         Adds a subgraph or triple to this context graph.
         If the subgraph is a ContextGraph, it will also merge the context.
@@ -148,13 +148,39 @@ class ContextGraph:
         else:
             raise TypeError("Subgraph must be a ContextGraph or a Graph instance.")
 
-    def compile(self) -> str:
+    def strip_datatypes(
+        self, strip_datatypes: bool = True, strip_languages: bool = True
+    ) -> Graph:
+        """
+        Returns a copy of the graph with datatypes and/or languages stripped from literals.
+
+        Params:
+            strip_datatypes: If True, any datatypes will be stripped from literals.
+            strip_languages: If True, any languages will be stripped from literals.
+        """
+        output_graph = Graph()
+        for s, p, o in self.graph:
+            if isinstance(o, Literal):
+                if strip_datatypes:
+                    o._datatype = None
+                if strip_languages:
+                    o._language = None
+            output_graph.add((s, p, o))
+        return output_graph
+
+    def compile(self, **kwargs) -> str:
         """
         Compiles the RO-Crate to a JSON-LD string
+
+        Params:
+            strip_datatypes: If True, any datatypes or languages will be stripped from literals. This is useful for compatibility with systems that do not support datatypes.
+            **kwargs: Additional keyword arguments to pass to the RDFLib serializer
         """
         # Serializer kwargs are annoyingly not listed in the docs.
         # See them here: https://github.com/RDFLib/rdflib/blob/d220ee3bcba10a7af6630c4faaa37ca9cee33554/rdflib/plugins/serializers/jsonld.py#L76-L84
-        return self.graph.serialize(format="json-ld", context=self.context_source)
+        return self.graph.serialize(
+            format="json-ld", context=self.context_source, **kwargs
+        )
 
     @warnings.deprecated(
         "The `add_entity` method is deprecated. Instead use `add` on instances of `RdfType` instead to add entities"

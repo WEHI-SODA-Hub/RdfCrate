@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any, Iterable, TypeVar, TYPE_CHECKING, TypedDict
 from typing_extensions import Annotated, Doc, Unpack
-import warnings
+from deprecated import deprecated
 
 from rdflib import RDF, Graph, IdentifiedNode, Literal
 from rdflib.plugins.shared.jsonld.context import Context, Term, _ContextSourceType
@@ -182,7 +182,7 @@ class ContextGraph:
             format="json-ld", context=self.context_source, **kwargs
         )
 
-    @warnings.deprecated(
+    @deprecated(
         "The `add_entity` method is deprecated. Instead use `add` on instances of `RdfType` instead to add entities"
     )
     def add_entity(self, entity: EntityClass, *args: EntityArgs) -> EntityClass:
@@ -210,7 +210,7 @@ class ContextGraph:
         entity.add(*args, graph=self)
         return entity
 
-    @warnings.deprecated(
+    @deprecated(
         "The `add_metadata` method is deprecated. Instead use `update` on instances of `RdfType` instead"
     )
     def add_metadata(self, entity: RdfClass, *args: EntityArgs) -> None:

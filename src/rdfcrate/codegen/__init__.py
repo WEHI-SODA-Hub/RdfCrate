@@ -3,6 +3,9 @@ Generates URIs for everything in the RO-Crate context
 """
 
 import ast_compat as ast
+
+# This isn't exported by ast-compat for some reason
+from ast import expr
 from dataclasses import dataclass, field
 import itertools
 from pathlib import Path
@@ -216,7 +219,7 @@ class CodegenState:
             ).askAnswer,
         )
 
-    def property_range(self, prop: URIRef) -> ast.expr:
+    def property_range(self, prop: URIRef) -> expr:
         """
         Returns the range of a property, as a type annotation
         """
@@ -370,9 +373,7 @@ class CodegenState:
         _, _, term_name = self.graph.compute_qname(entity)
         return sanitize_cls_name(term_name)
 
-    def _find_superclasses(
-        self, cls_uri: URIRef
-    ) -> tuple[list[ast.expr], list[URIRef]]:
+    def _find_superclasses(self, cls_uri: URIRef) -> tuple[list[expr], list[URIRef]]:
         """
         Finds all the superclasses of a class
 
@@ -381,7 +382,7 @@ class CodegenState:
             - uris: A list of URIs for these base classes
         """
         # We need to use this type so that
-        names: list[ast.expr] = []
+        names: list[expr] = []
         uris: list[URIRef] = []
         # We order superclasses with the "deepest" class first, so that Python won't complain about the MRO
         for result in self.graph.query(
@@ -433,7 +434,7 @@ class CodegenState:
 
             # Determine the base classes from rdfs:subClassOf
             class_deps[cls_uri] = []
-            superclass_names: list[ast.expr]
+            superclass_names: list[expr]
             superclass_names, superclass_uris = self._find_superclasses(cls_uri)
             for superclass_uri in superclass_uris:
                 class_deps[cls_uri].append(superclass_uri)

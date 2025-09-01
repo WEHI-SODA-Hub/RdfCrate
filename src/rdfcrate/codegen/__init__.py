@@ -2,7 +2,7 @@
 Generates URIs for everything in the RO-Crate context
 """
 
-import ast
+import ast_compat as ast
 from dataclasses import dataclass, field
 import itertools
 from pathlib import Path

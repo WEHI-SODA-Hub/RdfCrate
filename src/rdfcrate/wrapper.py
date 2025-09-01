@@ -213,7 +213,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
             self.link_to_dataset(dir_id, dataset)
         return dir_id
 
-    def compile(self) -> str:
+    def compile(self, **kwargs) -> str:
         """
         Compiles the RO-Crate to a JSON-LD string
         """
@@ -222,7 +222,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
                 "Root data entity not found. Did you call `add_root_entity`?"
             )
 
-        return super().compile()
+        return super().compile(**kwargs)
 
 
 class AttachedCrate(RoCrate):

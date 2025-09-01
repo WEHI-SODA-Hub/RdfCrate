@@ -339,7 +339,6 @@ class CodegenState:
             self.classes.append(
                 ast.ClassDef(
                     name=sanitize_cls_name(name),
-                    type_params=[],
                     bases=[ast.Name("RdfLiteral")],
                     keywords=[],
                     body=[

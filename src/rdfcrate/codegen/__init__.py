@@ -302,7 +302,6 @@ class CodegenState:
             self.classes.append(
                 ast.ClassDef(
                     name=sanitize_cls_name(name),
-                    type_params=[],
                     bases=[
                         # Set T to the range of the property
                         ast.Subscript(
@@ -441,7 +440,6 @@ class CodegenState:
 
             classes[cls_uri] = ast.ClassDef(
                 name=cls_name,
-                type_params=[],
                 bases=superclass_names,
                 keywords=[],
                 body=[
@@ -498,7 +496,6 @@ class CodegenState:
                 self.classes.append(
                     ast.ClassDef(
                         name=sanitize_cls_name(term),
-                        type_params=[],
                         bases=superclass_names,
                         keywords=[],
                         body=[
@@ -515,7 +512,6 @@ class CodegenState:
                 self.classes.append(
                     ast.ClassDef(
                         name=sanitize_cls_name(term),
-                        type_params=[],
                         bases=[
                             # Set T to the range of the property
                             ast.Subscript(

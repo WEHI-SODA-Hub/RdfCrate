@@ -1,6 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
 from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
+from deprecated import deprecated
 from typing_extensions import Doc, Unpack
 from rdflib import URIRef
 from rdfcrate.context_graph import ContextGraph, EntityArgs, ContextGraphKwargs
@@ -76,6 +77,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         The root entity of the RO-Crate
         """
 
+    @deprecated("This is deprecated in favour of `.add(RootDataEntity(...))`")
     def add_root_entity(
         self,
         name: schemaorg.name,
@@ -103,6 +105,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         The metadata entity of the RO-Crate
         """
 
+    @deprecated("This is deprecated in favour of `.add(MetadataEntity(...))`")
     def add_metadata_entity(self, *props: EntityArgs) -> None:
         """
         Creates the `ro-crate-metadata.json` record.
@@ -132,6 +135,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
             dataset = self.root_data_entity
         self.add_metadata(dataset, schemaorg.hasPart(entity))
 
+    @deprecated("This is deprecated in favour of `.add(FileEntity(...))`")
     def register_file(
         self,
         path: str,
@@ -176,6 +180,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
 
         return file_id
 
+    @deprecated("This is deprecated in favour of `.add(DirEntity(...))`")
     def register_dir(
         self,
         path: str,

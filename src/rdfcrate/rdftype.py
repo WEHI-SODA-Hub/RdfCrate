@@ -100,16 +100,20 @@ class RdfClass(RdfType):
             graph.register_term(self.term)
         return self.id
 
-    def add(self, graph: ContextGraph | None = None) -> ContextGraph:
+    def add(self, *args: EntityArgs, graph: ContextGraph | None = None) -> ContextGraph:
         """
         Adds triples to a graph with this entity as the subject.
         If the graph is not provided, an empty one will be created and returned.
+
+        Params:
+            graph: The graph to add the triples to. If not provided, a new empty graph
+            args: Additional properties to add to the entity. This is for backwards compatibility, but it's recommended to provide properties in the constructor instead.
         """
         # The public add method is needed here rather than in `ContextGraph` so that subclasses of `RdfType` can override it and mandate certain properties
         from rdfcrate import RdfTerm
 
         # Delegate to the `update` method to add properties
-        graph = self.update(graph=graph)
+        graph = self.update(*args, graph=graph)
 
         if not isinstance(self.term, RdfTerm):
             raise ValueError(
@@ -122,12 +126,17 @@ class RdfClass(RdfType):
 
         return graph
 
-    def update(self, graph: ContextGraph | None = None) -> ContextGraph:
+    def update(self, *args: EntityArgs, graph: ContextGraph | None = None) -> ContextGraph:
         """
         Updates this entity with the given properties, in a graph.
 
         If the graph is not provided, an empty one will be created and returned.
+
+        Params:
+            args: Additional properties to add to the entity. This is for backwards compatibility, but it's recommended to provide properties in the constructor instead.
+            graph: The graph to add the triples to. If not provided, a new empty graph will be created.
         """
+        self.props.extend(args)
         if graph is None:
             # We have to import here to avoid circular imports
             from rdfcrate.context_graph import ContextGraph

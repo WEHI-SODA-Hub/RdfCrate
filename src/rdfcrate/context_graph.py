@@ -4,7 +4,7 @@ from typing_extensions import Annotated, Doc, Unpack
 from deprecated import deprecated
 
 from rdflib import RDF, Graph, IdentifiedNode, Literal
-from rdflib.plugins.shared.jsonld.context import Context, Term, _ContextSourceType
+from rdflib.plugins.shared.jsonld.context import Context, Term
 
 from rdfcrate.rdfprop import PropertyProtocol
 from rdfcrate.rdfterm import RdfTerm
@@ -59,7 +59,7 @@ class ContextGraph:
     _custom_terms: dict[str, Any]
 
     @property
-    def context_source(self) -> _ContextSourceType:
+    def context_source(self) -> dict[str, Any]:
         """
         Returns the components that make up the context for this graph.
         """

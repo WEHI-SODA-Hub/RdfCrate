@@ -1,6 +1,6 @@
 [project]
 name = "rdfcrate"
-version = "1.0.0"
+version = "1.1.0"
 description = "Library for building RO-Crates using rdflib"
 readme = "README.md"
 authors = [
@@ -8,7 +8,10 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "rdflib>=7.1.2",
+    "ast-compat>=0.12.0",
+    "deprecated>=1.2.18",
+    # 7.1.3 defined compatible type annotations for triples
+    "rdflib>=7.1.3",
     "typer>=0.16.0",
     "vcrpy>=7.0.0",
 ]
@@ -16,6 +19,9 @@ dependencies = [
 [project.optional-dependencies]
 validation = [
     "roc-validator>=0.5.0",
+]
+nav = [
+    "rdfnav; python_version >= '3.12'",
 ]
 
 [project.scripts]
@@ -41,6 +47,9 @@ dev-dependencies = [
     "roc-validator>=0.5.0",
     "ruff>=0.11.5",
 ]
+
+[tool.uv.sources]
+rdfnav = { git = "https://github.com/WEHI-SODA-Hub/RdfNav" }
 
 [tool.pyright]
 include = ["src"]

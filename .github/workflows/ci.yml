@@ -29,7 +29,11 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install the project
-      run: uv sync --all-extras --dev
+      run: uv sync --dev
+
+    - name: Install optional rdfnav
+      run: uv sync --extra nav
+      if: matrix.python-version >= '3.12'
 
     - name: Run linter
       uses: astral-sh/ruff-action@v3
@@ -39,4 +43,4 @@ jobs:
 
     - uses: jakebailey/pyright-action@v2
       with:
-        version: 1.1.392 
+        version: 1.1.399

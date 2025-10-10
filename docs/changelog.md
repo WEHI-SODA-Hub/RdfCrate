@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.1.0
+
+### Changed
+
+* Added `ContextGraph`, a superclass of `RoCrate` which isn't tied to any RO-Crate specifics. This is designed to be a better API target for more general manipulations.
+* `ContextGraph` and subclasses are no longer dataclasses
+* Both `register_term()` and `register_terms()` now support `rdflib` `Term` classes now
+* Created a `PropertyProtocol` which is implemented by both `RdfProperty` and `ReverseProperty`. This allows APIs to more easily target both simultaneously
+* `RdfProp` and `RdfType` subclasses are now responsible for registering their own terms. Previously this was the responsibility of `RoCrate`
+* Handling of terms for data types like `sdo.Text()`
+
+### Added
+
+* New methods on `ContextGraph` which are therefore available in `RoCrate` are:
+    * `navigate()` and `navigate_to()`, which use the optional `rdfnav` dependency to allow for easy querying and mutation of the graph. Both will throw an exception if `rdfnav` is not installed.
+    * `register_term()`, for registering a single term. 
+    * `strip_datatypes()`, to help when serializing to RDF-naive parsers
+    * `context_source` and `full_context` provide different APIs for accessing the context
+
+
+### Deprecated
+
+* `RoCrate.add_entity()` and `RoCrate.add_metadata()` in favour of `RdfType().add()`
+
+### Fixed
+
+* Various type errors for code generation
+
 ## 1.0.0
 
 ### Breaking

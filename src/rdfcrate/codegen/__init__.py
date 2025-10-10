@@ -1,8 +1,13 @@
+# pyright: reportCallIssue=false
+# See https://github.com/python-compiler-tools/ast-compat/issues/5
 """
 Generates URIs for everything in the RO-Crate context
 """
 
-import ast
+import ast_compat as ast
+
+# This isn't exported by ast-compat for some reason
+from ast import expr
 from dataclasses import dataclass, field
 import itertools
 from pathlib import Path
@@ -12,8 +17,8 @@ import keyword
 from rdflib import Graph, RDFS, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from rdflib.query import ResultRow
-from rdflib.graph import _TripleType
 from rdflib.namespace import Namespace
+from rdfcrate.types import Triple
 
 from rdfcrate.spec_version import all_specs, SpecVersion, ROCrate1_2
 from graphlib import TopologicalSorter
@@ -216,7 +221,7 @@ class CodegenState:
             ).askAnswer,
         )
 
-    def property_range(self, prop: URIRef) -> ast.expr:
+    def property_range(self, prop: URIRef) -> expr:
         """
         Returns the range of a property, as a type annotation
         """
@@ -243,20 +248,22 @@ class CodegenState:
         if len(range_options) == 0:
             # If no range is found, use RdfType which allows any RDF entity
             self.add_import("rdfcrate.rdftype.RdfType")
-            return ast.Name("RdfType")
+            return ast.Name("RdfType", ctx=ast.Load())
         elif len(range_options) == 1:
             # If one range is found, use it
-            return ast.Name(range_options[0])
+            return ast.Name(range_options[0], ctx=ast.Load())
         else:
             # If multiple ranges are found, use a type union with `|`
             union_expr = ast.BinOp(
-                left=ast.Name(range_options[0]),
+                left=ast.Name(range_options[0], ctx=ast.Load()),
                 op=ast.BitOr(),
-                right=ast.Name(range_options[1]),
+                right=ast.Name(range_options[1], ctx=ast.Load()),
             )
             for range_name in range_options[2:]:
                 union_expr = ast.BinOp(
-                    left=union_expr, op=ast.BitOr(), right=ast.Name(range_name)
+                    left=union_expr,
+                    op=ast.BitOr(),
+                    right=ast.Name(range_name, ctx=ast.Load()),
                 )
             return union_expr
 
@@ -269,7 +276,7 @@ class CodegenState:
         """
         self.terms.add((term, str(uri)))
         return ast.Call(
-            func=ast.Name("RdfTerm"),
+            func=ast.Name("RdfTerm", ctx=ast.Load()),
             args=[
                 ast.Constant(str(uri)),
                 ast.Constant(term),
@@ -302,18 +309,17 @@ class CodegenState:
             self.classes.append(
                 ast.ClassDef(
                     name=sanitize_cls_name(name),
-                    type_params=[],
                     bases=[
                         # Set T to the range of the property
                         ast.Subscript(
-                            value=ast.Name("RdfProperty"),
+                            value=ast.Name("RdfProperty", ctx=ast.Load()),
                             slice=self.property_range(prop),
                         )
                     ],
                     keywords=[],
                     body=[
                         ast.Assign(
-                            targets=[ast.Name("term")],
+                            targets=[ast.Name("term", ctx=ast.Load())],
                             value=self.term_with_specs(name, str(prop)),
                             type_comment=None,
                         )
@@ -339,12 +345,11 @@ class CodegenState:
             self.classes.append(
                 ast.ClassDef(
                     name=sanitize_cls_name(name),
-                    type_params=[],
-                    bases=[ast.Name("RdfLiteral")],
+                    bases=[ast.Name("RdfLiteral", ctx=ast.Load())],
                     keywords=[],
                     body=[
                         ast.Assign(
-                            targets=[ast.Name("term")],
+                            targets=[ast.Name("term", ctx=ast.Load())],
                             value=self.term_with_specs(name, str(datatype)),
                             type_comment=None,
                         )
@@ -363,7 +368,7 @@ class CodegenState:
         # First try to get the label of the entity, if it has one
         for label in self.graph.objects(subject=entity, predicate=RDFS.label):
             # Remove underscores and spaces, and capitalize each word
-            label = "".join([word.title() for word in re.split(r"[\W_]+", label)])
+            label = "".join([word.title() for word in re.split(r"[\W_]+", str(label))])
             if mode == "property":
                 # Make properties camelCase rather than PascalCase
                 label = label[0].lower() + label[1:]
@@ -372,9 +377,7 @@ class CodegenState:
         _, _, term_name = self.graph.compute_qname(entity)
         return sanitize_cls_name(term_name)
 
-    def _find_superclasses(
-        self, cls_uri: URIRef
-    ) -> tuple[list[ast.expr], list[URIRef]]:
+    def _find_superclasses(self, cls_uri: URIRef) -> tuple[list[expr], list[URIRef]]:
         """
         Finds all the superclasses of a class
 
@@ -382,8 +385,8 @@ class CodegenState:
             - names: A list of ast.Name objects that can be used to define a child class
             - uris: A list of URIs for these base classes
         """
-        # We need to use this type so that 
-        names: list[ast.expr] = []
+        # We need to use this type so that
+        names: list[expr] = []
         uris: list[URIRef] = []
         # We order superclasses with the "deepest" class first, so that Python won't complain about the MRO
         for result in self.graph.query(
@@ -406,15 +409,15 @@ class CodegenState:
             superclass_name = self.get_entity_name(superclass_uri)
             if superclass_uri in self.module_map:
                 # If we find a previously defined superclass, we need to import it
-                names.append(ast.Name(self.import_iri(superclass_uri)))
+                names.append(ast.Name(self.import_iri(superclass_uri), ctx=ast.Load()))
             elif self.class_known(superclass_uri):
                 # Don't inherit from parent classes that we don't know about
-                names.append(ast.Name(superclass_name))
+                names.append(ast.Name(superclass_name, ctx=ast.Load()))
                 uris.append(superclass_uri)
 
         if len(names) == 0:
             # If no superclasses are found, use the default
-            names = [ast.Name("RdfClass")]
+            names = [ast.Name("RdfClass", ctx=ast.Load())]
         return names, uris
 
     def classes_from_rdfs(self, module_base: str) -> None:
@@ -435,19 +438,18 @@ class CodegenState:
 
             # Determine the base classes from rdfs:subClassOf
             class_deps[cls_uri] = []
-            superclass_names: list[ast.expr]
+            superclass_names: list[expr]
             superclass_names, superclass_uris = self._find_superclasses(cls_uri)
             for superclass_uri in superclass_uris:
                 class_deps[cls_uri].append(superclass_uri)
 
             classes[cls_uri] = ast.ClassDef(
                 name=cls_name,
-                type_params=[],
                 bases=superclass_names,
                 keywords=[],
                 body=[
                     ast.Assign(
-                        targets=[ast.Name("term")],
+                        targets=[ast.Name("term", ctx=ast.Load())],
                         value=self.term_with_specs(cls_name, cls_uri),
                         type_comment=None,
                     )
@@ -499,12 +501,11 @@ class CodegenState:
                 self.classes.append(
                     ast.ClassDef(
                         name=sanitize_cls_name(term),
-                        type_params=[],
                         bases=superclass_names,
                         keywords=[],
                         body=[
                             ast.Assign(
-                                targets=[ast.Name("term")],
+                                targets=[ast.Name("term", ctx=ast.Load())],
                                 value=self.term_with_specs(term, str(uri)),
                                 type_comment=None,
                             )
@@ -516,18 +517,17 @@ class CodegenState:
                 self.classes.append(
                     ast.ClassDef(
                         name=sanitize_cls_name(term),
-                        type_params=[],
                         bases=[
                             # Set T to the range of the property
                             ast.Subscript(
-                                value=ast.Name("RdfProperty"),
+                                value=ast.Name("RdfProperty", ctx=ast.Load()),
                                 slice=self.property_range(URIRef(uri)),
                             )
                         ],
                         keywords=[],
                         body=[
                             ast.Assign(
-                                targets=[ast.Name("term")],
+                                targets=[ast.Name("term", ctx=ast.Load())],
                                 value=self.term_with_specs(term, str(uri)),
                                 type_comment=None,
                             )
@@ -608,7 +608,7 @@ def schema_org_https(graph: Graph):
         )
         if triple != new_triple:
             graph.remove(triple)
-            graph.add(cast(_TripleType, new_triple))
+            graph.add(cast(Triple, new_triple))
 
 
 def generate_modules(

@@ -1,32 +1,32 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar, Generic, TypeVar, TYPE_CHECKING
-from rdflib import Graph
+from typing_extensions import Protocol
+from rdflib import IdentifiedNode
 
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.types import GraphId
+from rdfcrate.types import Identifier
 
 if TYPE_CHECKING:
     from rdfcrate.rdftype import RdfType
-
-
-@dataclass
-class ReverseProperty:
-    """
-    Represents the double of (subject, predicate), with the object being the class this is attached to.
-    """
-
-    term: RdfTerm
-    subject: RdfType
-
-    def add_to_graph(self, graph: Graph, object: GraphId) -> None:
-        graph.add((self.subject.id, self.term.uri, object))
-
+    from rdfcrate.context_graph import ContextGraph
 
 T = TypeVar("T", bound="RdfType", covariant=True)
 
+
+class PropertyProtocol(Protocol):
+    def add_to_graph(self, graph: ContextGraph, entity: Identifier):
+        """
+        Adds the property to the graph and registers any terms if necessary.
+
+        Params:
+            graph: The graph to which the property will be added
+            entity: The entity to which the property will be added
+        """
+
+
 @dataclass(frozen=True)
-class RdfProperty(Generic[T]):
+class RdfProperty(PropertyProtocol, Generic[T]):
     """
     Represents the double of (predicate, object), with the subject being the class this is attached to.
     This is the normal way properties will be defined
@@ -59,5 +59,28 @@ class RdfProperty(Generic[T]):
         term = RdfTerm(cls.term.uri, label)
         return type(cls.__name__, (cls,), {"term": term})
 
-    def add_to_graph(self, graph: Graph, subject: GraphId) -> None:
-        graph.add((subject, self.term.uri, self.object.id))
+    def add_to_graph(self, graph: ContextGraph, entity: Identifier) -> None:
+        if not isinstance(entity, IdentifiedNode):
+            raise ValueError("Subjects must be URIs or blank nodes.")
+        # The property is responsible for registering its own term
+        graph.register_term(self.term)
+        predicate = self.term.uri
+        graph.graph.add(
+            (entity, self.term.uri, self.object.as_object(graph, entity, predicate))
+        )
+
+
+@dataclass
+class ReverseProperty(PropertyProtocol):
+    """
+    Represents the double of (subject, predicate), with the object being the class this is attached to.
+    """
+
+    term: RdfTerm
+    subject: RdfType
+
+    def add_to_graph(self, graph: ContextGraph, entity: Identifier) -> None:
+        graph.register_term(self.term)
+        pred = self.term.uri
+        obj = entity
+        graph.graph.add((self.subject.as_subject(graph, pred, obj), pred, obj))

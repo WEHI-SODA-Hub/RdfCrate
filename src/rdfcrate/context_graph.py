@@ -194,6 +194,18 @@ class ContextGraph:
 
         Returns:
             The ID of the new entity
+
+        Example:
+            ```python
+            from rdflib import BNode,
+            from rdfcrate.vocabs import schemaorg
+
+            crate.add_entity(
+                BNode(),
+                schemaorg.Person,
+                schemaorg.name("Alice")
+            )
+            ```
         """
         # Note: The reason we have use the (entity, *args) signature is so that we can enforce certain properties and their types
         # when we make specialized variants of the method like `add_root_entity` or `register_file`.

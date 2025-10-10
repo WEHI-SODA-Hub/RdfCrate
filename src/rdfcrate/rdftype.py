@@ -95,18 +95,7 @@ class RdfClass(RdfType):
     def add(self, *args: EntityArgs, graph: ContextGraph | None = None) -> ContextGraph:
         """
         Adds triples to a graph with this entity as the subject.
-
         If the graph is not provided, an empty one will be created and returned.
-
-        Example:
-            from rdfcrate import ContextGraph, rdfs, sdo
-
-            graph = ContextGraph()
-            sdo.Thing("http://example.org/thing").add(
-                sdo.name("My Thing"),
-                sdo.description("An example thing"),
-                graph=graph
-            )
         """
         # The public add method is needed here rather than in `ContextGraph` so that subclasses of `RdfType` can override it and mandate certain properties
         from rdfcrate import RdfTerm

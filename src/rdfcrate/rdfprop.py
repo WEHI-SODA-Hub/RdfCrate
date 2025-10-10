@@ -29,7 +29,10 @@ class PropertyProtocol(Protocol):
 class RdfProperty(PropertyProtocol, Generic[T]):
     """
     Represents the double of (predicate, object), with the subject being the class this is attached to.
+
     This is the normal way properties will be defined
+    As a user, you will typically use this class by instantiating subclasses from the vocabs module and attaching them to entities.
+    If you want to define custom vocabulary, you can first subclass this and then create instances of that subclass.
     """
 
     term: ClassVar[RdfTerm]
@@ -39,12 +42,17 @@ class RdfProperty(PropertyProtocol, Generic[T]):
     def adhoc(term: RdfTerm, object: T) -> RdfProperty:
         """
         Makes an ad-hoc property class from a term.
+
+        If you want to use the property multiple times, you should define a subclass instead.
         """
         subclass = type(term.label, (RdfProperty,), {"term": term})
         return subclass(object=object)
 
     @classmethod
     def reverse(cls, subject: RdfType) -> ReverseProperty:
+        """
+        Utility for when you want to make the current entity the *object* of a property, rather than the subject.
+        """
         return ReverseProperty(cls.term, subject)
 
     @classmethod
@@ -84,3 +92,9 @@ class ReverseProperty(PropertyProtocol):
         pred = self.term.uri
         obj = entity
         graph.graph.add((self.subject.as_subject(graph, pred, obj), pred, obj))
+
+
+__all__ = [
+    "RdfProperty",
+    "ReverseProperty",
+]

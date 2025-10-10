@@ -1,3 +1,7 @@
+"""
+All objects in this module are re-exports from submodules.
+"""
+
 from rdfcrate.vocabs import (
     bioschemas,
     bioschemas_drafts,

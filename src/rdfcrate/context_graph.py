@@ -59,7 +59,10 @@ class ContextGraph:
     _custom_terms: dict[str, Any]
 
     @property
-    def context_source(self) -> dict[str, Any]:
+    def context_source(
+        self,
+    ) -> list[dict[str, Any] | str | None] | dict[str, Any] | str | None:
+        # Return type is quite general because JSON-LD defines @context quite flexibly
         """
         Returns the components that make up the context for this graph.
         """

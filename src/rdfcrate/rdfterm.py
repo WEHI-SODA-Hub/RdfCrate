@@ -38,3 +38,7 @@ class RdfTerm:
         else:
             self.label = term
         self.specs = specs
+
+__all__ = [
+    "RdfTerm",
+]

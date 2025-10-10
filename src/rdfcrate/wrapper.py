@@ -227,6 +227,8 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
 
 class AttachedCrate(RoCrate):
     """
+    An RO-Crate stored in a directory, with all contents local to that directory.
+
     See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#attached-ro-crate>
     """
 

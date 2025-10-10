@@ -19,10 +19,34 @@ plugins:
           show_root_heading: true
           heading_level: 2
           show_signature_annotations: true
+          allow_inspection: true
+- api-autonav:
+    modules: 
+      - 'src/rdfcrate'
+    exclude:
+      # Private and WIP modules
+      - 'rdfcrate.codegen'
+      - 'rdfcrate.literals'
+      - 'rdfcrate.types'
+      - 're:proto'
+      - 're:test'
+      # Submodules that are already documented in the top level module
+      # If we don't exclude these, they will be documented twice,
+      # the user might think they need to import directly from these submodules
+      - 'rdfcrate.context_graph'
+      - 'rdfcrate.rdfprop'
+      - 'rdfcrate.rdftype'
+      - 'rdfcrate.spec_version'
+      - 'rdfcrate.wrapper'
+
+    module_options:
+      # These modules don't set __all__, so we include all members to avoid empty docs
+      "rdfcrate.vocabs.*":
+        members: true
 
 nav:
   - 'README.md'
-  - 'docs/api.md'
+  - 'docs/changelog.md'
   - 'docs/motivation.md'
 
 markdown_extensions:

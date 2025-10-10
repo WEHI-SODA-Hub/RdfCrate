@@ -59,7 +59,8 @@ class RdfType:
 class RdfClass(RdfType):
     """
     An RDF entity that has a URI (or blank node).
-    Typically these are instance of rdfs:Class or owl:Class.
+
+    Typically these are instance of `rdfs:Class` or `owl:Class`.
     """
 
     id: IdentifiedNode
@@ -94,7 +95,18 @@ class RdfClass(RdfType):
     def add(self, *args: EntityArgs, graph: ContextGraph | None = None) -> ContextGraph:
         """
         Adds triples to a graph with this entity as the subject.
+
         If the graph is not provided, an empty one will be created and returned.
+
+        Example:
+            from rdfcrate import ContextGraph, rdfs, sdo
+
+            graph = ContextGraph()
+            sdo.Thing("http://example.org/thing").add(
+                sdo.name("My Thing"),
+                sdo.description("An example thing"),
+                graph=graph
+            )
         """
         # The public add method is needed here rather than in `ContextGraph` so that subclasses of `RdfType` can override it and mandate certain properties
         from rdfcrate import RdfTerm
@@ -169,6 +181,7 @@ class RdfClass(RdfType):
 class RdfLiteral(RdfType):
     """
     An RDF entity that is a literal value.
+
     Typically these are instances of `rdfs:Literal`
     """
 
@@ -193,3 +206,10 @@ class RdfLiteral(RdfType):
         # We always need to register the literal datatype when it's used as an object
         graph.register_term(self.term)
         return self.value
+
+
+__all__ = [
+    "RdfType",
+    "RdfClass",
+    "RdfLiteral",
+]

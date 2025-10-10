@@ -1,62 +1,145 @@
+from __future__ import annotations
 from pathlib import Path
-from typing import Any, Iterable
-from rdflib import Graph, URIRef, Literal, RDF, IdentifiedNode
-from rdfcrate import uris
+from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
+from typing_extensions import Doc, Unpack
+from rdflib import URIRef
+from rdfcrate.context_graph import ContextGraph, EntityArgs, ContextGraphKwargs
+from rdfcrate.rdfprop import RdfProperty
+from rdfcrate.rdftype import RdfClass
 from rdfcrate.spec_version import SpecVersion, ROCrate1_1
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass
 import mimetypes
 from os import stat
-from datetime import datetime
+from abc import ABCMeta, abstractmethod
+from rdflib.plugins.shared.jsonld.context import Context
+from rdfcrate.vocabs import dc, schemaorg, rocrate
+from urllib.parse import quote
+import warnings
 
-#: Predicate-object tuple
-Double = tuple[URIRef, Literal | IdentifiedNode]
-Attributes = Iterable[Double]
-Type = Iterable[URIRef]
+if TYPE_CHECKING:
+    from rocrate_validator.models import Severity, CheckIssue
 
-def has_predicate(double: Iterable[Double], predicate: URIRef) -> bool:
+EntityType = Annotated[
+    type[RdfClass],
+    Doc(
+        "The main type of the entity to create. An entity can have multiple types, which you can specify using `rdf.type()`. However for static type checking, you should choose a main type that agrees with the property (predicate) that it will be linked to."
+    ),
+]
+Recursive = Annotated[
+    bool,
+    Doc(
+        "If true, register all files and subdirectories in the directory.  The child entities will only have minimal metadata, but more can be added later with [`RoCrate.add_metadata`][rdfcrate.wrapper.RoCrate.add_metadata].  Also note that each registered data entity will be linked to the directory entity with `hasPart`."
+    ),
+]
+EntityClass = TypeVar("EntityClass", bound=RdfClass)
+
+
+def has_prop(props: Iterable[EntityArgs], predicate: type[RdfProperty]) -> bool:
     """
     Checks if an attribute list contains a specific predicate
     """
-    return any(pred == predicate for pred, _ in double)
+    return any(isinstance(prop, predicate) for prop in props)
 
-@dataclass
-class RoCrate:
+
+class RoCrateKwargs(ContextGraphKwargs, total=False):
+    version: SpecVersion
+
+
+class RoCrate(ContextGraph, metaclass=ABCMeta):
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """
-    graph: Graph = field(init=False, default_factory=Graph)
-    """
-    `rdflib.Graph` containing the RO-Crate metadata. This can be accessed directly, but it is recommended to use the other methods provided by this class where available.
-    """
-    version: SpecVersion = field(kw_only=True, default=ROCrate1_1)
-    "Version of the RO-Crate specification to use"
 
-    def add_entity(self, id: IdentifiedNode, type: Type, attrs: Attributes = []) -> IdentifiedNode:
+    version: SpecVersion
+    "Version of the RO-Crate specification to use"
+    _custom_terms: dict[str, Any]
+
+    def __init__(self, **kwargs: Unpack[RoCrateKwargs]):
+        super().__init__(**kwargs)
+        self.version = kwargs.get("version", ROCrate1_1)
+
+        # We resolve the RO-Crate context now so we can use it to resolve terms and check if they are already registered
+        self._roc_context = Context(self.version.context_url)
+
+    @property
+    def context_source(self):
+        # Implements the requirements for context format according to the RO-Crate spec
+        if len(self._custom_terms) == 0:
+            return self.version.context_url
+        else:
+            return [self.version.context_url, self._custom_terms]
+
+    @property
+    @abstractmethod
+    def root_data_entity(self) -> schemaorg.Dataset:
         """
-        Adds any type of entity to the crate
+        The root entity of the RO-Crate
+        """
+
+    def add_root_entity(
+        self,
+        name: schemaorg.name,
+        description: schemaorg.description,
+        date_published: schemaorg.datePublished,
+        license: schemaorg.license,
+        *props: EntityArgs,
+    ) -> schemaorg.Dataset:
+        """
+        Adds the root entity to the crate.
+        """
+        return self.add_entity(
+            self.root_data_entity,
+            name,
+            description,
+            date_published,
+            license,
+            *props,
+        )
+
+    @property
+    @abstractmethod
+    def metadata_entity(self) -> schemaorg.CreativeWork:
+        """
+        The metadata entity of the RO-Crate
+        """
+
+    def add_metadata_entity(self, *props: EntityArgs) -> None:
+        """
+        Creates the `ro-crate-metadata.json` record.
+        """
+        self.add_entity(
+            self.metadata_entity,
+            schemaorg.about(self.root_data_entity),
+            dc.conformsTo(dc.Standard(self.version.conforms_to_url)),
+            *props,
+        )
+
+    def link_to_dataset(
+        self,
+        entity: schemaorg.Dataset | rocrate.File,
+        dataset: schemaorg.Dataset | None,
+    ) -> None:
+        """
+        Links a data entity to a Dataset.
+
+        See https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/data-entities.html#referencing-files-and-folders-from-the-root-data-entity
 
         Params:
-            id: ID of the entity being added
-            type: Type of the entity being added
-            attrs: Attributes of the entity being added
-
-        Returns:
-            The ID of the new entity
-
-        Example:
-            ```python
-            from rdflib import BNode,
-            from rdfcrate import uris
-
-            crate.add_entity(BNode(), [uris.Person], [(uris.name, Literal("Alice"))])
-            ```
+            entity: ID of the entity being linked
+            dataset: ID of the dataset being linked to. If not provided, the entity will be linked to the root dataset.
         """
-        for t in type:
-            self.graph.add((id, RDF.type, t))
-        self.add_metadata(id, attrs)
-        return id
-    
-    def register_file(self, path: str, attrs: Attributes = [], guess_mime: bool = True, **kwargs: Any) -> IdentifiedNode:
+        if dataset is None:
+            dataset = self.root_data_entity
+        self.add_metadata(dataset, schemaorg.hasPart(entity))
+
+    def register_file(
+        self,
+        path: str,
+        *args: EntityArgs,
+        guess_mime: bool = True,
+        dataset: schemaorg.Dataset | None = None,
+        **kwargs,
+    ) -> rocrate.File:
         """
         Adds file metadata to the crate
 
@@ -64,29 +147,42 @@ class RoCrate:
 
         Params:
             path: Path or URL to the file being added
-            attrs: Attributes used to describe the `File` entity
             guess_mime: If true, automatically guess and document the MIME type of the file based on its extension
+            dataset: Dataset entity that the file should be linked to. If not provided, the file will be linked to the root dataset.
 
         Example:
             ```python
-            from rdfcrate import uris, AttachedCrate
+            from rdfcrate import AttachedCrate
+            from rdfcrate.vocabs import schemaorg as sdo
 
-            AttachedCrate(".").register_file("./some/data.txt", [
-                (uris.description, Literal("This is a file with some data")),
-            ])
+            AttachedCrate(".").register_file("./some/data.txt", sdo.description(sdo.Text("This is a file with some data")))
             ```
         """
-        file_id = URIRef(path)
-        self.add_entity(file_id, [uris.File], attrs)
+        file_id = rocrate.File(path)
+        self.add_entity(file_id, *args)
+
         if guess_mime:
-            if has_predicate(attrs, uris.encodingFormat):
-                raise ValueError("Cannot guess MIME type when encodingFormat is provided")
+            if any(isinstance(arg, schemaorg.encodingFormat) for arg in args):
+                raise ValueError(
+                    "Cannot guess MIME type when encodingFormat is provided"
+                )
             guess_type, _guess_encoding = mimetypes.guess_type(path)
             if guess_type is not None:
-                self.add_metadata(file_id, [(uris.encodingFormat, Literal(guess_type))])
+                self.add_metadata(
+                    file_id, schemaorg.encodingFormat(schemaorg.Text(guess_type))
+                )
+
+        self.link_to_dataset(file_id, dataset)
+
         return file_id
 
-    def register_dir(self, path: str, attrs: Attributes = {}, **kwargs: Any) -> IdentifiedNode:
+    def register_dir(
+        self,
+        path: str,
+        *props: EntityArgs,
+        dataset: schemaorg.Dataset | None = None,
+        **kwargs,
+    ) -> schemaorg.Dataset:
         """
         Adds metadata for a directory
 
@@ -96,71 +192,68 @@ class RoCrate:
         Params:
             path: Path to the directory, which must be within the crate root
             attrs: Attributes used to describe the `Dataset` entity
+            dataset: Dataset entity that the file should be linked to. If not provided, the file will be linked to the root dataset.
+            kwargs: Available for subclasses to extend the functionality.
 
         Example:
             ```python
-            from rdfcrate import uris, AttachedCrate
+            from rdfcrate import AttachedCrate
+            from rdfcrate.vocabs import schemaorg as sdo
 
-            AttachedCrate(".").register_dir("./some/dir", [
-                (uris.description, Literal("This is a directory I am describing")),
-            ])
+            AttachedCrate(".").register_dir("./some/dir", sdo.description(sdo.Text("This is a directory I am describing")))
             ```
         """
         if not path.endswith("/"):
             # Directories must end with a slash in RO-Crate
             path += "/"
-        dir_id = URIRef(path)
-        self.add_entity(dir_id, [uris.Dataset], attrs)
+        dir_id = schemaorg.Dataset(path)
+        self.add_entity(dir_id, *props)
+        if self.root_data_entity != dir_id:
+            # The root dataset is not linked to itself
+            self.link_to_dataset(dir_id, dataset)
         return dir_id
 
-    def add_metadata(self, entity: IdentifiedNode, attrs: Attributes) -> IdentifiedNode:
-        """
-        Add metadata for an existing entity.
-
-        Returns:
-            The ID of the updated entity
-
-        Params:
-            entity: ID of the entity being described
-            attrs: Attributes of the entity being described
-        """
-        for pred, obj in attrs:
-            self.graph.add((entity, pred, obj))
-        return entity
-
-    def compile(self) -> str:
+    def compile(self, **kwargs) -> str:
         """
         Compiles the RO-Crate to a JSON-LD string
         """
-        return self.graph.serialize(format="json-ld", context=self.version.context)
+        if self.root_data_entity.id not in self.graph.subjects():
+            raise ValueError(
+                "Root data entity not found. Did you call `add_root_entity`?"
+            )
 
-@dataclass
+        return super().compile(**kwargs)
+
+
 class AttachedCrate(RoCrate):
     """
+    An RO-Crate stored in a directory, with all contents local to that directory.
+
     See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#attached-ro-crate>
     """
-    path: InitVar[str | Path]
-    "The RO-Crate directory"
-    root: Path = field(init=False)
+
+    root: Path
     "The RO-Crate directory"
 
-    #: If true, automatically initialize the crate with all files and directories in the root
-    recursive_init: InitVar[bool] = field(default=False, kw_only=True)
-
-    def __post_init__(self, path: Path | str, recursive_init: bool = False):
-        self.root = Path(path)
-        root_dataset = self.register_dir(self.root, recursive=recursive_init, attrs=[
-            (uris.datePublished, Literal(datetime.now().isoformat()))
-        ])
-        self.add_entity(URIRef(self._resolve_path(self._ro_crate_metadata)), type=[uris.CreativeWork], attrs=[
-            (uris.conformsTo, URIRef(self.version.conforms_to)),
-            (uris.about, root_dataset),
-            # Even though File aka MediaObject is already a subclass of CreativeWork, the spec demands this is explicitly present
-            (RDF.type, uris.CreativeWork)
-        ])
+    def __init__(self, path: str | Path, **kwargs: Unpack[RoCrateKwargs]):
+        super().__init__(**kwargs)
+        self.root = Path(path).resolve()
 
     @property
-    def _ro_crate_metadata(self) -> Path:
+    def metadata_entity(self) -> schemaorg.CreativeWork:
+        """
+        The metadata entity of the RO-Crate
+        """
+        return schemaorg.CreativeWork(
+            self._resolve_path(self._metadata_path, existing=False)[1]
+        )
+
+    @property
+    def root_data_entity(self) -> schemaorg.Dataset:
+        return schemaorg.Dataset("./")
+
+    @property
+    def _metadata_path(self) -> Path:
         """
         Path to the RO-Crate metadata file
         """
@@ -170,11 +263,21 @@ class AttachedCrate(RoCrate):
         """
         Writes the RO-Crate to `ro-crate-metadata.json`
         """
-        self._ro_crate_metadata.write_text(self.compile())
+        self._metadata_path.write_text(self.compile())
 
-    def _resolve_path(self, path: Path | str) -> str:
+    def _resolve_path(
+        self, path: Path | str, existing: bool = True
+    ) -> tuple[Path, URIRef]:
         """
         Converts a crate path to a platform independent path compatible with RO-Crate
+
+        Params:
+            existing: If true, the path must exist, and an exception will be raised if it does not
+
+        Returns:
+            A tuple of:
+                - The absolute path
+                - The path as a URI, suitable for us as an IRI
         """
         if isinstance(path, str):
             # Paths can be provided as strings
@@ -183,14 +286,25 @@ class AttachedCrate(RoCrate):
         if path.is_absolute():
             # Absolute paths are accepted, but must be within the crate root
             if not path.is_relative_to(self.root):
-                raise ValueError(f"Path ({path}) must be within the crate root ({self.root})")
+                raise ValueError(
+                    f"Path ({path}) must be within the crate root ({self.root})"
+                )
         else:
             # Relative paths are assumed to be relative to the crate root
             path = self.root / path
 
-        return path.relative_to(self.root).as_posix()
+        if existing and not path.exists():
+            raise ValueError(f"Path {path} does not exist")
 
-    def register_file(self, path: Path | str, attrs: Attributes = [], guess_mime: bool = True, add_size: bool = False, **kwargs: Any):
+        return path.resolve(), URIRef(quote(path.relative_to(self.root).as_posix()))
+
+    def register_file(
+        self,
+        path: Path | str,
+        *props: EntityArgs,
+        add_size: bool = False,
+        **kwargs: Any,
+    ):
         """
         See [`RoCrate.register_file`][rdfcrate.wrapper.RoCrate.register_file].
 
@@ -198,41 +312,103 @@ class AttachedCrate(RoCrate):
             add_size: If true, automatically add the size of the file to the metadata
         """
         path = Path(path)
-        file_id = self._resolve_path(path)
-        ret = super().register_file(file_id, attrs, guess_mime)
+        _, file_id = self._resolve_path(path)
+        ret = super().register_file(file_id, *props, **kwargs)
         if add_size:
-            if has_predicate(attrs, uris.contentSize):
+            if has_prop([*props], schemaorg.contentSize):
                 raise ValueError("Cannot add size when contentSize is provided")
-            self.add_metadata(URIRef(file_id), [(uris.contentSize, Literal(stat(path).st_size))])
+            self.add_metadata(
+                ret,
+                schemaorg.contentSize(schemaorg.Text(stat(path).st_size)),
+            )
         return ret
 
-    def register_dir(self, path: Path | str, attrs: Attributes = [], recursive: bool = False, **kwargs: Any):
+    def add_root_entity(
+        self,
+        name: schemaorg.name,
+        description: schemaorg.description,
+        date_published: schemaorg.datePublished,
+        license: schemaorg.license,
+        *props: EntityArgs,
+        recursive: Recursive = False,
+    ) -> schemaorg.Dataset:
+        return self.register_dir(
+            ".", name, description, date_published, license, *props, recursive=recursive
+        )
+
+    def register_dir(
+        self,
+        path: Path | str,
+        *props: EntityArgs,
+        recursive: Recursive = False,
+        **kwargs: Any,
+    ) -> schemaorg.Dataset:
         """
         See [`RoCrate.register_dir`][rdfcrate.wrapper.RoCrate.register_dir].
-
-        Params:
-            recursive: If true, register all files and subdirectories in the directory. The automatically created children will only have default metadata.
-                You can use `add_metadata` to document them more comprehensively.
         """
-        id = super().register_dir(self._resolve_path(path), attrs)
+        full_path, id = self._resolve_path(path)
+        id = super().register_dir(id, *props, **kwargs)
 
         if recursive:
-            for child in Path(path).iterdir():
+            for child in full_path.iterdir():
+                if child in {self._metadata_path, self.root}:
+                    # Never register the metadata file or the root directory
+                    continue
                 if child.is_dir():
-                    child_id = self.register_dir(child, recursive=True)
+                    self.register_dir(child, recursive=True, dataset=id)
                 else:
-                    child_id = self.register_file(child)
-                self.add_metadata(id, [(uris.hasPart, child_id)])
+                    self.register_file(child, dataset=id)
         return id
+
+    def get_issues(self) -> list[CheckIssue]:
+        """
+        Returns a list of issues found in the RO-Crate using the `rocrate-validator` package.
+        """
+        try:
+            from rocrate_validator import services, models
+            from rocrate_validator.utils import URI
+        except ImportError:
+            raise ImportError(
+                "rocrate-validator is not installed. Please use the `validation` extra, e.g. `pip install rdfcrate[validation]`."
+            )
+
+        self.write()
+        result = services.validate(
+            services.ValidationSettings(
+                rocrate_uri=URI(self.root),
+                # TODO: Support other profiles
+                profile_identifier="ro-crate-1.1",
+                requirement_severity=models.Severity.RECOMMENDED,
+            )
+        )
+        return result.get_issues()
+
+    def validate(self, threshold: Severity | None = None) -> None:
+        """
+        Raises an exception if the RO-Crate is not valid.
+        """
+        if threshold is None:
+            from rocrate_validator.models import Severity
+
+            threshold = Severity.RECOMMENDED
+        for issue in self.get_issues():
+            msg = f'Detected issue of severity {issue.severity.name} with check "{issue.check.identifier}": {issue.message}'
+            if issue.severity >= threshold:
+                raise Exception(msg)
+            else:
+                warnings.warn(msg)
+
 
 @dataclass
 class DetatchedCrate(RoCrate):
     """
-    A crate describing local files.
+    A crate describing remote files.
 
     See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#detached-ro-crate>
     """
+
     root: str
 
-    def __post_init__(self):
-        self.register_dir(self.root)
+    @property
+    def root_data_entity(self):
+        return schemaorg.Dataset(self.root)

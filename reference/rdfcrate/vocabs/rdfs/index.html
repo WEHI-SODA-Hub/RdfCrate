@@ -1,0 +1,2678 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../rdf/">
+      
+      
+        <link rel="next" href="../rocrate/">
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.21">
+    
+    
+      
+        <title>rdfs - RdfCrate</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.2a3383ac.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rdfcrate.vocabs.rdfs" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="RdfCrate" class="md-header__button md-logo" aria-label="RdfCrate" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RdfCrate
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              rdfs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="RdfCrate" class="md-nav__button md-logo" aria-label="RdfCrate" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    RdfCrate
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RdfCrate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/motivation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Motivation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdfcrate
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdfcrate
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    rdfcrate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rdfterm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdfterm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_1_3" id="__nav_4_1_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>vocabs
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_1_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>vocabs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    vocabs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bioschemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>bioschemas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bioschemas_drafts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>bioschemas_drafts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>dc
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>geo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../owl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>owl
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pav/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>pav
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pcdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>pcdm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>prof
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prov/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>prov
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rdf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdf
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdfs
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdfs
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Class
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Container
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.ContainerMembershipProperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      ContainerMembershipProperty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Datatype" class="md-nav__link">
+    <span class="md-ellipsis">
+      Datatype
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Literal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Literal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfClass
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RdfClass">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.add" class="md-nav__link">
+    <span class="md-ellipsis">
+      add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.adhoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      adhoc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.to_type_property" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_type_property
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.update" class="md-nav__link">
+    <span class="md-ellipsis">
+      update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.with_term_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      with_term_label
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfProperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfProperty
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RdfProperty">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfProperty.adhoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      adhoc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfProperty.reverse" class="md-nav__link">
+    <span class="md-ellipsis">
+      reverse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfProperty.with_term_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      with_term_label
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfTerm" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfTerm
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfType" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfType
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RdfType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfType.as_object" class="md-nav__link">
+    <span class="md-ellipsis">
+      as_object
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfType.as_subject" class="md-nav__link">
+    <span class="md-ellipsis">
+      as_subject
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resource
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.comment" class="md-nav__link">
+    <span class="md-ellipsis">
+      comment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      domain
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.isDefinedBy" class="md-nav__link">
+    <span class="md-ellipsis">
+      isDefinedBy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.label" class="md-nav__link">
+    <span class="md-ellipsis">
+      label
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.member" class="md-nav__link">
+    <span class="md-ellipsis">
+      member
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.range" class="md-nav__link">
+    <span class="md-ellipsis">
+      range
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.seeAlso" class="md-nav__link">
+    <span class="md-ellipsis">
+      seeAlso
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.subClassOf" class="md-nav__link">
+    <span class="md-ellipsis">
+      subClassOf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.subPropertyOf" class="md-nav__link">
+    <span class="md-ellipsis">
+      subPropertyOf
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rocrate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rocrate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../schemaorg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>schemaorg
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Class
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Container
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.ContainerMembershipProperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      ContainerMembershipProperty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Datatype" class="md-nav__link">
+    <span class="md-ellipsis">
+      Datatype
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Literal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Literal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfClass
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RdfClass">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.add" class="md-nav__link">
+    <span class="md-ellipsis">
+      add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.adhoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      adhoc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.to_type_property" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_type_property
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.update" class="md-nav__link">
+    <span class="md-ellipsis">
+      update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfClass.with_term_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      with_term_label
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfProperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfProperty
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RdfProperty">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfProperty.adhoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      adhoc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfProperty.reverse" class="md-nav__link">
+    <span class="md-ellipsis">
+      reverse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfProperty.with_term_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      with_term_label
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfTerm" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfTerm
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfType" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfType
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RdfType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfType.as_object" class="md-nav__link">
+    <span class="md-ellipsis">
+      as_object
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.RdfType.as_subject" class="md-nav__link">
+    <span class="md-ellipsis">
+      as_subject
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.Resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resource
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.comment" class="md-nav__link">
+    <span class="md-ellipsis">
+      comment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      domain
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.isDefinedBy" class="md-nav__link">
+    <span class="md-ellipsis">
+      isDefinedBy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.label" class="md-nav__link">
+    <span class="md-ellipsis">
+      label
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.member" class="md-nav__link">
+    <span class="md-ellipsis">
+      member
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.range" class="md-nav__link">
+    <span class="md-ellipsis">
+      range
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.seeAlso" class="md-nav__link">
+    <span class="md-ellipsis">
+      seeAlso
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.subClassOf" class="md-nav__link">
+    <span class="md-ellipsis">
+      subClassOf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.rdfs.subPropertyOf" class="md-nav__link">
+    <span class="md-ellipsis">
+      subPropertyOf
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h1 id="rdfcrate.vocabs.rdfs" class="doc doc-heading">
+            <code>rdfcrate.vocabs.rdfs</code>
+
+
+</h1>
+
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.Class" class="doc doc-heading">
+            <code>Class</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Resource (rdfcrate.vocabs.rdfs.Resource)" href="#rdfcrate.vocabs.rdfs.Resource">Resource</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.Container" class="doc doc-heading">
+            <code>Container</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Resource (rdfcrate.vocabs.rdfs.Resource)" href="#rdfcrate.vocabs.rdfs.Resource">Resource</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.ContainerMembershipProperty" class="doc doc-heading">
+            <code>ContainerMembershipProperty</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfClass (rdfcrate.rdftype.RdfClass)" href="#rdfcrate.vocabs.rdfs.RdfClass">RdfClass</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.Datatype" class="doc doc-heading">
+            <code>Datatype</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Class (rdfcrate.vocabs.rdfs.Class)" href="#rdfcrate.vocabs.rdfs.Class">Class</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.Literal" class="doc doc-heading">
+            <code>Literal</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Resource (rdfcrate.vocabs.rdfs.Resource)" href="#rdfcrate.vocabs.rdfs.Resource">Resource</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.RdfClass" class="doc doc-heading">
+            <code>RdfClass</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfType (rdfcrate.rdftype.RdfType)" href="#rdfcrate.vocabs.rdfs.RdfType">RdfType</a></code></p>
+
+
+        <p>An RDF entity that has a URI (or blank node).</p>
+<p>Typically these are instance of <code>rdfs:Class</code> or <code>owl:Class</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfClass.add" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">EntityArgs</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">ContextGraph</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ContextGraph</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Adds triples to a graph with this entity as the subject.</p>
+<p>If the graph is not provided, an empty one will be created and returned.</p>
+
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p>from rdfcrate import ContextGraph, rdfs, sdo</p>
+<p>graph = ContextGraph()
+sdo.Thing("http://example.org/thing").add(
+    sdo.name("My Thing"),
+    sdo.description("An example thing"),
+    graph=graph
+)</p>
+</details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfClass.adhoc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">adhoc</span><span class="p">(</span><span class="n">term</span><span class="p">:</span> <span class="n">RdfTerm</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">Self</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Makes an ad-hoc type class from a term.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfClass.to_type_property" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_type_property</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">rdf</span><span class="o">.</span><span class="n">type</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Converts this class wrapper to an instance of <code>RdfProperty</code> that can be used to tag entities with this type.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfClass.update" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">EntityArgs</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">ContextGraph</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ContextGraph</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Updates this entity with the given properties, in a graph.</p>
+<p>If the graph is not provided, an empty one will be created and returned.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfClass.with_term_label" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">with_term_label</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">RdfClass</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Creates a new instance of this class with the given label.
+This is useful in cases where the term label is already defined by another vocabulary</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.RdfProperty" class="doc doc-heading">
+            <code>RdfProperty</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="rdfcrate.rdfprop.PropertyProtocol">PropertyProtocol</span></code>, <code><span title="typing.Generic">Generic</span>[<span title="rdfcrate.rdfprop.T">T</span>]</code></p>
+
+
+        <p>Represents the double of (predicate, object), with the subject being the class this is attached to.</p>
+<p>This is the normal way properties will be defined
+As a user, you will typically use this class by instantiating subclasses from the vocabs module and attaching them to entities.
+If you want to define custom vocabulary, you can first subclass this and then create instances of that subclass.</p>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfProperty.adhoc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">adhoc</span><span class="p">(</span><span class="n">term</span><span class="p">:</span> <span class="n">RdfTerm</span><span class="p">,</span> <span class="nb">object</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RdfProperty</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Makes an ad-hoc property class from a term.</p>
+<p>If you want to use the property multiple times, you should define a subclass instead.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfProperty.reverse" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">reverse</span><span class="p">(</span><span class="n">subject</span><span class="p">:</span> <span class="n">RdfType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReverseProperty</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Utility for when you want to make the current entity the <em>object</em> of a property, rather than the subject.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfProperty.with_term_label" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">with_term_label</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">RdfProperty</span><span class="p">[</span><span class="n">T</span><span class="p">]]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Creates a new instance of this property with the given label.
+This is useful in cases where the term label is already defined by another vocabulary</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.RdfTerm" class="doc doc-heading">
+            <code>RdfTerm</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>Wrapper for a term with a label and URI.
+This is needed because RO-Crate bans the use of full URIs in JSON-LD.</p>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.RdfType" class="doc doc-heading">
+            <code>RdfType</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>An entity within the RDF graph.</p>
+<p>This is a thin wrapper around a <code>rdflib</code> <code>Identifier</code> such as a <code>URIRef</code> or <code>BNode</code>, but which allows for static type checking.</p>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfType.as_object" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">as_object</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">ContextGraph</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="n">Subject</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Predicate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Object</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Converts this entity to an <code>Object</code> that can be used in triples.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.rdfs.RdfType.as_subject" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">as_subject</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">ContextGraph</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Predicate</span><span class="p">,</span> <span class="nb">object</span><span class="p">:</span> <span class="n">Object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Subject</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Converts this entity to a <code>Subject</code> that can be used in triples.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.Resource" class="doc doc-heading">
+            <code>Resource</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfClass (rdfcrate.rdftype.RdfClass)" href="#rdfcrate.vocabs.rdfs.RdfClass">RdfClass</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.comment" class="doc doc-heading">
+            <code>comment</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.rdfs.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Literal (rdfcrate.vocabs.rdfs.Literal)" href="#rdfcrate.vocabs.rdfs.Literal">Literal</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.domain" class="doc doc-heading">
+            <code>domain</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.rdfs.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Class (rdfcrate.vocabs.rdfs.Class)" href="#rdfcrate.vocabs.rdfs.Class">Class</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.isDefinedBy" class="doc doc-heading">
+            <code>isDefinedBy</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.rdfs.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Resource (rdfcrate.vocabs.rdfs.Resource)" href="#rdfcrate.vocabs.rdfs.Resource">Resource</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.label" class="doc doc-heading">
+            <code>label</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.rdfs.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Literal (rdfcrate.vocabs.rdfs.Literal)" href="#rdfcrate.vocabs.rdfs.Literal">Literal</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.member" class="doc doc-heading">
+            <code>member</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.rdfs.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Resource (rdfcrate.vocabs.rdfs.Resource)" href="#rdfcrate.vocabs.rdfs.Resource">Resource</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.range" class="doc doc-heading">
+            <code>range</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.rdfs.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Class (rdfcrate.vocabs.rdfs.Class)" href="#rdfcrate.vocabs.rdfs.Class">Class</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.seeAlso" class="doc doc-heading">
+            <code>seeAlso</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.rdfs.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Resource (rdfcrate.vocabs.rdfs.Resource)" href="#rdfcrate.vocabs.rdfs.Resource">Resource</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.subClassOf" class="doc doc-heading">
+            <code>subClassOf</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.rdfs.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Class (rdfcrate.vocabs.rdfs.Class)" href="#rdfcrate.vocabs.rdfs.Class">Class</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.rdfs.subPropertyOf" class="doc doc-heading">
+            <code>subPropertyOf</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.rdfs.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="RdfType (rdfcrate.rdftype.RdfType)" href="#rdfcrate.vocabs.rdfs.RdfType">RdfType</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

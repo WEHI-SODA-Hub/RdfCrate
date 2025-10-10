@@ -1,0 +1,6620 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../bioschemas/">
+      
+      
+        <link rel="next" href="../dc/">
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.21">
+    
+    
+      
+        <title>bioschemas_drafts - RdfCrate</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.2a3383ac.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rdfcrate.vocabs.bioschemas_drafts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="RdfCrate" class="md-header__button md-logo" aria-label="RdfCrate" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RdfCrate
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              bioschemas_drafts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="RdfCrate" class="md-nav__button md-logo" aria-label="RdfCrate" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    RdfCrate
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RdfCrate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../docs/motivation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Motivation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdfcrate
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdfcrate
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    rdfcrate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rdfterm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdfterm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_1_3" id="__nav_4_1_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>vocabs
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_1_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>vocabs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    vocabs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bioschemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>bioschemas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>bioschemas_drafts
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>bioschemas_drafts
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.BioChemEntity" class="md-nav__link">
+    <span class="md-ellipsis">
+      BioChemEntity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.BioChemStructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      BioChemStructure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.DNA" class="md-nav__link">
+    <span class="md-ellipsis">
+      DNA
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Enzyme" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enzyme
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Gene" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gene
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.LabProtocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      LabProtocol
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Phenotype" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phenotype
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Protein" class="md-nav__link">
+    <span class="md-ellipsis">
+      Protein
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RNA" class="md-nav__link">
+    <span class="md-ellipsis">
+      RNA
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfProperty
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RdfProperty">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty.adhoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      adhoc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty.reverse" class="md-nav__link">
+    <span class="md-ellipsis">
+      reverse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty.with_term_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      with_term_label
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfTerm" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfTerm
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sample
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.SequenceAnnotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      SequenceAnnotation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.SequenceMatchingModel" class="md-nav__link">
+    <span class="md-ellipsis">
+      SequenceMatchingModel
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.SequenceRange" class="md-nav__link">
+    <span class="md-ellipsis">
+      SequenceRange
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Study" class="md-nav__link">
+    <span class="md-ellipsis">
+      Study
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Taxon" class="md-nav__link">
+    <span class="md-ellipsis">
+      Taxon
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.TaxonName" class="md-nav__link">
+    <span class="md-ellipsis">
+      TaxonName
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.additionalProperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      additionalProperty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.alternateScientificName" class="md-nav__link">
+    <span class="md-ellipsis">
+      alternateScientificName
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.alternativeOf" class="md-nav__link">
+    <span class="md-ellipsis">
+      alternativeOf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.anatomicalLocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      anatomicalLocation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.associatedDisease" class="md-nav__link">
+    <span class="md-ellipsis">
+      associatedDisease
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.bioChemAssociation" class="md-nav__link">
+    <span class="md-ellipsis">
+      bioChemAssociation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.bioSample" class="md-nav__link">
+    <span class="md-ellipsis">
+      bioSample
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.biologicalType" class="md-nav__link">
+    <span class="md-ellipsis">
+      biologicalType
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.boundMolecule" class="md-nav__link">
+    <span class="md-ellipsis">
+      boundMolecule
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.childTaxon" class="md-nav__link">
+    <span class="md-ellipsis">
+      childTaxon
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.computationalTool" class="md-nav__link">
+    <span class="md-ellipsis">
+      computationalTool
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.creationMethod" class="md-nav__link">
+    <span class="md-ellipsis">
+      creationMethod
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.encodesBioChemEntity" class="md-nav__link">
+    <span class="md-ellipsis">
+      encodesBioChemEntity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.endDate" class="md-nav__link">
+    <span class="md-ellipsis">
+      endDate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.endUncertainty" class="md-nav__link">
+    <span class="md-ellipsis">
+      endUncertainty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.ethicalLegalSocial" class="md-nav__link">
+    <span class="md-ellipsis">
+      ethicalLegalSocial
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.expressedIn" class="md-nav__link">
+    <span class="md-ellipsis">
+      expressedIn
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasAssociatedBioChemEntity" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasAssociatedBioChemEntity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasBioPolymerSequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasBioPolymerSequence
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasCoenzyme" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasCoenzyme
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasCofactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasCofactor
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasKineticRate" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasKineticRate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasMolecularFunction" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasMolecularFunction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasSequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasSequence
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasSequenceAnnotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasSequenceAnnotation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasStatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasStatus
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.intendedUse" class="md-nav__link">
+    <span class="md-ellipsis">
+      intendedUse
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.isCodingRNA" class="md-nav__link">
+    <span class="md-ellipsis">
+      isCodingRNA
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.isInvolvedInBiologicalProcess" class="md-nav__link">
+    <span class="md-ellipsis">
+      isInvolvedInBiologicalProcess
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.isLocatedInSubcellularLocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      isLocatedInSubcellularLocation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.isMatchedBy" class="md-nav__link">
+    <span class="md-ellipsis">
+      isMatchedBy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.labEquipment" class="md-nav__link">
+    <span class="md-ellipsis">
+      labEquipment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.massResolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      massResolution
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.match" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.modelDataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      modelDataset
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.modelSignature" class="md-nav__link">
+    <span class="md-ellipsis">
+      modelSignature
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.optimalPH" class="md-nav__link">
+    <span class="md-ellipsis">
+      optimalPH
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.optimalTemperature" class="md-nav__link">
+    <span class="md-ellipsis">
+      optimalTemperature
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.parentTaxon" class="md-nav__link">
+    <span class="md-ellipsis">
+      parentTaxon
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.protocolAdvantage" class="md-nav__link">
+    <span class="md-ellipsis">
+      protocolAdvantage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.protocolApplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      protocolApplication
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.protocolLimitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      protocolLimitation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.protocolOutcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      protocolOutcome
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.rangeEnd" class="md-nav__link">
+    <span class="md-ellipsis">
+      rangeEnd
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.rangeStart" class="md-nav__link">
+    <span class="md-ellipsis">
+      rangeStart
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.reagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      reagent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.relatedStudy" class="md-nav__link">
+    <span class="md-ellipsis">
+      relatedStudy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      sample
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.scientificName" class="md-nav__link">
+    <span class="md-ellipsis">
+      scientificName
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.sequenceLocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      sequenceLocation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.sequenceOrientation" class="md-nav__link">
+    <span class="md-ellipsis">
+      sequenceOrientation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.sequenceValue" class="md-nav__link">
+    <span class="md-ellipsis">
+      sequenceValue
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.startDate" class="md-nav__link">
+    <span class="md-ellipsis">
+      startDate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.startUncertainty" class="md-nav__link">
+    <span class="md-ellipsis">
+      startUncertainty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.studyDomain" class="md-nav__link">
+    <span class="md-ellipsis">
+      studyDomain
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.studyLocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      studyLocation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.studyProcess" class="md-nav__link">
+    <span class="md-ellipsis">
+      studyProcess
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.studySubject" class="md-nav__link">
+    <span class="md-ellipsis">
+      studySubject
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.taxonRank" class="md-nav__link">
+    <span class="md-ellipsis">
+      taxonRank
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.taxonomicRange" class="md-nav__link">
+    <span class="md-ellipsis">
+      taxonomicRange
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.valueReference" class="md-nav__link">
+    <span class="md-ellipsis">
+      valueReference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>dc
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>geo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../owl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>owl
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pav/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>pav
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pcdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>pcdm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>prof
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prov/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>prov
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rdf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdf
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rdfs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rdfs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rocrate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>rocrate
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../schemaorg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>schemaorg
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.BioChemEntity" class="md-nav__link">
+    <span class="md-ellipsis">
+      BioChemEntity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.BioChemStructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      BioChemStructure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.DNA" class="md-nav__link">
+    <span class="md-ellipsis">
+      DNA
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Enzyme" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enzyme
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Gene" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gene
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.LabProtocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      LabProtocol
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Phenotype" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phenotype
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Protein" class="md-nav__link">
+    <span class="md-ellipsis">
+      Protein
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RNA" class="md-nav__link">
+    <span class="md-ellipsis">
+      RNA
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfProperty
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RdfProperty">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty.adhoc" class="md-nav__link">
+    <span class="md-ellipsis">
+      adhoc
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty.reverse" class="md-nav__link">
+    <span class="md-ellipsis">
+      reverse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty.with_term_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      with_term_label
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.RdfTerm" class="md-nav__link">
+    <span class="md-ellipsis">
+      RdfTerm
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sample
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.SequenceAnnotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      SequenceAnnotation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.SequenceMatchingModel" class="md-nav__link">
+    <span class="md-ellipsis">
+      SequenceMatchingModel
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.SequenceRange" class="md-nav__link">
+    <span class="md-ellipsis">
+      SequenceRange
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Study" class="md-nav__link">
+    <span class="md-ellipsis">
+      Study
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.Taxon" class="md-nav__link">
+    <span class="md-ellipsis">
+      Taxon
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.TaxonName" class="md-nav__link">
+    <span class="md-ellipsis">
+      TaxonName
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.additionalProperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      additionalProperty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.alternateScientificName" class="md-nav__link">
+    <span class="md-ellipsis">
+      alternateScientificName
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.alternativeOf" class="md-nav__link">
+    <span class="md-ellipsis">
+      alternativeOf
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.anatomicalLocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      anatomicalLocation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.associatedDisease" class="md-nav__link">
+    <span class="md-ellipsis">
+      associatedDisease
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.bioChemAssociation" class="md-nav__link">
+    <span class="md-ellipsis">
+      bioChemAssociation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.bioSample" class="md-nav__link">
+    <span class="md-ellipsis">
+      bioSample
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.biologicalType" class="md-nav__link">
+    <span class="md-ellipsis">
+      biologicalType
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.boundMolecule" class="md-nav__link">
+    <span class="md-ellipsis">
+      boundMolecule
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.childTaxon" class="md-nav__link">
+    <span class="md-ellipsis">
+      childTaxon
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.computationalTool" class="md-nav__link">
+    <span class="md-ellipsis">
+      computationalTool
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.creationMethod" class="md-nav__link">
+    <span class="md-ellipsis">
+      creationMethod
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.encodesBioChemEntity" class="md-nav__link">
+    <span class="md-ellipsis">
+      encodesBioChemEntity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.endDate" class="md-nav__link">
+    <span class="md-ellipsis">
+      endDate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.endUncertainty" class="md-nav__link">
+    <span class="md-ellipsis">
+      endUncertainty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.ethicalLegalSocial" class="md-nav__link">
+    <span class="md-ellipsis">
+      ethicalLegalSocial
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.expressedIn" class="md-nav__link">
+    <span class="md-ellipsis">
+      expressedIn
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasAssociatedBioChemEntity" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasAssociatedBioChemEntity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasBioPolymerSequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasBioPolymerSequence
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasCoenzyme" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasCoenzyme
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasCofactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasCofactor
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasKineticRate" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasKineticRate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasMolecularFunction" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasMolecularFunction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasSequence" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasSequence
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasSequenceAnnotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasSequenceAnnotation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.hasStatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      hasStatus
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.intendedUse" class="md-nav__link">
+    <span class="md-ellipsis">
+      intendedUse
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.isCodingRNA" class="md-nav__link">
+    <span class="md-ellipsis">
+      isCodingRNA
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.isInvolvedInBiologicalProcess" class="md-nav__link">
+    <span class="md-ellipsis">
+      isInvolvedInBiologicalProcess
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.isLocatedInSubcellularLocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      isLocatedInSubcellularLocation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.isMatchedBy" class="md-nav__link">
+    <span class="md-ellipsis">
+      isMatchedBy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.labEquipment" class="md-nav__link">
+    <span class="md-ellipsis">
+      labEquipment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.massResolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      massResolution
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.match" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.modelDataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      modelDataset
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.modelSignature" class="md-nav__link">
+    <span class="md-ellipsis">
+      modelSignature
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.optimalPH" class="md-nav__link">
+    <span class="md-ellipsis">
+      optimalPH
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.optimalTemperature" class="md-nav__link">
+    <span class="md-ellipsis">
+      optimalTemperature
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.parentTaxon" class="md-nav__link">
+    <span class="md-ellipsis">
+      parentTaxon
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.protocolAdvantage" class="md-nav__link">
+    <span class="md-ellipsis">
+      protocolAdvantage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.protocolApplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      protocolApplication
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.protocolLimitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      protocolLimitation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.protocolOutcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      protocolOutcome
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.rangeEnd" class="md-nav__link">
+    <span class="md-ellipsis">
+      rangeEnd
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.rangeStart" class="md-nav__link">
+    <span class="md-ellipsis">
+      rangeStart
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.reagent" class="md-nav__link">
+    <span class="md-ellipsis">
+      reagent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.relatedStudy" class="md-nav__link">
+    <span class="md-ellipsis">
+      relatedStudy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      sample
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.scientificName" class="md-nav__link">
+    <span class="md-ellipsis">
+      scientificName
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.sequenceLocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      sequenceLocation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.sequenceOrientation" class="md-nav__link">
+    <span class="md-ellipsis">
+      sequenceOrientation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.sequenceValue" class="md-nav__link">
+    <span class="md-ellipsis">
+      sequenceValue
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.startDate" class="md-nav__link">
+    <span class="md-ellipsis">
+      startDate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.startUncertainty" class="md-nav__link">
+    <span class="md-ellipsis">
+      startUncertainty
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.studyDomain" class="md-nav__link">
+    <span class="md-ellipsis">
+      studyDomain
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.studyLocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      studyLocation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.studyProcess" class="md-nav__link">
+    <span class="md-ellipsis">
+      studyProcess
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.studySubject" class="md-nav__link">
+    <span class="md-ellipsis">
+      studySubject
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.taxonRank" class="md-nav__link">
+    <span class="md-ellipsis">
+      taxonRank
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.taxonomicRange" class="md-nav__link">
+    <span class="md-ellipsis">
+      taxonomicRange
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rdfcrate.vocabs.bioschemas_drafts.valueReference" class="md-nav__link">
+    <span class="md-ellipsis">
+      valueReference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h1 id="rdfcrate.vocabs.bioschemas_drafts" class="doc doc-heading">
+            <code>rdfcrate.vocabs.bioschemas_drafts</code>
+
+
+</h1>
+
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.BioChemEntity" class="doc doc-heading">
+            <code>BioChemEntity</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.BioChemStructure" class="doc doc-heading">
+            <code>BioChemStructure</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.DNA" class="doc doc-heading">
+            <code>DNA</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.Enzyme" class="doc doc-heading">
+            <code>Enzyme</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.Gene" class="doc doc-heading">
+            <code>Gene</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.bioschemas_drafts.BioChemEntity)" href="#rdfcrate.vocabs.bioschemas_drafts.BioChemEntity">BioChemEntity</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.LabProtocol" class="doc doc-heading">
+            <code>LabProtocol</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="HowTo (rdfcrate.vocabs.schemaorg.HowTo)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.HowTo">HowTo</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.Phenotype" class="doc doc-heading">
+            <code>Phenotype</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Thing (rdfcrate.vocabs.schemaorg.Thing)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Thing">Thing</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.Protein" class="doc doc-heading">
+            <code>Protein</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.bioschemas_drafts.BioChemEntity)" href="#rdfcrate.vocabs.bioschemas_drafts.BioChemEntity">BioChemEntity</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.RNA" class="doc doc-heading">
+            <code>RNA</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.bioschemas.BioChemEntity)" href="../bioschemas/#rdfcrate.vocabs.bioschemas.BioChemEntity">BioChemEntity</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.RdfProperty" class="doc doc-heading">
+            <code>RdfProperty</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="rdfcrate.rdfprop.PropertyProtocol">PropertyProtocol</span></code>, <code><span title="typing.Generic">Generic</span>[<span title="rdfcrate.rdfprop.T">T</span>]</code></p>
+
+
+        <p>Represents the double of (predicate, object), with the subject being the class this is attached to.</p>
+<p>This is the normal way properties will be defined
+As a user, you will typically use this class by instantiating subclasses from the vocabs module and attaching them to entities.
+If you want to define custom vocabulary, you can first subclass this and then create instances of that subclass.</p>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.bioschemas_drafts.RdfProperty.adhoc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">adhoc</span><span class="p">(</span><span class="n">term</span><span class="p">:</span> <span class="n">RdfTerm</span><span class="p">,</span> <span class="nb">object</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RdfProperty</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Makes an ad-hoc property class from a term.</p>
+<p>If you want to use the property multiple times, you should define a subclass instead.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.bioschemas_drafts.RdfProperty.reverse" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">reverse</span><span class="p">(</span><span class="n">subject</span><span class="p">:</span> <span class="n">RdfType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReverseProperty</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Utility for when you want to make the current entity the <em>object</em> of a property, rather than the subject.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="rdfcrate.vocabs.bioschemas_drafts.RdfProperty.with_term_label" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">with_term_label</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">RdfProperty</span><span class="p">[</span><span class="n">T</span><span class="p">]]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Creates a new instance of this property with the given label.
+This is useful in cases where the term label is already defined by another vocabulary</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.RdfTerm" class="doc doc-heading">
+            <code>RdfTerm</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>Wrapper for a term with a label and URI.
+This is needed because RO-Crate bans the use of full URIs in JSON-LD.</p>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.Sample" class="doc doc-heading">
+            <code>Sample</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Thing (rdfcrate.vocabs.schemaorg.Thing)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Thing">Thing</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.SequenceAnnotation" class="doc doc-heading">
+            <code>SequenceAnnotation</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.bioschemas.BioChemEntity)" href="../bioschemas/#rdfcrate.vocabs.bioschemas.BioChemEntity">BioChemEntity</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.SequenceMatchingModel" class="doc doc-heading">
+            <code>SequenceMatchingModel</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="CreativeWork (rdfcrate.vocabs.schemaorg.CreativeWork)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.CreativeWork">CreativeWork</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.SequenceRange" class="doc doc-heading">
+            <code>SequenceRange</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.bioschemas.BioChemEntity)" href="../bioschemas/#rdfcrate.vocabs.bioschemas.BioChemEntity">BioChemEntity</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.Study" class="doc doc-heading">
+            <code>Study</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="CreativeWork (rdfcrate.vocabs.schemaorg.CreativeWork)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.CreativeWork">CreativeWork</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.Taxon" class="doc doc-heading">
+            <code>Taxon</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Thing (rdfcrate.vocabs.schemaorg.Thing)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Thing">Thing</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.TaxonName" class="doc doc-heading">
+            <code>TaxonName</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="CreativeWork (rdfcrate.vocabs.schemaorg.CreativeWork)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.CreativeWork">CreativeWork</a></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.additionalProperty" class="doc doc-heading">
+            <code>additionalProperty</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.alternateScientificName" class="doc doc-heading">
+            <code>alternateScientificName</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="TaxonName (rdfcrate.vocabs.bioschemas_drafts.TaxonName)" href="#rdfcrate.vocabs.bioschemas_drafts.TaxonName">TaxonName</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.alternativeOf" class="doc doc-heading">
+            <code>alternativeOf</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Gene (rdfcrate.vocabs.schemaorg.Gene)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Gene">Gene</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.anatomicalLocation" class="doc doc-heading">
+            <code>anatomicalLocation</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.associatedDisease" class="doc doc-heading">
+            <code>associatedDisease</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="MedicalCondition (rdfcrate.vocabs.schemaorg.MedicalCondition)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.MedicalCondition">MedicalCondition</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.bioChemAssociation" class="doc doc-heading">
+            <code>bioChemAssociation</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.bioSample" class="doc doc-heading">
+            <code>bioSample</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a> | <a class="autorefs autorefs-internal" title="BioSample (rdfcrate.vocabs.bioschemas.BioSample)" href="../bioschemas/#rdfcrate.vocabs.bioschemas.BioSample">BioSample</a> | <a class="autorefs autorefs-internal" title="Taxon (rdfcrate.vocabs.schemaorg.Taxon)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Taxon">Taxon</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.biologicalType" class="doc doc-heading">
+            <code>biologicalType</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.boundMolecule" class="doc doc-heading">
+            <code>boundMolecule</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a> | <a class="autorefs autorefs-internal" title="ChemicalSubstance (rdfcrate.vocabs.schemaorg.ChemicalSubstance)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.ChemicalSubstance">ChemicalSubstance</a> | <a class="autorefs autorefs-internal" title="MolecularEntity (rdfcrate.vocabs.schemaorg.MolecularEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.MolecularEntity">MolecularEntity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.childTaxon" class="doc doc-heading">
+            <code>childTaxon</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="Taxon (rdfcrate.vocabs.schemaorg.Taxon)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Taxon">Taxon</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.computationalTool" class="doc doc-heading">
+            <code>computationalTool</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="ComputationalWorkflow (rdfcrate.vocabs.bioschemas.ComputationalWorkflow)" href="../bioschemas/#rdfcrate.vocabs.bioschemas.ComputationalWorkflow">ComputationalWorkflow</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="SoftwareApplication (rdfcrate.vocabs.schemaorg.SoftwareApplication)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.SoftwareApplication">SoftwareApplication</a> | <a class="autorefs autorefs-internal" title="SoftwareSourceCode (rdfcrate.vocabs.schemaorg.SoftwareSourceCode)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.SoftwareSourceCode">SoftwareSourceCode</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.creationMethod" class="doc doc-heading">
+            <code>creationMethod</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.encodesBioChemEntity" class="doc doc-heading">
+            <code>encodesBioChemEntity</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.bioschemas.BioChemEntity)" href="../bioschemas/#rdfcrate.vocabs.bioschemas.BioChemEntity">BioChemEntity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.endDate" class="doc doc-heading">
+            <code>endDate</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Date (rdfcrate.vocabs.schemaorg.Date)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Date">Date</a> | <a class="autorefs autorefs-internal" title="DateTime (rdfcrate.vocabs.schemaorg.DateTime)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DateTime">DateTime</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.endUncertainty" class="doc doc-heading">
+            <code>endUncertainty</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.ethicalLegalSocial" class="doc doc-heading">
+            <code>ethicalLegalSocial</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.expressedIn" class="doc doc-heading">
+            <code>expressedIn</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a> | <a class="autorefs autorefs-internal" title="AnatomicalStructure (rdfcrate.vocabs.schemaorg.AnatomicalStructure)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.AnatomicalStructure">AnatomicalStructure</a> | <a class="autorefs autorefs-internal" title="AnatomicalSystem (rdfcrate.vocabs.schemaorg.AnatomicalSystem)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.AnatomicalSystem">AnatomicalSystem</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.hasAssociatedBioChemEntity" class="doc doc-heading">
+            <code>hasAssociatedBioChemEntity</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="RNA (rdfcrate.vocabs.bioschemas_drafts.RNA)" href="#rdfcrate.vocabs.bioschemas_drafts.RNA">RNA</a> | <a class="autorefs autorefs-internal" title="Protein (rdfcrate.vocabs.schemaorg.Protein)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Protein">Protein</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.hasBioPolymerSequence" class="doc doc-heading">
+            <code>hasBioPolymerSequence</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.hasCoenzyme" class="doc doc-heading">
+            <code>hasCoenzyme</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.hasCofactor" class="doc doc-heading">
+            <code>hasCofactor</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="ChemicalSubstance (rdfcrate.vocabs.schemaorg.ChemicalSubstance)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.ChemicalSubstance">ChemicalSubstance</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.hasKineticRate" class="doc doc-heading">
+            <code>hasKineticRate</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.hasMolecularFunction" class="doc doc-heading">
+            <code>hasMolecularFunction</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.hasSequence" class="doc doc-heading">
+            <code>hasSequence</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.hasSequenceAnnotation" class="doc doc-heading">
+            <code>hasSequenceAnnotation</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="SequenceAnnotation (rdfcrate.vocabs.bioschemas_drafts.SequenceAnnotation)" href="#rdfcrate.vocabs.bioschemas_drafts.SequenceAnnotation">SequenceAnnotation</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.hasStatus" class="doc doc-heading">
+            <code>hasStatus</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.intendedUse" class="doc doc-heading">
+            <code>intendedUse</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.isCodingRNA" class="doc doc-heading">
+            <code>isCodingRNA</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Boolean (rdfcrate.vocabs.schemaorg.Boolean)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Boolean">Boolean</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.isInvolvedInBiologicalProcess" class="doc doc-heading">
+            <code>isInvolvedInBiologicalProcess</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.isLocatedInSubcellularLocation" class="doc doc-heading">
+            <code>isLocatedInSubcellularLocation</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.isMatchedBy" class="doc doc-heading">
+            <code>isMatchedBy</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="SequenceMatchingModel (rdfcrate.vocabs.bioschemas_drafts.SequenceMatchingModel)" href="#rdfcrate.vocabs.bioschemas_drafts.SequenceMatchingModel">SequenceMatchingModel</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.labEquipment" class="doc doc-heading">
+            <code>labEquipment</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.massResolution" class="doc doc-heading">
+            <code>massResolution</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Quantity (rdfcrate.vocabs.schemaorg.Quantity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Quantity">Quantity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.match" class="doc doc-heading">
+            <code>match</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.modelDataset" class="doc doc-heading">
+            <code>modelDataset</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Dataset (rdfcrate.vocabs.schemaorg.Dataset)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Dataset">Dataset</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.modelSignature" class="doc doc-heading">
+            <code>modelSignature</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.optimalPH" class="doc doc-heading">
+            <code>optimalPH</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Number (rdfcrate.vocabs.schemaorg.Number)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Number">Number</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.optimalTemperature" class="doc doc-heading">
+            <code>optimalTemperature</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Quantity (rdfcrate.vocabs.schemaorg.Quantity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Quantity">Quantity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.parentTaxon" class="doc doc-heading">
+            <code>parentTaxon</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="Taxon (rdfcrate.vocabs.schemaorg.Taxon)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Taxon">Taxon</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.protocolAdvantage" class="doc doc-heading">
+            <code>protocolAdvantage</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="CreativeWork (rdfcrate.vocabs.schemaorg.CreativeWork)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.CreativeWork">CreativeWork</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.protocolApplication" class="doc doc-heading">
+            <code>protocolApplication</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="CreativeWork (rdfcrate.vocabs.schemaorg.CreativeWork)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.CreativeWork">CreativeWork</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.protocolLimitation" class="doc doc-heading">
+            <code>protocolLimitation</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="CreativeWork (rdfcrate.vocabs.schemaorg.CreativeWork)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.CreativeWork">CreativeWork</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.protocolOutcome" class="doc doc-heading">
+            <code>protocolOutcome</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="CreativeWork (rdfcrate.vocabs.schemaorg.CreativeWork)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.CreativeWork">CreativeWork</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.rangeEnd" class="doc doc-heading">
+            <code>rangeEnd</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Integer (rdfcrate.vocabs.schemaorg.Integer)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Integer">Integer</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.rangeStart" class="doc doc-heading">
+            <code>rangeStart</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Integer (rdfcrate.vocabs.schemaorg.Integer)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Integer">Integer</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.reagent" class="doc doc-heading">
+            <code>reagent</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="ChemicalSubstance (rdfcrate.vocabs.schemaorg.ChemicalSubstance)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.ChemicalSubstance">ChemicalSubstance</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a> | <a class="autorefs autorefs-internal" title="MolecularEntity (rdfcrate.vocabs.schemaorg.MolecularEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.MolecularEntity">MolecularEntity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.relatedStudy" class="doc doc-heading">
+            <code>relatedStudy</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Study (rdfcrate.vocabs.bioschemas_drafts.Study)" href="#rdfcrate.vocabs.bioschemas_drafts.Study">Study</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.sample" class="doc doc-heading">
+            <code>sample</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="Thing (rdfcrate.vocabs.schemaorg.Thing)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Thing">Thing</a> | <a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.scientificName" class="doc doc-heading">
+            <code>scientificName</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="TaxonName (rdfcrate.vocabs.bioschemas_drafts.TaxonName)" href="#rdfcrate.vocabs.bioschemas_drafts.TaxonName">TaxonName</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.sequenceLocation" class="doc doc-heading">
+            <code>sequenceLocation</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="SequenceRange (rdfcrate.vocabs.bioschemas_drafts.SequenceRange)" href="#rdfcrate.vocabs.bioschemas_drafts.SequenceRange">SequenceRange</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.sequenceOrientation" class="doc doc-heading">
+            <code>sequenceOrientation</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Integer (rdfcrate.vocabs.schemaorg.Integer)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Integer">Integer</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.sequenceValue" class="doc doc-heading">
+            <code>sequenceValue</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.startDate" class="doc doc-heading">
+            <code>startDate</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Date (rdfcrate.vocabs.schemaorg.Date)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Date">Date</a> | <a class="autorefs autorefs-internal" title="DateTime (rdfcrate.vocabs.schemaorg.DateTime)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DateTime">DateTime</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.startUncertainty" class="doc doc-heading">
+            <code>startUncertainty</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.studyDomain" class="doc doc-heading">
+            <code>studyDomain</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.studyLocation" class="doc doc-heading">
+            <code>studyLocation</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="AdministrativeArea (rdfcrate.vocabs.schemaorg.AdministrativeArea)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.AdministrativeArea">AdministrativeArea</a> | <a class="autorefs autorefs-internal" title="Place (rdfcrate.vocabs.schemaorg.Place)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Place">Place</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.studyProcess" class="doc doc-heading">
+            <code>studyProcess</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.studySubject" class="doc doc-heading">
+            <code>studySubject</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="MedicalEntity (rdfcrate.vocabs.schemaorg.MedicalEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.MedicalEntity">MedicalEntity</a> | <a class="autorefs autorefs-internal" title="BioChemEntity (rdfcrate.vocabs.schemaorg.BioChemEntity)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.BioChemEntity">BioChemEntity</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.taxonRank" class="doc doc-heading">
+            <code>taxonRank</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.taxonomicRange" class="doc doc-heading">
+            <code>taxonomicRange</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a> | <a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="Taxon (rdfcrate.vocabs.schemaorg.Taxon)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Taxon">Taxon</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="rdfcrate.vocabs.bioschemas_drafts.valueReference" class="doc doc-heading">
+            <code>valueReference</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="RdfProperty
+
+
+  
+      dataclass
+   (rdfcrate.rdfprop.RdfProperty)" href="#rdfcrate.vocabs.bioschemas_drafts.RdfProperty">RdfProperty</a>[<a class="autorefs autorefs-internal" title="Text (rdfcrate.vocabs.schemaorg.Text)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Text">Text</a> | <a class="autorefs autorefs-internal" title="QuantitativeValue (rdfcrate.vocabs.schemaorg.QuantitativeValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.QuantitativeValue">QuantitativeValue</a> | <a class="autorefs autorefs-internal" title="Enumeration (rdfcrate.vocabs.schemaorg.Enumeration)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.Enumeration">Enumeration</a> | <a class="autorefs autorefs-internal" title="QualitativeValue (rdfcrate.vocabs.schemaorg.QualitativeValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.QualitativeValue">QualitativeValue</a> | <a class="autorefs autorefs-internal" title="StructuredValue (rdfcrate.vocabs.schemaorg.StructuredValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.StructuredValue">StructuredValue</a> | <a class="autorefs autorefs-internal" title="PropertyValue (rdfcrate.vocabs.schemaorg.PropertyValue)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.PropertyValue">PropertyValue</a> | <a class="autorefs autorefs-internal" title="DefinedTerm (rdfcrate.vocabs.schemaorg.DefinedTerm)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.DefinedTerm">DefinedTerm</a> | <a class="autorefs autorefs-internal" title="URL (rdfcrate.vocabs.schemaorg.URL)" href="../schemaorg/#rdfcrate.vocabs.schemaorg.URL">URL</a>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

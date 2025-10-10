@@ -2,8 +2,61 @@
   "@context": "https://w3id.org/ro/crate/1.1/context",
   "@graph": [
     {
-      "@id": "ro-crate-metadata.json",
+      "@id": "https://orcid.org/0000-0002-8965-2595",
+      "@type": "Person",
+      "affiliation": {
+        "@id": "https://github.com/WEHI-ResearchComputing"
+      },
+      "name": "Michael"
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "author": {
+        "@id": "https://orcid.org/0000-0002-8965-2595"
+      },
+      "datePublished": "2025-09-02T13:08:19.144604",
+      "description": "Crate for validating RdfCrate",
+      "hasPart": [
+        {
+          "@id": "text.txt"
+        },
+        {
+          "@id": "binary.bin"
+        }
+      ],
+      "license": {
+        "@id": "https://opensource.org/license/mit"
+      },
+      "name": "Test Crate",
+      "publisher": {
+        "@id": "https://github.com/WEHI-ResearchComputing"
+      },
+      "version": "1.0"
+    },
+    {
+      "@id": "subdir/more_text.txt",
       "@type": "File",
+      "encodingFormat": "text/plain"
+    },
+    {
+      "@id": "binary.bin",
+      "@type": "File",
+      "encodingFormat": "application/octet-stream"
+    },
+    {
+      "@id": "https://opensource.org/license/mit",
+      "@type": "CreativeWork",
+      "name": "MIT License"
+    },
+    {
+      "@id": "text.txt",
+      "@type": "File",
+      "encodingFormat": "text/plain"
+    },
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
       "about": {
         "@id": "./"
       },
@@ -12,12 +65,17 @@
       }
     },
     {
-      "@id": "text.txt",
-      "@type": "File"
+      "@id": "https://github.com/WEHI-ResearchComputing",
+      "@type": "Organization",
+      "name": "WEHI Research Computing Platform",
+      "url": "https://github.com/WEHI-ResearchComputing"
     },
     {
-      "@id": ".",
-      "@type": "Dataset"
+      "@id": "subdir/",
+      "@type": "Dataset",
+      "hasPart": {
+        "@id": "subdir/more_text.txt"
+      }
     }
   ]
 }

@@ -1,13 +1,64 @@
 from pathlib import Path
-from rdfcrate import uris, AttachedCrate, spec_version
-from rdflib import RDF, Literal, URIRef, Graph
+from rdfcrate import AttachedCrate
+from rdflib import Literal, Graph, URIRef
+from rdfcrate.vocabs import dc, sdo, roc, rdf
 import json
 from datetime import datetime
+import tempfile
+import pytest
+from rdfcrate.test_helpers import patch_rocrate_context
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
+MIT = URIRef("https://opensource.org/license/mit")
+ME = URIRef("https://orcid.org/0000-0002-8965-2595")
+WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
+
+BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
+
+@pytest.fixture()
+def empty_crate():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        yield AttachedCrate(path=tmpdir)
+
+@pytest.fixture(scope="function", autouse=True)
+def rocrate_context():
+    with patch_rocrate_context():
+        yield
+
+
+def make_test_crate(recursive: bool = False):
+    crate = AttachedCrate(TEST_CRATE)
+
+    crate.add_root_entity(
+        sdo.name(sdo.Text("Test Crate")),
+        sdo.description(sdo.Text("Crate for validating RdfCrate")),
+        sdo.datePublished(sdo.DateTime(datetime.now().isoformat())),
+        sdo.license(
+            crate.add_entity(sdo.CreativeWork(MIT), sdo.name(sdo.Text("MIT License")))
+        ),
+        sdo.version(sdo.Text("1.0")),
+        sdo.publisher(
+            wehi := crate.add_entity(
+                sdo.Organization(WEHI_RCP),
+                sdo.name(sdo.Text("WEHI Research Computing Platform")),
+                sdo.url(sdo.URL(WEHI_RCP)),
+            )
+        ),
+        sdo.author(
+            crate.add_entity(
+                sdo.Person(ME), sdo.name(sdo.Text("Michael")), sdo.affiliation(wehi)
+            )
+        ),
+        recursive=recursive,
+    )
+    crate.add_metadata_entity()
+    return crate
+
+
 def test_spec_conformant():
-    crate = AttachedCrate(path=TEST_CRATE, recursive_init=False, version=spec_version.ROCrate1_1)
+    crate = make_test_crate(recursive=True)
+
     # Normally checking JSON-LD using JSON is a bad idea, but RO-Crate mandates a specific structure that
     # goes beyond standard JSON-LD
     crate_json = json.loads(crate.compile())
@@ -34,25 +85,68 @@ def test_spec_conformant():
     assert found_metadata
     assert found_root
 
+
 def test_single_file():
-    crate = AttachedCrate(path=TEST_CRATE)
+    crate = make_test_crate(recursive=False)
     crate.register_file("text.txt")
 
     # Check that the graph has the expected structure
-    assert set(crate.graph.subjects()) == {URIRef("./"), URIRef("ro-crate-metadata.json"), URIRef("text.txt")}
-    assert set(crate.graph.predicates()) >= {RDF.type, uris.about, uris.conformsTo}
-    assert set(crate.graph.objects()) >= {uris.File, uris.Dataset}
+    assert set(crate.graph.subjects()) == {
+        URIRef("./"),
+        URIRef("ro-crate-metadata.json"),
+        URIRef("text.txt"),
+        *BASE_SUBJECTS,
+    }
+    assert set(crate.graph.predicates()) >= {
+        rdf.type.term.uri,
+        sdo.about.term.uri,
+        dc.conformsTo.term.uri,
+    }
+    assert set(crate.graph.objects()) >= {roc.File.term.uri, sdo.Dataset.term.uri}
+
+    crate.validate()
 
     # Check that we can round-trip the graph
     Graph().parse(data=crate.compile(), format="json-ld")
 
+
 def test_recursive_add():
-    crate = AttachedCrate(path=TEST_CRATE, recursive_init=True)
-    assert set(crate.graph.subjects()) == {URIRef("./"), URIRef("ro-crate-metadata.json"), URIRef("text.txt"), URIRef("binary.bin"), URIRef("subdir/"), URIRef("subdir/more_text.txt")}, "All files and directories should be in the crate"
-    assert set(crate.graph.objects(URIRef("./"), uris.hasPart)) == {URIRef("ro-crate-metadata.json"), URIRef("text.txt"), URIRef("binary.bin"), URIRef("subdir/")}, "Root should have all files and directories as parts"
+    crate = make_test_crate(recursive=True)
+    assert set(crate.graph.subjects()) == {
+        URIRef("./"),
+        URIRef("ro-crate-metadata.json"),
+        URIRef("text.txt"),
+        URIRef("binary.bin"),
+        URIRef("subdir/"),
+        URIRef("subdir/more_text.txt"),
+        *BASE_SUBJECTS,
+    }, "All files and directories should be in the crate"
+    assert crate.graph.value(
+        predicate=sdo.hasPart.term.uri, object=URIRef("subdir/more_text.txt")
+    ) == URIRef("subdir/"), (
+        "Recursive add should link the immediate child and parent via hasPart"
+    )
+    crate.validate()
+
 
 def test_mime_type():
-    crate = AttachedCrate(path=TEST_CRATE, recursive_init=True)
-    
-    assert crate.graph.value(URIRef("text.txt"), uris.encodingFormat) == Literal("text/plain")
-    assert crate.graph.value(URIRef("ro-crate-metadata.json"), uris.encodingFormat) == Literal("application/json")
+    crate = make_test_crate(recursive=True)
+
+    assert crate.graph.value(
+        URIRef("text.txt"), sdo.encodingFormat.term.uri
+    ) == Literal("text/plain")
+
+
+
+def test_spaces_in_path(empty_crate: AttachedCrate):
+    """
+    Test that we can register a file with spaces in the path.
+    """
+    path = empty_crate.root / "file with spaces.txt"
+    path.touch()
+    empty_crate.register_file(path)
+    assert (
+        URIRef("file%20with%20spaces.txt"),
+        rdf.type.term.uri,
+        roc.File.term.uri,
+    ) in empty_crate.graph

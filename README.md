@@ -1,6 +1,5 @@
-
-
 # RdfCrate
+
 
 `rdfcrate` is a Python package for working with RO-Crates which treats
 RO-Crates as RDF graphs rather than JSON objects.
@@ -50,7 +49,7 @@ print(crate.compile())
           "@type": "Dataset",
           "datePublished": {
             "@type": "http://www.w3.org/2001/XMLSchema#date",
-            "@value": "2025-04-24"
+            "@value": "2025-10-10"
           },
           "description": "Photo gallery of iconic bridges in Melbourne",
           "hasPart": {

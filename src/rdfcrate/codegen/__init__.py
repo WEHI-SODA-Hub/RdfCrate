@@ -314,6 +314,7 @@ class CodegenState:
                         ast.Subscript(
                             value=ast.Name("RdfProperty", ctx=ast.Load()),
                             slice=self.property_range(prop),
+                            ctx=ast.Load()
                         )
                     ],
                     keywords=[],
@@ -522,6 +523,7 @@ class CodegenState:
                             ast.Subscript(
                                 value=ast.Name("RdfProperty", ctx=ast.Load()),
                                 slice=self.property_range(URIRef(uri)),
+                                ctx=ast.Load()
                             )
                         ],
                         keywords=[],

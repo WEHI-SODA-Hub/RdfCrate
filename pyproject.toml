@@ -26,7 +26,7 @@ nav = [
 
 [project.scripts]
 rdfcrate-codegen = "rdfcrate.codegen.__main__:app"
-regenerate-cassettes = "rdfcrate.test_helpers:generate_cassettes"
+regenerate-cassettes = "rdfcrate.vcr:generate_cassettes"
 
 [build-system]
 requires = ["hatchling"]

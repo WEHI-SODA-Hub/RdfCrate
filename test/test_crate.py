@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 import tempfile
 import pytest
-from rdfcrate.test_helpers import patch_rocrate_context
+from rdfcrate.vcr import patch_rocrate_context
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 

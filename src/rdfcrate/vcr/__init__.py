@@ -1,6 +1,7 @@
 import contextlib
+import json
 from pathlib import Path
-from unittest.mock import patch
+from typing import Any
 from urllib.request import urlopen
 import vcr
 import yaml
@@ -8,14 +9,45 @@ import yaml
 HERE = Path(__file__).parent
 CONTEXT_CASSETTE = HERE / "context.yml"
 
+class PrettyYamlSerializer:
+    @staticmethod
+    def serialize(cassette_dict: dict[str, Any]):
+        # Parse the body if it's JSON
+        for interaction in cassette_dict["interactions"]:
+            body = interaction["response"]["body"]
+            # Content-Type is a list
+            for header in interaction["response"]["headers"]["Content-Type"]:
+                if "json" in header:
+                    interaction["response"]["body"] = json.loads(body["string"])
+                    break
+
+        return yaml.dump(cassette_dict, default_flow_style=False)
+
+    @staticmethod
+    def deserialize(cassette_str: str):
+        parsed = yaml.load(cassette_str, Loader=yaml.SafeLoader)
+
+        # Deserialize the body if it's JSON
+        for interaction in parsed["interactions"]:
+            body = interaction["response"]["body"]
+            content_type = interaction["response"]["headers"]["Content-Type"]
+            if "json" in content_type:
+                interaction["response"]["body"] = { "string": json.dumps(body) }
+
+        return parsed
+
+vcr = vcr.VCR()
+vcr.register_serializer("prettyyaml", PrettyYamlSerializer)
+
 def generate_cassettes():
     """
     To be used as a CLI script, via `uv run regenerate-cassettes`.
     """
     # Record cassettes, bypassing the W3ID proxy
-    with vcr.use_cassette(CONTEXT_CASSETTE, record_mode="always"):
+    with vcr.use_cassette(CONTEXT_CASSETTE, record_mode="always", serializer="prettyyaml"):
         urlopen("https://www.researchobject.org/ro-crate/specification/1.1/context.jsonld")
         urlopen("https://www.researchobject.org/ro-crate/specification/1.2/context.jsonld")
+        urlopen("https://www.researchobject.org/ro-crate/specification/1.3/context.jsonld")
 
     # Rewrite the URLs to use the W3ID URIs
     with CONTEXT_CASSETTE.open("r") as f:
@@ -31,11 +63,8 @@ def generate_cassettes():
 @contextlib.contextmanager
 def patch_rocrate_context():
     """
-    Patches the `urlopen` function to return a local context file instead of fetching it from the network.
+    Patches HTTP requests to return a local context file instead of fetching it from the network.
     This is useful for tests that require the RO-Crate context without making network requests.
-
-    Params:
-        import_path: The import path of the `urlopen` function to patch. Default is "rdflib._networking.urlopen".
     """
     # Intercept any HTTP requests to the RO-Crate context and return a local file instead
     with (
@@ -45,7 +74,5 @@ def patch_rocrate_context():
             match_on=['path'],
             allow_playback_repeats=True
         ),
-        # Also force the validator to not cache requests, see https://github.com/kevin1024/vcrpy/issues/881
-        patch("rocrate_validator.constants.DEFAULT_HTTP_CACHE_TIMEOUT", 0)
     ):
         yield

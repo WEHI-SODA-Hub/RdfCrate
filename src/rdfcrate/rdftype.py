@@ -5,12 +5,13 @@ from typing import (
     Annotated,
     Any,
     ClassVar,
+    Self,
     TypeVar,
     cast,
 )
 
 from rdflib import RDF, IdentifiedNode, Literal, URIRef
-from typing_extensions import Doc, Self
+from typing_extensions import Doc
 
 from rdfcrate.types import Identifier, Object, Predicate, Subject
 

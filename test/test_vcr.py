@@ -6,17 +6,15 @@ from datetime import datetime
 from unittest.mock import patch
 
 from rdfcrate import AttachedCrate
-from rdfcrate.vcr import PrettyYamlSerializer, patch_rocrate_context
+from rdfcrate.vcr import patch_rocrate_context
 from rdfcrate.vocabs import sdo
 
 
 def test_patch_rocrate_context_reads_cassette_from_disk(tmp_path):
     """
-    When `patch_rocrate_context` is used, `AttachedCrate.serialize` should call `PrettyYamlSerializer.deserialize`
+    When `patch_rocrate_context` is used, `urlopen` should not be called, and the crate should be able to be compiled without network access.
     """
-    with patch.object(
-        PrettyYamlSerializer, "deserialize", wraps=PrettyYamlSerializer.deserialize
-    ) as mock_deserialize:
+    with patch("urllib.request.urlopen") as mock_urlopen:
         with patch_rocrate_context():
             crate = AttachedCrate(tmp_path)
             crate.add_root_entity(
@@ -32,4 +30,4 @@ def test_patch_rocrate_context_reads_cassette_from_disk(tmp_path):
             )
             crate.compile()
 
-    mock_deserialize.assert_called_once()
+        mock_urlopen.assert_not_called()

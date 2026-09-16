@@ -1,15 +1,17 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import ClassVar, Generic, TypeVar, TYPE_CHECKING
-from typing_extensions import Protocol
+from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar
+
 from rdflib import IdentifiedNode
+from typing_extensions import Protocol
 
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.types import Identifier
 
 if TYPE_CHECKING:
-    from rdfcrate.rdftype import RdfType
     from rdfcrate.context_graph import ContextGraph
+    from rdfcrate.rdftype import RdfType
 
 T = TypeVar("T", bound="RdfType", covariant=True)
 

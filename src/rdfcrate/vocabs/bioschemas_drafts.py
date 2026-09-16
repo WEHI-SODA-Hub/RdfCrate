@@ -1,9 +1,8 @@
 from __future__ import annotations
+
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.vocabs import schemaorg
-from rdfcrate.vocabs import bioschemas
-from rdfcrate.vocabs import bioschemas_drafts
+from rdfcrate.vocabs import bioschemas, bioschemas_drafts, schemaorg
 
 
 class LabProtocol(schemaorg.HowTo):

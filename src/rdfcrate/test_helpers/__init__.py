@@ -2,6 +2,7 @@ import contextlib
 from pathlib import Path
 from unittest.mock import patch
 from urllib.request import urlopen
+
 import vcr
 import yaml
 

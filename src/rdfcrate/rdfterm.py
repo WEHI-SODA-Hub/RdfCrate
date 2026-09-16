@@ -1,5 +1,6 @@
+from urllib.parse import parse_qsl, urlparse
+
 from rdflib import URIRef
-from urllib.parse import urlparse, parse_qsl
 
 
 def guess_term_from_uri(uri: str) -> str:

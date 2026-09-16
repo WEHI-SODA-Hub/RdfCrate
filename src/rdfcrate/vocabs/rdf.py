@@ -1,9 +1,9 @@
 from __future__ import annotations
+
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.vocabs import rdfs
-from rdfcrate.vocabs import rdf
 from rdfcrate.rdftype import RdfType
+from rdfcrate.vocabs import rdf, rdfs
 
 
 class Bag(rdfs.Container):

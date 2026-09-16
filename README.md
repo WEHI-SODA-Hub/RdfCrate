@@ -28,15 +28,12 @@ from rdfcrate import AttachedCrate, sdo
 from datetime import date
 
 crate = AttachedCrate("crate/")
-crate.register_file(
-    "monty.jpg", 
-    sdo.name(sdo.Text("Montague Street Bridge"))
-)
+crate.register_file("monty.jpg", sdo.name(sdo.Text("Montague Street Bridge")))
 crate.add_root_entity(
     sdo.name(sdo.Text("Melbourne Bridges")),
     sdo.description(sdo.Text("Photo gallery of iconic bridges in Melbourne")),
     sdo.datePublished(sdo.Date(date.today())),
-    sdo.license(sdo.URL("https://creativecommons.org/licenses/by/4.0/"))
+    sdo.license(sdo.URL("https://creativecommons.org/licenses/by/4.0/")),
 )
 print(crate.compile())
 ```

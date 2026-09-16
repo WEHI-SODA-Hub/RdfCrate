@@ -14,7 +14,7 @@ However, strictly following this design by generating actual Pydantic classes do
 
 Firstly, properties are defined as classes themselves, so this:
 ```python
-sdo.name(sdo.Text("Michael")),
+(sdo.name(sdo.Text("Michael")),)
 ```
 Is equivalent to
 ```json
@@ -30,10 +30,7 @@ While Python classes are generated for each RDF class, they do not define requir
 Instead, you pass a list of these properties to construct a new entity:
 ```python
 crate.add_entity(
-    "#me",
-    sdo.Person,
-    sdo.name(sdo.Text("Michael")),
-    sdo.affiliation(wehi)
+    "#me", sdo.Person, sdo.name(sdo.Text("Michael")), sdo.affiliation(wehi)
 )
 ```
 The return value from `crate.add_entity` is just an ID (an IRI), not an actual object with properties.

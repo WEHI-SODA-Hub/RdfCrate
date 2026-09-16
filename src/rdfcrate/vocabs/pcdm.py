@@ -1,9 +1,9 @@
 from __future__ import annotations
-from rdfcrate.rdftype import RdfClass
+
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
+from rdfcrate.rdftype import RdfClass, RdfType
 from rdfcrate.vocabs import pcdm
-from rdfcrate.rdftype import RdfType
 
 
 class Collection(RdfClass):

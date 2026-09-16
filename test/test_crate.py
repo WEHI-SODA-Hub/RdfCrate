@@ -4,10 +4,10 @@ from datetime import datetime
 from pathlib import Path
 
 import pytest
-from rdfcrate.vcr import patch_rocrate_context
 from rdflib import Graph, Literal, URIRef
 
 from rdfcrate import AttachedCrate
+from rdfcrate.vcr import patch_rocrate_context
 from rdfcrate.vocabs import dc, rdf, roc, sdo
 
 TEST_CRATE = Path(__file__).parent / "test_crate"

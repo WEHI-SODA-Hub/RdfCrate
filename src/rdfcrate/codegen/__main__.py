@@ -1,9 +1,11 @@
 import ast
 from pathlib import Path
-import typer
 from typing import Annotated
-from rdfcrate.codegen import CodegenState, core_vocab, generate_modules
+
+import typer
 from rdflib.plugins.shared.jsonld.context import Context
+
+from rdfcrate.codegen import CodegenState, core_vocab, generate_modules
 
 app = typer.Typer()
 

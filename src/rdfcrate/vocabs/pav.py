@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.rdftype import RdfType

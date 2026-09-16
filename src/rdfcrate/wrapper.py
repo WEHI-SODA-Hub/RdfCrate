@@ -1,23 +1,27 @@
 from __future__ import annotations
+
+import mimetypes
+import warnings
+from abc import ABCMeta, abstractmethod
+from collections.abc import Iterable
+from dataclasses import dataclass
+from os import stat
 from pathlib import Path
-from typing import Annotated, Any, Iterable, TypeVar, TYPE_CHECKING
-from typing_extensions import Doc, Unpack
+from typing import TYPE_CHECKING, Annotated, Any, TypeVar
+from urllib.parse import quote
+
 from rdflib import URIRef
-from rdfcrate.context_graph import ContextGraph, EntityArgs, ContextGraphKwargs
+from rdflib.plugins.shared.jsonld.context import Context
+from typing_extensions import Doc, Unpack
+
+from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, EntityArgs
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdftype import RdfClass
-from rdfcrate.spec_version import SpecVersion, ROCrate1_1
-from dataclasses import dataclass
-import mimetypes
-from os import stat
-from abc import ABCMeta, abstractmethod
-from rdflib.plugins.shared.jsonld.context import Context
-from rdfcrate.vocabs import dc, schemaorg, rocrate
-from urllib.parse import quote
-import warnings
+from rdfcrate.spec_version import ROCrate1_1, SpecVersion
+from rdfcrate.vocabs import dc, rocrate, schemaorg
 
 if TYPE_CHECKING:
-    from rocrate_validator.models import Severity, CheckIssue
+    from rocrate_validator.models import CheckIssue, Severity
 
 EntityType = Annotated[
     type[RdfClass],
@@ -365,7 +369,7 @@ class AttachedCrate(RoCrate):
         Returns a list of issues found in the RO-Crate using the `rocrate-validator` package.
         """
         try:
-            from rocrate_validator import services, models
+            from rocrate_validator import models, services
             from rocrate_validator.utils import URI
         except ImportError:
             raise ImportError(

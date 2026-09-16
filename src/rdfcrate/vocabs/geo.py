@@ -1,10 +1,9 @@
 from __future__ import annotations
-from rdfcrate.rdftype import RdfClass
+
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.vocabs import rdfs
-from rdfcrate.vocabs import geo
-from rdfcrate.rdftype import RdfType
+from rdfcrate.rdftype import RdfClass, RdfType
+from rdfcrate.vocabs import geo, rdfs
 
 
 class SpatialObjectCollection(rdfs.Container):

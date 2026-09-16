@@ -3,7 +3,7 @@ Literal subclasses for specific data types.
 These behave identically at runtime, but allow static typing
 """
 
-from rdflib import Literal, XSD
+from rdflib import XSD, Literal
 
 
 class IntLiteral(Literal):

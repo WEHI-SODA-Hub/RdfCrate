@@ -1,12 +1,14 @@
-from pathlib import Path
-from rdfcrate import AttachedCrate
-from rdflib import Literal, Graph, URIRef
-from rdfcrate.vocabs import dc, sdo, roc, rdf
 import json
-from datetime import datetime
 import tempfile
+from datetime import datetime
+from pathlib import Path
+
 import pytest
 from rdfcrate.vcr import patch_rocrate_context
+from rdflib import Graph, Literal, URIRef
+
+from rdfcrate import AttachedCrate
+from rdfcrate.vocabs import dc, rdf, roc, sdo
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
@@ -16,10 +18,12 @@ WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
 
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
 
+
 @pytest.fixture()
 def empty_crate():
     with tempfile.TemporaryDirectory() as tmpdir:
         yield AttachedCrate(path=tmpdir)
+
 
 @pytest.fixture(scope="function", autouse=True)
 def rocrate_context():
@@ -135,7 +139,6 @@ def test_mime_type():
     assert crate.graph.value(
         URIRef("text.txt"), sdo.encodingFormat.term.uri
     ) == Literal("text/plain")
-
 
 
 def test_spaces_in_path(empty_crate: AttachedCrate):

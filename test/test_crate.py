@@ -16,10 +16,12 @@ WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
 
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
 
+
 @pytest.fixture()
 def empty_crate():
     with tempfile.TemporaryDirectory() as tmpdir:
         yield AttachedCrate(path=tmpdir)
+
 
 @pytest.fixture(scope="function", autouse=True)
 def rocrate_context():
@@ -135,7 +137,6 @@ def test_mime_type():
     assert crate.graph.value(
         URIRef("text.txt"), sdo.encodingFormat.term.uri
     ) == Literal("text/plain")
-
 
 
 def test_spaces_in_path(empty_crate: AttachedCrate):

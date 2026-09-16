@@ -1,0 +1,134 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - www.researchobject.org
+      User-Agent:
+      - Python-urllib/3.13
+    method: GET
+    uri: https://www.researchobject.org/ro-crate/specification/1.1/context.jsonld
+  response:
+    body:
+      external_file: https___www.researchobject.org_ro-crate_specification_1.1_context.jsonld.body
+    headers:
+      Content-Length:
+      - '164403'
+      Content-Type:
+      - application/ld+json
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - www.researchobject.org
+      User-Agent:
+      - Python-urllib/3.13
+    method: GET
+    uri: https://www.researchobject.org/ro-crate/specification/1.2/context.jsonld
+  response:
+    body:
+      external_file: https___www.researchobject.org_ro-crate_specification_1.2_context.jsonld.body
+    headers:
+      Content-Length:
+      - '184412'
+      Content-Type:
+      - application/ld+json
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - www.researchobject.org
+      User-Agent:
+      - Python-urllib/3.13
+    method: GET
+    uri: https://www.researchobject.org/ro-crate/specification/1.3/context.jsonld
+  response:
+    body:
+      external_file: https___www.researchobject.org_ro-crate_specification_1.3_context.jsonld.body
+    headers:
+      Content-Length:
+      - '196942'
+      Content-Type:
+      - application/ld+json
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - w3id.org
+      User-Agent:
+      - Python-urllib/3.13
+    method: GET
+    uri: https://w3id.org/ro/crate/1.1/context
+  response:
+    body:
+      external_file: https___w3id.org_ro_crate_1.1_context.body
+    headers:
+      Content-Length:
+      - '164403'
+      Content-Type:
+      - application/ld+json
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - w3id.org
+      User-Agent:
+      - Python-urllib/3.13
+    method: GET
+    uri: https://w3id.org/ro/crate/1.2/context
+  response:
+    body:
+      external_file: https___w3id.org_ro_crate_1.2_context.body
+    headers:
+      Content-Length:
+      - '184412'
+      Content-Type:
+      - application/ld+json
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Connection:
+      - close
+      Host:
+      - w3id.org
+      User-Agent:
+      - Python-urllib/3.13
+    method: GET
+    uri: https://w3id.org/ro/crate/1.3/context
+  response:
+    body:
+      external_file: https___w3id.org_ro_crate_1.3_context.body
+    headers:
+      Content-Length:
+      - '196942'
+      Content-Type:
+      - application/ld+json
+    status:
+      code: 200
+      message: OK
+version: 1

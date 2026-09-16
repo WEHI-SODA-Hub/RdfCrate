@@ -13,7 +13,7 @@ dependencies = [
     # 7.1.3 defined compatible type annotations for triples
     "rdflib>=7.1.3",
     "typer>=0.16.0",
-    "vcrpy>=7.0.0",
+    "vcrpy>=8.3.0",
 ]
 
 [project.optional-dependencies]
@@ -26,10 +26,10 @@ nav = [
 
 [project.scripts]
 rdfcrate-codegen = "rdfcrate.codegen.__main__:app"
-regenerate-cassettes = "rdfcrate.test_helpers:generate_cassettes"
+regenerate-cassettes = "rdfcrate.vcr:generate_cassettes"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.18.0"]
 build-backend = "hatchling.build"
 
 [dependency-groups]

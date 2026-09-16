@@ -1,13 +1,14 @@
 import ast
-from rdflib import RDFS, Graph, RDF, PROV, URIRef
+
+from rdflib import PROV, RDF, RDFS, Graph, URIRef
 
 from rdfcrate.codegen import (
+    SDO,
+    CodegenState,
     find_classes,
     find_datatypes,
     find_enum_values,
     find_properties,
-    SDO,
-    CodegenState,
 )
 
 

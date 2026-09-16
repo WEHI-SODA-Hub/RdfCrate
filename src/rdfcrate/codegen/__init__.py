@@ -4,24 +4,26 @@
 Generates URIs for everything in the RO-Crate context
 """
 
-import ast_compat as ast
+import itertools
+import keyword
+import re
 
 # This isn't exported by ast-compat for some reason
 from ast import expr
+from collections.abc import Iterable
 from dataclasses import dataclass, field
-import itertools
+from graphlib import TopologicalSorter
 from pathlib import Path
-import re
-from typing import Any, Iterable, Literal, cast
-import keyword
-from rdflib import Graph, RDFS, URIRef
+from typing import Any, Literal, cast
+
+import ast_compat as ast
+from rdflib import RDFS, Graph, URIRef
+from rdflib.namespace import Namespace
 from rdflib.plugins.shared.jsonld.context import Context
 from rdflib.query import ResultRow
-from rdflib.namespace import Namespace
-from rdfcrate.types import Triple
 
-from rdfcrate.spec_version import all_specs, SpecVersion, ROCrate1_2
-from graphlib import TopologicalSorter
+from rdfcrate.spec_version import ROCrate1_2, SpecVersion, all_specs
+from rdfcrate.types import Triple
 
 #: HTTP URI for schema.org
 SDO = Namespace("http://schema.org/")

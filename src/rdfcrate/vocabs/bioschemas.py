@@ -1,8 +1,8 @@
 from __future__ import annotations
+
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.vocabs import schemaorg
-from rdfcrate.vocabs import bioschemas
+from rdfcrate.vocabs import bioschemas, schemaorg
 
 
 class ChemicalSubstance(schemaorg.BioChemEntity):

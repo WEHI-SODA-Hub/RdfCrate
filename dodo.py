@@ -1,8 +1,10 @@
 import json
-from rdfcrate.codegen import module_from_context, module_from_rdfs, uris_from_rdfs
-from ast import unparse, Constant, Expr, Module
+from ast import Constant, Expr, Module, unparse
 from pathlib import Path
+
 import requests
+
+from rdfcrate.codegen import module_from_context, module_from_rdfs, uris_from_rdfs
 
 git_repo = Path("specifications").resolve()
 

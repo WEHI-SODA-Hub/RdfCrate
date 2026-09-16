@@ -1,10 +1,12 @@
 from __future__ import annotations
-from typing import Any, Iterable, TypeVar, TYPE_CHECKING, TypedDict
-from typing_extensions import Annotated, Doc, Unpack
-from deprecated import deprecated
 
+from collections.abc import Iterable
+from typing import TYPE_CHECKING, Annotated, Any, TypedDict, TypeVar
+
+from deprecated import deprecated
 from rdflib import RDF, Graph, IdentifiedNode, Literal
 from rdflib.plugins.shared.jsonld.context import Context, Term
+from typing_extensions import Doc, Unpack
 
 from rdfcrate.rdfprop import PropertyProtocol
 from rdfcrate.rdfterm import RdfTerm

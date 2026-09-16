@@ -1,4 +1,5 @@
 import pytest
+
 from rdfcrate.rdfterm import guess_term_from_uri
 
 

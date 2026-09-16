@@ -47,7 +47,6 @@ dev-dependencies = [
     "roc-validator>=0.5.0",
     "ruff>=0.11.5",
     "mkdocs-api-autonav>=0.4.0",
-    "editables>=0.6",
 ]
 
 [tool.uv.sources]
@@ -59,11 +58,3 @@ venvPath = "."
 venv = ".venv"
 exclude = [".venv"]
 reportGeneralTypeIssues = false
-
-[tool.hatch.build]
-# artifacts = [
-#   "*.json",
-#   "*.yml",
-# ]
-# ignore-vcs = true
-dev-mode-exact = true

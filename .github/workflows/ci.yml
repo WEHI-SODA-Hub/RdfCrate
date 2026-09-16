@@ -35,10 +35,17 @@ jobs:
       run: uv sync --extra nav
       if: matrix.python-version >= '3.12'
 
-    - name: Run linter
+    - name: Format code
       uses: astral-sh/ruff-action@v3
       with:
         version-file: pyproject.toml
+        args: "format --check --diff"
+
+    - name: Run linter (but don't fail the build)
+      uses: astral-sh/ruff-action@v3
+      with:
+        version-file: pyproject.toml
+        args: --exit-zero
 
     - name: Run tests
       run: uv run pytest test

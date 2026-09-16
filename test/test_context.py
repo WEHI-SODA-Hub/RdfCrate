@@ -2,14 +2,16 @@
 Tests for ContextGraph, ie those that aren't RO-Crate specific.
 """
 
-from rdfcrate.context_graph import ContextGraph
-from rdfcrate import RdfProperty, owl, RdfClass
-from rdflib import RDF, Literal, BNode, URIRef, Graph
-from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.vocabs import dc, sdo, rdf, bioschemas_drafts, rdfs
 import datetime
 import json
+
 import pytest
+from rdflib import RDF, BNode, Graph, Literal, URIRef
+
+from rdfcrate import RdfClass, RdfProperty, owl
+from rdfcrate.context_graph import ContextGraph
+from rdfcrate.rdfterm import RdfTerm
+from rdfcrate.vocabs import bioschemas_drafts, dc, rdf, rdfs, sdo
 
 
 def test_bioschemas():

@@ -5,7 +5,6 @@ All objects in this module are re-exports from submodules.
 from rdfcrate.vocabs import (
     bioschemas,
     bioschemas_drafts,
-    rocrate,
     dc,
     geo,
     owl,
@@ -15,6 +14,7 @@ from rdfcrate.vocabs import (
     prov,
     rdf,
     rdfs,
+    rocrate,
     schemaorg,
 )
 
@@ -24,7 +24,6 @@ roc = rocrate
 __all__ = [
     "bioschemas",
     "bioschemas_drafts",
-    "rocrate",
     "dc",
     "geo",
     "owl",
@@ -34,7 +33,8 @@ __all__ = [
     "prov",
     "rdf",
     "rdfs",
+    "roc",
+    "rocrate",
     "schemaorg",
     "sdo",
-    "roc",
 ]

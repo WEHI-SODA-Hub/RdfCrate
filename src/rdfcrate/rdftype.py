@@ -1,20 +1,22 @@
 from __future__ import annotations
+
 from typing import (
+    TYPE_CHECKING,
     Annotated,
     Any,
     ClassVar,
     TypeVar,
-    TYPE_CHECKING,
     cast,
 )
+
+from rdflib import RDF, IdentifiedNode, Literal, URIRef
 from typing_extensions import Doc, Self
 
-from rdflib import Literal, URIRef, RDF, IdentifiedNode
 from rdfcrate.types import Identifier, Object, Predicate, Subject
 
 if TYPE_CHECKING:
     from rdfcrate import RdfTerm, rdf
-    from rdfcrate.context_graph import EntityArgs, ContextGraph
+    from rdfcrate.context_graph import ContextGraph, EntityArgs
 
 EntityUri = Annotated[
     str,
@@ -209,7 +211,7 @@ class RdfLiteral(RdfType):
 
 
 __all__ = [
-    "RdfType",
     "RdfClass",
     "RdfLiteral",
+    "RdfType",
 ]

@@ -1,11 +1,9 @@
 from __future__ import annotations
-from rdfcrate.rdftype import RdfClass
+
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.vocabs import owl
-from rdfcrate.rdftype import RdfType
-from rdfcrate.vocabs import prov
-from rdfcrate.vocabs import rdfs
+from rdfcrate.rdftype import RdfClass, RdfType
+from rdfcrate.vocabs import owl, prov, rdfs
 
 
 class Agent(RdfClass):

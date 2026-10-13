@@ -44,25 +44,10 @@ class ContextGraph:
         """
         self.graph = kwargs.get("graph", Graph())
         self.vocabs = list(kwargs.get("vocabs", []))
-        self._resolved_base_context = None
 
     graph: Graph
-    #: Namespaces whose terms can be used in the graph. Every predicate, type and datatype in the graph must be defined in one of these, or in the base context.
+    #: Namespaces whose terms can be used in the graph. Every predicate, type and datatype in the graph must be defined in one of these.
     vocabs: list[type[ContextNamespace]]
-    #: Cache of the parsed base context, to avoid re-parsing it on every compile
-    _resolved_base_context: Context | None
-
-    @property
-    def base_context(self) -> str | None:
-        """
-        A remote context that all terms are resolved against before falling back to `vocabs`.
-        """
-        return None
-
-    def _base(self) -> Context:
-        if self._resolved_base_context is None:
-            self._resolved_base_context = Context(self.base_context)
-        return self._resolved_base_context
 
     def _used_iris(self) -> set[URIRef]:
         """
@@ -83,35 +68,41 @@ class ContextGraph:
                 iris.add(object.datatype)
         return iris
 
-    def custom_context(self) -> dict[str, str]:
+    def vocab_context(self, parent: Context | None = None) -> dict[str, str]:
         """
-        Returns the terms from `vocabs` that are used in the graph and aren't already in the base context.
+        Returns the terms from `vocabs` that are used in the graph.
+
+        Params:
+            parent: A context that the returned terms will be combined with. Terms already defined in it will be omitted.
 
         Raises:
             ValueError: If two terms have the same label, or if an IRI in the graph has no term.
         """
-        base = self._base()
-        missing = {iri for iri in self._used_iris() if base.find_term(str(iri)) is None}
+        if parent is None:
+            parent = Context()
+        missing = {
+            iri for iri in self._used_iris() if parent.find_term(str(iri)) is None
+        }
 
-        custom: dict[str, str] = {}
+        context: dict[str, str] = {}
         for vocab in self.vocabs:
             vocab_context = vocab.jsonld_context(iris=missing)
             vocab_expander = Context(vocab_context)
             for label, value in vocab_context.items():
                 iri = vocab_expander.expand(label)
-                existing = custom.get(label)
+                existing = context.get(label)
                 if existing is not None and existing != value:
                     raise ValueError(
                         f'Term "{label}" from {vocab.__name__} is defined as both {existing} and {value}. Use a `context_prefix` to distinguish them.'
                     )
-                existing_base = base.expand(label)
-                if existing_base is not None and existing_base != iri:
+                existing_parent = parent.expand(label)
+                if existing_parent is not None and existing_parent != iri:
                     raise ValueError(
-                        f'Term "{label}" from {vocab.__name__} is already defined to mean {existing_base} in the base context. Use a `context_prefix` to distinguish them.'
+                        f'Term "{label}" from {vocab.__name__} is already defined to mean {existing_parent} in the parent context. Use a `context_prefix` to distinguish them.'
                     )
-                custom[label] = value
+                context[label] = value
 
-        resolved = base.subcontext(custom)
+        resolved = parent.subcontext(context)
         unresolved = sorted(
             str(iri) for iri in missing if resolved.find_term(str(iri)) is None
         )
@@ -120,7 +111,7 @@ class ContextGraph:
                 f"No term is defined for the following IRIs: {', '.join(unresolved)}. Add them to a ContextNamespace in `vocabs`."
             )
 
-        return custom
+        return context
 
     @property
     def context_source(
@@ -130,13 +121,9 @@ class ContextGraph:
         """
         Returns the components that make up the context for this graph.
         """
+        # This is a property so that subclasses can generate context without storing it directly.
         # This is separate from `.full_context` because passing that into the serializer will result in a combined dictionary
-        custom = self.custom_context()
-        if self.base_context is None:
-            return custom
-        if len(custom) == 0:
-            return self.base_context
-        return [self.base_context, custom]
+        return self.vocab_context()
 
     @property
     def full_context(self) -> Context:
@@ -167,7 +154,7 @@ class ContextGraph:
 
     def add(self, subgraph: ContextGraph | Graph | Triple) -> None:
         """
-        Adds a subgraph or triple to this crate.
+        Adds a subgraph or triple to this graph.
         If the subgraph is a ContextGraph, its vocabs will also be added.
         """
         if isinstance(subgraph, ContextGraph):
@@ -237,7 +224,7 @@ class ContextGraph:
 
     def compile(self, **kwargs) -> str:
         """
-        Compiles the crate to a JSON-LD string
+        Compiles the graph to a JSON-LD string
 
         Params:
             **kwargs: Additional keyword arguments to pass to the RDFLib serializer

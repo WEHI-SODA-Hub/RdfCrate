@@ -8,6 +8,7 @@ import json
 import pytest
 from rdflib import RDF, XSD, BNode, Graph, Literal, URIRef
 from rdflib.compare import isomorphic
+from rdflib.plugins.shared.jsonld.context import Context
 
 from rdfcrate import ContextGraph, ContextNamespace
 from rdfcrate.vocabs import Rdf
@@ -218,3 +219,20 @@ def test_navigate_and_navigate_to():
 
     node = crate.navigate_to(thing)
     assert node.is_instance_of(Sdo.Thing)
+
+
+def test_parent_context():
+    """
+    Terms already defined in a parent context should be omitted, and terms that clash with it should raise an error.
+    """
+    crate = ContextGraph(vocabs=[Sdo, BioschemasDrafts])
+    crate.add_entity(
+        "#thing",
+        (Rdf.type_, BioschemasDrafts.LabProtocol),
+        (Sdo.name, Literal("Some Protocol")),
+    )
+    assert crate.vocab_context(parent=Context({"name": str(Sdo.name)})) == {
+        "LabProtocol": str(BioschemasDrafts.LabProtocol)
+    }
+    with pytest.raises(ValueError, match="parent context"):
+        crate.vocab_context(parent=Context({"name": "https://example.org/name"}))

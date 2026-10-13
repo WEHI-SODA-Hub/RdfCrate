@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Annotated, Any
 from urllib.parse import quote
 
 from rdflib import IdentifiedNode, Literal, URIRef
+from rdflib.plugins.shared.jsonld.context import Context
 from typing_extensions import Doc, Unpack
 
 from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, PropertyArg
@@ -65,10 +66,17 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         super().__init__(**kwargs)
         self.version = kwargs.get("version", ROCrate1_1)
 
+        # We resolve the RO-Crate context now so we can use it to resolve terms and check if they are already defined
+        self._roc_context = Context(self.version.context_url)
+
     @property
-    def base_context(self) -> str:
+    def context_source(self) -> list[dict[str, Any] | str | None] | str:
         # Implements the requirements for context format according to the RO-Crate spec
-        return self.version.context_url
+        custom_terms = self.vocab_context(parent=self._roc_context)
+        if len(custom_terms) == 0:
+            return self.version.context_url
+        else:
+            return [self.version.context_url, custom_terms]
 
     @property
     @abstractmethod

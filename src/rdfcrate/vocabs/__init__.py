@@ -8,21 +8,6 @@ To use other terms, subclass these, or define your own `ContextNamespace`.
 from rdflib import RDF, URIRef
 
 from rdfcrate.namespace import ContextNamespace
-from rdfcrate.vocabs import (
-    bioschemas,
-    bioschemas_drafts,
-    dc,
-    geo,
-    owl,
-    pav,
-    pcdm,
-    prof,
-    prov,
-    rdf,
-    rdfs,
-    rocrate,
-    schemaorg,
-)
 
 
 class Sdo(ContextNamespace):
@@ -52,26 +37,8 @@ class Rdf(ContextNamespace):
     type_ = _base + "type"
 
 
-sdo = schemaorg
-roc = rocrate
-
 __all__ = [
     "Dct",
     "Rdf",
     "Sdo",
-    "bioschemas",
-    "bioschemas_drafts",
-    "dc",
-    "geo",
-    "owl",
-    "pav",
-    "pcdm",
-    "prof",
-    "prov",
-    "rdf",
-    "rdfs",
-    "roc",
-    "rocrate",
-    "schemaorg",
-    "sdo",
 ]

@@ -14,7 +14,7 @@ from rdflib import URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from typing_extensions import Doc, Unpack
 
-from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, EntityArgs
+from rdfcrate.base_crate import BaseCrate, BaseCrateKwargs, EntityArgs
 from rdfcrate.rdfprop import RdfProperty
 from rdfcrate.rdftype import RdfClass
 from rdfcrate.spec_version import ROCrate1_1, SpecVersion
@@ -45,11 +45,11 @@ def has_prop(props: Iterable[EntityArgs], predicate: type[RdfProperty]) -> bool:
     return any(isinstance(prop, predicate) for prop in props)
 
 
-class RoCrateKwargs(ContextGraphKwargs, total=False):
+class RoCrateKwargs(BaseCrateKwargs, total=False):
     version: SpecVersion
 
 
-class RoCrate(ContextGraph, metaclass=ABCMeta):
+class RoCrate(BaseCrate, metaclass=ABCMeta):
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """

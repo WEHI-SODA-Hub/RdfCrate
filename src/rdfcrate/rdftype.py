@@ -17,7 +17,7 @@ from rdfcrate.types import Identifier, Object, Predicate, Subject
 
 if TYPE_CHECKING:
     from rdfcrate import RdfTerm, rdf
-    from rdfcrate.context_graph import ContextGraph, EntityArgs
+    from rdfcrate.base_crate import BaseCrate, EntityArgs
 
 EntityUri = Annotated[
     str,
@@ -40,7 +40,7 @@ class RdfType:
     term: ClassVar[RdfTerm]
 
     def as_subject(
-        self, graph: ContextGraph, predicate: Predicate, object: Object
+        self, graph: BaseCrate, predicate: Predicate, object: Object
     ) -> Subject:
         """
         Converts this entity to a `Subject` that can be used in triples.
@@ -48,14 +48,14 @@ class RdfType:
         raise NotImplementedError()
 
     def as_object(
-        self, graph: ContextGraph, subject: Subject, predicate: Predicate
+        self, graph: BaseCrate, subject: Subject, predicate: Predicate
     ) -> Object:
         """
         Converts this entity to an `Object` that can be used in triples.
         """
         raise NotImplementedError()
 
-    def register(self, graph: ContextGraph) -> None:
+    def register(self, graph: BaseCrate) -> None:
         graph.register_term(self.term)
 
 
@@ -82,12 +82,12 @@ class RdfClass(RdfType):
         return value.id == self.id
 
     def as_subject(
-        self, graph: ContextGraph, predicate: URIRef, object: Identifier
+        self, graph: BaseCrate, predicate: URIRef, object: Identifier
     ) -> IdentifiedNode:
         return self.id
 
     def as_object(
-        self, graph: ContextGraph, subject: Subject, predicate: Predicate
+        self, graph: BaseCrate, subject: Subject, predicate: Predicate
     ) -> Object:
         if predicate == RDF.type:
             # rdf:type is a special case because we also need to register the class term
@@ -95,23 +95,23 @@ class RdfClass(RdfType):
             graph.register_term(self.term)
         return self.id
 
-    def add(self, *args: EntityArgs, graph: ContextGraph | None = None) -> ContextGraph:
+    def add(self, *args: EntityArgs, graph: BaseCrate | None = None) -> BaseCrate:
         """
         Adds triples to a graph with this entity as the subject.
 
         If the graph is not provided, an empty one will be created and returned.
 
         Example:
-            from rdfcrate import ContextGraph, rdfs, sdo
+            from rdfcrate import BaseCrate, rdfs, sdo
 
-            graph = ContextGraph()
+            graph = BaseCrate()
             sdo.Thing("http://example.org/thing").add(
                 sdo.name("My Thing"),
                 sdo.description("An example thing"),
                 graph=graph
             )
         """
-        # The public add method is needed here rather than in `ContextGraph` so that subclasses of `RdfType` can override it and mandate certain properties
+        # The public add method is needed here rather than in `BaseCrate` so that subclasses of `RdfType` can override it and mandate certain properties
         from rdfcrate import RdfTerm
 
         # Delegate to the `update` method to add properties
@@ -128,9 +128,7 @@ class RdfClass(RdfType):
 
         return graph
 
-    def update(
-        self, *args: EntityArgs, graph: ContextGraph | None = None
-    ) -> ContextGraph:
+    def update(self, *args: EntityArgs, graph: BaseCrate | None = None) -> BaseCrate:
         """
         Updates this entity with the given properties, in a graph.
 
@@ -138,9 +136,9 @@ class RdfClass(RdfType):
         """
         if graph is None:
             # We have to import here to avoid circular imports
-            from rdfcrate.context_graph import ContextGraph
+            from rdfcrate.base_crate import BaseCrate
 
-            graph = ContextGraph()
+            graph = BaseCrate()
 
         # The properties are responsible for registering their own terms
         for arg in args:
@@ -199,12 +197,12 @@ class RdfLiteral(RdfType):
             self.value = Literal(value, datatype=self.term.uri)
 
     def as_subject(
-        self, graph: ContextGraph, predicate: URIRef, object: Identifier
+        self, graph: BaseCrate, predicate: URIRef, object: Identifier
     ) -> IdentifiedNode:
         raise ValueError("Literals cannot be used as subjects.")
 
     def as_object(
-        self, graph: ContextGraph, subject: Subject, predicate: Predicate
+        self, graph: BaseCrate, subject: Subject, predicate: Predicate
     ) -> Object:
         # We always need to register the literal datatype when it's used as an object
         graph.register_term(self.term)

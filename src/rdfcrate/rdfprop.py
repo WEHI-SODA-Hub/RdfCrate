@@ -10,14 +10,14 @@ from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.types import Identifier
 
 if TYPE_CHECKING:
-    from rdfcrate.context_graph import ContextGraph
+    from rdfcrate.base_crate import BaseCrate
     from rdfcrate.rdftype import RdfType
 
 T = TypeVar("T", bound="RdfType", covariant=True)
 
 
 class PropertyProtocol(Protocol):
-    def add_to_graph(self, graph: ContextGraph, entity: Identifier):
+    def add_to_graph(self, graph: BaseCrate, entity: Identifier):
         """
         Adds the property to the graph and registers any terms if necessary.
 
@@ -69,7 +69,7 @@ class RdfProperty(PropertyProtocol, Generic[T]):
         term = RdfTerm(cls.term.uri, label)
         return type(cls.__name__, (cls,), {"term": term})
 
-    def add_to_graph(self, graph: ContextGraph, entity: Identifier) -> None:
+    def add_to_graph(self, graph: BaseCrate, entity: Identifier) -> None:
         if not isinstance(entity, IdentifiedNode):
             raise ValueError("Subjects must be URIs or blank nodes.")
         # The property is responsible for registering its own term
@@ -89,7 +89,7 @@ class ReverseProperty(PropertyProtocol):
     term: RdfTerm
     subject: RdfType
 
-    def add_to_graph(self, graph: ContextGraph, entity: Identifier) -> None:
+    def add_to_graph(self, graph: BaseCrate, entity: Identifier) -> None:
         graph.register_term(self.term)
         pred = self.term.uri
         obj = entity

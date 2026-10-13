@@ -1,5 +1,5 @@
 """
-Tests for ContextGraph, ie those that aren't RO-Crate specific.
+Tests for BaseCrate, ie those that aren't RO-Crate specific.
 """
 
 import datetime
@@ -9,13 +9,13 @@ import pytest
 from rdflib import RDF, BNode, Graph, Literal, URIRef
 
 from rdfcrate import RdfClass, RdfProperty, owl
-from rdfcrate.context_graph import ContextGraph
+from rdfcrate.base_crate import BaseCrate
 from rdfcrate.rdfterm import RdfTerm
 from rdfcrate.vocabs import bioschemas_drafts, dc, rdf, rdfs, sdo
 
 
 def test_bioschemas():
-    graph = ContextGraph()
+    graph = BaseCrate()
     graph.add_entity(
         bioschemas_drafts.LabProtocol("#some_protocol"),
         sdo.name(sdo.Text("Some Protocol")),
@@ -29,7 +29,7 @@ def test_bioschemas():
 
 
 def test_bnode():
-    graph = ContextGraph()
+    graph = BaseCrate()
     graph.add_entity(bioschemas_drafts.LabProtocol(BNode()))
     assert any(isinstance(id, BNode) for id in graph.graph.subjects())
 
@@ -38,7 +38,7 @@ def test_datatype():
     """
     Test that we handle datatypes correctly, including registering the datatype term in the context.
     """
-    graph = ContextGraph()
+    graph = BaseCrate()
     sdo.Thing("#thing").add(
         sdo.dateCreated(sdo.Date(datetime.date(2023, 1, 1))), graph=graph
     )
@@ -52,9 +52,9 @@ def test_datatype():
 
 def test_strip_datatypes():
     """
-    Test that `context_graph.strip_datatypes()` works as expected.
+    Test that `base_crate.strip_datatypes()` works as expected.
     """
-    graph = ContextGraph()
+    graph = BaseCrate()
     sdo.Thing("#thing").add(
         sdo.dateCreated(sdo.Date(datetime.date(2023, 1, 1))), graph=graph
     )
@@ -69,7 +69,7 @@ def test_multi_type():
     class CustomType(rdfs.Class):
         term = RdfTerm("https://example.org/SomeOtherType")
 
-    graph = ContextGraph()
+    graph = BaseCrate()
     graph.add_entity(
         bioschemas_drafts.LabProtocol("#multi_type_entity"),
         CustomType.to_type_property(),
@@ -82,7 +82,7 @@ def test_multi_type():
 
 
 def test_redefine_term():
-    graph = ContextGraph(unique_terms=True)
+    graph = BaseCrate(unique_terms=True)
     graph.register_term(
         RdfTerm("https://schema.org/Thing", "Thing"),
     )
@@ -96,7 +96,7 @@ def test_add_metadata_term():
     """
     Test that terms used in `add_metadata` are registered in the context.
     """
-    graph = ContextGraph()
+    graph = BaseCrate()
     graph.add_metadata(
         sdo.Thing("#thing"),
         dc.valid(rdfs.Literal(Literal(True))),
@@ -109,7 +109,7 @@ def test_reverse_prop():
     """
     Test that we can add a reverse property to an entity.
     """
-    graph = ContextGraph()
+    graph = BaseCrate()
     thing = graph.add_entity(
         sdo.Thing("#thing"),
     )
@@ -127,7 +127,7 @@ def test_adhoc_term():
     """
     Test that we can define terms on the fly and use them in properties.
     """
-    graph = ContextGraph()
+    graph = BaseCrate()
     thing = graph.add_entity(
         sdo.Thing("#thing"),
         RdfProperty.adhoc(
@@ -143,7 +143,7 @@ def test_cls_with_term_label():
     """
     Test that we can use two types with the same term label, by renaming one of them.
     """
-    graph = ContextGraph()
+    graph = BaseCrate()
     thing = graph.add_entity(
         sdo.Class("#thing"), owl.Class.with_term_label("owlClass").to_type_property()
     )
@@ -155,7 +155,7 @@ def test_prop_with_term_label():
     """
     Test that we can use two properties with the same term label, by renaming one of them.
     """
-    graph = ContextGraph()
+    graph = BaseCrate()
 
     class exHasPart(RdfProperty):
         term = RdfTerm("https://example.org/hasPart", "hasPart")
@@ -174,7 +174,7 @@ def test_adhoc_class():
     """
     Test that we can use two types with the same term label, by renaming one of them.
     """
-    graph = ContextGraph()
+    graph = BaseCrate()
     ExampleClass = RdfClass.adhoc(RdfTerm("https://example.org/thing"))
     graph.add_entity(
         ExampleClass("#thing"),
@@ -183,7 +183,7 @@ def test_adhoc_class():
 
 
 def test_add_contextgraph():
-    a = ContextGraph()
+    a = BaseCrate()
     b = sdo.Thing("#sub").add()
     a.add(b)
 
@@ -196,7 +196,7 @@ def test_add_contextgraph():
 
 
 def test_add_graph():
-    graph = ContextGraph()
+    graph = BaseCrate()
     g2 = Graph()
     g2.add((URIRef("#g2"), RDF.type, sdo.Thing.term.uri))
     graph.add(g2)
@@ -204,7 +204,7 @@ def test_add_graph():
 
 
 def test_add_triple():
-    graph = ContextGraph()
+    graph = BaseCrate()
     triple = (URIRef("#triple"), RDF.type, sdo.Thing.term.uri)
     graph.add(triple)
     assert triple in graph.graph
@@ -212,11 +212,11 @@ def test_add_triple():
 
 def test_navigate_and_navigate_to():
     """
-    Test ContextGraph.navigate and navigate_to, skipping if rdfnav is not installed.
+    Test BaseCrate.navigate and navigate_to, skipping if rdfnav is not installed.
     """
     pytest.importorskip("rdfnav")
 
-    graph = ContextGraph()
+    graph = BaseCrate()
     thing = graph.add_entity(sdo.Thing("#thing"))
 
     navigator = graph.navigate()

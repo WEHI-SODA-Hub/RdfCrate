@@ -33,7 +33,7 @@ plugins:
       # Submodules that are already documented in the top level module
       # If we don't exclude these, they will be documented twice,
       # the user might think they need to import directly from these submodules
-      - 'rdfcrate.context_graph'
+      - 'rdfcrate.base_crate'
       - 'rdfcrate.rdfprop'
       - 'rdfcrate.rdftype'
       - 'rdfcrate.spec_version'

@@ -26,22 +26,22 @@ EntityArgs = Annotated[
 ]
 
 
-class ContextGraphKwargs(TypedDict, total=False):
+class BaseCrateKwargs(TypedDict, total=False):
     graph: Graph
     unique_terms: bool
     require_terms: bool
 
 
-class ContextGraph:
+class BaseCrate:
     """
     A graph and associated JSON-LD context
 
     Typical usage involves creating new subgraphs via `RdfType.add` and then merging them into this context graph.
     """
 
-    def __init__(self, **kwargs: Unpack[ContextGraphKwargs]):
+    def __init__(self, **kwargs: Unpack[BaseCrateKwargs]):
         """
-        Initializes a new ContextGraph with an optional initial graph.
+        Initializes a new BaseCrate with an optional initial graph.
         If no graph is provided, an empty Graph is created.
         """
         self.graph = kwargs.get("graph", Graph())
@@ -135,12 +135,12 @@ class ContextGraph:
         # Allows subclasses to override the registration process
         self._custom_terms[term.name] = Context()._term_dict(term)
 
-    def add(self, subgraph: ContextGraph | Graph | Triple) -> None:
+    def add(self, subgraph: BaseCrate | Graph | Triple) -> None:
         """
         Adds a subgraph or triple to this context graph.
-        If the subgraph is a ContextGraph, it will also merge the context.
+        If the subgraph is a BaseCrate, it will also merge the context.
         """
-        if isinstance(subgraph, ContextGraph):
+        if isinstance(subgraph, BaseCrate):
             self.graph += subgraph.graph
             term: Term
             for term in subgraph.full_context.terms.values():
@@ -151,7 +151,7 @@ class ContextGraph:
             # If it's a triple, add it directly
             self.graph.add(subgraph)
         else:
-            raise TypeError("Subgraph must be a ContextGraph or a Graph instance.")
+            raise TypeError("Subgraph must be a BaseCrate or a Graph instance.")
 
     def strip_datatypes(
         self, strip_datatypes: bool = True, strip_languages: bool = True

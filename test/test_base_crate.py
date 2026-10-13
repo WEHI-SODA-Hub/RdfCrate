@@ -6,208 +6,202 @@ import datetime
 import json
 
 import pytest
-from rdflib import RDF, BNode, Graph, Literal, URIRef
+from rdflib import RDF, XSD, BNode, Graph, Literal, URIRef
+from rdflib.compare import isomorphic
 
-from rdfcrate import RdfClass, RdfProperty, owl
-from rdfcrate.base_crate import BaseCrate
-from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.vocabs import bioschemas_drafts, dc, rdf, rdfs, sdo
+from rdfcrate import BaseCrate, ContextNamespace
+from rdfcrate.vocabs import Rdf
 
 
-def test_bioschemas():
-    graph = BaseCrate()
-    graph.add_entity(
-        bioschemas_drafts.LabProtocol("#some_protocol"),
-        sdo.name(sdo.Text("Some Protocol")),
+class Sdo(ContextNamespace):
+    _base = URIRef("http://schema.org/")
+    Thing = _base + "Thing"
+    dateCreated = _base + "dateCreated"
+    hasPart = _base + "hasPart"
+    name = _base + "name"
+
+
+class BioschemasDrafts(ContextNamespace):
+    _base = URIRef("https://bioschemas.org/draft_terms/")
+    LabProtocol = _base + "LabProtocol"
+    Enzyme = _base + "Enzyme"
+
+
+class Obi(ContextNamespace, context_prefix="obi"):
+    _base = URIRef("http://purl.obolibrary.org/obo/")
+    Image = _base + "IAO_0000101"
+    Assay = _base + "OBI_0000070"
+
+
+class Xsd(ContextNamespace, context_prefix="xsd"):
+    _base = URIRef(str(XSD))
+    date = _base + "date"
+
+
+def test_custom_vocab():
+    """
+    Only the vocab terms that are used in the graph should be in the context, and they should be used to shorten IRIs.
+    """
+    crate = BaseCrate(vocabs=[Sdo, BioschemasDrafts])
+    crate.add_entity(
+        "#some_protocol",
+        (Rdf.type_, BioschemasDrafts.LabProtocol),
+        (Sdo.name, Literal("Some Protocol")),
     )
-    entity_json = json.loads(graph.compile())
-    assert "http" not in entity_json["@type"], "All terms should be shortened"
+    entity_json = json.loads(crate.compile())
+    assert entity_json["@context"] == {
+        "LabProtocol": "https://bioschemas.org/draft_terms/LabProtocol",
+        "name": "http://schema.org/name",
+    }
+    assert entity_json["@type"] == "LabProtocol"
+    assert entity_json["name"] == "Some Protocol"
 
-    assert entity_json["@context"]["LabProtocol"] == str(
-        bioschemas_drafts.LabProtocol.term.uri
-    ), "Only the terms that are used in the graph should be in the context"
+
+def test_curies():
+    """
+    Namespaces with a `context_prefix` and `_base` should use CURIEs, both in the context and in `@id` values.
+    """
+    crate = BaseCrate(vocabs=[Sdo, Obi])
+    crate.add_entity(
+        "#image",
+        (Rdf.type_, Obi.Image),
+        (Sdo.hasPart, Obi.Assay),
+    )
+    entity_json = json.loads(crate.compile())
+    assert entity_json["@context"] == {
+        "obi": "http://purl.obolibrary.org/obo/",
+        "obiImage": "obi:IAO_0000101",
+        "hasPart": "http://schema.org/hasPart",
+    }
+    assert entity_json["@type"] == "obiImage"
+    assert entity_json["hasPart"] == {"@id": "obi:OBI_0000070"}
 
 
-def test_bnode():
-    graph = BaseCrate()
-    graph.add_entity(bioschemas_drafts.LabProtocol(BNode()))
-    assert any(isinstance(id, BNode) for id in graph.graph.subjects())
+def test_round_trip():
+    """
+    The compiled JSON-LD should parse back to the same graph, including CURIEs.
+    """
+    crate = BaseCrate(vocabs=[Sdo, Obi])
+    crate.add_entity(
+        "http://example.org/image",
+        (Rdf.type_, Obi.Image),
+        (Sdo.hasPart, Obi.Assay),
+        (Sdo.name, Literal("An image")),
+    )
+    assert isomorphic(
+        Graph().parse(data=crate.compile(), format="json-ld"), crate.graph
+    )
+
+
+def test_rdf_type_not_in_context():
+    """
+    rdf:type should never be redefined, since JSON-LD uses `@type`.
+    """
+    crate = BaseCrate(vocabs=[Sdo, Rdf])
+    crate.add_entity("#thing", (Rdf.type_, Sdo.Thing))
+    assert json.loads(crate.compile())["@context"] == {
+        "Thing": "http://schema.org/Thing"
+    }
+
+
+def test_missing_term():
+    """
+    IRIs that aren't defined in any vocab should raise an error.
+    """
+    crate = BaseCrate(vocabs=[Sdo])
+    crate.add_entity("#thing", (Rdf.type_, BioschemasDrafts.Enzyme))
+    with pytest.raises(ValueError, match=str(BioschemasDrafts.Enzyme)):
+        crate.compile()
+
+
+def test_vocab_clash():
+    """
+    Two vocabs that use the same label for different IRIs should raise an error.
+    """
+
+    class Example(ContextNamespace):
+        name = URIRef("https://example.org/name")
+
+    crate = BaseCrate(vocabs=[Sdo, Example])
+    crate.add_entity("#thing", (Sdo.name, Literal("a")), (Example.name, Literal("b")))
+    with pytest.raises(ValueError, match="context_prefix"):
+        crate.compile()
 
 
 def test_datatype():
     """
-    Test that we handle datatypes correctly, including registering the datatype term in the context.
+    Datatypes that are serialized as JSON-LD `@type` need a term, but native JSON types don't.
     """
-    graph = BaseCrate()
-    sdo.Thing("#thing").add(
-        sdo.dateCreated(sdo.Date(datetime.date(2023, 1, 1))), graph=graph
-    )
-    assert graph.full_context.expand("Date") == "http://schema.org/Date", (
-        "The term for the Date data type should be registered"
-    )
-    date_value = graph.graph.value(URIRef("#thing"), sdo.dateCreated.term.uri)
-    assert isinstance(date_value, Literal), "The date value should be a Literal"
-    assert date_value.value == datetime.date(2023, 1, 1)
+    crate = BaseCrate(vocabs=[Sdo])
+    crate.add_entity("#thing", (Sdo.name, Literal(True)), (Sdo.name, Literal(1)))
+    crate.compile()
+
+    crate.add_entity("#thing", (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1))))
+    with pytest.raises(ValueError, match=str(XSD.date)):
+        crate.compile()
+
+    crate.vocabs.append(Xsd)
+    assert crate.full_context.expand("xsdDate") == str(XSD.date)
+
+
+def test_bnode():
+    crate = BaseCrate(vocabs=[BioschemasDrafts])
+    crate.add_entity(BNode(), (Rdf.type_, BioschemasDrafts.LabProtocol))
+    assert any(isinstance(id, BNode) for id in crate.graph.subjects())
 
 
 def test_strip_datatypes():
     """
     Test that `base_crate.strip_datatypes()` works as expected.
     """
-    graph = BaseCrate()
-    sdo.Thing("#thing").add(
-        sdo.dateCreated(sdo.Date(datetime.date(2023, 1, 1))), graph=graph
-    )
-    stripped_graph = graph.strip_datatypes()
-    date_value = stripped_graph.value(URIRef("#thing"), sdo.dateCreated.term.uri)
+    crate = BaseCrate()
+    crate.add_entity("#thing", (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1))))
+    stripped_graph = crate.strip_datatypes()
+    date_value = stripped_graph.value(URIRef("#thing"), Sdo.dateCreated)
     assert isinstance(date_value, Literal), "The date value should be a Literal"
     assert date_value.value == datetime.date(2023, 1, 1)
     assert date_value.datatype is None, "The date value should not have a datatype"
 
 
-def test_multi_type():
-    class CustomType(rdfs.Class):
-        term = RdfTerm("https://example.org/SomeOtherType")
-
-    graph = BaseCrate()
-    graph.add_entity(
-        bioschemas_drafts.LabProtocol("#multi_type_entity"),
-        CustomType.to_type_property(),
-    )
-
-    # We never want to redefine rdf:type
-    assert str(rdf.type.term.uri) not in graph._custom_terms
-    # But we should have the custom type in the context
-    assert "https://example.org/SomeOtherType" in graph.full_context.to_dict().values()
+def test_add_entity_returns_id():
+    crate = BaseCrate()
+    assert crate.add_entity("#thing") == URIRef("#thing")
+    node = BNode()
+    assert crate.add_entity(node) == node
 
 
-def test_redefine_term():
-    graph = BaseCrate(unique_terms=True)
-    graph.register_term(
-        RdfTerm("https://schema.org/Thing", "Thing"),
-    )
-    with pytest.raises(ValueError):
-        graph.register_term(
-            RdfTerm("https://example.org/Thing", "Thing"),
-        )
-
-
-def test_add_metadata_term():
+def test_add_basecrate():
     """
-    Test that terms used in `add_metadata` are registered in the context.
+    Adding a BaseCrate should merge both its graph and its vocabs.
     """
-    graph = BaseCrate()
-    graph.add_metadata(
-        sdo.Thing("#thing"),
-        dc.valid(rdfs.Literal(Literal(True))),
-    )
-    # If valid can expand, it means it was correctly registered
-    assert graph.full_context.expand("valid") == "http://purl.org/dc/terms/valid"
-
-
-def test_reverse_prop():
-    """
-    Test that we can add a reverse property to an entity.
-    """
-    graph = BaseCrate()
-    thing = graph.add_entity(
-        sdo.Thing("#thing"),
-    )
-    other_thing = graph.add_entity(
-        sdo.Thing("#other-thing"), sdo.hasPart.reverse(thing)
-    )
-    assert (
-        thing.id,
-        sdo.hasPart.term.uri,
-        other_thing.id,
-    ) in graph.graph
-
-
-def test_adhoc_term():
-    """
-    Test that we can define terms on the fly and use them in properties.
-    """
-    graph = BaseCrate()
-    thing = graph.add_entity(
-        sdo.Thing("#thing"),
-        RdfProperty.adhoc(
-            term=RdfTerm("https://example.org/myProp"), object=sdo.Text("value")
-        ),
-    )
-    object = graph.graph.value(thing.id, URIRef("https://example.org/myProp"))
-    assert isinstance(object, Literal)
-    assert object.value == "value"
-
-
-def test_cls_with_term_label():
-    """
-    Test that we can use two types with the same term label, by renaming one of them.
-    """
-    graph = BaseCrate()
-    thing = graph.add_entity(
-        sdo.Class("#thing"), owl.Class.with_term_label("owlClass").to_type_property()
-    )
-    assert (thing.id, RDF.type, sdo.Class.term.uri) in graph.graph
-    assert (thing.id, RDF.type, owl.Class.term.uri) in graph.graph
-
-
-def test_prop_with_term_label():
-    """
-    Test that we can use two properties with the same term label, by renaming one of them.
-    """
-    graph = BaseCrate()
-
-    class exHasPart(RdfProperty):
-        term = RdfTerm("https://example.org/hasPart", "hasPart")
-
-    part = sdo.CreativeWork("https://example.org/part")
-
-    with pytest.raises(ValueError):
-        sdo.Thing("#thing").add(sdo.hasPart(part), exHasPart(part), graph=graph)
-
-    sdo.Thing("#thing").add(
-        sdo.hasPart(part), exHasPart.with_term_label("exHasPart")(part), graph=graph
-    )
-
-
-def test_adhoc_class():
-    """
-    Test that we can use two types with the same term label, by renaming one of them.
-    """
-    graph = BaseCrate()
-    ExampleClass = RdfClass.adhoc(RdfTerm("https://example.org/thing"))
-    graph.add_entity(
-        ExampleClass("#thing"),
-    )
-    assert (URIRef("#thing"), RDF.type, ExampleClass.term.uri) in graph.graph
-
-
-def test_add_contextgraph():
-    a = BaseCrate()
-    b = sdo.Thing("#sub").add()
+    a = BaseCrate(vocabs=[Sdo])
+    b = BaseCrate(vocabs=[Sdo, BioschemasDrafts])
+    b.add_entity("#sub", (Rdf.type_, BioschemasDrafts.LabProtocol))
     a.add(b)
 
-    assert URIRef("#sub") in set(b.graph.subjects()), (
+    assert URIRef("#sub") in set(a.graph.subjects()), (
         "Subgraph should be added to the main graph"
     )
-    assert b.full_context.expand("Thing") == str(sdo.Thing.term.uri), (
-        "Context should be preserved"
-    )
+    assert a.vocabs == [Sdo, BioschemasDrafts], "Vocabs should be merged"
+    assert a.full_context.expand("LabProtocol") == str(BioschemasDrafts.LabProtocol)
 
 
 def test_add_graph():
-    graph = BaseCrate()
+    crate = BaseCrate()
     g2 = Graph()
-    g2.add((URIRef("#g2"), RDF.type, sdo.Thing.term.uri))
-    graph.add(g2)
-    assert (URIRef("#g2"), RDF.type, sdo.Thing.term.uri) in graph.graph
+    g2.add((URIRef("#g2"), RDF.type, Sdo.Thing))
+    crate.add(g2)
+    assert (URIRef("#g2"), RDF.type, Sdo.Thing) in crate.graph
 
 
 def test_add_triple():
-    graph = BaseCrate()
-    triple = (URIRef("#triple"), RDF.type, sdo.Thing.term.uri)
-    graph.add(triple)
-    assert triple in graph.graph
+    """
+    Plain triples can be used in place of reverse properties.
+    """
+    crate = BaseCrate()
+    triple = (URIRef("#parent"), Sdo.hasPart, URIRef("#child"))
+    crate.add(triple)
+    assert triple in crate.graph
 
 
 def test_navigate_and_navigate_to():
@@ -216,11 +210,11 @@ def test_navigate_and_navigate_to():
     """
     pytest.importorskip("rdfnav")
 
-    graph = BaseCrate()
-    thing = graph.add_entity(sdo.Thing("#thing"))
+    crate = BaseCrate()
+    thing = crate.add_entity("#thing", (Rdf.type_, Sdo.Thing))
 
-    navigator = graph.navigate()
-    assert navigator.instance(sdo.Thing.term.uri).iri == thing.id
+    navigator = crate.navigate()
+    assert navigator.instance(Sdo.Thing).iri == thing
 
-    node = graph.navigate_to(thing.id)
-    assert node.is_instance_of(sdo.Thing.term.uri)
+    node = crate.navigate_to(thing)
+    assert node.is_instance_of(Sdo.Thing)

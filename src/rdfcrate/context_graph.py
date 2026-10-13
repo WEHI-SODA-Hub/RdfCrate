@@ -25,21 +25,21 @@ PropertyArg = Annotated[
 NATIVE_DATATYPES = {XSD.boolean, XSD.integer, XSD.double, XSD.string}
 
 
-class BaseCrateKwargs(TypedDict, total=False):
+class ContextGraphKwargs(TypedDict, total=False):
     graph: Graph
     vocabs: Iterable[type[ContextNamespace]]
 
 
-class BaseCrate:
+class ContextGraph:
     """
     A graph and associated JSON-LD context
 
     The context is generated when the graph is compiled, and contains only the terms from `vocabs` that are used in the graph.
     """
 
-    def __init__(self, **kwargs: Unpack[BaseCrateKwargs]):
+    def __init__(self, **kwargs: Unpack[ContextGraphKwargs]):
         """
-        Initializes a new BaseCrate with an optional initial graph.
+        Initializes a new ContextGraph with an optional initial graph.
         If no graph is provided, an empty Graph is created.
         """
         self.graph = kwargs.get("graph", Graph())
@@ -91,9 +91,7 @@ class BaseCrate:
             ValueError: If two terms have the same label, or if an IRI in the graph has no term.
         """
         base = self._base()
-        missing = {
-            iri for iri in self._used_iris() if base.find_term(str(iri)) is None
-        }
+        missing = {iri for iri in self._used_iris() if base.find_term(str(iri)) is None}
 
         custom: dict[str, str] = {}
         for vocab in self.vocabs:
@@ -167,12 +165,12 @@ class BaseCrate:
         """
         return self.navigate()[iri]
 
-    def add(self, subgraph: BaseCrate | Graph | Triple) -> None:
+    def add(self, subgraph: ContextGraph | Graph | Triple) -> None:
         """
         Adds a subgraph or triple to this crate.
-        If the subgraph is a BaseCrate, its vocabs will also be added.
+        If the subgraph is a ContextGraph, its vocabs will also be added.
         """
-        if isinstance(subgraph, BaseCrate):
+        if isinstance(subgraph, ContextGraph):
             self.graph += subgraph.graph
             for vocab in subgraph.vocabs:
                 if vocab not in self.vocabs:
@@ -183,7 +181,7 @@ class BaseCrate:
             # If it's a triple, add it directly
             self.graph.add(subgraph)
         else:
-            raise TypeError("Subgraph must be a BaseCrate or a Graph instance.")
+            raise TypeError("Subgraph must be a ContextGraph or a Graph instance.")
 
     def add_entity(
         self, entity: IdentifiedNode | str, *props: PropertyArg
@@ -201,10 +199,10 @@ class BaseCrate:
         Example:
             ```python
             from rdflib import Literal
-            from rdfcrate import BaseCrate
+            from rdfcrate import ContextGraph
             from rdfcrate.vocabs import Rdf, Sdo
 
-            BaseCrate().add_entity(
+            ContextGraph().add_entity(
                 "#thing",
                 (Rdf.type_, Sdo.CreativeWork),
                 (Sdo.name, Literal("My Thing")),

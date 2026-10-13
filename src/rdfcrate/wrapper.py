@@ -14,7 +14,7 @@ from urllib.parse import quote
 from rdflib import IdentifiedNode, Literal, URIRef
 from typing_extensions import Doc, Unpack
 
-from rdfcrate.base_crate import BaseCrate, BaseCrateKwargs, PropertyArg
+from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, PropertyArg
 from rdfcrate.spec_version import ROCrate1_1, SpecVersion
 from rdfcrate.types import Object, Predicate
 from rdfcrate.vocabs import Dct, Rdf, Sdo
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 Recursive = Annotated[
     bool,
     Doc(
-        "If true, register all files and subdirectories in the directory.  The child entities will only have minimal metadata, but more can be added later with [`BaseCrate.add_entity`][rdfcrate.base_crate.BaseCrate.add_entity].  Also note that each registered data entity will be linked to the directory entity with `hasPart`."
+        "If true, register all files and subdirectories in the directory.  The child entities will only have minimal metadata, but more can be added later with [`ContextGraph.add_entity`][rdfcrate.context_graph.ContextGraph.add_entity].  Also note that each registered data entity will be linked to the directory entity with `hasPart`."
     ),
 ]
 
@@ -49,11 +49,11 @@ def as_literal(value: Object | str | date) -> Object:
     return value
 
 
-class RoCrateKwargs(BaseCrateKwargs, total=False):
+class RoCrateKwargs(ContextGraphKwargs, total=False):
     version: SpecVersion
 
 
-class RoCrate(BaseCrate, metaclass=ABCMeta):
+class RoCrate(ContextGraph, metaclass=ABCMeta):
     """
     Abstract class containing common functionality for both attached and detached RO-Crates
     """

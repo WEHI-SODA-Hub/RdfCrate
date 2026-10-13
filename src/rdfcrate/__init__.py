@@ -1,4 +1,4 @@
-from rdfcrate.base_crate import BaseCrate
+from rdfcrate.context_graph import ContextGraph
 from rdfcrate.namespace import ContextNamespace
 from rdfcrate.spec_version import (
     ROCrate0_2,
@@ -11,7 +11,7 @@ from rdfcrate.wrapper import AttachedCrate, DetatchedCrate
 
 __all__ = [
     "AttachedCrate",
-    "BaseCrate",
+    "ContextGraph",
     "ContextNamespace",
     "DetatchedCrate",
     "ROCrate0_2",

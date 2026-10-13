@@ -1,5 +1,5 @@
 """
-Tests for BaseCrate, ie those that aren't RO-Crate specific.
+Tests for ContextGraph, ie those that aren't RO-Crate specific.
 """
 
 import datetime
@@ -9,7 +9,7 @@ import pytest
 from rdflib import RDF, XSD, BNode, Graph, Literal, URIRef
 from rdflib.compare import isomorphic
 
-from rdfcrate import BaseCrate, ContextNamespace
+from rdfcrate import ContextGraph, ContextNamespace
 from rdfcrate.vocabs import Rdf
 
 
@@ -42,7 +42,7 @@ def test_custom_vocab():
     """
     Only the vocab terms that are used in the graph should be in the context, and they should be used to shorten IRIs.
     """
-    crate = BaseCrate(vocabs=[Sdo, BioschemasDrafts])
+    crate = ContextGraph(vocabs=[Sdo, BioschemasDrafts])
     crate.add_entity(
         "#some_protocol",
         (Rdf.type_, BioschemasDrafts.LabProtocol),
@@ -61,7 +61,7 @@ def test_curies():
     """
     Namespaces with a `context_prefix` and `_base` should use CURIEs, both in the context and in `@id` values.
     """
-    crate = BaseCrate(vocabs=[Sdo, Obi])
+    crate = ContextGraph(vocabs=[Sdo, Obi])
     crate.add_entity(
         "#image",
         (Rdf.type_, Obi.Image),
@@ -81,7 +81,7 @@ def test_round_trip():
     """
     The compiled JSON-LD should parse back to the same graph, including CURIEs.
     """
-    crate = BaseCrate(vocabs=[Sdo, Obi])
+    crate = ContextGraph(vocabs=[Sdo, Obi])
     crate.add_entity(
         "http://example.org/image",
         (Rdf.type_, Obi.Image),
@@ -97,7 +97,7 @@ def test_rdf_type_not_in_context():
     """
     rdf:type should never be redefined, since JSON-LD uses `@type`.
     """
-    crate = BaseCrate(vocabs=[Sdo, Rdf])
+    crate = ContextGraph(vocabs=[Sdo, Rdf])
     crate.add_entity("#thing", (Rdf.type_, Sdo.Thing))
     assert json.loads(crate.compile())["@context"] == {
         "Thing": "http://schema.org/Thing"
@@ -108,7 +108,7 @@ def test_missing_term():
     """
     IRIs that aren't defined in any vocab should raise an error.
     """
-    crate = BaseCrate(vocabs=[Sdo])
+    crate = ContextGraph(vocabs=[Sdo])
     crate.add_entity("#thing", (Rdf.type_, BioschemasDrafts.Enzyme))
     with pytest.raises(ValueError, match=str(BioschemasDrafts.Enzyme)):
         crate.compile()
@@ -122,7 +122,7 @@ def test_vocab_clash():
     class Example(ContextNamespace):
         name = URIRef("https://example.org/name")
 
-    crate = BaseCrate(vocabs=[Sdo, Example])
+    crate = ContextGraph(vocabs=[Sdo, Example])
     crate.add_entity("#thing", (Sdo.name, Literal("a")), (Example.name, Literal("b")))
     with pytest.raises(ValueError, match="context_prefix"):
         crate.compile()
@@ -132,7 +132,7 @@ def test_datatype():
     """
     Datatypes that are serialized as JSON-LD `@type` need a term, but native JSON types don't.
     """
-    crate = BaseCrate(vocabs=[Sdo])
+    crate = ContextGraph(vocabs=[Sdo])
     crate.add_entity("#thing", (Sdo.name, Literal(True)), (Sdo.name, Literal(1)))
     crate.compile()
 
@@ -145,16 +145,16 @@ def test_datatype():
 
 
 def test_bnode():
-    crate = BaseCrate(vocabs=[BioschemasDrafts])
+    crate = ContextGraph(vocabs=[BioschemasDrafts])
     crate.add_entity(BNode(), (Rdf.type_, BioschemasDrafts.LabProtocol))
     assert any(isinstance(id, BNode) for id in crate.graph.subjects())
 
 
 def test_strip_datatypes():
     """
-    Test that `base_crate.strip_datatypes()` works as expected.
+    Test that `context_graph.strip_datatypes()` works as expected.
     """
-    crate = BaseCrate()
+    crate = ContextGraph()
     crate.add_entity("#thing", (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1))))
     stripped_graph = crate.strip_datatypes()
     date_value = stripped_graph.value(URIRef("#thing"), Sdo.dateCreated)
@@ -164,7 +164,7 @@ def test_strip_datatypes():
 
 
 def test_add_entity_returns_id():
-    crate = BaseCrate()
+    crate = ContextGraph()
     assert crate.add_entity("#thing") == URIRef("#thing")
     node = BNode()
     assert crate.add_entity(node) == node
@@ -172,10 +172,10 @@ def test_add_entity_returns_id():
 
 def test_add_basecrate():
     """
-    Adding a BaseCrate should merge both its graph and its vocabs.
+    Adding a ContextGraph should merge both its graph and its vocabs.
     """
-    a = BaseCrate(vocabs=[Sdo])
-    b = BaseCrate(vocabs=[Sdo, BioschemasDrafts])
+    a = ContextGraph(vocabs=[Sdo])
+    b = ContextGraph(vocabs=[Sdo, BioschemasDrafts])
     b.add_entity("#sub", (Rdf.type_, BioschemasDrafts.LabProtocol))
     a.add(b)
 
@@ -187,7 +187,7 @@ def test_add_basecrate():
 
 
 def test_add_graph():
-    crate = BaseCrate()
+    crate = ContextGraph()
     g2 = Graph()
     g2.add((URIRef("#g2"), RDF.type, Sdo.Thing))
     crate.add(g2)
@@ -198,7 +198,7 @@ def test_add_triple():
     """
     Plain triples can be used in place of reverse properties.
     """
-    crate = BaseCrate()
+    crate = ContextGraph()
     triple = (URIRef("#parent"), Sdo.hasPart, URIRef("#child"))
     crate.add(triple)
     assert triple in crate.graph
@@ -206,11 +206,11 @@ def test_add_triple():
 
 def test_navigate_and_navigate_to():
     """
-    Test BaseCrate.navigate and navigate_to, skipping if rdfnav is not installed.
+    Test ContextGraph.navigate and navigate_to, skipping if rdfnav is not installed.
     """
     pytest.importorskip("rdfnav")
 
-    crate = BaseCrate()
+    crate = ContextGraph()
     thing = crate.add_entity("#thing", (Rdf.type_, Sdo.Thing))
 
     navigator = crate.navigate()

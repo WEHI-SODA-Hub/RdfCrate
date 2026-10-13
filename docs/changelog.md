@@ -10,7 +10,6 @@
     - Types are added as properties: `(Rdf.type_, Sdo.Person)`
     - Reverse properties have been removed. Add a plain triple using `crate.add((subject, predicate, object))` instead
 - Removed the bundled vocabularies and the `rdfcrate-codegen` CLI. `rdfcrate.vocabs` now only contains minimal `Sdo`, `Dct` and `Rdf` namespaces for the terms that `rdfcrate` uses internally. Define any other terms in your own `ContextNamespace`
-- Renamed `ContextGraph` to `BaseCrate`, and moved it to `rdfcrate.base_crate`
 - The JSON-LD context is now generated at compile time from the `ContextNamespace` classes passed to the crate's `vocabs`, and only contains the terms that are used. Removed `register_term()`, `register_terms()`, `with_term_label()`, and the `unique_terms` and `require_terms` options
 - Compiling a crate now raises an error if an IRI used as a predicate, type or datatype has no term, or if two terms clash
 - `add_root_entity` now takes plain values for `name`, `description`, `date_published` and `license`. Dates are written as ISO 8601 strings

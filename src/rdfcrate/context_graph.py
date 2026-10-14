@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 PropertyArg = Annotated[
     tuple[Predicate, Object],
     Doc(
-        "A `(predicate, object)` pair, which will be added to the graph with the entity as the subject. For example `(Sdo.name, Literal('My Dataset'))`."
+        "A `(predicate, object)` pair, which will be added to the graph with the entity as the subject. For example `(SCHEMA.name, Literal('My Dataset'))`."
     ),
 ]
 
@@ -185,14 +185,14 @@ class ContextGraph:
 
         Example:
             ```python
-            from rdflib import Literal
+            from rdflib import RDF, Literal, Namespace
             from rdfcrate import ContextGraph
-            from rdfcrate.vocabs import Rdf, Sdo
 
+            SCHEMA = Namespace("http://schema.org/")
             ContextGraph().add_entity(
                 "#thing",
-                (Rdf.type_, Sdo.CreativeWork),
-                (Sdo.name, Literal("My Thing")),
+                (RDF.type, SCHEMA.CreativeWork),
+                (SCHEMA.name, Literal("My Thing")),
             )
             ```
         """

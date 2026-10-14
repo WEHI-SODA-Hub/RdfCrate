@@ -4,11 +4,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
-from rdflib import RDF, Graph, Literal, URIRef
+from rdflib import DCTERMS, RDF, Graph, Literal, URIRef
 
-from rdfcrate import AttachedCrate, ContextNamespace, vocabs
+from rdfcrate import AttachedCrate, ContextNamespace
 from rdfcrate.test_helpers import patch_rocrate_context
-from rdfcrate.vocabs import Dct, Rdf
+from rdfcrate.wrapper import SCHEMA
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
@@ -17,20 +17,6 @@ ME = URIRef("https://orcid.org/0000-0002-8965-2595")
 WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
 
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
-
-
-class Sdo(vocabs.Sdo):
-    """
-    Extends the internal namespace with the extra terms used in these tests
-    """
-
-    Organization = vocabs.Sdo._base + "Organization"
-    Person = vocabs.Sdo._base + "Person"
-    affiliation = vocabs.Sdo._base + "affiliation"
-    author = vocabs.Sdo._base + "author"
-    publisher = vocabs.Sdo._base + "publisher"
-    url = vocabs.Sdo._base + "url"
-    version = vocabs.Sdo._base + "version"
 
 
 class Obi(ContextNamespace, context_prefix="obi"):
@@ -56,30 +42,30 @@ def rocrate_context():
 
 
 def make_test_crate(recursive: bool = False):
-    crate = AttachedCrate(TEST_CRATE, vocabs=[Sdo])
+    crate = AttachedCrate(TEST_CRATE)
 
     wehi = crate.add_entity(
         WEHI_RCP,
-        (Rdf.type_, Sdo.Organization),
-        (Sdo.name, Literal("WEHI Research Computing Platform")),
-        (Sdo.url, Literal(WEHI_RCP)),
+        (RDF.type, SCHEMA.Organization),
+        (SCHEMA.name, Literal("WEHI Research Computing Platform")),
+        (SCHEMA.url, Literal(WEHI_RCP)),
     )
     crate.add_root_entity(
         "Test Crate",
         "Crate for validating RdfCrate",
         datetime.now(timezone.utc),
         crate.add_entity(
-            MIT, (Rdf.type_, Sdo.CreativeWork), (Sdo.name, Literal("MIT License"))
+            MIT, (RDF.type, SCHEMA.CreativeWork), (SCHEMA.name, Literal("MIT License"))
         ),
-        (Sdo.version, Literal("1.0")),
-        (Sdo.publisher, wehi),
+        (SCHEMA.version, Literal("1.0")),
+        (SCHEMA.publisher, wehi),
         (
-            Sdo.author,
+            SCHEMA.author,
             crate.add_entity(
                 ME,
-                (Rdf.type_, Sdo.Person),
-                (Sdo.name, Literal("Michael")),
-                (Sdo.affiliation, wehi),
+                (RDF.type, SCHEMA.Person),
+                (SCHEMA.name, Literal("Michael")),
+                (SCHEMA.affiliation, wehi),
             ),
         ),
         recursive=recursive,
@@ -131,10 +117,10 @@ def test_single_file():
     }
     assert set(crate.graph.predicates()) >= {
         RDF.type,
-        Sdo.about,
-        Dct.conformsTo,
+        SCHEMA.about,
+        DCTERMS.conformsTo,
     }
-    assert set(crate.graph.objects()) >= {Sdo.File, Sdo.Dataset}
+    assert set(crate.graph.objects()) >= {SCHEMA.MediaObject, SCHEMA.Dataset}
 
     crate.validate()
 
@@ -154,7 +140,7 @@ def test_recursive_add():
         *BASE_SUBJECTS,
     }, "All files and directories should be in the crate"
     assert crate.graph.value(
-        predicate=Sdo.hasPart, object=URIRef("subdir/more_text.txt")
+        predicate=SCHEMA.hasPart, object=URIRef("subdir/more_text.txt")
     ) == URIRef("subdir/"), (
         "Recursive add should link the immediate child and parent via hasPart"
     )
@@ -164,7 +150,7 @@ def test_recursive_add():
 def test_mime_type():
     crate = make_test_crate(recursive=True)
 
-    assert crate.graph.value(URIRef("text.txt"), Sdo.encodingFormat) == Literal(
+    assert crate.graph.value(URIRef("text.txt"), SCHEMA.encodingFormat) == Literal(
         "text/plain"
     )
 
@@ -179,7 +165,7 @@ def test_spaces_in_path(empty_crate: AttachedCrate):
     assert (
         URIRef("file%20with%20spaces.txt"),
         RDF.type,
-        Sdo.File,
+        SCHEMA.MediaObject,
     ) in empty_crate.graph
 
 
@@ -202,8 +188,8 @@ def test_custom_vocabs():
     crate.vocabs += [Obi, OmeroCrate]
     crate.register_file(
         "text.txt",
-        (Sdo.name, Literal("COMET Image")),
-        (Rdf.type_, Obi.Image),
+        (SCHEMA.name, Literal("COMET Image")),
+        (RDF.type, Obi.Image),
         (OmeroCrate.upload, Literal(True)),
     )
     crate_json = json.loads(crate.compile())

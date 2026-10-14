@@ -11,7 +11,6 @@ from rdflib.compare import isomorphic
 from rdflib.plugins.shared.jsonld.context import Context
 
 from rdfcrate import ContextGraph, ContextNamespace
-from rdfcrate.vocabs import Rdf
 
 
 class Sdo(ContextNamespace):
@@ -46,7 +45,7 @@ def test_custom_vocab():
     crate = ContextGraph(vocabs=[Sdo, BioschemasDrafts])
     crate.add_entity(
         "#some_protocol",
-        (Rdf.type_, BioschemasDrafts.LabProtocol),
+        (RDF.type, BioschemasDrafts.LabProtocol),
         (Sdo.name, Literal("Some Protocol")),
     )
     entity_json = json.loads(crate.compile())
@@ -65,7 +64,7 @@ def test_curies():
     crate = ContextGraph(vocabs=[Sdo, Obi])
     crate.add_entity(
         "#image",
-        (Rdf.type_, Obi.Image),
+        (RDF.type, Obi.Image),
         (Sdo.hasPart, Obi.Assay),
     )
     entity_json = json.loads(crate.compile())
@@ -85,7 +84,7 @@ def test_round_trip():
     crate = ContextGraph(vocabs=[Sdo, Obi])
     crate.add_entity(
         "http://example.org/image",
-        (Rdf.type_, Obi.Image),
+        (RDF.type, Obi.Image),
         (Sdo.hasPart, Obi.Assay),
         (Sdo.name, Literal("An image")),
     )
@@ -98,8 +97,13 @@ def test_rdf_type_not_in_context():
     """
     rdf:type should never be redefined, since JSON-LD uses `@type`.
     """
+
+    class Rdf(ContextNamespace):
+        _base = URIRef(str(RDF))
+        type_ = _base + "type"
+
     crate = ContextGraph(vocabs=[Sdo, Rdf])
-    crate.add_entity("#thing", (Rdf.type_, Sdo.Thing))
+    crate.add_entity("#thing", (RDF.type, Sdo.Thing))
     assert json.loads(crate.compile())["@context"] == {
         "Thing": "http://schema.org/Thing"
     }
@@ -110,7 +114,7 @@ def test_missing_term():
     IRIs that aren't defined in any vocab should raise an error.
     """
     crate = ContextGraph(vocabs=[Sdo])
-    crate.add_entity("#thing", (Rdf.type_, BioschemasDrafts.Enzyme))
+    crate.add_entity("#thing", (RDF.type, BioschemasDrafts.Enzyme))
     with pytest.raises(ValueError, match=str(BioschemasDrafts.Enzyme)):
         crate.compile()
 
@@ -147,7 +151,7 @@ def test_datatype():
 
 def test_bnode():
     crate = ContextGraph(vocabs=[BioschemasDrafts])
-    crate.add_entity(BNode(), (Rdf.type_, BioschemasDrafts.LabProtocol))
+    crate.add_entity(BNode(), (RDF.type, BioschemasDrafts.LabProtocol))
     assert any(isinstance(id, BNode) for id in crate.graph.subjects())
 
 
@@ -177,7 +181,7 @@ def test_add_basecrate():
     """
     a = ContextGraph(vocabs=[Sdo])
     b = ContextGraph(vocabs=[Sdo, BioschemasDrafts])
-    b.add_entity("#sub", (Rdf.type_, BioschemasDrafts.LabProtocol))
+    b.add_entity("#sub", (RDF.type, BioschemasDrafts.LabProtocol))
     a.add(b)
 
     assert URIRef("#sub") in set(a.graph.subjects()), (
@@ -212,7 +216,7 @@ def test_navigate_and_navigate_to():
     pytest.importorskip("rdfnav")
 
     crate = ContextGraph()
-    thing = crate.add_entity("#thing", (Rdf.type_, Sdo.Thing))
+    thing = crate.add_entity("#thing", (RDF.type, Sdo.Thing))
 
     navigator = crate.navigate()
     assert navigator.instance(Sdo.Thing).iri == thing
@@ -228,7 +232,7 @@ def test_parent_context():
     crate = ContextGraph(vocabs=[Sdo, BioschemasDrafts])
     crate.add_entity(
         "#thing",
-        (Rdf.type_, BioschemasDrafts.LabProtocol),
+        (RDF.type, BioschemasDrafts.LabProtocol),
         (Sdo.name, Literal("Some Protocol")),
     )
     assert crate.vocab_context(parent=Context({"name": str(Sdo.name)})) == {

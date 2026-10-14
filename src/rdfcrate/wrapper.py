@@ -11,17 +11,20 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Any
 from urllib.parse import quote
 
-from rdflib import IdentifiedNode, Literal, URIRef
+from rdflib import DCTERMS, RDF, IdentifiedNode, Literal, Namespace, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from typing_extensions import Doc, Unpack
 
 from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, PropertyArg
 from rdfcrate.spec_version import ROCrate1_1, SpecVersion
 from rdfcrate.types import Object, Predicate
-from rdfcrate.vocabs import Dct, Rdf, Sdo
 
 if TYPE_CHECKING:
     from rocrate_validator.models import CheckIssue, Severity
+
+#: Schema.org namespace as used by RO-Crate.
+#: Note that this is different from `rdflib.SDO`, which uses `https://schema.org/`.
+SCHEMA = Namespace("http://schema.org/")
 
 Recursive = Annotated[
     bool,
@@ -104,7 +107,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         """
         self.add_entity(
             self.root_data_entity,
-            (Rdf.type_, Sdo.Dataset),
+            (RDF.type, SCHEMA.Dataset),
             *self._root_props(name, description, date_published, license),
             *props,
         )
@@ -118,10 +121,10 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         license: Object | str,
     ) -> list[PropertyArg]:
         return [
-            (Sdo.name, as_literal(name)),
-            (Sdo.description, as_literal(description)),
-            (Sdo.datePublished, as_literal(date_published)),
-            (Sdo.license, as_literal(license)),
+            (SCHEMA.name, as_literal(name)),
+            (SCHEMA.description, as_literal(description)),
+            (SCHEMA.datePublished, as_literal(date_published)),
+            (SCHEMA.license, as_literal(license)),
         ]
 
     @property
@@ -137,9 +140,9 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         """
         self.add_entity(
             self.metadata_entity,
-            (Rdf.type_, Sdo.CreativeWork),
-            (Sdo.about, self.root_data_entity),
-            (Dct.conformsTo, self.version.conforms_to_url),
+            (RDF.type, SCHEMA.CreativeWork),
+            (SCHEMA.about, self.root_data_entity),
+            (DCTERMS.conformsTo, self.version.conforms_to_url),
             *props,
         )
 
@@ -159,7 +162,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         """
         if dataset is None:
             dataset = self.root_data_entity
-        self.add_entity(dataset, (Sdo.hasPart, entity))
+        self.add_entity(dataset, (SCHEMA.hasPart, entity))
 
     def register_file(
         self,
@@ -183,22 +186,22 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
             ```python
             from rdflib import Literal
             from rdfcrate import AttachedCrate
-            from rdfcrate.vocabs import Sdo
+            from rdfcrate.wrapper import SCHEMA
 
-            AttachedCrate(".").register_file("./some/data.txt", (Sdo.description, Literal("This is a file with some data")))
+            AttachedCrate(".").register_file("./some/data.txt", (SCHEMA.description, Literal("This is a file with some data")))
             ```
         """
         file_id = URIRef(path)
-        self.add_entity(file_id, (Rdf.type_, Sdo.File), *props)
+        self.add_entity(file_id, (RDF.type, SCHEMA.MediaObject), *props)
 
         if guess_mime:
-            if has_predicate(props, Sdo.encodingFormat):
+            if has_predicate(props, SCHEMA.encodingFormat):
                 raise ValueError(
                     "Cannot guess MIME type when encodingFormat is provided"
                 )
             guess_type, _guess_encoding = mimetypes.guess_type(path)
             if guess_type is not None:
-                self.add_entity(file_id, (Sdo.encodingFormat, Literal(guess_type)))
+                self.add_entity(file_id, (SCHEMA.encodingFormat, Literal(guess_type)))
 
         self.link_to_dataset(file_id, dataset)
 
@@ -227,16 +230,16 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
             ```python
             from rdflib import Literal
             from rdfcrate import AttachedCrate
-            from rdfcrate.vocabs import Sdo
+            from rdfcrate.wrapper import SCHEMA
 
-            AttachedCrate(".").register_dir("./some/dir", (Sdo.description, Literal("This is a directory I am describing")))
+            AttachedCrate(".").register_dir("./some/dir", (SCHEMA.description, Literal("This is a directory I am describing")))
             ```
         """
         if not path.endswith("/"):
             # Directories must end with a slash in RO-Crate
             path += "/"
         dir_id = URIRef(path)
-        self.add_entity(dir_id, (Rdf.type_, Sdo.Dataset), *props)
+        self.add_entity(dir_id, (RDF.type, SCHEMA.Dataset), *props)
         if self.root_data_entity != dir_id:
             # The root dataset is not linked to itself
             self.link_to_dataset(dir_id, dataset)
@@ -342,9 +345,9 @@ class AttachedCrate(RoCrate):
         _, file_id = self._resolve_path(path)
         ret = super().register_file(file_id, *props, **kwargs)
         if add_size:
-            if has_predicate(props, Sdo.contentSize):
+            if has_predicate(props, SCHEMA.contentSize):
                 raise ValueError("Cannot add size when contentSize is provided")
-            self.add_entity(ret, (Sdo.contentSize, Literal(str(stat(path).st_size))))
+            self.add_entity(ret, (SCHEMA.contentSize, Literal(str(stat(path).st_size))))
         return ret
 
     def add_root_entity(

@@ -14,9 +14,11 @@ In practice this added a lot of complexity, and was never a good fit for RDF:
 
 ## Properties
 
-Properties are `(predicate, object)` tuples, using `rdflib` terms directly:
+Properties are `(predicate, object)` tuples, using `rdflib` terms directly.
+The examples here use `RDF` from `rdflib`, and `SCHEMA` from `rdfcrate.wrapper`, which is `Namespace("http://schema.org/")`.
+Note that RO-Crate uses `http://schema.org/`, so `rdflib.SDO`, which uses `https://schema.org/`, should not be used.
 ```python
-(Sdo.name, Literal("Michael"))
+(SCHEMA.name, Literal("Michael"))
 ```
 Is equivalent to
 ```json
@@ -30,15 +32,15 @@ You pass a list of properties to create or describe an entity, and types are add
 ```python
 me = crate.add_entity(
     "#me",
-    (Rdf.type_, Sdo.Person),
-    (Sdo.name, Literal("Michael")),
-    (Sdo.affiliation, wehi),
+    (RDF.type, SCHEMA.Person),
+    (SCHEMA.name, Literal("Michael")),
+    (SCHEMA.affiliation, wehi),
 )
 ```
 The return value from `crate.add_entity` is just the IRI, which you can then use as the object of other properties.
 Properties only go from the entity being described to the object, so to make the entity the object of a property, add a plain triple:
 ```python
-crate.add((parent, Sdo.hasPart, me))
+crate.add((parent, SCHEMA.hasPart, me))
 ```
 
 ## Mandatory Properties
@@ -50,7 +52,7 @@ crate.add_root_entity(
     "Photo gallery of iconic bridges in Melbourne",
     date.today(),
     URIRef("https://creativecommons.org/licenses/by/4.0/"),
-    (Sdo.keywords, Literal("bridges")),
+    (SCHEMA.keywords, Literal("bridges")),
 )
 ```
 
@@ -58,11 +60,6 @@ crate.add_root_entity(
 
 RO-Crate requires that each IRI has a short form (a term) in the JSON-LD context.
 Terms in the RO-Crate context, such as `name` or `File`, are used automatically.
-`rdfcrate.vocabs.Sdo` only contains the schema.org terms that `rdfcrate` uses internally, but you can subclass it to add more, as the examples above assume:
-```python
-class Sdo(rdfcrate.vocabs.Sdo):
-    Person = rdfcrate.vocabs.Sdo._base + "Person"
-```
 Any other terms must be defined in a `ContextNamespace`, and passed to the crate in `vocabs`:
 ```python
 class Obi(ContextNamespace, context_prefix="obi"):

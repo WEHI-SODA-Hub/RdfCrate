@@ -26,9 +26,9 @@ document. Here’s how you could make an RO-Crate using RdfCrate:
 ``` python
 from datetime import date
 
-from rdflib import Literal, URIRef
+from rdflib import RDF, Literal, URIRef
 from rdfcrate import AttachedCrate, ContextNamespace
-from rdfcrate.vocabs import Rdf, Sdo
+from rdfcrate.wrapper import SCHEMA
 
 # Terms outside of the RO-Crate context are defined in a ContextNamespace
 class Wikidata(ContextNamespace, context_prefix="wd"):
@@ -38,8 +38,8 @@ class Wikidata(ContextNamespace, context_prefix="wd"):
 crate = AttachedCrate("crate/", vocabs=[Wikidata])
 crate.register_file(
     "monty.jpg",
-    (Sdo.name, Literal("Montague Street Bridge")),
-    (Rdf.type_, Wikidata.Photograph),
+    (SCHEMA.name, Literal("Montague Street Bridge")),
+    (RDF.type, Wikidata.Photograph),
 )
 crate.add_root_entity(
     "Melbourne Bridges",
@@ -62,7 +62,7 @@ print(crate.compile())
         {
           "@id": "./",
           "@type": "Dataset",
-          "datePublished": "2026-10-13",
+          "datePublished": "2026-10-14",
           "description": "Photo gallery of iconic bridges in Melbourne",
           "hasPart": {
             "@id": "monty.jpg"

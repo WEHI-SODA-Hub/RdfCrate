@@ -80,39 +80,14 @@ class ContextGraph:
         Raises:
             ValueError: If two terms have the same label, or if an IRI in the graph has no term.
         """
-        if omit is None:
-            omit = Context()
-        missing = {
-            iri for iri in self._used_iris() if omit.find_term(str(iri)) is None
-        }
-
-        context: dict[str, str] = {}
-        for vocab in self.vocabs:
-            vocab_context = vocab.jsonld_context(iris=missing)
-            vocab_expander = Context(vocab_context)
-            for label, value in vocab_context.items():
-                iri = vocab_expander.expand(label)
-                existing = context.get(label)
-                if existing is not None and existing != value:
-                    raise ValueError(
-                        f'Term "{label}" from {vocab.__name__} is defined as both {existing} and {value}. Use a `context_prefix` to distinguish them.'
-                    )
-                existing_parent = omit.expand(label)
-                if existing_parent is not None and existing_parent != iri:
-                    raise ValueError(
-                        f'Term "{label}" from {vocab.__name__} is already defined to mean {existing_parent} in the parent context. Use a `context_prefix` to distinguish them.'
-                    )
-                context[label] = value
-
-        resolved = omit.subcontext(context)
-        unresolved = sorted(
-            str(iri) for iri in missing if resolved.find_term(str(iri)) is None
-        )
-        if unresolved:
-            raise ValueError(
-                f"No term is defined for the following IRIs: {', '.join(unresolved)}. Add them to a ContextNamespace in `vocabs`."
-            )
-
+        context = {}
+        for iri in self._used_iris():
+            for vocab in self.vocabs:
+                if vocab.has_iri(iri):
+                    vocab.add_term(iri, context=context)
+                    break
+            else:
+                raise ValueError(f"No term is defined for IRI {iri} in any of the provided vocabularies.")
         return context
 
     @property

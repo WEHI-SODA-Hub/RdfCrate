@@ -2,53 +2,11 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any, ClassVar, Literal, Protocol
+from typing import Any, ClassVar, Literal, Protocol, TypeAlias
 
 from rdflib import RDF, URIRef
 
-class ContextBuilder(Protocol):
-    def terms_to_dict(self, ns: ContextNamespace) -> dict[str, URIRef]:
-        ...
-
-@dataclass
-class StandardContextBuilder(ContextBuilder):
-    """
-    Builds a JSON-LD context where terms are used directly
-    """
-
-    def terms_to_dict(self, ns: ContextNamespace) -> dict[str, URIRef]:
-        return {
-            attr: value for attr, value in ns.terms()
-        }
-
-@dataclass
-class CurieContextBuilder(ContextBuilder):
-    """
-    Builds a JSON-LD context using CURIEs for the terms in a namespace.
-    """
-    #: The prefix term as a human-readable string, e.g., "obi" for OBI
-    prefix: str
-    #: The base IRI that the prefix maps to in the JSON-LD context, e.g. "http://purl.obolibrary.org/obo/" for OBI
-    base: URIRef
-
-    def terms_to_dict(self, ns: ContextNamespace) -> dict[str, URIRef]:
-        # Only the prefix and base are included in the context.
-        # The terms themselves will be represented as CURIEs using that prefix.
-        return {self.prefix: self.base}
-
-
-@dataclass
-class PrefixContextBuilder(ContextBuilder):
-    """
-    Builds a JSON-LD context that prefixes each term to avoid naming conflicts.
-    """
-    #: The prefix term as a human-readable string, e.g., "obi" for OBI
-    prefix: str
-
-    def terms_to_dict(self, ns: ContextNamespace) -> dict[str, URIRef]:
-        return {
-            f"{self.prefix}{attr}": value for attr, value in ns.terms()
-        }
+ContextMode: TypeAlias = Literal["standard", "prefix", "prefix_collision", "curie", "omit"]
 
 class ContextNamespace:
     """
@@ -74,90 +32,89 @@ class ContextNamespace:
     #: IRI that the terms in this namespace share. If this and `_context_prefix` are set, the context will use CURIEs.
     _base: ClassVar[URIRef | None] = None
     #: Prefix that is prepended to every term label in the context, and used as the CURIE prefix for `_base`.
-    _context_prefix: ClassVar[str | None] = None
+    _prefix: ClassVar[str | None] = None
     #: The mode used for prefixing terms in the context.
-    _prefix_mode: ClassVar[Literal["none", "prefix", "curie"]] = "none"
+    _mode: ClassVar[ContextMode] = "standard"
     #: A dictionary version of the terms in this namespace
-    _terms: ClassVar[dict[str, URIRef]] = {}
-    #: The set of all IRIs defined as terms in this namespace.
-    _all_iris: ClassVar[set[URIRef]] = set()
+    _terms_to_iris: ClassVar[dict[str, URIRef]] = {}
+    #: Inverse mapping from IRIs to term labels.
+    _iris_to_terms: ClassVar[dict[URIRef, str]] = {}
 
-    def __init_subclass__(cls, /, context_prefix: str | None = None, prefix_mode: Literal["none", "prefix", "curie"] = "none", **kwargs: Any):
+    def __init_subclass__(cls, /, prefix: str | None = None, mode: ContextMode | None = None, **kwargs: Any):
         """
         Params:
-            context_prefix: A prefix that will be prepended to each term label in the JSON-LD context.
-                If `_base` is also set, it will be defined as a prefix in the context, and terms will be written as CURIEs.
+            mode: The mode used for prefixing terms in the JSON-LD context.
+                Can be "standard", "prefix", "curie", or "omit". In "standard" mode, terms are not prefixed. In "prefix" mode, the specified prefix is prepended to each term label. In "curie" mode, terms are written as CURIEs using the prefix. In "omit" mode, no terms are included in the context.
+                In "prefix_collision" mode, the specified prefix is prepended to a term label only if that term is already in use in the context.
+            prefix: A prefix that will be prepended to each term label in "prefix" and "curie" modes.
         """
         super().__init_subclass__(**kwargs)
-        cls._context_prefix = context_prefix
-        cls._prefix_mode = prefix_mode
-        cls._terms = {
+        cls._prefix = prefix
+        if mode is not None:
+            cls._mode = mode
+        cls._terms_to_iris = {
             attr: value
             for attr, value in vars(cls).items()
             if not attr.startswith("_") and isinstance(value, URIRef)
         }
-        cls._all_iris = set(cls._terms.values())
+        cls._iris_to_terms = {value: attr for attr, value in cls._terms_to_iris.items()}
 
     @classmethod
     def terms(cls) -> Iterable[tuple[str, URIRef]]:
         """
-        Returns all IRIs defined as terms in this namespace.
+        Yields all IRIs defined as terms in this namespace.
         """
-        for attr, value in cls._terms.items():
-            yield attr, value
+        yield from cls._terms_to_iris.items()
 
     @classmethod
-    def defines_iri(cls, iri: URIRef) -> bool:
+    def has_iri(cls, iri: URIRef) -> bool:
         """
         Returns `True` if the given IRI is defined as a term in this namespace.
         """
-        return iri in cls._all_iris
+        return iri in cls._iris_to_terms
 
     @classmethod
-    def jsonld_context(cls, iris: Iterable[URIRef] | None = None) -> dict[str, str]:
+    def add_term(cls, iri: URIRef, context: dict[str, str]):
         """
-        Returns a flat JSON-LD context for the terms in this namespace.
-
-        If `context_prefix` is set, it is prepended to each term label, e.g. `{"obiImage": ...}`.
-        This is designed to avoid collisions with other terms in the context.
-        If `_base` is also set, the prefix is defined as `_base`, and terms are written as CURIEs, e.g. `{"obi": "http://purl.obolibrary.org/obo/", "obiImage": "obi:IAO_0000101"}`.
-        Otherwise, terms are mapped to full IRIs.
-
-        `rdf:type` is never included, because JSON-LD uses `@type` for it.
-
-        Params:
-            iris: If provided, only terms with these IRIs will be included in the context.
+        Updates the JSON-LD context `context` with terms in order to label `iri`
         """
-        match cls._prefix_mode:
-            case "none":
-                prefix = None
-            case "prefix" | "curie":
-                prefix = cls._context_prefix
-            case _:
-                raise ValueError(f"Unknown prefix mode: {cls._prefix_mode}")
-        
-        prefix = cls._context_prefix
-        base = cls._base
-        included = set(iris or [])
-        context: dict[str, str] = {}
+        # At this point we know that the IRI is defined as a term in this namespace.
+        term = cls._iris_to_terms[iri]
+        match cls._mode:
+            case "omit":
+                # In omit mode, we do not include any terms in the JSON-LD context.
+                return
+            case "standard":
+                # Add terms for each utilised IRI
+                context[term] = iri.toPython()
+            case "prefix":
+                if cls._prefix is None:
+                    raise ValueError("Context prefix must be set for prefix mode.")
+                # Add an extra prefix to the term label
+                context[f"{cls._prefix}{term}"] = iri.toPython()
+            case "curie":
+                if cls._base is None:
+                    raise ValueError("Base IRI must be set for CURIE mode.")
+                if cls._prefix is None:
+                    raise ValueError("Context prefix must be set for CURIE mode.")
 
-        for attr, iri in cls._terms.items():
-            if iri not in included:
-                # Skip terms that aren't used in the graph
-                continue
+                # In CURIE mode, we only add the base IRI, and let the serializer construct CURIEs for us
+                context[cls._prefix] = cls._base
+            case "prefix_collision":
+                if term in context:
+                    # Only add the prefix if there is a collision
+                    term = f"{cls._prefix}{term}"
+                context[term] = iri.toPython()
 
-            label = attr.removesuffix("_")
-            if prefix is not None:
-                label = prefix + label[0].upper() + label[1:]
+    # @classmethod
+    # def jsonld_context(cls, iris: Iterable[URIRef]) -> dict[str, str]:
+    #     """
+    #     Returns a flat JSON-LD context for the given IRIs. 
+    #     If a given IRI is not defined as a term in this namespace, it will be ignored.
 
-            if prefix is not None and base is not None and iri.startswith(base):
-                # Using a CURIE
-                context[prefix] = str(base)
-                context[label] = f"{prefix}:{iri[len(base) :]}"
-            else:
-                context[label] = str(iri)
-
-        return context
+    #     This approach avoids adding unused terms to the JSON-LD context.
+    #     """
+    #     return {}
 
 
 __all__ = [

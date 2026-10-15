@@ -68,20 +68,22 @@ class ContextGraph:
                 iris.add(object.datatype)
         return iris
 
-    def vocab_context(self, parent: Context | None = None) -> dict[str, str]:
+    def vocab_context(self, omit: Context | None = None) -> dict[str, str]:
         """
-        Returns the terms from `vocabs` that are used in the graph.
+        Returns the terms from `vocabs` that are used in the graph, and validates that all IRIs have exactly one term.
 
         Params:
-            parent: A context that the returned terms will be combined with. Terms already defined in it will be omitted.
+            omit: A context containing terms that do not need to be explicitly handled.
+                e.g. for RO-Crate, this will be the RO-Crate context.
+                Specifically, any IRI in the graph that is also in `omit` will not be included in the returned context, nor will it fail validation for missing a term.
 
         Raises:
             ValueError: If two terms have the same label, or if an IRI in the graph has no term.
         """
-        if parent is None:
-            parent = Context()
+        if omit is None:
+            omit = Context()
         missing = {
-            iri for iri in self._used_iris() if parent.find_term(str(iri)) is None
+            iri for iri in self._used_iris() if omit.find_term(str(iri)) is None
         }
 
         context: dict[str, str] = {}
@@ -95,14 +97,14 @@ class ContextGraph:
                     raise ValueError(
                         f'Term "{label}" from {vocab.__name__} is defined as both {existing} and {value}. Use a `context_prefix` to distinguish them.'
                     )
-                existing_parent = parent.expand(label)
+                existing_parent = omit.expand(label)
                 if existing_parent is not None and existing_parent != iri:
                     raise ValueError(
                         f'Term "{label}" from {vocab.__name__} is already defined to mean {existing_parent} in the parent context. Use a `context_prefix` to distinguish them.'
                     )
                 context[label] = value
 
-        resolved = parent.subcontext(context)
+        resolved = omit.subcontext(context)
         unresolved = sorted(
             str(iri) for iri in missing if resolved.find_term(str(iri)) is None
         )

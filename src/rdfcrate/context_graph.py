@@ -7,6 +7,7 @@ from rdflib import RDF, XSD, Graph, IdentifiedNode, Literal, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from typing_extensions import Doc, Unpack
 
+from rdfcrate.context_builder import ContextBuilder
 from rdfcrate.namespace import ContextNamespace
 from rdfcrate.types import Object, Predicate, Triple
 
@@ -69,22 +70,31 @@ class ContextGraph:
                 iris.add(object.datatype)
         return iris
 
+    def context_builder(self) -> ContextBuilder:
+        """
+        Returns a new `ContextBuilder` used to generate the vocab context.
+        Subclasses can override this to provide terms that are defined in an existing context.
+        """
+        return ContextBuilder()
+
     def vocab_context(self) -> dict[str, str]:
         """
         Returns the terms from `vocabs` that are used in the graph, and validates that all IRIs have exactly one term.
         Terms from namespaces in "omit" mode are not returned, but other namespaces still can't redefine them.
         """
-        context: dict[str, str] = {}
-        claimed: dict[str, str] = {}
+        builder = self.context_builder()
         for vocab in self.vocabs:
-            vocab.reserve_terms(claimed)
-        iris_to_label = self._used_iris()
+            vocab.reserve_terms(builder)
+        # IRIs that already have a term defined elsewhere don't need one in the generated context
+        iris_to_label = {
+            iri for iri in self._used_iris() if not builder.is_omitted(iri)
+        }
         # We have to iterate over the vocabularies first to ensure that higher-priority vocabularies get the chance to define terms before lower-priority ones.
         for vocab in self.vocabs:
             labelled = set()
             for iri in iris_to_label:
                 if vocab.has_iri(iri):
-                    vocab.add_term(iri, context=context, claimed=claimed)
+                    vocab.add_term(iri, builder)
                     labelled.add(iri)
             iris_to_label -= labelled
 
@@ -93,7 +103,7 @@ class ContextGraph:
                 f"No term is defined for IRI {iri} in any of the provided vocabularies."
             )
 
-        return context
+        return builder.jsonld_context()
 
     @property
     def context_source(

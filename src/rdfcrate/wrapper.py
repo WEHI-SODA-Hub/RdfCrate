@@ -15,6 +15,7 @@ from rdflib import DCTERMS, RDF, IdentifiedNode, Literal, Namespace, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from typing_extensions import Doc, Unpack
 
+from rdfcrate.context_builder import ContextBuilder
 from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, PropertyArg
 from rdfcrate.spec_version import ROCrate1_1, SpecVersion
 from rdfcrate.types import Object, Predicate
@@ -71,6 +72,10 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
 
         # We resolve the RO-Crate context now so we can use it to resolve terms and check if they are already defined
         self._roc_context = Context(self.version.context_url)
+
+    def context_builder(self) -> ContextBuilder:
+        # Terms in the RO-Crate context are already defined, so they mustn't be added or redefined
+        return ContextBuilder(external=self._roc_context)
 
     @property
     def context_source(self) -> list[dict[str, Any] | str | None] | str:

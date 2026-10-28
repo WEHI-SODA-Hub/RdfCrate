@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import Any, ClassVar, Literal, TypeAlias
+from typing import TYPE_CHECKING, Any, ClassVar, Literal, TypeAlias
 
 from rdflib import URIRef
+
+if TYPE_CHECKING:
+    from rdfcrate.context_builder import ContextBuilder
 
 ContextMode: TypeAlias = Literal[
     "standard", "prefix", "prefix_collision", "curie", "omit"
@@ -84,53 +87,47 @@ class ContextNamespace:
         return iri in cls._iris_to_terms
 
     @classmethod
-    def reserve_terms(cls, claimed: dict[str, str]):
+    def reserve_terms(cls, builder: ContextBuilder):
         """
-        Claims the labels of terms that are defined outside of the generated context, whether or not they are used in the graph.
+        Reserves the labels of terms that are defined outside of the generated context, whether or not they are used in the graph.
         In "omit" mode this is every term in the namespace, since they are already defined elsewhere, e.g. in a remote context.
         """
         if cls._mode == "omit":
             for term, iri in cls.terms():
-                cls._claim(term, iri, claimed)
+                builder.omit_term(term, iri)
 
     @classmethod
-    def add_term(cls, iri: URIRef, context: dict[str, str], claimed: dict[str, str]):
+    def add_term(cls, iri: URIRef, builder: ContextBuilder):
         """
-        Updates the JSON-LD context `context` with terms in order to label `iri`
-
-        Params:
-            context: The JSON-LD context to update.
-            claimed: Every term label in use, mapped to the IRI it expands to.
-                This is a superset of `context`, since it also includes the terms of "omit" namespaces, which are defined elsewhere but must not be redefined.
+        Adds terms to `builder` in order to label `iri`.
+        IRIs from "omit" namespaces never reach this method, because `reserve_terms` has already labelled them.
         """
         # At this point we know that the IRI is defined as a term in this namespace.
         term = cls._iris_to_terms[iri]
         match cls._mode:
             case "omit":
-                # In omit mode, we do not include any terms in the JSON-LD context. Their labels are claimed by `reserve_terms`.
-                pass
+                raise ValueError(
+                    f"IRI {iri} is from an omit namespace, so it should be labelled by `reserve_terms`."
+                )
             case "standard":
                 # Add terms for each utilised IRI
-                cls._claim(term, iri, claimed)
-                context[term] = iri.toPython()
+                builder.claim(term, iri)
             case "prefix":
                 if cls._prefix is None:
                     raise ValueError("Context prefix must be set for prefix mode.")
                 # Add an extra prefix to the term label
-                label = f"{cls._prefix}{term}"
-                cls._claim(label, iri, claimed)
-                context[label] = iri.toPython()
+                builder.claim(f"{cls._prefix}{term}", iri)
             case "prefix_collision":
                 # Only add the prefix if the unprefixed label is already taken
                 label = term
-                if term in claimed and claimed[term] != iri.toPython():
+                existing = builder.lookup(term)
+                if existing is not None and existing != iri.toPython():
                     if cls._prefix is None:
                         raise ValueError(
                             "Context prefix must be set for prefix_collision mode when a collision occurs."
                         )
                     label = f"{cls._prefix}{term}"
-                cls._claim(label, iri, claimed)
-                context[label] = iri.toPython()
+                builder.claim(label, iri)
             case "curie":
                 if cls._base is None:
                     raise ValueError("Base IRI must be set for CURIE mode.")
@@ -138,19 +135,7 @@ class ContextNamespace:
                     raise ValueError("Context prefix must be set for CURIE mode.")
 
                 # In CURIE mode, we only add the base IRI, and let the serializer construct CURIEs for us
-                cls._claim(cls._prefix, cls._base, claimed)
-                context[cls._prefix] = cls._base.toPython()
-
-    @staticmethod
-    def _claim(label: str, iri: URIRef, claimed: dict[str, str]):
-        """
-        Records that `label` expands to `iri`, or raises an error if it is already claimed by a different IRI.
-        """
-        if label in claimed and claimed[label] != iri.toPython():
-            raise ValueError(
-                f"Collision detected for term {label} with IRI {iri.toPython()}, which is already used for {claimed[label]}."
-            )
-        claimed[label] = iri.toPython()
+                builder.claim(cls._prefix, cls._base)
 
     # @classmethod
     # def jsonld_context(cls, iris: Iterable[URIRef]) -> dict[str, str]:

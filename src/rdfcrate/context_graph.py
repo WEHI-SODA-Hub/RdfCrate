@@ -47,6 +47,7 @@ class ContextGraph:
 
     graph: Graph
     #: Namespaces whose terms can be used in the graph. Every predicate, type and datatype in the graph must be defined in one of these.
+    #: The earlier a vocabulary appears in this list, the higher its priority when resolving term collisions.
     vocabs: list[type[ContextNamespace]]
 
     def _used_iris(self) -> set[URIRef]:
@@ -68,26 +69,30 @@ class ContextGraph:
                 iris.add(object.datatype)
         return iris
 
-    def vocab_context(self, omit: Context | None = None) -> dict[str, str]:
+    def vocab_context(self) -> dict[str, str]:
         """
         Returns the terms from `vocabs` that are used in the graph, and validates that all IRIs have exactly one term.
-
-        Params:
-            omit: A context containing terms that do not need to be explicitly handled.
-                e.g. for RO-Crate, this will be the RO-Crate context.
-                Specifically, any IRI in the graph that is also in `omit` will not be included in the returned context, nor will it fail validation for missing a term.
-
-        Raises:
-            ValueError: If two terms have the same label, or if an IRI in the graph has no term.
+        Terms from namespaces in "omit" mode are not returned, but other namespaces still can't redefine them.
         """
-        context = {}
-        for iri in self._used_iris():
-            for vocab in self.vocabs:
+        context: dict[str, str] = {}
+        claimed: dict[str, str] = {}
+        for vocab in self.vocabs:
+            vocab.reserve_terms(claimed)
+        iris_to_label = self._used_iris()
+        # We have to iterate over the vocabularies first to ensure that higher-priority vocabularies get the chance to define terms before lower-priority ones.
+        for vocab in self.vocabs:
+            labelled = set()
+            for iri in iris_to_label:
                 if vocab.has_iri(iri):
-                    vocab.add_term(iri, context=context)
-                    break
-            else:
-                raise ValueError(f"No term is defined for IRI {iri} in any of the provided vocabularies.")
+                    vocab.add_term(iri, context=context, claimed=claimed)
+                    labelled.add(iri)
+            iris_to_label -= labelled
+
+        for iri in iris_to_label:
+            raise ValueError(
+                f"No term is defined for IRI {iri} in any of the provided vocabularies."
+            )
+
         return context
 
     @property

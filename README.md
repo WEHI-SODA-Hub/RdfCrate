@@ -30,10 +30,12 @@ from rdflib import RDF, Literal, URIRef
 from rdfcrate import AttachedCrate, ContextNamespace
 from rdfcrate.wrapper import SCHEMA
 
+
 # Terms outside of the RO-Crate context are defined in a ContextNamespace
 class Wikidata(ContextNamespace, context_prefix="wd"):
     _base = URIRef("http://www.wikidata.org/entity/")
     Photograph = _base + "Q125191"
+
 
 crate = AttachedCrate("crate/", vocabs=[Wikidata])
 crate.register_file(

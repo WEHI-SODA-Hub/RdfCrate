@@ -75,7 +75,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
     @property
     def context_source(self) -> list[dict[str, Any] | str | None] | str:
         # Implements the requirements for context format according to the RO-Crate spec
-        custom_terms = self.vocab_context(omit=self._roc_context)
+        custom_terms = self.vocab_context()
         if len(custom_terms) == 0:
             return self.version.context_url
         else:

@@ -4,19 +4,21 @@ Tests for ContextGraph, ie those that aren't RO-Crate specific.
 
 import datetime
 import json
+from dataclasses import dataclass
 
 import pytest
-from rdflib import RDF, XSD, BNode, Graph, Literal, URIRef
+from rdflib import DCTERMS, RDF, SDO, XSD, BNode, Graph, Literal, URIRef
 from rdflib.compare import isomorphic
-from rdflib.plugins.shared.jsonld.context import Context
 
 from rdfcrate import ContextGraph, ContextNamespace
 
 
-class Sdo(ContextNamespace):
+class Sdo(ContextNamespace, mode="omit"):
     _base = URIRef("http://schema.org/")
     Thing = _base + "Thing"
     dateCreated = _base + "dateCreated"
+    description = _base + "description"
+    duration = _base + "duration"
     hasPart = _base + "hasPart"
     name = _base + "name"
 
@@ -25,17 +27,46 @@ class BioschemasDrafts(ContextNamespace):
     _base = URIRef("https://bioschemas.org/draft_terms/")
     LabProtocol = _base + "LabProtocol"
     Enzyme = _base + "Enzyme"
+    labEquipment = _base + "labEquipment"
 
 
-class Obi(ContextNamespace, context_prefix="obi"):
+class Dcterms(ContextNamespace):
+    _base = URIRef(str(DCTERMS))
+    description = _base + "description"
+
+
+class Obi(ContextNamespace, prefix="obi", mode="prefix_collision"):
     _base = URIRef("http://purl.obolibrary.org/obo/")
     Image = _base + "IAO_0000101"
     Assay = _base + "OBI_0000070"
+    hasPart = _base + "BFO_0000051"
 
 
-class Xsd(ContextNamespace, context_prefix="xsd"):
+class Xsd(ContextNamespace, prefix="xsd", mode="prefix"):
     _base = URIRef(str(XSD))
     date = _base + "date"
+    duration = _base + "duration"
+
+
+class Edam(ContextNamespace, prefix="edam", mode="curie"):
+    _base = URIRef("http://edamontology.org/")
+    Sequence = _base + "data_2044"
+    Image = _base + "data_2968"
+
+
+class RoCrate(ContextNamespace, mode="omit"):
+    # Unlike the other namespaces, this has no base IRI and is set to omit mode
+    # This is because the context is already included as a URL
+    File = SDO.MediaObject
+
+
+class NoPrefix(ContextNamespace, mode="prefix"):
+    _base = URIRef("https://example.org/")
+    name = _base + "name"
+
+
+class NoBaseCurie(ContextNamespace, prefix="ex", mode="curie"):
+    name = URIRef("https://example.org/name")
 
 
 def test_custom_vocab():
@@ -51,41 +82,33 @@ def test_custom_vocab():
     entity_json = json.loads(crate.compile())
     assert entity_json["@context"] == {
         "LabProtocol": "https://bioschemas.org/draft_terms/LabProtocol",
-        "name": "http://schema.org/name",
     }
     assert entity_json["@type"] == "LabProtocol"
-    assert entity_json["name"] == "Some Protocol"
 
 
 def test_curies():
     """
-    Namespaces with a `context_prefix` and `_base` should use CURIEs, both in the context and in `@id` values.
+    Namespaces in "curie" mode should only add their prefix to the context, and IRIs should be shortened to CURIEs.
     """
-    crate = ContextGraph(vocabs=[Sdo, Obi])
-    crate.add_entity(
-        "#image",
-        (RDF.type, Obi.Image),
-        (Sdo.hasPart, Obi.Assay),
-    )
+    crate = ContextGraph(vocabs=[Sdo, Edam])
+    crate.add_entity("#sequence", (RDF.type, Edam.Sequence))
     entity_json = json.loads(crate.compile())
     assert entity_json["@context"] == {
-        "obi": "http://purl.obolibrary.org/obo/",
-        "obiImage": "obi:IAO_0000101",
-        "hasPart": "http://schema.org/hasPart",
+        "edam": "http://edamontology.org/",
     }
-    assert entity_json["@type"] == "obiImage"
-    assert entity_json["hasPart"] == {"@id": "obi:OBI_0000070"}
+    assert entity_json["@type"] == "edam:data_2044"
 
 
 def test_round_trip():
     """
-    The compiled JSON-LD should parse back to the same graph, including CURIEs.
+    The compiled JSON-LD should parse back to the same graph, including CURIEs and prefixed terms.
     """
-    crate = ContextGraph(vocabs=[Sdo, Obi])
+    crate = ContextGraph(vocabs=[Sdo, Obi, Edam])
     crate.add_entity(
         "http://example.org/image",
-        (RDF.type, Obi.Image),
-        (Sdo.hasPart, Obi.Assay),
+        (RDF.type, Edam.Image),
+        (Sdo.hasPart, URIRef("http://example.org/part")),
+        (Obi.hasPart, Obi.Assay),
         (Sdo.name, Literal("An image")),
     )
     assert isomorphic(
@@ -102,35 +125,11 @@ def test_rdf_type_not_in_context():
         _base = URIRef(str(RDF))
         type_ = _base + "type"
 
-    crate = ContextGraph(vocabs=[Sdo, Rdf])
-    crate.add_entity("#thing", (RDF.type, Sdo.Thing))
+    crate = ContextGraph(vocabs=[BioschemasDrafts, Rdf])
+    crate.add_entity("#thing", (RDF.type, BioschemasDrafts.LabProtocol))
     assert json.loads(crate.compile())["@context"] == {
-        "Thing": "http://schema.org/Thing"
+        "LabProtocol": "https://bioschemas.org/draft_terms/LabProtocol"
     }
-
-
-def test_missing_term():
-    """
-    IRIs that aren't defined in any vocab should raise an error.
-    """
-    crate = ContextGraph(vocabs=[Sdo])
-    crate.add_entity("#thing", (RDF.type, BioschemasDrafts.Enzyme))
-    with pytest.raises(ValueError, match=str(BioschemasDrafts.Enzyme)):
-        crate.compile()
-
-
-def test_vocab_clash():
-    """
-    Two vocabs that use the same label for different IRIs should raise an error.
-    """
-
-    class Example(ContextNamespace):
-        name = URIRef("https://example.org/name")
-
-    crate = ContextGraph(vocabs=[Sdo, Example])
-    crate.add_entity("#thing", (Sdo.name, Literal("a")), (Example.name, Literal("b")))
-    with pytest.raises(ValueError, match="context_prefix"):
-        crate.compile()
 
 
 def test_datatype():
@@ -139,14 +138,14 @@ def test_datatype():
     """
     crate = ContextGraph(vocabs=[Sdo])
     crate.add_entity("#thing", (Sdo.name, Literal(True)), (Sdo.name, Literal(1)))
-    crate.compile()
+    assert crate.vocab_context() == {}
 
     crate.add_entity("#thing", (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1))))
     with pytest.raises(ValueError, match=str(XSD.date)):
-        crate.compile()
+        crate.vocab_context()
 
     crate.vocabs.append(Xsd)
-    assert crate.full_context.expand("xsdDate") == str(XSD.date)
+    assert crate.full_context.expand("xsddate") == str(XSD.date)
 
 
 def test_bnode():
@@ -225,18 +224,168 @@ def test_navigate_and_navigate_to():
     assert node.is_instance_of(Sdo.Thing)
 
 
-def test_parent_context():
+@dataclass
+class VocabContextCase:
+    #: Vocabs to provide to the `ContextGraph`, in priority order
+    vocabs: list[type[ContextNamespace]]
+    #: Properties of a single entity in the graph
+    props: list[tuple[URIRef, URIRef | Literal]]
+    #: Expected result of `.vocab_context()`, or the exception it should raise
+    expected: dict[str, str] | type[Exception]
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        # omit
+        pytest.param(
+            VocabContextCase(
+                vocabs=[RoCrate, Sdo],
+                props=[(RDF.type, RoCrate.File), (Sdo.name, Literal("a"))],
+                expected={},
+            ),
+            id="omit",
+        ),
+        # standard
+        pytest.param(
+            VocabContextCase(
+                vocabs=[Sdo, BioschemasDrafts],
+                props=[
+                    (RDF.type, BioschemasDrafts.LabProtocol),
+                    # IRI objects don't need a term, only the predicate does
+                    (
+                        BioschemasDrafts.labEquipment,
+                        URIRef("https://example.org/pipette"),
+                    ),
+                ],
+                expected={
+                    "LabProtocol": "https://bioschemas.org/draft_terms/LabProtocol",
+                    "labEquipment": "https://bioschemas.org/draft_terms/labEquipment",
+                },
+            ),
+            id="standard",
+        ),
+        # prefix
+        pytest.param(
+            VocabContextCase(
+                vocabs=[Sdo, Xsd],
+                props=[
+                    (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1))),
+                    # "duration" is claimed by Sdo, but that doesn't matter because Xsd always prefixes
+                    (Sdo.duration, Literal("PT1H", datatype=XSD.duration)),
+                ],
+                expected={
+                    "xsddate": str(XSD.date),
+                    "xsdduration": str(XSD.duration),
+                },
+            ),
+            id="prefix",
+        ),
+        # prefix_collision
+        pytest.param(
+            VocabContextCase(
+                vocabs=[Sdo, Obi],
+                props=[(RDF.type, Obi.Image), (Obi.hasPart, Obi.Assay)],
+                expected={
+                    "Image": "http://purl.obolibrary.org/obo/IAO_0000101",
+                    # "hasPart" is claimed by Sdo even though Sdo.hasPart isn't used
+                    "obihasPart": "http://purl.obolibrary.org/obo/BFO_0000051",
+                },
+            ),
+            id="prefix_collision",
+        ),
+        # curie
+        pytest.param(
+            VocabContextCase(
+                vocabs=[Obi, Edam],
+                # "Image" is claimed by Obi, but that doesn't matter because Edam only adds its prefix
+                props=[(RDF.type, Obi.Image), (RDF.type, Edam.Image)],
+                expected={
+                    "Image": "http://purl.obolibrary.org/obo/IAO_0000101",
+                    "edam": "http://edamontology.org/",
+                },
+            ),
+            id="curie",
+        ),
+        # All modes together
+        pytest.param(
+            VocabContextCase(
+                vocabs=[RoCrate, Sdo, BioschemasDrafts, Obi, Xsd, Edam],
+                props=[
+                    (RDF.type, RoCrate.File),
+                    (RDF.type, BioschemasDrafts.LabProtocol),
+                    (RDF.type, Obi.Image),
+                    (RDF.type, Edam.Image),
+                    (Sdo.name, Literal("a")),
+                    (Sdo.hasPart, URIRef("https://example.org/part")),
+                    (Obi.hasPart, Obi.Assay),
+                    (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1))),
+                ],
+                expected={
+                    "LabProtocol": "https://bioschemas.org/draft_terms/LabProtocol",
+                    "Image": "http://purl.obolibrary.org/obo/IAO_0000101",
+                    "obihasPart": "http://purl.obolibrary.org/obo/BFO_0000051",
+                    "xsddate": str(XSD.date),
+                    "edam": "http://edamontology.org/",
+                },
+            ),
+            id="all-modes",
+        ),
+    ],
+)
+def test_vocab_context(case: VocabContextCase):
     """
-    Terms already defined in a parent context should be omitted, and terms that clash with it should raise an error.
+    Each namespace mode should contribute the right terms to the vocab context, both alone and alongside other namespaces.
     """
-    crate = ContextGraph(vocabs=[Sdo, BioschemasDrafts])
-    crate.add_entity(
-        "#thing",
-        (RDF.type, BioschemasDrafts.LabProtocol),
-        (Sdo.name, Literal("Some Protocol")),
-    )
-    assert crate.vocab_context(parent=Context({"name": str(Sdo.name)})) == {
-        "LabProtocol": str(BioschemasDrafts.LabProtocol)
-    }
-    with pytest.raises(ValueError, match="parent context"):
-        crate.vocab_context(parent=Context({"name": "https://example.org/name"}))
+    crate = ContextGraph(vocabs=case.vocabs)
+    crate.add_entity("#thing", *case.props)
+    assert crate.vocab_context() == case.expected
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        pytest.param(
+            VocabContextCase(
+                vocabs=[Sdo],
+                props=[(RDF.type, BioschemasDrafts.Enzyme)],
+                expected=ValueError,
+            ),
+            id="missing-term",
+        ),
+        pytest.param(
+            VocabContextCase(
+                # "description" is claimed by Sdo even though Sdo.description isn't used, and Dcterms has no prefix to fall back on
+                vocabs=[Sdo, Dcterms],
+                props=[(Dcterms.description, Literal("a"))],
+                expected=ValueError,
+            ),
+            id="standard-clashing-with-omit",
+        ),
+        pytest.param(
+            VocabContextCase(
+                vocabs=[NoPrefix],
+                props=[(NoPrefix.name, Literal("a"))],
+                expected=ValueError,
+            ),
+            id="prefix-without-prefix",
+        ),
+        pytest.param(
+            VocabContextCase(
+                vocabs=[NoBaseCurie],
+                props=[(NoBaseCurie.name, Literal("a"))],
+                expected=ValueError,
+            ),
+            id="curie-without-base",
+        ),
+    ],
+)
+def test_vocab_context_error(case: VocabContextCase):
+    """
+    Invalid combinations of graph contents and namespaces should raise an error from `.vocab_context()`.
+    """
+    crate = ContextGraph(vocabs=case.vocabs)
+    crate.add_entity("#thing", *case.props)
+    assert isinstance(case.expected, type)
+    with pytest.raises(case.expected):
+        crate.vocab_context()

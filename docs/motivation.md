@@ -66,6 +66,7 @@ class Obi(ContextNamespace, context_prefix="obi"):
     _base = URIRef("http://purl.obolibrary.org/obo/")
     Image = _base + "IAO_0000101"
 
+
 crate = AttachedCrate("crate/", vocabs=[Obi])
 ```
 When the crate is compiled, the context will contain only the terms that are actually used.

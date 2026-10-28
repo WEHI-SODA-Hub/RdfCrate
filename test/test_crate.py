@@ -1,6 +1,6 @@
 import json
 import tempfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
@@ -53,7 +53,7 @@ def make_test_crate(recursive: bool = False):
     crate.add_root_entity(
         "Test Crate",
         "Crate for validating RdfCrate",
-        datetime.now(timezone.utc),
+        datetime.now(UTC),
         crate.add_entity(
             MIT, (RDF.type, SCHEMA.CreativeWork), (SCHEMA.name, Literal("MIT License"))
         ),

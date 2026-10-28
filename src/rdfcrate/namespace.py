@@ -46,20 +46,22 @@ class ContextNamespace:
         cls,
         /,
         prefix: str | None = None,
-        mode: ContextMode | None = None,
+        mode: ContextMode = "standard",
         **kwargs: Any,
     ):
         """
         Params:
             mode: The mode used for prefixing terms in the JSON-LD context.
-                Can be "standard", "prefix", "curie", or "omit". In "standard" mode, terms are not prefixed. In "prefix" mode, the specified prefix is prepended to each term label. In "curie" mode, terms are written as CURIEs using the prefix. In "omit" mode, no terms are included in the context, because they are defined elsewhere, but other namespaces can't reuse their labels.
+                In "standard" mode, terms map to their full IRIs without any prefix.
+                In "prefix" mode, the specified prefix is prepended to each term label to avoid collisions.
+                In "curie" mode, terms are written as CURIEs using the prefix.
+                In "omit" mode, no terms are included in the context, because they are defined elsewhere, but other namespaces can't reuse their labels.
                 In "prefix_collision" mode, the specified prefix is prepended to a term label only if that term is already in use in the context.
             prefix: A prefix that will be prepended to each term label in "prefix" and "curie" modes.
         """
         super().__init_subclass__(**kwargs)
         cls._prefix = prefix
-        if mode is not None:
-            cls._mode = mode
+        cls._mode = mode
         cls._terms_to_iris = {
             attr: value
             for attr, value in vars(cls).items()

@@ -3,7 +3,7 @@ from rdflib import RDF, URIRef
 from rdfcrate.namespace import ContextNamespace
 
 
-class Obi(ContextNamespace, context_prefix="obi"):
+class Obi(ContextNamespace, prefix="obi"):
     _base = URIRef("http://purl.obolibrary.org/obo/")
     Image = _base + "IAO_0000101"
     plasmaCell = _base + "CL_0000786"

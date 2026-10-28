@@ -19,7 +19,7 @@ WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
 
 
-class Obi(ContextNamespace, context_prefix="obi"):
+class Obi(ContextNamespace, prefix="obi"):
     _base = URIRef("http://purl.obolibrary.org/obo/")
     Image = _base + "IAO_0000101"
 

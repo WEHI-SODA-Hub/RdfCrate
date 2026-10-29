@@ -9,8 +9,10 @@ from dataclasses import dataclass
 import pytest
 from rdflib import DCTERMS, RDF, SDO, XSD, BNode, Graph, Literal, URIRef
 from rdflib.compare import isomorphic
+from rdflib.plugins.shared.jsonld.context import Context
 
 from rdfcrate import ContextGraph, ContextNamespace
+from rdfcrate.context_builder import ContextBuilder
 
 
 class Sdo(ContextNamespace, mode="omit"):
@@ -69,11 +71,24 @@ class NoBaseCurie(ContextNamespace, prefix="ex", mode="curie"):
     name = URIRef("https://example.org/name")
 
 
+class ExternalContextGraph(ContextGraph):
+    """
+    A `ContextGraph` whose external context defines the terms of the "omit" namespaces above, like the RO-Crate context does for `RoCrate`.
+    """
+
+    external = Context(
+        {term: str(iri) for vocab in [Sdo, RoCrate] for term, iri in vocab.terms()}
+    )
+
+    def context_builder(self) -> ContextBuilder:
+        return ContextBuilder(external=self.external)
+
+
 def test_custom_vocab():
     """
     Only the vocab terms that are used in the graph should be in the context, and they should be used to shorten IRIs.
     """
-    crate = ContextGraph(vocabs=[Sdo, BioschemasDrafts])
+    crate = ExternalContextGraph(vocabs=[Sdo, BioschemasDrafts])
     crate.add_entity(
         "#some_protocol",
         (RDF.type, BioschemasDrafts.LabProtocol),
@@ -90,7 +105,7 @@ def test_curies():
     """
     Namespaces in "curie" mode should only add their prefix to the context, and IRIs should be shortened to CURIEs.
     """
-    crate = ContextGraph(vocabs=[Sdo, Edam])
+    crate = ExternalContextGraph(vocabs=[Sdo, Edam])
     crate.add_entity("#sequence", (RDF.type, Edam.Sequence))
     entity_json = json.loads(crate.compile())
     assert entity_json["@context"] == {
@@ -103,7 +118,7 @@ def test_round_trip():
     """
     The compiled JSON-LD should parse back to the same graph, including CURIEs and prefixed terms.
     """
-    crate = ContextGraph(vocabs=[Sdo, Obi, Edam])
+    crate = ExternalContextGraph(vocabs=[Sdo, Obi, Edam])
     crate.add_entity(
         "http://example.org/image",
         (RDF.type, Edam.Image),
@@ -136,7 +151,7 @@ def test_datatype():
     """
     Datatypes that are serialized as JSON-LD `@type` need a term, but native JSON types don't.
     """
-    crate = ContextGraph(vocabs=[Sdo])
+    crate = ExternalContextGraph(vocabs=[Sdo])
     crate.add_entity("#thing", (Sdo.name, Literal(True)), (Sdo.name, Literal(1)))
     assert crate.vocab_context() == {}
 
@@ -337,7 +352,7 @@ def test_vocab_context(case: VocabContextCase):
     """
     Each namespace mode should contribute the right terms to the vocab context, both alone and alongside other namespaces.
     """
-    crate = ContextGraph(vocabs=case.vocabs)
+    crate = ExternalContextGraph(vocabs=case.vocabs)
     crate.add_entity("#thing", *case.props)
     assert crate.vocab_context() == case.expected
 
@@ -384,7 +399,7 @@ def test_vocab_context_error(case: VocabContextCase):
     """
     Invalid combinations of graph contents and namespaces should raise an error from `.vocab_context()`.
     """
-    crate = ContextGraph(vocabs=case.vocabs)
+    crate = ExternalContextGraph(vocabs=case.vocabs)
     crate.add_entity("#thing", *case.props)
     assert isinstance(case.expected, type)
     with pytest.raises(case.expected):

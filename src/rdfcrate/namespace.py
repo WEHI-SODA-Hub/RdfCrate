@@ -58,7 +58,7 @@ class ContextNamespace:
                 In "standard" mode, terms map to their full IRIs without any prefix.
                 In "prefix" mode, the specified prefix is prepended to each term label to avoid collisions.
                 In "curie" mode, terms are written as CURIEs using the prefix.
-                In "omit" mode, no terms are included in the context, because they are defined elsewhere, but other namespaces can't reuse their labels.
+                In "omit" mode, no terms are included in the context, because they must be defined by the external context passed to `ContextBuilder`.
                 In "prefix_collision" mode, the specified prefix is prepended to a term label only if that term is already in use in the context.
             prefix: A prefix that will be prepended to each term label in "prefix" and "curie" modes.
         """
@@ -87,27 +87,17 @@ class ContextNamespace:
         return iri in cls._iris_to_terms
 
     @classmethod
-    def reserve_terms(cls, builder: ContextBuilder):
-        """
-        Reserves the labels of terms that are defined outside of the generated context, whether or not they are used in the graph.
-        In "omit" mode this is every term in the namespace, since they are already defined elsewhere, e.g. in a remote context.
-        """
-        if cls._mode == "omit":
-            for term, iri in cls.terms():
-                builder.omit_term(term, iri)
-
-    @classmethod
     def add_term(cls, iri: URIRef, builder: ContextBuilder):
         """
         Adds terms to `builder` in order to label `iri`.
-        IRIs from "omit" namespaces never reach this method, because `reserve_terms` has already labelled them.
+        IRIs from "omit" namespaces only reach this method if the builder's external context doesn't define them.
         """
         # At this point we know that the IRI is defined as a term in this namespace.
         term = cls._iris_to_terms[iri]
         match cls._mode:
             case "omit":
                 raise ValueError(
-                    f"IRI {iri} is from an omit namespace, so it should be labelled by `reserve_terms`."
+                    f"IRI {iri} is from omit namespace {cls.__name__}, but the external context doesn't define it."
                 )
             case "standard":
                 # Add terms for each utilised IRI

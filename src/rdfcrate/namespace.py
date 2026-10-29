@@ -65,9 +65,11 @@ class ContextNamespace:
         super().__init_subclass__(**kwargs)
         cls._prefix = prefix
         cls._mode = mode
+        # Walk the MRO from base to subclass so that subclasses inherit and can override terms
         cls._terms_to_iris = {
             attr: value
-            for attr, value in vars(cls).items()
+            for klass in reversed(cls.__mro__)
+            for attr, value in vars(klass).items()
             if not attr.startswith("_") and isinstance(value, URIRef)
         }
         cls._iris_to_terms = {value: attr for attr, value in cls._terms_to_iris.items()}

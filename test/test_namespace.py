@@ -35,78 +35,48 @@ def test_attribute_access():
     assert isinstance(Obi.plasmaCell, URIRef)
 
 
-def test_curies():
+def test_terms():
     """
-    If both `context_prefix` and `_base` are set, terms should be CURIEs, with the prefix defined in the context.
-    Terms not under `_base` should use full IRIs.
+    `terms()` should yield each public URIRef attribute with its absolute IRI.
     """
-    assert Obi.jsonld_context() == {
-        "obi": "http://purl.obolibrary.org/obo/",
-        "obiImage": "obi:IAO_0000101",
-        "obiPlasmaCell": "obi:CL_0000786",
-        "obiExternal": "https://example.org/external",
+    assert dict(Obi.terms()) == {
+        "Image": URIRef("http://purl.obolibrary.org/obo/IAO_0000101"),
+        "plasmaCell": URIRef("http://purl.obolibrary.org/obo/CL_0000786"),
+        "external": URIRef("https://example.org/external"),
+    }
+    assert dict(Sdo.terms()) == {
+        "name": URIRef("http://schema.org/name"),
+        "description": URIRef("http://schema.org/description"),
     }
 
 
-def test_full_iris_without_prefix():
+def test_terms_keep_trailing_underscore():
     """
-    If `context_prefix` is not set, terms should use full IRIs and unprefixed labels.
+    Attribute names are yielded as written, including trailing underscores.
     """
-    assert Sdo.jsonld_context() == {
-        "name": "http://schema.org/name",
-        "description": "http://schema.org/description",
+    assert dict(Unprefixed.terms()) == {"type_": URIRef("https://example.org/type")}
+    assert dict(Rdf.terms()) == {
+        "type_": RDF.type,
+        "Property": RDF.Property,
     }
 
 
-def test_rdf_type_excluded():
+def test_terms_exclude_internal_attributes():
     """
-    `rdf:type` should never be in the context, since JSON-LD uses `@type`.
+    Attributes starting with "_" should not be yielded.
     """
-    assert Rdf.jsonld_context() == {
-        "Property": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
-    }
+    assert all(not term.startswith("_") for term, _ in Obi.terms())
 
 
-def test_trailing_underscore():
+def test_subclass_inherits_terms():
     """
-    Trailing underscores, which avoid clashes with Python names, should be removed from the label.
-    """
-    assert Unprefixed.jsonld_context() == {"type": "https://example.org/type"}
-
-
-def test_iri_filter():
-    """
-    Only the requested IRIs should be included. The prefix should only be defined if a CURIE uses it.
-    """
-    assert Obi.jsonld_context(iris=[Obi.Image]) == {
-        "obi": "http://purl.obolibrary.org/obo/",
-        "obiImage": "obi:IAO_0000101",
-    }
-    assert Obi.jsonld_context(iris=[Obi.external]) == {
-        "obiExternal": "https://example.org/external"
-    }
-    assert Obi.jsonld_context(iris=[]) == {}
-
-
-def test_excludes_internal_attributes():
-    """
-    Attributes starting with "_" should not be included in the JSON-LD context.
-    """
-    context = Obi.jsonld_context()
-    assert "_base" not in context
-    assert "_context_prefix" not in context
-
-
-def test_subclass_inherits_terms_and_prefix():
-    """
-    Subclassing a namespace should keep its terms and prefix, allowing it to be extended.
+    Subclassing a namespace should keep its terms, allowing it to be extended.
     """
 
     class ObiExtended(Obi):
         Assay = Obi._base + "OBI_0000070"
 
-    assert ObiExtended.jsonld_context(iris=[ObiExtended.Assay, Obi.Image]) == {
-        "obi": "http://purl.obolibrary.org/obo/",
-        "obiAssay": "obi:OBI_0000070",
-        "obiImage": "obi:IAO_0000101",
+    assert dict(ObiExtended.terms()) == {
+        **dict(Obi.terms()),
+        "Assay": URIRef("http://purl.obolibrary.org/obo/OBI_0000070"),
     }

@@ -197,13 +197,12 @@ def test_custom_vocabs():
     assert crate_json["@context"] == [
         "https://w3id.org/ro/crate/1.1/context",
         {
-            "obi": "http://purl.obolibrary.org/obo/",
-            "obiImage": "obi:IAO_0000101",
+            "Image": "http://purl.obolibrary.org/obo/IAO_0000101",
             "upload": "https://w3id.org/WEHI-SODA-Hub/omerocrate/upload",
         },
     ]
     file = next(e for e in crate_json["@graph"] if e["@id"] == "text.txt")
-    assert set(file["@type"]) == {"File", "obiImage"}
+    assert set(file["@type"]) == {"File", "Image"}
     assert file["upload"] is True
 
     # Check that we can round-trip the graph

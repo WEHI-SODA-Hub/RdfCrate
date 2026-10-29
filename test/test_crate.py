@@ -1,14 +1,14 @@
 import json
 import tempfile
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
-from rdflib import Graph, Literal, URIRef
+from rdflib import DCTERMS, RDF, Graph, Literal, URIRef
 
-from rdfcrate import AttachedCrate
+from rdfcrate import AttachedCrate, ContextNamespace
 from rdfcrate.test_helpers import patch_rocrate_context
-from rdfcrate.vocabs import dc, rdf, roc, sdo
+from rdfcrate.wrapper import SCHEMA
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 
@@ -17,6 +17,16 @@ ME = URIRef("https://orcid.org/0000-0002-8965-2595")
 WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
 
 BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
+
+
+class Obi(ContextNamespace, prefix="obi"):
+    _base = URIRef("http://purl.obolibrary.org/obo/")
+    Image = _base + "IAO_0000101"
+
+
+class OmeroCrate(ContextNamespace):
+    _base = URIRef("https://w3id.org/WEHI-SODA-Hub/omerocrate/")
+    upload = _base + "upload"
 
 
 @pytest.fixture()
@@ -34,25 +44,29 @@ def rocrate_context():
 def make_test_crate(recursive: bool = False):
     crate = AttachedCrate(TEST_CRATE)
 
+    wehi = crate.add_entity(
+        WEHI_RCP,
+        (RDF.type, SCHEMA.Organization),
+        (SCHEMA.name, Literal("WEHI Research Computing Platform")),
+        (SCHEMA.url, Literal(WEHI_RCP)),
+    )
     crate.add_root_entity(
-        sdo.name(sdo.Text("Test Crate")),
-        sdo.description(sdo.Text("Crate for validating RdfCrate")),
-        sdo.datePublished(sdo.DateTime(datetime.now().isoformat())),
-        sdo.license(
-            crate.add_entity(sdo.CreativeWork(MIT), sdo.name(sdo.Text("MIT License")))
+        "Test Crate",
+        "Crate for validating RdfCrate",
+        datetime.now(UTC),
+        crate.add_entity(
+            MIT, (RDF.type, SCHEMA.CreativeWork), (SCHEMA.name, Literal("MIT License"))
         ),
-        sdo.version(sdo.Text("1.0")),
-        sdo.publisher(
-            wehi := crate.add_entity(
-                sdo.Organization(WEHI_RCP),
-                sdo.name(sdo.Text("WEHI Research Computing Platform")),
-                sdo.url(sdo.URL(WEHI_RCP)),
-            )
-        ),
-        sdo.author(
+        (SCHEMA.version, Literal("1.0")),
+        (SCHEMA.publisher, wehi),
+        (
+            SCHEMA.author,
             crate.add_entity(
-                sdo.Person(ME), sdo.name(sdo.Text("Michael")), sdo.affiliation(wehi)
-            )
+                ME,
+                (RDF.type, SCHEMA.Person),
+                (SCHEMA.name, Literal("Michael")),
+                (SCHEMA.affiliation, wehi),
+            ),
         ),
         recursive=recursive,
     )
@@ -102,11 +116,11 @@ def test_single_file():
         *BASE_SUBJECTS,
     }
     assert set(crate.graph.predicates()) >= {
-        rdf.type.term.uri,
-        sdo.about.term.uri,
-        dc.conformsTo.term.uri,
+        RDF.type,
+        SCHEMA.about,
+        DCTERMS.conformsTo,
     }
-    assert set(crate.graph.objects()) >= {roc.File.term.uri, sdo.Dataset.term.uri}
+    assert set(crate.graph.objects()) >= {SCHEMA.MediaObject, SCHEMA.Dataset}
 
     crate.validate()
 
@@ -126,7 +140,7 @@ def test_recursive_add():
         *BASE_SUBJECTS,
     }, "All files and directories should be in the crate"
     assert crate.graph.value(
-        predicate=sdo.hasPart.term.uri, object=URIRef("subdir/more_text.txt")
+        predicate=SCHEMA.hasPart, object=URIRef("subdir/more_text.txt")
     ) == URIRef("subdir/"), (
         "Recursive add should link the immediate child and parent via hasPart"
     )
@@ -136,9 +150,9 @@ def test_recursive_add():
 def test_mime_type():
     crate = make_test_crate(recursive=True)
 
-    assert crate.graph.value(
-        URIRef("text.txt"), sdo.encodingFormat.term.uri
-    ) == Literal("text/plain")
+    assert crate.graph.value(URIRef("text.txt"), SCHEMA.encodingFormat) == Literal(
+        "text/plain"
+    )
 
 
 def test_spaces_in_path(empty_crate: AttachedCrate):
@@ -150,6 +164,73 @@ def test_spaces_in_path(empty_crate: AttachedCrate):
     empty_crate.register_file(path)
     assert (
         URIRef("file%20with%20spaces.txt"),
-        rdf.type.term.uri,
-        roc.File.term.uri,
+        RDF.type,
+        SCHEMA.MediaObject,
     ) in empty_crate.graph
+
+
+def test_rocrate_terms_not_in_context():
+    """
+    Terms that are already in the RO-Crate context should not be added to the custom context.
+    """
+    crate = make_test_crate(recursive=True)
+    crate_json = json.loads(crate.compile())
+    assert crate_json["@context"] == "https://w3id.org/ro/crate/1.1/context"
+    file = next(e for e in crate_json["@graph"] if e["@id"] == "text.txt")
+    assert file["@type"] == "File"
+
+
+def test_custom_vocabs():
+    """
+    Terms that aren't in the RO-Crate context should be added to the context from the crate's vocabs.
+    """
+    crate = make_test_crate()
+    crate.vocabs += [Obi, OmeroCrate]
+    crate.register_file(
+        "text.txt",
+        (SCHEMA.name, Literal("COMET Image")),
+        (RDF.type, Obi.Image),
+        (OmeroCrate.upload, Literal(True)),
+    )
+    crate_json = json.loads(crate.compile())
+
+    assert crate_json["@context"] == [
+        "https://w3id.org/ro/crate/1.1/context",
+        {
+            "Image": "http://purl.obolibrary.org/obo/IAO_0000101",
+            "upload": "https://w3id.org/WEHI-SODA-Hub/omerocrate/upload",
+        },
+    ]
+    file = next(e for e in crate_json["@graph"] if e["@id"] == "text.txt")
+    assert set(file["@type"]) == {"File", "Image"}
+    assert file["upload"] is True
+
+    # Check that we can round-trip the graph
+    assert len(Graph().parse(data=crate.compile(), format="json-ld")) == len(
+        crate.graph
+    )
+
+
+def test_clash_with_rocrate_context():
+    """
+    A vocab term that has the same label as a different term in the RO-Crate context should raise an error.
+    """
+
+    class Example(ContextNamespace):
+        name = URIRef("https://example.org/name")
+
+    crate = make_test_crate()
+    crate.vocabs.append(Example)
+    crate.add_entity("./", (Example.name, Literal("Other name")))
+    with pytest.raises(ValueError, match="already defined"):
+        crate.compile()
+
+
+def test_missing_term():
+    """
+    Using an IRI that isn't in the RO-Crate context or any vocab should raise an error.
+    """
+    crate = make_test_crate()
+    crate.add_entity("./", (URIRef("https://example.org/undefined"), Literal("x")))
+    with pytest.raises(ValueError, match="https://example.org/undefined"):
+        crate.compile()

@@ -1,59 +1,79 @@
 # Motivation
 
-The most user friendly interface for Python users is probably a library of classes with properties that can be composed together.
-This is intuitive due to common usage in Python, and demonstrated by the popularity of Pydantic.
-However, strictly following this design by generating actual Pydantic classes does not suit RDF (which underlies RO-Crate) because:
+RO-Crates are JSON-LD documents, but working with them as JSON means handling the details of JSON-LD such as contexts, `@id` and `@type`.
+`rdfcrate` instead treats an RO-Crate as an RDF graph, so you work with plain `rdflib` triples and the JSON-LD is generated for you.
+
+Previous versions of `rdfcrate` wrapped every RDF class, property and datatype in a Python class, so that a type checker could catch errors such as passing the wrong type of value to a property.
+In practice this added a lot of complexity, and was never a good fit for RDF:
 
 * RDF is "open". Any property can be used with any class, by default
 * Entities can and should have multiple types
-* RDF is a graph, meaning that the same entity can be referenced by multiple other entities, and even circular relationships are allowed. In contrast, a Pydantic graph is just a tree.
+* RDF is a graph, meaning that the same entity can be referenced by multiple other entities, and even circular relationships are allowed
 
-`rdfcrate` tries to make concessions for these aspects of RDF.
+`rdfcrate` now leaves validation to tools designed for it, such as SHACL, and focuses on building the graph and its context.
 
 ## Properties
 
-Firstly, properties are defined as classes themselves, so this:
+Properties are `(predicate, object)` tuples, using `rdflib` terms directly.
+The examples here use `RDF` from `rdflib`, and `SCHEMA` from `rdfcrate.wrapper`, which is `Namespace("http://schema.org/")`.
+Note that RO-Crate uses `http://schema.org/`, so `rdflib.SDO`, which uses `https://schema.org/`, should not be used.
 ```python
-(sdo.name(sdo.Text("Michael")),)
+(SCHEMA.name, Literal("Michael"))
 ```
 Is equivalent to
 ```json
 {"name": "Michael"}
 ```
-It is defined this way because properties need to be decoupled from classes.
-Almost any property should be usable on any class, and users should be able to define custom properties and use them on built-in classes.
-These properties do mandate certain types as their arguments, which allows you to catch basic type errors statically.
 
-## Classes
+## Entities
 
-While Python classes are generated for each RDF class, they do not define required properties.
-Instead, you pass a list of these properties to construct a new entity:
+Entities are just IRIs (or blank nodes).
+You pass a list of properties to create or describe an entity, and types are added with `rdf:type` like any other property:
 ```python
-crate.add_entity(
-    "#me", sdo.Person, sdo.name(sdo.Text("Michael")), sdo.affiliation(wehi)
+me = crate.add_entity(
+    "#me",
+    (RDF.type, SCHEMA.Person),
+    (SCHEMA.name, Literal("Michael")),
+    (SCHEMA.affiliation, wehi),
 )
 ```
-The return value from `crate.add_entity` is just an ID (an IRI), not an actual object with properties.
-This allows you to flexibly link entities in a graph.
-
-## Positional Arguments
-We don't use keyword arguments when constructing entities, because this is redundant when the properties themselves are classes.
-Also, using position arguments allows us to define some properties as mandatory and others as optional, for example:
+The return value from `crate.add_entity` is just the IRI, which you can then use as the object of other properties.
+Properties only go from the entity being described to the object, so to make the entity the object of a property, add a plain triple:
 ```python
-def add_root_entity(
-    self,
-    name: schemaorg.name,
-    description: schemaorg.description,
-    date_published: schemaorg.datePublished,
-    license: schemaorg.license,
-    *props: RdfProperty | ReverseProperty,
-    recursive: Recursive = False
-) -> schemaorg.Dataset:
+crate.add((parent, SCHEMA.hasPart, me))
 ```
-It wouldn't be possible to allow user-defined properties with specific types as well as allowing the class to define required properties, with keyword arguments.
-Also, there would be no easy way to associate keywords with IRIs, since a `TypedDict` must have string keys. 
+
+## Mandatory Properties
+
+Methods like `add_root_entity` take the properties that RO-Crate requires as positional arguments, and any others after them:
+```python
+crate.add_root_entity(
+    "Melbourne Bridges",
+    "Photo gallery of iconic bridges in Melbourne",
+    date.today(),
+    URIRef("https://creativecommons.org/licenses/by/4.0/"),
+    (SCHEMA.keywords, Literal("bridges")),
+)
+```
 
 ## Terms
 
-RO-Crate requires that each IRI has a short form, and it also mandates the use of certain terms like `File` which are just aliases.
-To support this, all classes and properties have an associated `RdfTerm` object, which tracks both the alias and the IRI.
+RO-Crate requires that each IRI has a short form (a term) in the JSON-LD context.
+Terms in the RO-Crate context, such as `name` or `File`, are used automatically.
+Any other terms must be defined in a `ContextNamespace`, and passed to the crate in `vocabs`:
+```python
+class Obi(ContextNamespace, context_prefix="obi"):
+    _base = URIRef("http://purl.obolibrary.org/obo/")
+    Image = _base + "IAO_0000101"
+
+
+crate = AttachedCrate("crate/", vocabs=[Obi])
+```
+When the crate is compiled, the context will contain only the terms that are actually used.
+If `context_prefix` is set, it is prepended to every term label to avoid clashes with other vocabularies, and if `_base` is also set, the context will use CURIEs:
+```json
+{"obi": "http://purl.obolibrary.org/obo/", "obiImage": "obi:IAO_0000101"}
+```
+Compiling a crate raises an error if two terms clash, or if an IRI used as a predicate, type or datatype has no term.
+
+Because the terms you use are listed explicitly, you only need to define the small subset of each ontology that you actually use, and it is easy to see which terms a project depends on.

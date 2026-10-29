@@ -1,42 +1,41 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, Annotated, Any, TypedDict, TypeVar
+from typing import TYPE_CHECKING, Annotated, Any, TypedDict
 
-from deprecated import deprecated
-from rdflib import RDF, Graph, IdentifiedNode, Literal
-from rdflib.plugins.shared.jsonld.context import Context, Term
+from rdflib import RDF, XSD, Graph, IdentifiedNode, Literal, URIRef
+from rdflib.plugins.shared.jsonld.context import Context
 from typing_extensions import Doc, Unpack
 
-from rdfcrate.rdfprop import PropertyProtocol
-from rdfcrate.rdfterm import RdfTerm
-from rdfcrate.rdftype import RdfClass
-from rdfcrate.types import Triple
+from rdfcrate.context_builder import ContextBuilder
+from rdfcrate.namespace import ContextNamespace
+from rdfcrate.types import Object, Predicate, Triple
 
 if TYPE_CHECKING:
     from rdfnav import GraphNavigator, UriNode  # type: ignore
 
 
-EntityClass = TypeVar("EntityClass", bound=RdfClass)
-EntityArgs = Annotated[
-    PropertyProtocol,
+PropertyArg = Annotated[
+    tuple[Predicate, Object],
     Doc(
-        "Additional properties to add to the entity. Instances of `RdfProperty` will create triples with this new entity as the subject. Instances of `ReverseProperty` will create triples with this new entity as the object."
+        "A `(predicate, object)` pair, which will be added to the graph with the entity as the subject. For example `(SCHEMA.name, Literal('My Dataset'))`."
     ),
 ]
+
+#: Datatypes that rdflib serializes as native JSON values, which therefore don't need a term in the context.
+NATIVE_DATATYPES = {XSD.boolean, XSD.integer, XSD.double, XSD.string}
 
 
 class ContextGraphKwargs(TypedDict, total=False):
     graph: Graph
-    unique_terms: bool
-    require_terms: bool
+    vocabs: Iterable[type[ContextNamespace]]
 
 
 class ContextGraph:
     """
     A graph and associated JSON-LD context
 
-    Typical usage involves creating new subgraphs via `RdfType.add` and then merging them into this context graph.
+    The context is generated when the graph is compiled, and contains only the terms from `vocabs` that are used in the graph.
     """
 
     def __init__(self, **kwargs: Unpack[ContextGraphKwargs]):
@@ -45,20 +44,64 @@ class ContextGraph:
         If no graph is provided, an empty Graph is created.
         """
         self.graph = kwargs.get("graph", Graph())
-        self.unique_terms = kwargs.get("unique_terms", True)
-        self.require_terms = kwargs.get("require_terms", True)
-
-        # We separately track custom terms so that we can compile the context according to the spec
-        # If we just used the context directly, it would contain all terms as one dictionary and not use a remote context
-        self._custom_terms = {}
+        self.vocabs = list(kwargs.get("vocabs", []))
 
     graph: Graph
-    #: If True, trying to add a term that already exists will raise an error
-    unique_terms: bool
-    #: If True, the context will require terms for all properties and classes
-    require_terms: bool
-    #: Set of custom terms not in the standard RO-Crate context that need to be in the final JSON-LD context.
-    _custom_terms: dict[str, Any]
+    #: Namespaces whose terms can be used in the graph. Every predicate, type and datatype in the graph must be defined in one of these.
+    #: The earlier a vocabulary appears in this list, the higher its priority when resolving term collisions.
+    vocabs: list[type[ContextNamespace]]
+
+    def _used_iris(self) -> set[URIRef]:
+        """
+        Returns all IRIs in the graph that need a term in the context.
+        """
+        iris: set[URIRef] = set()
+        for _, predicate, object in self.graph:
+            if predicate == RDF.type:
+                if isinstance(object, URIRef):
+                    iris.add(object)
+            elif isinstance(predicate, URIRef):
+                iris.add(predicate)
+            if (
+                isinstance(object, Literal)
+                and object.datatype is not None
+                and object.datatype not in NATIVE_DATATYPES
+            ):
+                iris.add(object.datatype)
+        return iris
+
+    def context_builder(self) -> ContextBuilder:
+        """
+        Returns a new `ContextBuilder` used to generate the vocab context.
+        Subclasses can override this to provide terms that are defined in an existing context.
+        """
+        return ContextBuilder()
+
+    def vocab_context(self) -> dict[str, str]:
+        """
+        Returns the terms from `vocabs` that are used in the graph, and validates that all IRIs have exactly one term.
+        Terms from namespaces in "omit" mode are not returned, and must instead be defined by the builder's external context.
+        """
+        builder = self.context_builder()
+        # IRIs that already have a term defined elsewhere don't need one in the generated context
+        iris_to_label = {
+            iri for iri in self._used_iris() if not builder.is_omitted(iri)
+        }
+        # We have to iterate over the vocabularies first to ensure that higher-priority vocabularies get the chance to define terms before lower-priority ones.
+        for vocab in self.vocabs:
+            labelled = set()
+            for iri in iris_to_label:
+                if vocab.has_iri(iri):
+                    vocab.add_term(iri, builder)
+                    labelled.add(iri)
+            iris_to_label -= labelled
+
+        for iri in iris_to_label:
+            raise ValueError(
+                f"No term is defined for IRI {iri} in any of the provided vocabularies."
+            )
+
+        return builder.jsonld_context()
 
     @property
     def context_source(
@@ -69,8 +112,8 @@ class ContextGraph:
         Returns the components that make up the context for this graph.
         """
         # This is a property so that subclasses can generate context without storing it directly.
-        # This is separate from `.context` because passing that into the serializer will result in a combined dictionary
-        return self._custom_terms
+        # This is separate from `.full_context` because passing that into the serializer will result in a combined dictionary
+        return self.vocab_context()
 
     @property
     def full_context(self) -> Context:
@@ -92,59 +135,23 @@ class ContextGraph:
                 "Please install the `nav` extra for rdfcrate if you want to use the `.navigate()` method."
             )
 
-    def navigate_to(self, iri: IdentifiedNode | RdfClass) -> UriNode:
+    def navigate_to(self, iri: IdentifiedNode) -> UriNode:
         """
         Returns a navigator for the given IRI.
         This lets you mutate and query the graph using the `rdfnav` package.
         """
-        navigator = self.navigate()
-        if isinstance(iri, IdentifiedNode):
-            return navigator[iri]
-        elif isinstance(iri, RdfClass):
-            return navigator[iri.id]
-
-    def register_terms(self, terms: Iterable[RdfTerm | Term]) -> None:
-        # Added for backwards compatibility
-        for term in terms:
-            self.register_term(term)
-
-    def register_term(self, term: RdfTerm | Term) -> None:
-        """
-        Adds a custom term to the context
-        """
-
-        if isinstance(term, RdfTerm):
-            term = Term(name=term.label, id=str(term.uri))
-
-        existing = self.full_context.expand(term.name)
-        if existing == str(term.id):
-            # Skip terms that are already in the RO-Crate context
-            return
-        if self.unique_terms and existing is not None:
-            raise ValueError(
-                f'Term "{term.name}" is already defined to mean {existing}. Cannot redefine to {term.id}.'
-            )
-
-        if str(term.id) == str(RDF.type):
-            # rdf:type should never be re-defined
-            return
-
-        self._do_register(term)
-
-    def _do_register(self, term: Term) -> None:
-        # Allows subclasses to override the registration process
-        self._custom_terms[term.name] = Context()._term_dict(term)
+        return self.navigate()[iri]
 
     def add(self, subgraph: ContextGraph | Graph | Triple) -> None:
         """
-        Adds a subgraph or triple to this context graph.
-        If the subgraph is a ContextGraph, it will also merge the context.
+        Adds a subgraph or triple to this graph.
+        If the subgraph is a ContextGraph, its vocabs will also be added.
         """
         if isinstance(subgraph, ContextGraph):
             self.graph += subgraph.graph
-            term: Term
-            for term in subgraph.full_context.terms.values():
-                self.register_term(term)
+            for vocab in subgraph.vocabs:
+                if vocab not in self.vocabs:
+                    self.vocabs.append(vocab)
         elif isinstance(subgraph, Graph):
             self.graph += subgraph
         elif isinstance(subgraph, tuple):
@@ -152,6 +159,38 @@ class ContextGraph:
             self.graph.add(subgraph)
         else:
             raise TypeError("Subgraph must be a ContextGraph or a Graph instance.")
+
+    def add_entity(
+        self, entity: IdentifiedNode | str, *props: PropertyArg
+    ) -> IdentifiedNode:
+        """
+        Adds triples to the graph with `entity` as the subject.
+        This can be used both to create new entities and to add metadata to existing ones.
+
+        Returns:
+            The ID of the entity
+
+        Params:
+            entity: ID of the entity. Strings are treated as IRIs.
+
+        Example:
+            ```python
+            from rdflib import RDF, Literal, Namespace
+            from rdfcrate import ContextGraph
+
+            SCHEMA = Namespace("http://schema.org/")
+            ContextGraph().add_entity(
+                "#thing",
+                (RDF.type, SCHEMA.CreativeWork),
+                (SCHEMA.name, Literal("My Thing")),
+            )
+            ```
+        """
+        if not isinstance(entity, IdentifiedNode):
+            entity = URIRef(entity)
+        for predicate, object in props:
+            self.graph.add((entity, predicate, object))
+        return entity
 
     def strip_datatypes(
         self, strip_datatypes: bool = True, strip_languages: bool = True
@@ -175,10 +214,9 @@ class ContextGraph:
 
     def compile(self, **kwargs) -> str:
         """
-        Compiles the RO-Crate to a JSON-LD string
+        Compiles the graph to a JSON-LD string
 
         Params:
-            strip_datatypes: If True, any datatypes or languages will be stripped from literals. This is useful for compatibility with systems that do not support datatypes.
             **kwargs: Additional keyword arguments to pass to the RDFLib serializer
         """
         # Serializer kwargs are annoyingly not listed in the docs.
@@ -186,35 +224,3 @@ class ContextGraph:
         return self.graph.serialize(
             format="json-ld", context=self.context_source, **kwargs
         )
-
-    @deprecated(
-        "The `add_entity` method is deprecated. Instead use `add` on instances of `RdfType` instead to add entities"
-    )
-    def add_entity(self, entity: EntityClass, *args: EntityArgs) -> EntityClass:
-        """
-        Adds any type of entity to the crate
-
-        Returns:
-            The ID of the new entity
-        """
-        # Note: The reason we have use the (entity, *args) signature is so that we can enforce certain properties and their types
-        # when we make specialized variants of the method like `add_root_entity` or `register_file`.
-        # `entity.add()` handles the term registration and the triple creation
-        entity.add(*args, graph=self)
-        return entity
-
-    @deprecated(
-        "The `add_metadata` method is deprecated. Instead use `update` on instances of `RdfType` instead"
-    )
-    def add_metadata(self, entity: RdfClass, *args: EntityArgs) -> None:
-        """
-        Add metadata for an existing entity.
-
-        Returns:
-            The ID of the updated entity
-
-        Params:
-            uri: ID of the entity being described
-        """
-        for arg in args:
-            arg.add_to_graph(self, entity.id)

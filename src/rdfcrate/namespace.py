@@ -25,16 +25,16 @@ class ContextNamespace:
         from rdflib import URIRef
         from rdfcrate import ContextNamespace
 
-        class Obi(ContextNamespace, context_prefix="obi"):
+        class Obi(ContextNamespace, prefix="obi", mode="curie"):
             _base = URIRef("http://purl.obolibrary.org/obo/")
             Image = _base + "IAO_0000101"
 
-        Obi.jsonld_context()
-        # {"obi": "http://purl.obolibrary.org/obo/", "obiImage": "obi:IAO_0000101"}
+        dict(Obi.terms())
+        # {"Image": URIRef("http://purl.obolibrary.org/obo/IAO_0000101")}
         ```
     """
 
-    #: IRI that the terms in this namespace share. If this and `_context_prefix` are set, the context will use CURIEs.
+    #: IRI that the terms in this namespace share. If this and `_prefix` are set, the context will use CURIEs.
     _base: ClassVar[URIRef | None] = None
     #: Prefix that is prepended to every term label in the context, and used as the CURIE prefix for `_base`.
     _prefix: ClassVar[str | None] = None
@@ -49,7 +49,7 @@ class ContextNamespace:
         cls,
         /,
         prefix: str | None = None,
-        mode: ContextMode = "standard",
+        mode: ContextMode | None = None,
         **kwargs: Any,
     ):
         """
@@ -63,8 +63,11 @@ class ContextNamespace:
             prefix: A prefix that will be prepended to each term label in "prefix" and "curie" modes.
         """
         super().__init_subclass__(**kwargs)
-        cls._prefix = prefix
-        cls._mode = mode
+        # Only override the inherited values if explicitly provided
+        if prefix is not None:
+            cls._prefix = prefix
+        if mode is not None:
+            cls._mode = mode
         # Walk the MRO from base to subclass so that subclasses inherit and can override terms
         cls._terms_to_iris = {
             attr: value

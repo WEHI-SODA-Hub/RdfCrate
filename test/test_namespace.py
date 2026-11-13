@@ -80,3 +80,71 @@ def test_subclass_inherits_terms():
         **dict(Obi.terms()),
         "Assay": URIRef("http://purl.obolibrary.org/obo/OBI_0000070"),
     }
+
+
+class CurieBase(ContextNamespace, prefix="base", mode="curie"):
+    _base = URIRef("https://example.org/")
+    thing = _base + "thing"
+
+
+def test_default_config():
+    """
+    A namespace with no `prefix` or `mode` arguments should use the defaults.
+    """
+    assert Sdo._prefix is None
+    assert Sdo._mode == "standard"
+
+
+def test_subclass_inherits_config():
+    """
+    A subclass that doesn't pass `prefix` or `mode` should inherit them from its parent.
+    """
+
+    class Child(CurieBase):
+        pass
+
+    assert Child._prefix == "base"
+    assert Child._mode == "curie"
+    assert Child._base == CurieBase._base
+
+
+def test_subclass_overrides_config():
+    """
+    Explicit `prefix` and `mode` arguments should override the inherited values, without changing the parent.
+    """
+
+    class Child(CurieBase, prefix="child", mode="prefix"):
+        pass
+
+    assert Child._prefix == "child"
+    assert Child._mode == "prefix"
+    assert CurieBase._prefix == "base"
+    assert CurieBase._mode == "curie"
+
+
+def test_subclass_overrides_one_config_value():
+    """
+    Overriding only one of `prefix` or `mode` should leave the other inherited.
+    """
+
+    class ModeOnly(CurieBase, mode="prefix"):
+        pass
+
+    class PrefixOnly(CurieBase, prefix="other"):
+        pass
+
+    assert ModeOnly._prefix == "base"
+    assert ModeOnly._mode == "prefix"
+    assert PrefixOnly._prefix == "other"
+    assert PrefixOnly._mode == "curie"
+
+
+def test_subclass_can_set_empty_prefix():
+    """
+    An empty-string prefix is an explicit value, so it should override the parent's prefix.
+    """
+
+    class Child(CurieBase, prefix=""):
+        pass
+
+    assert Child._prefix == ""

@@ -1,22 +1,33 @@
 # Motivation
 
-RO-Crates are JSON-LD documents, but working with them as JSON means handling the details of JSON-LD such as contexts, `@id` and `@type`.
-`rdfcrate` instead treats an RO-Crate as an RDF graph, so you work with plain `rdflib` triples and the JSON-LD is generated for you.
+There are some existing approaches to handling RO-Crates in Python, but they all have disadvantages
 
-Previous versions of `rdfcrate` wrapped every RDF class, property and datatype in a Python class, so that a type checker could catch errors such as passing the wrong type of value to a property.
-In practice this added a lot of complexity, and was never a good fit for RDF:
+## Treat them as JSON
+
+This approach means handling the details of JSON-LD such as contexts, `@id` and `@type`, which are complex and can often be automated.
+
+## Wrap them in generated Python classes
+
+This approach was used by `RdfCrate` 1.x, but ultimately it was never a great fit because:
 
 * RDF is "open". Any property can be used with any class, by default
 * Entities can and should have multiple types
 * RDF is a graph, meaning that the same entity can be referenced by multiple other entities, and even circular relationships are allowed
+* Data types are optional in RDF, so enforcing them in Python is often a bad idea
 
-`rdfcrate` now leaves validation to tools designed for it, such as SHACL, and focuses on building the graph and its context.
+## Use `rdflib`
+
+`rdflib` is very close to the raw RDF, which is often great, but it has some weaknesses:
+
+* Writing out triples is very repetitive, you have to repeat the subject many times when describing one object
+* RO-Crate conventions are not handled by the library, so the `./` and `ro-crate-metadata.json` have to be manually written out
+* The context/term rules of RO-Crate are quite difficult to get right. RO-Crate requires that you have a term for each IRI, but writing the context by hand is onerous and unnecessary
+
+`RdfCrate` tries to strike a good balance by abstracting just a bit on top of `rdflib`, solving the above issues.
 
 ## Properties
 
 Properties are `(predicate, object)` tuples, using `rdflib` terms directly.
-The examples here use `RDF` from `rdflib`, and `SCHEMA` from `rdfcrate.wrapper`, which is `Namespace("http://schema.org/")`.
-Note that RO-Crate uses `http://schema.org/`, so `rdflib.SDO`, which uses `https://schema.org/`, should not be used.
 ```python
 (SCHEMA.name, Literal("Michael"))
 ```

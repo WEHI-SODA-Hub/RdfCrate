@@ -19,7 +19,13 @@
 
 ### Added
 
-- `ContextNamespace`, which defines terms as `URIRef` class attributes and generates a flat JSON-LD context. If both `context_prefix` and `_base` are set, the context uses CURIEs
+- `ContextNamespace`, which defines terms as `URIRef` class attributes and generates a flat JSON-LD context. The `prefix` and `mode` class arguments control how its terms are labelled in the context:
+    - `"standard"` (the default) uses the attribute name as the label
+    - `"prefix"` prepends `prefix` to every label
+    - `"prefix_collision"` prepends `prefix` only when the unprefixed label is already taken
+    - `"curie"` adds `prefix` as a CURIE prefix for `_base`
+    - `"omit"` adds no terms, because they must be defined by an external context
+- Subclasses of a `ContextNamespace` inherit its terms, `_base`, `prefix` and `mode`. Passing `prefix` or `mode` to the subclass overrides the inherited value
 
 
 ## 1.1.0

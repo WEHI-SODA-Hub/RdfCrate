@@ -224,7 +224,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         Params:
             path: Path to the directory, which must be within the crate root
             props: Properties used to describe the `Dataset` entity
-            dataset: Dataset entity that the file should be linked to. If not provided, the file will be linked to the root dataset.
+            dataset: Dataset entity that the directory should be linked to. If not provided, the directory will be linked to the root dataset.
             kwargs: Available for subclasses to extend the functionality.
 
         Example:

@@ -34,7 +34,11 @@ plugins:
       - 'rdfcrate.context_graph'
       - 'rdfcrate.vocabs'
       - 'rdfcrate.spec_version'
-      - 'rdfcrate.wrapper'
+    module_options:
+      # Documented only so that docstrings are included in the API reference
+      'rdfcrate\.wrapper$':
+        members:
+          - RoCrate
 
 nav:
   - 'README.md'

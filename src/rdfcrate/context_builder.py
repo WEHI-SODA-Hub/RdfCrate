@@ -15,14 +15,18 @@ class ContextBuilder:
     This is kept separate from `ContextGraph` because it only lives for a single context generation,
     whereas a graph is long-lived and may change between compiles.
     It also means that `ContextNamespace` only depends on the few term-claiming methods it needs, rather than the whole graph.
+
+    Params:
+        external: An existing JSON-LD context whose terms are added to `omit`.
     """
 
-    #: Generated terms, which will be serialized as the JSON-LD context.
     context: dict[str, str] = field(default_factory=dict)
-    #: Terms that are defined outside the generated context, such as by a remote context or by "omit" namespaces.
-    #: These are never serialized, but other namespaces can't redefine them.
+    """Generated terms, which will be serialized as the JSON-LD context."""
     omit: dict[str, str] = field(default_factory=dict)
-    #: An existing JSON-LD context whose terms are added to `omit`.
+    """
+    Terms that are defined outside the generated context, such as by a remote context or by "omit" namespaces.
+    These are never serialized, but other namespaces can't redefine them.
+    """
     external: InitVar[Context | None] = None
 
     def __post_init__(self, external: Context | None):

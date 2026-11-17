@@ -34,16 +34,16 @@ class ContextNamespace:
         ```
     """
 
-    #: IRI that the terms in this namespace share. Required in "curie" mode, where it is added to the context under `_prefix`. Can also be used to construct IRIs for terms in the namespace, e.g. `MyNamespace._base + "MyTerm"`.
     _base: ClassVar[URIRef | None] = None
-    #: Prefix used by the "prefix", "prefix_collision" and "curie" modes.
+    """IRI that the terms in this namespace share. Required in "curie" mode, where it is added to the context under `_prefix`. Can also be used to construct IRIs for terms in the namespace, e.g. `MyNamespace._base + "MyTerm"`."""
     _prefix: ClassVar[str | None] = None
-    #: The mode used for prefixing terms in the context.
+    """Prefix used by the "prefix", "prefix_collision" and "curie" modes."""
     _mode: ClassVar[ContextMode] = "standard"
-    #: A dictionary version of the terms in this namespace
+    """The mode used for prefixing terms in the context."""
     _terms_to_iris: ClassVar[dict[str, URIRef]] = {}
-    #: Inverse mapping from IRIs to term labels.
+    """A dictionary version of the terms in this namespace"""
     _iris_to_terms: ClassVar[dict[URIRef, str]] = {}
+    """Inverse mapping from IRIs to term labels."""
 
     def __init_subclass__(
         cls,

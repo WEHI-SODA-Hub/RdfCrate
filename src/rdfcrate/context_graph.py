@@ -22,8 +22,8 @@ PropertyArg = Annotated[
     ),
 ]
 
-#: Datatypes that rdflib serializes as native JSON values, which therefore don't need a term in the context.
 NATIVE_DATATYPES = {XSD.boolean, XSD.integer, XSD.double, XSD.string}
+"""Datatypes that rdflib serializes as native JSON values, which therefore don't need a term in the context."""
 
 
 class ContextGraphKwargs(TypedDict, total=False):
@@ -47,9 +47,11 @@ class ContextGraph:
         self.vocabs = list(kwargs.get("vocabs", []))
 
     graph: Graph
-    #: Namespaces whose terms can be used in the graph. Every predicate, type and datatype in the graph must be defined in one of these.
-    #: The earlier a vocabulary appears in this list, the higher its priority when resolving term collisions.
     vocabs: list[type[ContextNamespace]]
+    """
+    Namespaces whose terms can be used in the graph. Every predicate, type and datatype in the graph must be defined in one of these.
+    The earlier a vocabulary appears in this list, the higher its priority when resolving term collisions.
+    """
 
     def _used_iris(self) -> set[URIRef]:
         """

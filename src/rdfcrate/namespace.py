@@ -18,14 +18,14 @@ class ContextNamespace:
     An RDF namespace that can also generate a JSON-LD context for the terms it defines.
 
     Subclasses should define each term as a class attribute holding a `URIRef`.
-    The attribute name becomes the term label in the JSON-LD context, with any trailing underscore removed, so that Python keywords such as `type_` can be used.
+    The attribute name becomes the term label in the JSON-LD context.
 
     Example:
         ```python
         from rdflib import URIRef
         from rdfcrate import ContextNamespace
 
-        class Obi(ContextNamespace, prefix="obi", mode="curie"):
+        class Obi(ContextNamespace):
             _base = URIRef("http://purl.obolibrary.org/obo/")
             Image = _base + "IAO_0000101"
 
@@ -34,9 +34,9 @@ class ContextNamespace:
         ```
     """
 
-    #: IRI that the terms in this namespace share. If this and `_prefix` are set, the context will use CURIEs.
+    #: IRI that the terms in this namespace share. Required in "curie" mode, where it is added to the context under `_prefix`. Can also be used to construct IRIs for terms in the namespace, e.g. `MyNamespace._base + "MyTerm"`.
     _base: ClassVar[URIRef | None] = None
-    #: Prefix that is prepended to every term label in the context, and used as the CURIE prefix for `_base`.
+    #: Prefix used by the "prefix", "prefix_collision" and "curie" modes.
     _prefix: ClassVar[str | None] = None
     #: The mode used for prefixing terms in the context.
     _mode: ClassVar[ContextMode] = "standard"
@@ -55,12 +55,12 @@ class ContextNamespace:
         """
         Params:
             mode: The mode used for prefixing terms in the JSON-LD context.
-                In "standard" mode, terms map to their full IRIs without any prefix.
-                In "prefix" mode, the specified prefix is prepended to each term label to avoid collisions.
-                In "curie" mode, terms are written as CURIEs using the prefix.
+                In "standard" mode (the default), the attribute name is used as the term label.
+                In "prefix" mode, `prefix` is prepended to every term label.
+                In "prefix_collision" mode, `prefix` is prepended to a term label only if that label is already in use in the context.
+                In "curie" mode, `prefix` is added to the context as a CURIE prefix for `_base`, and terms are written as CURIEs e.g. `schema:Thing`.
                 In "omit" mode, no terms are included in the context, because they must be defined by the external context passed to `ContextBuilder`.
-                In "prefix_collision" mode, the specified prefix is prepended to a term label only if that term is already in use in the context.
-            prefix: A prefix that will be prepended to each term label in "prefix" and "curie" modes.
+            prefix: Prepended to term labels in "prefix" and "prefix_collision" modes, and used as the CURIE prefix in "curie" mode. Ignored in "standard" and "omit" modes.
         """
         super().__init_subclass__(**kwargs)
         # Only override the inherited values if explicitly provided

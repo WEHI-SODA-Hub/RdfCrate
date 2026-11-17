@@ -73,7 +73,7 @@ RO-Crate requires that each IRI has a short form (a term) in the JSON-LD context
 Terms in the RO-Crate context, such as `name` or `File`, are used automatically.
 Any other terms must be defined in a `ContextNamespace`, and passed to the crate in `vocabs`:
 ```python
-class Obi(ContextNamespace, prefix="obi"):
+class Obi(ContextNamespace):
     _base = URIRef("http://purl.obolibrary.org/obo/")
     Image = _base + "IAO_0000101"
 

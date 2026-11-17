@@ -175,10 +175,9 @@ class ContextGraph:
 
         Example:
             ```python
-            from rdflib import RDF, Literal, Namespace
-            from rdfcrate import ContextGraph
+            from rdflib import RDF, Literal
+            from rdfcrate import SCHEMA, ContextGraph
 
-            SCHEMA = Namespace("http://schema.org/")
             ContextGraph().add_entity(
                 "#thing",
                 (RDF.type, SCHEMA.CreativeWork),

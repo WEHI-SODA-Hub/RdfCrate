@@ -27,8 +27,7 @@ Here's how you could make an RO-Crate using RdfCrate:
 from datetime import date
 
 from rdflib import DCMITYPE, RDF, Literal, URIRef
-from rdfcrate import AttachedCrate, ContextNamespace
-from rdfcrate.wrapper import SCHEMA
+from rdfcrate import SCHEMA, AttachedCrate, ContextNamespace
 
 # Terms outside of the RO-Crate context are defined in a ContextNamespace
 class DcmiType(ContextNamespace):

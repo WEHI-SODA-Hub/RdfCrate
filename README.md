@@ -27,8 +27,7 @@ document. Here’s how you could make an RO-Crate using RdfCrate:
 from datetime import date
 
 from rdflib import DCMITYPE, RDF, Literal, URIRef
-from rdfcrate import AttachedCrate, ContextNamespace
-from rdfcrate.wrapper import SCHEMA
+from rdfcrate import SCHEMA, AttachedCrate, ContextNamespace
 
 # Terms outside of the RO-Crate context are defined in a ContextNamespace
 class DcmiType(ContextNamespace):
@@ -59,6 +58,16 @@ print(crate.compile())
       ],
       "@graph": [
         {
+          "@id": "ro-crate-metadata.json",
+          "@type": "CreativeWork",
+          "about": {
+            "@id": "./"
+          },
+          "conformsTo": {
+            "@id": "https://w3id.org/ro/crate/1.1"
+          }
+        },
+        {
           "@id": "monty.jpg",
           "@type": [
             "File",
@@ -79,16 +88,6 @@ print(crate.compile())
             "@id": "https://creativecommons.org/licenses/by/4.0/"
           },
           "name": "Melbourne Bridges"
-        },
-        {
-          "@id": "ro-crate-metadata.json",
-          "@type": "CreativeWork",
-          "about": {
-            "@id": "./"
-          },
-          "conformsTo": {
-            "@id": "https://w3id.org/ro/crate/1.1"
-          }
         }
       ]
     }

@@ -6,9 +6,8 @@ from pathlib import Path
 import pytest
 from rdflib import DCTERMS, RDF, Graph, Literal, URIRef
 
-from rdfcrate import AttachedCrate, ContextNamespace
+from rdfcrate import SCHEMA, AttachedCrate, ContextNamespace
 from rdfcrate.test_helpers import patch_rocrate_context
-from rdfcrate.wrapper import SCHEMA
 
 TEST_CRATE = Path(__file__).parent / "test_crate"
 

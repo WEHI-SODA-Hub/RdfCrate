@@ -11,21 +11,18 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Any
 from urllib.parse import quote
 
-from rdflib import DCTERMS, RDF, IdentifiedNode, Literal, Namespace, URIRef
+from rdflib import DCTERMS, RDF, IdentifiedNode, Literal, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from typing_extensions import Doc, Unpack
 
 from rdfcrate.context_builder import ContextBuilder
 from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, PropertyArg
+from rdfcrate.vocabs import SCHEMA
 from rdfcrate.spec_version import ROCrate1_1, SpecVersion
 from rdfcrate.types import Object, Predicate
 
 if TYPE_CHECKING:
     from rocrate_validator.models import CheckIssue, Severity
-
-#: Schema.org namespace as used by RO-Crate.
-#: Note that this is different from `rdflib.SDO`, which uses `https://schema.org/`.
-SCHEMA = Namespace("http://schema.org/")
 
 Recursive = Annotated[
     bool,
@@ -190,8 +187,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         Example:
             ```python
             from rdflib import Literal
-            from rdfcrate import AttachedCrate
-            from rdfcrate.wrapper import SCHEMA
+            from rdfcrate import SCHEMA, AttachedCrate
 
             AttachedCrate(".").register_file("./some/data.txt", (SCHEMA.description, Literal("This is a file with some data")))
             ```
@@ -234,8 +230,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         Example:
             ```python
             from rdflib import Literal
-            from rdfcrate import AttachedCrate
-            from rdfcrate.wrapper import SCHEMA
+            from rdfcrate import SCHEMA, AttachedCrate
 
             AttachedCrate(".").register_dir("./some/dir", (SCHEMA.description, Literal("This is a directory I am describing")))
             ```

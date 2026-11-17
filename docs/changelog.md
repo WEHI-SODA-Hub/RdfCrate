@@ -9,7 +9,7 @@
     - Properties are now `(predicate, object)` tuples of `rdflib` terms: `(SCHEMA.name, Literal("WEHI Research Computing Platform"))`
     - Types are added as properties: `(RDF.type, SCHEMA.Person)`
     - Reverse properties have been removed. Add a plain triple using `crate.add((subject, predicate, object))` instead
-- Removed the bundled vocabularies (`rdfcrate.vocabs`) and the `rdfcrate-codegen` CLI. Use `rdflib` terms directly, such as `RDF.type`, and define any terms that aren't in the RO-Crate context in your own `ContextNamespace`. `rdfcrate.wrapper.SCHEMA` is provided for `http://schema.org/` terms, since `rdflib.SDO` uses `https://schema.org/`
+- Removed the bundled vocabularies (`rdfcrate.vocabs`) and the `rdfcrate-codegen` CLI. Use `rdflib` terms directly, such as `RDF.type`, and define any terms that aren't in the RO-Crate context in your own `ContextNamespace`. `rdfcrate.SCHEMA` is provided for `http://schema.org/` terms, since `rdflib.SDO` uses `https://schema.org/`
 - The JSON-LD context is now generated at compile time from the `ContextNamespace` classes passed to the crate's `vocabs`, and only contains the terms that are used. Removed `register_term()`, `register_terms()`, `with_term_label()`, and the `unique_terms` and `require_terms` options
 - Compiling a crate now raises an error if an IRI used as a predicate, type or datatype has no term, or if two terms clash
 - `add_root_entity` now takes plain values for `name`, `description`, `date_published` and `license`. Dates are written as ISO 8601 strings

@@ -26,22 +26,19 @@ document. Here’s how you could make an RO-Crate using RdfCrate:
 ``` python
 from datetime import date
 
-from rdflib import RDF, Literal, URIRef
+from rdflib import DCMITYPE, RDF, Literal, URIRef
 from rdfcrate import AttachedCrate, ContextNamespace
 from rdfcrate.wrapper import SCHEMA
 
-
 # Terms outside of the RO-Crate context are defined in a ContextNamespace
-class Wikidata(ContextNamespace, prefix="wd"):
-    _base = URIRef("http://www.wikidata.org/entity/")
-    Photograph = _base + "Q125191"
+class DcmiType(ContextNamespace):
+    StillImage = DCMITYPE.StillImage
 
-
-crate = AttachedCrate("crate/", vocabs=[Wikidata])
+crate = AttachedCrate("crate/", vocabs=[DcmiType])
 crate.register_file(
     "monty.jpg",
     (SCHEMA.name, Literal("Montague Street Bridge")),
-    (RDF.type, Wikidata.Photograph),
+    (RDF.type, DcmiType.StillImage),
 )
 crate.add_root_entity(
     "Melbourne Bridges",
@@ -56,15 +53,23 @@ print(crate.compile())
       "@context": [
         "https://w3id.org/ro/crate/1.1/context",
         {
-          "wd": "http://www.wikidata.org/entity/",
-          "wdPhotograph": "wd:Q125191"
+          "StillImage": "http://purl.org/dc/dcmitype/StillImage"
         }
       ],
       "@graph": [
         {
+          "@id": "monty.jpg",
+          "@type": [
+            "File",
+            "StillImage"
+          ],
+          "encodingFormat": "image/jpeg",
+          "name": "Montague Street Bridge"
+        },
+        {
           "@id": "./",
           "@type": "Dataset",
-          "datePublished": "2026-10-14",
+          "datePublished": "2026-11-17",
           "description": "Photo gallery of iconic bridges in Melbourne",
           "hasPart": {
             "@id": "monty.jpg"
@@ -73,15 +78,6 @@ print(crate.compile())
             "@id": "https://creativecommons.org/licenses/by/4.0/"
           },
           "name": "Melbourne Bridges"
-        },
-        {
-          "@id": "monty.jpg",
-          "@type": [
-            "File",
-            "wdPhotograph"
-          ],
-          "encodingFormat": "image/jpeg",
-          "name": "Montague Street Bridge"
         }
       ]
     }

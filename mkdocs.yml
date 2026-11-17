@@ -7,9 +7,10 @@ theme:
 plugins:
 - search
 - same-dir
-# Run quarto render guide.qmd --to md before building, as
-# mkquartodocs seems to be broken https://github.com/jspaezp/mkquartodocs/issues/57
-# - mkquartodocs
+- mkquartodocs:
+    # README.qmd is rendered separately as gfm, and mkquartodocs would overwrite README.md.
+    # site/ is the build output, which mkquartodocs doesn't know to skip.
+    ignore_pattern: '.*/(README\.qmd|site/.*)'
 - mkdocstrings:
     default_handler: python
     handlers:

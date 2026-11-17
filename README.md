@@ -46,6 +46,7 @@ crate.add_root_entity(
     date.today(),
     URIRef("https://creativecommons.org/licenses/by/4.0/"),
 )
+crate.add_metadata_entity()
 print(crate.compile())
 ```
 
@@ -78,6 +79,16 @@ print(crate.compile())
             "@id": "https://creativecommons.org/licenses/by/4.0/"
           },
           "name": "Melbourne Bridges"
+        },
+        {
+          "@id": "ro-crate-metadata.json",
+          "@type": "CreativeWork",
+          "about": {
+            "@id": "./"
+          },
+          "conformsTo": {
+            "@id": "https://w3id.org/ro/crate/1.1"
+          }
         }
       ]
     }

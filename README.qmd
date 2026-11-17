@@ -46,5 +46,6 @@ crate.add_root_entity(
     date.today(),
     URIRef("https://creativecommons.org/licenses/by/4.0/"),
 )
+crate.add_metadata_entity()
 print(crate.compile())
 ```

@@ -4,7 +4,7 @@ There are some existing approaches to handling RO-Crates in Python, but they all
 
 ## Treat them as JSON
 
-This approach means handling the details of JSON-LD such as contexts, `@id` and `@type`, which are complex and can often be automated.
+This approach means manually handling the details of JSON-LD such as contexts, `@id` and `@type`, which are complex and confusing.
 
 ## Wrap them in generated Python classes
 
@@ -81,10 +81,4 @@ class Obi(ContextNamespace, prefix="obi"):
 crate = AttachedCrate("crate/", vocabs=[Obi])
 ```
 When the crate is compiled, the context will contain only the terms that are actually used.
-If `context_prefix` is set, it is prepended to every term label to avoid clashes with other vocabularies, and if `_base` is also set, the context will use CURIEs:
-```json
-{"obi": "http://purl.obolibrary.org/obo/", "obiImage": "obi:IAO_0000101"}
-```
-Compiling a crate raises an error if two terms clash, or if an IRI used as a predicate, type or datatype has no term.
-
 Because the terms you use are listed explicitly, you only need to define the small subset of each ontology that you actually use, and it is easy to see which terms a project depends on.

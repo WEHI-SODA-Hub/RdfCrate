@@ -29,9 +29,11 @@ from datetime import date
 from rdflib import DCMITYPE, RDF, Literal, URIRef
 from rdfcrate import SCHEMA, AttachedCrate, ContextNamespace
 
+
 # Terms outside of the RO-Crate context are defined in a ContextNamespace
 class DcmiType(ContextNamespace):
     StillImage = DCMITYPE.StillImage
+
 
 crate = AttachedCrate("crate/", vocabs=[DcmiType])
 crate.register_file(

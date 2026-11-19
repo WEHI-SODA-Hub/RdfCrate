@@ -56,15 +56,14 @@ class ContextNamespace:
         Params:
             mode: The mode used for prefixing terms in the JSON-LD context.
                 In "standard" mode (the default), the attribute name is used as the term label.
+                This suits a vocabulary with opaque IRIs such as OBI, since it lets us label `BFO_0000051` as `hasPart`.
                 In "prefix" mode, `prefix` is prepended to every term label.
-                This suits a vocabulary whose labels might clash, such as XSD, whose `date` and `duration` are also schema.org properties.
+                This suits when you don't want to use CURIE mode, and you also know clashes between your vocabularies are likely.
                 In "prefix_collision" mode, `prefix` is prepended to a term label only if that label is already in use in the context.
-                This suits a vocabulary whose labels only occasionally clash.
                 In "curie" mode, `prefix` is added to the context as a CURIE prefix for `_base`, and terms are written as CURIEs e.g. `schema:Thing`.
-                This suits a vocabulary with opaque IRIs, such as EDAM, where `edam:data_2044` is as readable as any label.
+                This suits a vocabulary whose IRIs are human-readable, e.g. `schema:name`
                 In "external" mode, terms are only labelled by the external context passed to `ContextBuilder`, and using a term it doesn't define raises an error.
-                This suits a vocabulary that the external context already covers, such as schema.org with the RO-Crate context, when you want to guarantee no other terms are used.
-                Note that in every mode, IRIs defined by the external context use its labels. This mode only prevents falling back to a generated term.
+                This suits a vocabulary that the external context already covers, such as schema.org with the RO-Crate context.
             prefix: Prepended to term labels in "prefix" and "prefix_collision" modes, and used as the CURIE prefix in "curie" mode. Ignored in "standard" and "external" modes.
         """
         super().__init_subclass__(**kwargs)

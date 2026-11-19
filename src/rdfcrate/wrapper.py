@@ -17,9 +17,9 @@ from typing_extensions import Doc, Unpack
 
 from rdfcrate.context_builder import ContextBuilder
 from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, PropertyArg
-from rdfcrate.vocabs import SCHEMA
 from rdfcrate.spec_version import ROCrate1_1, SpecVersion
 from rdfcrate.types import Object, Predicate
+from rdfcrate.vocabs import SCHEMA
 
 if TYPE_CHECKING:
     from rocrate_validator.models import CheckIssue, Severity

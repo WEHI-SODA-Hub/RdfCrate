@@ -7,9 +7,10 @@ theme:
 plugins:
 - search
 - same-dir
-# Run quarto render guide.qmd --to md before building, as
-# mkquartodocs seems to be broken https://github.com/jspaezp/mkquartodocs/issues/57
-# - mkquartodocs
+- mkquartodocs:
+    # README.qmd is rendered separately as gfm, and mkquartodocs would overwrite README.md.
+    # site/ is the build output, which mkquartodocs doesn't know to skip.
+    ignore_pattern: '.*/(README\.qmd|site/.*)'
 - mkdocstrings:
     default_handler: python
     handlers:
@@ -25,8 +26,6 @@ plugins:
       - 'src/rdfcrate'
     exclude:
       # Private and WIP modules
-      - 'rdfcrate.codegen'
-      - 'rdfcrate.literals'
       - 'rdfcrate.types'
       - 're:proto'
       - 're:test'
@@ -34,15 +33,13 @@ plugins:
       # If we don't exclude these, they will be documented twice,
       # the user might think they need to import directly from these submodules
       - 'rdfcrate.context_graph'
-      - 'rdfcrate.rdfprop'
-      - 'rdfcrate.rdftype'
+      - 'rdfcrate.vocabs'
       - 'rdfcrate.spec_version'
-      - 'rdfcrate.wrapper'
-
     module_options:
-      # These modules don't set __all__, so we include all members to avoid empty docs
-      "rdfcrate.vocabs.*":
-        members: true
+      # Documented only so that docstrings are included in the API reference
+      'rdfcrate\.wrapper$':
+        members:
+          - RoCrate
 
 nav:
   - 'README.md'

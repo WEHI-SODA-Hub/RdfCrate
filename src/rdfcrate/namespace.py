@@ -136,16 +136,6 @@ class ContextNamespace:
                 # In CURIE mode, we only add the base IRI, and let the serializer construct CURIEs for us
                 builder.claim(cls._prefix, cls._base)
 
-    # @classmethod
-    # def jsonld_context(cls, iris: Iterable[URIRef]) -> dict[str, str]:
-    #     """
-    #     Returns a flat JSON-LD context for the given IRIs.
-    #     If a given IRI is not defined as a term in this namespace, it will be ignored.
-
-    #     This approach avoids adding unused terms to the JSON-LD context.
-    #     """
-    #     return {}
-
 
 __all__ = [
     "ContextNamespace",

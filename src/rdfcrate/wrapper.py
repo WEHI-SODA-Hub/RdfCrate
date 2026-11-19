@@ -8,10 +8,10 @@ from dataclasses import dataclass
 from datetime import date
 from os import stat
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Any
+from typing import TYPE_CHECKING, Annotated, Any, overload
 from urllib.parse import quote
 
-from rdflib import DCTERMS, RDF, IdentifiedNode, Literal, URIRef
+from rdflib import DCTERMS, RDF, BNode, IdentifiedNode, Literal, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from typing_extensions import Doc, Unpack
 
@@ -37,6 +37,27 @@ def has_predicate(props: Iterable[PropertyArg], predicate: Predicate) -> bool:
     Checks if a property list contains a specific predicate
     """
     return any(prop_predicate == predicate for prop_predicate, _ in props)
+
+
+# These overloads come before `str` because RDF terms are also `str` subclasses
+@overload
+def as_literal(value: URIRef) -> URIRef: ...  # pyright: ignore[reportOverlappingOverload]
+
+
+@overload
+def as_literal(value: BNode) -> BNode: ...  # pyright: ignore[reportOverlappingOverload]
+
+
+@overload
+def as_literal(value: Literal) -> Literal: ...
+
+
+@overload
+def as_literal(value: Object) -> Object: ...
+
+
+@overload
+def as_literal(value: str | date) -> Literal: ...
 
 
 def as_literal(value: Object | str | date) -> Object:

@@ -90,7 +90,7 @@ def test_custom_vocab():
     """
     crate = ExternalContextGraph(vocabs=[Sdo, BioschemasDrafts])
     crate.add_entity(
-        "#some_protocol",
+        URIRef("#some_protocol"),
         (RDF.type, BioschemasDrafts.LabProtocol),
         (Sdo.name, Literal("Some Protocol")),
     )
@@ -106,7 +106,7 @@ def test_curies():
     Namespaces in "curie" mode should only add their prefix to the context, and IRIs should be shortened to CURIEs.
     """
     crate = ExternalContextGraph(vocabs=[Sdo, Edam])
-    crate.add_entity("#sequence", (RDF.type, Edam.Sequence))
+    crate.add_entity(URIRef("#sequence"), (RDF.type, Edam.Sequence))
     entity_json = json.loads(crate.compile())
     assert entity_json["@context"] == {
         "edam": "http://edamontology.org/",
@@ -120,7 +120,7 @@ def test_round_trip():
     """
     crate = ExternalContextGraph(vocabs=[Sdo, Obi, Edam])
     crate.add_entity(
-        "http://example.org/image",
+        URIRef("http://example.org/image"),
         (RDF.type, Edam.Image),
         (Sdo.hasPart, URIRef("http://example.org/part")),
         (Obi.hasPart, Obi.Assay),
@@ -141,7 +141,7 @@ def test_rdf_type_not_in_context():
         type_ = _base + "type"
 
     crate = ContextGraph(vocabs=[BioschemasDrafts, Rdf])
-    crate.add_entity("#thing", (RDF.type, BioschemasDrafts.LabProtocol))
+    crate.add_entity(URIRef("#thing"), (RDF.type, BioschemasDrafts.LabProtocol))
     assert json.loads(crate.compile())["@context"] == {
         "LabProtocol": "https://bioschemas.org/draft_terms/LabProtocol"
     }
@@ -152,10 +152,14 @@ def test_datatype():
     Datatypes that are serialized as JSON-LD `@type` need a term, but native JSON types don't.
     """
     crate = ExternalContextGraph(vocabs=[Sdo])
-    crate.add_entity("#thing", (Sdo.name, Literal(True)), (Sdo.name, Literal(1)))
+    crate.add_entity(
+        URIRef("#thing"), (Sdo.name, Literal(True)), (Sdo.name, Literal(1))
+    )
     assert crate.vocab_context() == {}
 
-    crate.add_entity("#thing", (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1))))
+    crate.add_entity(
+        URIRef("#thing"), (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1)))
+    )
     with pytest.raises(ValueError, match=str(XSD.date)):
         crate.vocab_context()
 
@@ -174,7 +178,9 @@ def test_strip_datatypes():
     Test that `context_graph.strip_datatypes()` works as expected.
     """
     crate = ContextGraph()
-    crate.add_entity("#thing", (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1))))
+    crate.add_entity(
+        URIRef("#thing"), (Sdo.dateCreated, Literal(datetime.date(2023, 1, 1)))
+    )
     stripped_graph = crate.strip_datatypes()
     date_value = stripped_graph.value(URIRef("#thing"), Sdo.dateCreated)
     assert isinstance(date_value, Literal), "The date value should be a Literal"
@@ -184,7 +190,7 @@ def test_strip_datatypes():
 
 def test_add_entity_returns_id():
     crate = ContextGraph()
-    assert crate.add_entity("#thing") == URIRef("#thing")
+    assert crate.add_entity(URIRef("#thing")) == URIRef("#thing")
     node = BNode()
     assert crate.add_entity(node) == node
 
@@ -195,7 +201,7 @@ def test_add_basecrate():
     """
     a = ContextGraph(vocabs=[Sdo])
     b = ContextGraph(vocabs=[Sdo, BioschemasDrafts])
-    b.add_entity("#sub", (RDF.type, BioschemasDrafts.LabProtocol))
+    b.add_entity(URIRef("#sub"), (RDF.type, BioschemasDrafts.LabProtocol))
     a.add(b)
 
     assert URIRef("#sub") in set(a.graph.subjects()), (
@@ -230,7 +236,7 @@ def test_navigate_and_navigate_to():
     pytest.importorskip("rdfnav")
 
     crate = ContextGraph()
-    thing = crate.add_entity("#thing", (RDF.type, Sdo.Thing))
+    thing = crate.add_entity(URIRef("#thing"), (RDF.type, Sdo.Thing))
 
     navigator = crate.navigate()
     assert navigator.instance(Sdo.Thing).iri == thing
@@ -353,7 +359,7 @@ def test_vocab_context(case: VocabContextCase):
     Each namespace mode should contribute the right terms to the vocab context, both alone and alongside other namespaces.
     """
     crate = ExternalContextGraph(vocabs=case.vocabs)
-    crate.add_entity("#thing", *case.props)
+    crate.add_entity(URIRef("#thing"), *case.props)
     assert crate.vocab_context() == case.expected
 
 
@@ -400,7 +406,7 @@ def test_vocab_context_error(case: VocabContextCase):
     Invalid combinations of graph contents and namespaces should raise an error from `.vocab_context()`.
     """
     crate = ExternalContextGraph(vocabs=case.vocabs)
-    crate.add_entity("#thing", *case.props)
+    crate.add_entity(URIRef("#thing"), *case.props)
     assert isinstance(case.expected, type)
     with pytest.raises(case.expected):
         crate.vocab_context()

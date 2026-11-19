@@ -42,7 +42,7 @@ Entities are just IRIs (or blank nodes).
 You pass a list of properties to create or describe an entity, and types are added with `rdf:type` like any other property:
 ```python
 me = crate.add_entity(
-    "#me",
+    URIRef("#me"),
     (RDF.type, SCHEMA.Person),
     (SCHEMA.name, Literal("Michael")),
     (SCHEMA.affiliation, wehi),

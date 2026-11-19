@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, Annotated, Any, TypedDict
+from typing import TYPE_CHECKING, Annotated, Any, TypedDict, TypeVar
 
 from rdflib import RDF, XSD, Graph, IdentifiedNode, Literal, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
@@ -21,6 +21,8 @@ PropertyArg = Annotated[
         "A `(predicate, object)` pair, which will be added to the graph with the entity as the subject. For example `(SCHEMA.name, Literal('My Dataset'))`."
     ),
 ]
+
+EntityT = TypeVar("EntityT", bound=IdentifiedNode)
 
 NATIVE_DATATYPES = {XSD.boolean, XSD.integer, XSD.double, XSD.string}
 """Datatypes that rdflib serializes as native JSON values, which therefore don't need a term in the context."""
@@ -162,33 +164,29 @@ class ContextGraph:
         else:
             raise TypeError("Subgraph must be a ContextGraph or a Graph instance.")
 
-    def add_entity(
-        self, entity: IdentifiedNode | str, *props: PropertyArg
-    ) -> IdentifiedNode:
+    def add_entity(self, entity: EntityT, *props: PropertyArg) -> EntityT:
         """
         Adds triples to the graph with `entity` as the subject.
         This can be used both to create new entities and to add metadata to existing ones.
 
         Returns:
-            The ID of the entity
+            The ID of the entity, which has the same type as `entity`
 
         Params:
-            entity: ID of the entity. Strings are treated as IRIs.
+            entity: ID of the entity, either a `URIRef` or a `BNode`.
 
         Example:
             ```python
-            from rdflib import RDF, Literal
+            from rdflib import RDF, Literal, URIRef
             from rdfcrate import SCHEMA, ContextGraph
 
             ContextGraph().add_entity(
-                "#thing",
+                URIRef("#thing"),
                 (RDF.type, SCHEMA.CreativeWork),
                 (SCHEMA.name, Literal("My Thing")),
             )
             ```
         """
-        if not isinstance(entity, IdentifiedNode):
-            entity = URIRef(entity)
         for predicate, object in props:
             self.graph.add((entity, predicate, object))
         return entity

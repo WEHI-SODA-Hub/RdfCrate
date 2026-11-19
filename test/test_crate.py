@@ -220,7 +220,7 @@ def test_clash_with_rocrate_context():
 
     crate = make_test_crate()
     crate.vocabs.append(Example)
-    crate.add_entity("./", (Example.name, Literal("Other name")))
+    crate.add_entity(URIRef("./"), (Example.name, Literal("Other name")))
     with pytest.raises(ValueError, match="already defined"):
         crate.compile()
 
@@ -230,6 +230,8 @@ def test_missing_term():
     Using an IRI that isn't in the RO-Crate context or any vocab should raise an error.
     """
     crate = make_test_crate()
-    crate.add_entity("./", (URIRef("https://example.org/undefined"), Literal("x")))
+    crate.add_entity(
+        URIRef("./"), (URIRef("https://example.org/undefined"), Literal("x"))
+    )
     with pytest.raises(ValueError, match="https://example.org/undefined"):
         crate.compile()

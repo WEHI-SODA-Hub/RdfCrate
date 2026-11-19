@@ -16,6 +16,7 @@
 - `add_metadata` has been removed. `add_entity`, which is no longer deprecated, can be used to add properties to existing entities
 - The automatically added `contentSize` is now a string, as specified by schema.org
 - Datatypes such as `Text` and `Boolean` are no longer added to the context
+- `add_entity()` no longer takes a plain `str`, it must be either a `BNode` or `URIRef`
 
 ### Added
 

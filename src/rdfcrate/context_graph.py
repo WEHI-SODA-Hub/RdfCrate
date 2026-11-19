@@ -82,12 +82,12 @@ class ContextGraph:
     def vocab_context(self) -> dict[str, str]:
         """
         Returns the terms from `vocabs` that are used in the graph, and validates that all IRIs have exactly one term.
-        Terms from namespaces in "omit" mode are not returned, and must instead be defined by the builder's external context.
+        Terms defined by the builder's external context are not returned, and terms from namespaces in "external" mode must be defined there.
         """
         builder = self.context_builder()
         # IRIs that already have a term defined elsewhere don't need one in the generated context
         iris_to_label = {
-            iri for iri in self._used_iris() if not builder.is_omitted(iri)
+            iri for iri in self._used_iris() if not builder.is_external(iri)
         }
         # We have to iterate over the vocabularies first to ensure that higher-priority vocabularies get the chance to define terms before lower-priority ones.
         for vocab in self.vocabs:

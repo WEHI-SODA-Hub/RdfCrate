@@ -15,7 +15,7 @@ from rdfcrate import ContextGraph, ContextNamespace
 from rdfcrate.context_builder import ContextBuilder
 
 
-class Sdo(ContextNamespace, mode="omit"):
+class Sdo(ContextNamespace, mode="external"):
     _base = URIRef("http://schema.org/")
     Thing = _base + "Thing"
     dateCreated = _base + "dateCreated"
@@ -56,8 +56,8 @@ class Edam(ContextNamespace, prefix="edam", mode="curie"):
     Image = _base + "data_2968"
 
 
-class RoCrate(ContextNamespace, mode="omit"):
-    # Unlike the other namespaces, this has no base IRI and is set to omit mode
+class RoCrate(ContextNamespace, mode="external"):
+    # Unlike the other namespaces, this has no base IRI and is set to external mode
     # This is because the context is already included as a URL
     File = SDO.MediaObject
 
@@ -73,7 +73,7 @@ class NoBaseCurie(ContextNamespace, prefix="ex", mode="curie"):
 
 class ExternalContextGraph(ContextGraph):
     """
-    A `ContextGraph` whose external context defines the terms of the "omit" namespaces above, like the RO-Crate context does for `RoCrate`.
+    A `ContextGraph` whose external context defines the terms of the "external" namespaces above, like the RO-Crate context does for `RoCrate`.
     """
 
     external = Context(
@@ -81,7 +81,7 @@ class ExternalContextGraph(ContextGraph):
     )
 
     def context_builder(self) -> ContextBuilder:
-        return ContextBuilder(external=self.external)
+        return ContextBuilder(external_context=self.external)
 
 
 def test_custom_vocab():
@@ -252,14 +252,14 @@ class VocabContextCase:
 @pytest.mark.parametrize(
     "case",
     [
-        # omit
+        # external
         pytest.param(
             VocabContextCase(
                 vocabs=[RoCrate, Sdo],
                 props=[(RDF.type, RoCrate.File), (Sdo.name, Literal("a"))],
                 expected={},
             ),
-            id="omit",
+            id="external",
         ),
         # standard
         pytest.param(
@@ -370,12 +370,12 @@ def test_vocab_context(case: VocabContextCase):
         ),
         pytest.param(
             VocabContextCase(
-                # "description" is claimed by Sdo even though Sdo.description isn't used, and Dcterms has no prefix to fall back on
+                # "description" is defined by the external context even though Sdo.description isn't used, and Dcterms has no prefix to fall back on
                 vocabs=[Sdo, Dcterms],
                 props=[(Dcterms.description, Literal("a"))],
                 expected=ValueError,
             ),
-            id="standard-clashing-with-omit",
+            id="standard-clashing-with-external",
         ),
         pytest.param(
             VocabContextCase(

@@ -72,7 +72,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
 
     def context_builder(self) -> ContextBuilder:
         # Terms in the RO-Crate context are already defined, so they mustn't be added or redefined
-        return ContextBuilder(external=self._roc_context)
+        return ContextBuilder(external_context=self._roc_context)
 
     @property
     def context_source(self) -> list[dict[str, Any] | str | None] | str:

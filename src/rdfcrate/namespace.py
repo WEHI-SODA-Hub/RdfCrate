@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from rdfcrate.context_builder import ContextBuilder
 
 ContextMode: TypeAlias = Literal[
-    "standard", "prefix", "prefix_collision", "curie", "omit"
+    "standard", "prefix", "prefix_collision", "curie", "external"
 ]
 
 
@@ -57,10 +57,15 @@ class ContextNamespace:
             mode: The mode used for prefixing terms in the JSON-LD context.
                 In "standard" mode (the default), the attribute name is used as the term label.
                 In "prefix" mode, `prefix` is prepended to every term label.
+                This suits a vocabulary whose labels might clash, such as XSD, whose `date` and `duration` are also schema.org properties.
                 In "prefix_collision" mode, `prefix` is prepended to a term label only if that label is already in use in the context.
+                This suits a vocabulary whose labels only occasionally clash.
                 In "curie" mode, `prefix` is added to the context as a CURIE prefix for `_base`, and terms are written as CURIEs e.g. `schema:Thing`.
-                In "omit" mode, no terms are included in the context, because they must be defined by the external context passed to `ContextBuilder`.
-            prefix: Prepended to term labels in "prefix" and "prefix_collision" modes, and used as the CURIE prefix in "curie" mode. Ignored in "standard" and "omit" modes.
+                This suits a vocabulary with opaque IRIs, such as EDAM, where `edam:data_2044` is as readable as any label.
+                In "external" mode, terms are only labelled by the external context passed to `ContextBuilder`, and using a term it doesn't define raises an error.
+                This suits a vocabulary that the external context already covers, such as schema.org with the RO-Crate context, when you want to guarantee no other terms are used.
+                Note that in every mode, IRIs defined by the external context use its labels. This mode only prevents falling back to a generated term.
+            prefix: Prepended to term labels in "prefix" and "prefix_collision" modes, and used as the CURIE prefix in "curie" mode. Ignored in "standard" and "external" modes.
         """
         super().__init_subclass__(**kwargs)
         # Only override the inherited values if explicitly provided
@@ -95,14 +100,14 @@ class ContextNamespace:
     def add_term(cls, iri: URIRef, builder: ContextBuilder):
         """
         Adds terms to `builder` in order to label `iri`.
-        IRIs from "omit" namespaces only reach this method if the builder's external context doesn't define them.
+        IRIs from "external" namespaces only reach this method if the builder's external context doesn't define them.
         """
         # At this point we know that the IRI is defined as a term in this namespace.
         term = cls._iris_to_terms[iri]
         match cls._mode:
-            case "omit":
+            case "external":
                 raise ValueError(
-                    f"IRI {iri} is from omit namespace {cls.__name__}, but the external context doesn't define it."
+                    f"IRI {iri} is from external namespace {cls.__name__}, but the external context doesn't define it."
                 )
             case "standard":
                 # Add terms for each utilised IRI

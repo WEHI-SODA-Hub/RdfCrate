@@ -10,29 +10,33 @@ from rdflib.plugins.shared.jsonld.context import Context
 class ContextBuilder:
     """
     State used while generating a JSON-LD context for a graph.
-    Every term label in use is either in `context` or `omit`, but never both.
+    Every term label in use is either in `context` or `external`, but never both.
 
     This is kept separate from `ContextGraph` because it only lives for a single context generation,
     whereas a graph is long-lived and may change between compiles.
     It also means that `ContextNamespace` only depends on the few term-claiming methods it needs, rather than the whole graph.
 
     Params:
-        external: An existing JSON-LD context whose terms are added to `omit`.
+        external_context: An existing JSON-LD context whose terms are added to `external`.
     """
+
+    # The reason why `external_context` is not just inferred from the mode="external" vocabularies is that these vocabs only contain manually-defined terms which are a subset of all the terms defined by a remote context.
+    # For example if my custom Schema.org Namespace has only `schema:name` defined but then I try to use `owl:Class` in my graph, we need to avoid re-defining `Class` since it's in the RO-Crate context despite not being in my namespace.
+    # `external_context` also reserves labels that are not valid Python identifiers, which can't be added to namespaces.
 
     context: dict[str, str] = field(default_factory=dict)
     """Generated terms, which will be serialized as the JSON-LD context."""
-    omit: dict[str, str] = field(default_factory=dict)
+    external: dict[str, str] = field(default_factory=dict)
     """
-    Terms that are defined outside the generated context, such as by a remote context or by "omit" namespaces.
+    Terms that are defined by the external context.
     These are never serialized, but other namespaces can't redefine them.
     """
-    external: InitVar[Context | None] = None
+    external_context: InitVar[Context | None] = None
 
-    def __post_init__(self, external: Context | None):
-        if external is not None:
-            for label, term in external.terms.items():
-                self.omit_term(label, URIRef(term.id))
+    def __post_init__(self, external_context: Context | None):
+        if external_context is not None:
+            for label, term in external_context.terms.items():
+                self.add_external_term(label, URIRef(term.id))
 
     def lookup(self, label: str) -> str | None:
         """
@@ -40,7 +44,7 @@ class ContextBuilder:
         """
         if label in self.context:
             return self.context[label]
-        return self.omit.get(label)
+        return self.external.get(label)
 
     def _check_collision(self, label: str, iri: URIRef):
         """
@@ -57,21 +61,21 @@ class ContextBuilder:
         Adds a term mapping `label` to `iri` to the generated context.
         """
         self._check_collision(label, iri)
-        if label not in self.omit:
+        if label not in self.external:
             self.context[label] = iri.toPython()
 
-    def omit_term(self, label: str, iri: URIRef):
+    def add_external_term(self, label: str, iri: URIRef):
         """
         Records that `label` maps to `iri` in a context defined elsewhere, so it is not added to the generated context.
         """
         self._check_collision(label, iri)
-        self.omit[label] = iri.toPython()
+        self.external[label] = iri.toPython()
 
-    def is_omitted(self, iri: URIRef) -> bool:
+    def is_external(self, iri: URIRef) -> bool:
         """
         Returns `True` if `iri` already has a term defined outside the generated context.
         """
-        return iri.toPython() in self.omit.values()
+        return iri.toPython() in self.external.values()
 
     def jsonld_context(self) -> dict[str, str]:
         """

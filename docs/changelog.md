@@ -24,7 +24,7 @@
     - `"prefix"` prepends `prefix` to every label
     - `"prefix_collision"` prepends `prefix` only when the unprefixed label is already taken
     - `"curie"` adds `prefix` as a CURIE prefix for `_base`
-    - `"omit"` adds no terms, because they must be defined by an external context
+    - `"external"` adds no terms, and raises an error for any term the external context doesn't define
 - Subclasses of a `ContextNamespace` inherit its terms, `_base`, `prefix` and `mode`. Passing `prefix` or `mode` to the subclass overrides the inherited value
 
 

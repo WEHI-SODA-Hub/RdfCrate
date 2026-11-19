@@ -12,8 +12,7 @@
 - Removed the bundled vocabularies (`rdfcrate.vocabs`) and the `rdfcrate-codegen` CLI. Use `rdflib` terms directly, such as `RDF.type`, and define any terms that aren't in the RO-Crate context in your own `ContextNamespace`. `rdfcrate.SCHEMA` is provided for `http://schema.org/` terms, since `rdflib.SDO` uses `https://schema.org/`
 - The JSON-LD context is now generated at compile time from the `ContextNamespace` classes passed to the crate's `vocabs`, and only contains the terms that are used. Removed `register_term()`, `register_terms()`, `with_term_label()`, and the `unique_terms` and `require_terms` options
 - Compiling a crate now raises an error if an IRI used as a predicate, type or datatype has no term, or if two terms clash
-- `add_root_entity` now takes plain values for `name`, `description`, `date_published` and `license`. Dates are written as ISO 8601 strings
-- `add_metadata` has been removed. `add_entity`, which is no longer deprecated, can be used to add properties to existing entities
+- `add_metadata` has been removed since it would be identical to `add_entity` without types. `add_entity` is no longer deprecated, and can be used to add properties to existing entities.
 - The automatically added `contentSize` is now a string, as specified by schema.org
 - Datatypes such as `Text` and `Boolean` are no longer added to the context
 - `add_entity()` no longer takes a plain `str`, it must be either a `BNode` or `URIRef`

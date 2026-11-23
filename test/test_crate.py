@@ -13,9 +13,10 @@ TEST_CRATE = Path(__file__).parent / "test_crate"
 
 MIT = URIRef("https://opensource.org/license/mit")
 ME = URIRef("https://orcid.org/0000-0002-8965-2595")
-WEHI_RCP = URIRef("https://github.com/WEHI-ResearchComputing")
+WEHI = URIRef("https://ror.org/01b6kha49")
+WEHI_CONTACT = URIRef("#wehi-contact")
 
-BASE_SUBJECTS = [MIT, ME, WEHI_RCP]
+BASE_SUBJECTS = [MIT, ME, WEHI, WEHI_CONTACT]
 
 
 class Obi(ContextNamespace, prefix="obi"):
@@ -44,17 +45,30 @@ def make_test_crate(recursive: bool = False):
     crate = AttachedCrate(TEST_CRATE)
 
     wehi = crate.add_entity(
-        WEHI_RCP,
+        WEHI,
         (RDF.type, SCHEMA.Organization),
-        (SCHEMA.name, Literal("WEHI Research Computing Platform")),
-        (SCHEMA.url, Literal(WEHI_RCP)),
+        (SCHEMA.name, Literal("Walter and Eliza Hall Institute of Medical Research")),
+        (SCHEMA.url, Literal("https://www.wehi.edu.au")),
+        (
+            SCHEMA.contactPoint,
+            crate.add_entity(
+                WEHI_CONTACT,
+                (RDF.type, SCHEMA.ContactPoint),
+                (SCHEMA.name, Literal("WEHI general enquiries")),
+                (SCHEMA.contactType, Literal("General enquiries")),
+                (SCHEMA.url, Literal("https://www.wehi.edu.au/contact-us")),
+            ),
+        ),
     )
     crate.add_root_entity(
         "Test Crate",
         "Crate for validating RdfCrate",
         datetime.now(UTC),
         crate.add_entity(
-            MIT, (RDF.type, SCHEMA.CreativeWork), (SCHEMA.name, Literal("MIT License"))
+            MIT,
+            (RDF.type, SCHEMA.CreativeWork),
+            (SCHEMA.name, Literal("MIT License")),
+            (SCHEMA.description, Literal("A permissive open source licence")),
         ),
         (SCHEMA.version, Literal("1.0")),
         (SCHEMA.publisher, wehi),
@@ -73,13 +87,36 @@ def make_test_crate(recursive: bool = False):
     return crate
 
 
+def describe_data_entities(crate: AttachedCrate):
+    """
+    Adds the metadata that RO-Crate recommends for every file and directory in the crate,
+    so that the crate passes validation at the RECOMMENDED level.
+    """
+    for entity in set(crate.graph.subjects(RDF.type, SCHEMA.MediaObject)) | set(
+        crate.graph.subjects(RDF.type, SCHEMA.Dataset)
+    ):
+        assert isinstance(entity, URIRef)
+        if entity == URIRef("./"):
+            continue
+        path = TEST_CRATE / str(entity)
+        crate.add_entity(
+            entity,
+            (SCHEMA.name, Literal(path.name)),
+            (SCHEMA.description, Literal(f"Test data: {path.name}")),
+        )
+        if path.is_file():
+            crate.add_entity(
+                entity, (SCHEMA.contentSize, Literal(str(path.stat().st_size)))
+            )
+
+
 def test_spec_conformant():
     crate = make_test_crate(recursive=True)
 
     # Normally checking JSON-LD using JSON is a bad idea, but RO-Crate mandates a specific structure that
     # goes beyond standard JSON-LD
     crate_json = json.loads(crate.compile())
-    assert crate_json["@context"] == "https://w3id.org/ro/crate/1.1/context"
+    assert crate_json["@context"] == "https://w3id.org/ro/crate/1.3/context"
 
     found_metadata = False
     found_root = False
@@ -91,7 +128,7 @@ def test_spec_conformant():
             # This descriptor MUST have an about property referencing the Root Data Entity, which SHOULD have an @id of ./.
             assert entity["about"] == {"@id": "./"}
             # The conformsTo of the RO-Crate Metadata File Descriptor SHOULD be a versioned permalink URI of the RO-Crate specification that the RO-Crate JSON-LD conforms to. The URI SHOULD start with https://w3id.org/ro/crate/.
-            assert entity["conformsTo"] == {"@id": "https://w3id.org/ro/crate/1.1"}
+            assert entity["conformsTo"] == {"@id": "https://w3id.org/ro/crate/1.3"}
         elif entity["@id"] == "./":
             found_root = True
             # @type: MUST be Dataset
@@ -105,7 +142,12 @@ def test_spec_conformant():
 
 def test_single_file():
     crate = make_test_crate(recursive=False)
-    crate.register_file("text.txt")
+    crate.register_file(
+        "text.txt",
+        (SCHEMA.name, Literal("text.txt")),
+        (SCHEMA.description, Literal("A plain text file")),
+        add_size=True,
+    )
 
     # Check that the graph has the expected structure
     assert set(crate.graph.subjects()) == {
@@ -143,6 +185,7 @@ def test_recursive_add():
     ) == URIRef("subdir/"), (
         "Recursive add should link the immediate child and parent via hasPart"
     )
+    describe_data_entities(crate)
     crate.validate()
 
 
@@ -174,7 +217,7 @@ def test_rocrate_terms_not_in_context():
     """
     crate = make_test_crate(recursive=True)
     crate_json = json.loads(crate.compile())
-    assert crate_json["@context"] == "https://w3id.org/ro/crate/1.1/context"
+    assert crate_json["@context"] == "https://w3id.org/ro/crate/1.3/context"
     file = next(e for e in crate_json["@graph"] if e["@id"] == "text.txt")
     assert file["@type"] == "File"
 
@@ -194,7 +237,7 @@ def test_custom_vocabs():
     crate_json = json.loads(crate.compile())
 
     assert crate_json["@context"] == [
-        "https://w3id.org/ro/crate/1.1/context",
+        "https://w3id.org/ro/crate/1.3/context",
         {
             "Image": "http://purl.obolibrary.org/obo/IAO_0000101",
             "upload": "https://w3id.org/WEHI-SODA-Hub/omerocrate/upload",

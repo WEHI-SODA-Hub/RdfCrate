@@ -1,4 +1,5 @@
 import contextlib
+import os
 from pathlib import Path
 from unittest.mock import patch
 from urllib.request import urlopen
@@ -21,6 +22,9 @@ def generate_cassettes():
         )
         urlopen(
             "https://www.researchobject.org/ro-crate/specification/1.2/context.jsonld"
+        )
+        urlopen(
+            "https://www.researchobject.org/ro-crate/specification/1.3/context.jsonld"
         )
 
     # Rewrite the URLs to use the W3ID URIs
@@ -56,7 +60,7 @@ def patch_rocrate_context():
             match_on=["path"],
             allow_playback_repeats=True,
         ),
-        # Also force the validator to not cache requests, see https://github.com/kevin1024/vcrpy/issues/881
-        patch("rocrate_validator.constants.DEFAULT_HTTP_CACHE_TIMEOUT", 0),
+        # Stop the validator from pre-fetching profile resources outside the cassette
+        patch.dict(os.environ, {"ROCRATE_VALIDATOR_AUTO_WARM": "0"}),
     ):
         yield

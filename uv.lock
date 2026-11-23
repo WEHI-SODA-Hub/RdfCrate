@@ -1149,7 +1149,7 @@ dev = [
 requires-dist = [
     { name = "rdflib", specifier = ">=7.1.3" },
     { name = "rdfnav", marker = "python_full_version >= '3.12' and extra == 'nav'", git = "https://github.com/WEHI-SODA-Hub/RdfNav" },
-    { name = "roc-validator", marker = "extra == 'validation'", specifier = ">=0.5.0" },
+    { name = "roc-validator", marker = "extra == 'validation'", specifier = ">=0.14.0" },
     { name = "vcrpy", specifier = ">=7.0.0" },
 ]
 provides-extras = ["validation", "nav"]
@@ -1165,7 +1165,7 @@ dev = [
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "requests", specifier = ">=2.32.3" },
-    { name = "roc-validator", specifier = ">=0.5.0" },
+    { name = "roc-validator", specifier = ">=0.14.0" },
     { name = "ruff", specifier = ">=0.11.5" },
     { name = "tabulate", specifier = ">=0.9.0" },
 ]
@@ -1256,7 +1256,7 @@ wheels = [
 
 [[package]]
 name = "roc-validator"
-version = "0.7.3"
+version = "0.14.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -1271,9 +1271,9 @@ dependencies = [
     { name = "rich-click" },
     { name = "toml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9d/e9/f0a0f82ba185a1b2bfb8ccce92ddaeea936b4a0b8ab95ccac6e0d3c83909/roc_validator-0.7.3.tar.gz", hash = "sha256:72e2422978969b859a427d7fd60ab82ec289838b04bfaeed354fea522f3de6ed", size = 97441, upload-time = "2025-06-23T10:25:39.437Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/08/54/1679ed2e70637ee6bfbaafcdaced7c586c6bb27b7ad5cf9f1d06036c5f9f/roc_validator-0.14.0.tar.gz", hash = "sha256:cb53084449ccd231b8f55f567a98c8ce2eb6f097b9ed755856e53b7679230cb7", size = 262653, upload-time = "2026-11-16T14:17:18.986Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b0/3c/e1a30a397850583a963bc0eafecba62f8daa527133a74dc55ea20034506d/roc_validator-0.7.3-py3-none-any.whl", hash = "sha256:9af2f7eccd73d53e985f7f9e2702eb323ec67b445f821532f4ca05deb7bd9ae0", size = 191631, upload-time = "2025-06-23T10:25:36.977Z" },
+    { url = "https://files.pythonhosted.org/packages/68/67/f2d144fe2be01a5a4dd8b87e7cf12fefeaaf55dda2e435aa616dc6df7158/roc_validator-0.14.0-py3-none-any.whl", hash = "sha256:3880116faef861a4996e5c35c91b55dc34035f09e4f295c764645225ff1ef2d3", size = 520643, upload-time = "2026-11-16T14:17:17.023Z" },
 ]
 
 [[package]]

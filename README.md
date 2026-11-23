@@ -7,10 +7,10 @@ RO-Crates as RDF graphs rather than JSON objects.
 ## Advantages
 
 - Simple API that doesn’t require understanding JSON-LD
-- Library of types and properties to speed up development and ensure
-  correctness
+- Uses plain `rdflib` terms, so any RDF vocabulary can be used
+- JSON-LD context generated automatically, containing only the terms you
+  use
 - Valid JSON-LD guaranteed
-- Type checker friendly
 
 ## Installation
 
@@ -24,42 +24,72 @@ Let’s say you have a directory with one file in it, which you want to
 document. Here’s how you could make an RO-Crate using RdfCrate:
 
 ``` python
-from rdfcrate import AttachedCrate, sdo
 from datetime import date
 
-crate = AttachedCrate("crate/")
-crate.register_file("monty.jpg", sdo.name(sdo.Text("Montague Street Bridge")))
-crate.add_root_entity(
-    sdo.name(sdo.Text("Melbourne Bridges")),
-    sdo.description(sdo.Text("Photo gallery of iconic bridges in Melbourne")),
-    sdo.datePublished(sdo.Date(date.today())),
-    sdo.license(sdo.URL("https://creativecommons.org/licenses/by/4.0/")),
+from rdflib import DCMITYPE, RDF, Literal, URIRef
+from rdfcrate import SCHEMA, AttachedCrate, ContextNamespace
+
+
+# Terms outside of the RO-Crate context are defined in a ContextNamespace
+class DcmiType(ContextNamespace):
+    StillImage = DCMITYPE.StillImage
+
+
+crate = AttachedCrate("crate/", vocabs=[DcmiType])
+crate.register_file(
+    "monty.jpg",
+    (SCHEMA.name, Literal("Montague Street Bridge")),
+    (RDF.type, DcmiType.StillImage),
 )
+crate.add_root_entity(
+    "Melbourne Bridges",
+    "Photo gallery of iconic bridges in Melbourne",
+    date.today(),
+    URIRef("https://creativecommons.org/licenses/by/4.0/"),
+)
+crate.add_metadata_entity()
 print(crate.compile())
 ```
 
     {
-      "@context": "https://w3id.org/ro/crate/1.1/context",
+      "@context": [
+        "https://w3id.org/ro/crate/1.1/context",
+        {
+          "StillImage": "http://purl.org/dc/dcmitype/StillImage"
+        }
+      ],
       "@graph": [
+        {
+          "@id": "ro-crate-metadata.json",
+          "@type": "CreativeWork",
+          "about": {
+            "@id": "./"
+          },
+          "conformsTo": {
+            "@id": "https://w3id.org/ro/crate/1.1"
+          }
+        },
+        {
+          "@id": "monty.jpg",
+          "@type": [
+            "File",
+            "StillImage"
+          ],
+          "encodingFormat": "image/jpeg",
+          "name": "Montague Street Bridge"
+        },
         {
           "@id": "./",
           "@type": "Dataset",
-          "datePublished": {
-            "@type": "http://www.w3.org/2001/XMLSchema#date",
-            "@value": "2025-10-10"
-          },
+          "datePublished": "2026-11-17",
           "description": "Photo gallery of iconic bridges in Melbourne",
           "hasPart": {
             "@id": "monty.jpg"
           },
-          "license": "https://creativecommons.org/licenses/by/4.0/",
+          "license": {
+            "@id": "https://creativecommons.org/licenses/by/4.0/"
+          },
           "name": "Melbourne Bridges"
-        },
-        {
-          "@id": "monty.jpg",
-          "@type": "File",
-          "encodingFormat": "image/jpeg",
-          "name": "Montague Street Bridge"
         }
       ]
     }

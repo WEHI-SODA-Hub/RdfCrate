@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.0.0
+
+### Breaking
+
+- Removed the typed API, including `RdfClass`, `RdfProperty`, `ReverseProperty`, `RdfLiteral`, `RdfTerm` and the typed literals. Validation is now expected to be done separately, for example with SHACL
+    - Entities are now plain IRIs or blank nodes, for example `URIRef("#me")`
+    - Properties are now `(predicate, object)` tuples of `rdflib` terms: `(SCHEMA.name, Literal("WEHI Research Computing Platform"))`
+    - Types are added as properties: `(RDF.type, SCHEMA.Person)`
+    - Reverse properties have been removed. Add a plain triple using `crate.add((subject, predicate, object))` instead
+- Removed the bundled vocabularies (`rdfcrate.vocabs`) and the `rdfcrate-codegen` CLI. Use `rdflib` terms directly, such as `RDF.type`, and define any terms that aren't in the RO-Crate context in your own `ContextNamespace`. `rdfcrate.SCHEMA` is provided for `http://schema.org/` terms, since `rdflib.SDO` uses `https://schema.org/`
+- The JSON-LD context is now generated at compile time from the `ContextNamespace` classes passed to the crate's `vocabs`, and only contains the terms that are used. Removed `register_term()`, `register_terms()`, `with_term_label()`, and the `unique_terms` and `require_terms` options
+- Compiling a crate now raises an error if an IRI used as a predicate, type or datatype has no term, or if two terms clash
+- `add_metadata` has been removed since it would be identical to `add_entity` without types. `add_entity` is no longer deprecated, and can be used to add properties to existing entities.
+- The automatically added `contentSize` is now a string, as specified by schema.org
+- Datatypes such as `Text` and `Boolean` are no longer added to the context
+- `add_entity()` no longer takes a plain `str`, it must be either a `BNode` or `URIRef`
+
+### Added
+
+- `ContextNamespace`, which defines terms as `URIRef` class attributes and generates a flat JSON-LD context. The `prefix` and `mode` class arguments control how its terms are labelled in the context:
+    - `"standard"` (the default) uses the attribute name as the label
+    - `"prefix"` prepends `prefix` to every label
+    - `"prefix_collision"` prepends `prefix` only when the unprefixed label is already taken
+    - `"curie"` adds `prefix` as a CURIE prefix for `_base`
+    - `"external"` adds no terms, and raises an error for any term the external context doesn't define
+- Subclasses of a `ContextNamespace` inherit its terms, `_base`, `prefix` and `mode`. Passing `prefix` or `mode` to the subclass overrides the inherited value
+
+
 ## 1.1.0
 
 * Added `ContextGraph`, a superclass of `RoCrate` which isn't tied to any RO-Crate specifics. This is designed to be a better API target for more general manipulations

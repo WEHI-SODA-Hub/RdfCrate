@@ -17,7 +17,7 @@ from typing_extensions import Doc, Unpack
 
 from rdfcrate.context_builder import ContextBuilder
 from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, PropertyArg
-from rdfcrate.spec_version import ROCrate1_1, SpecVersion
+from rdfcrate.spec_version import ROCrate1_3, SpecVersion
 from rdfcrate.types import Object, Predicate
 from rdfcrate.vocabs import SCHEMA
 
@@ -86,7 +86,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
 
     def __init__(self, **kwargs: Unpack[RoCrateKwargs]):
         super().__init__(**kwargs)
-        self.version = kwargs.get("version", ROCrate1_1)
+        self.version = kwargs.get("version", ROCrate1_3)
 
         # We resolve the RO-Crate context now so we can use it to resolve terms and check if they are already defined
         self._roc_context = Context(self.version.context_url)
@@ -177,7 +177,7 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         """
         Links a data entity to a Dataset.
 
-        See https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/data-entities.html#referencing-files-and-folders-from-the-root-data-entity
+        See https://www.researchobject.org/ro-crate/specification/1.3/data-entities.html#referencing-files-and-folders-from-the-root-data-entity
 
         Params:
             entity: ID of the entity being linked
@@ -282,7 +282,7 @@ class AttachedCrate(RoCrate):
     """
     An RO-Crate stored in a directory, with all contents local to that directory.
 
-    See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#attached-ro-crate>
+    See <https://www.researchobject.org/ro-crate/specification/1.3/structure#attached-ro-crate>
     """
 
     root: Path
@@ -362,13 +362,14 @@ class AttachedCrate(RoCrate):
         Params:
             add_size: If true, automatically add the size of the file to the metadata
         """
-        path = Path(path)
-        _, file_id = self._resolve_path(path)
+        full_path, file_id = self._resolve_path(path)
         ret = super().register_file(file_id, *props, **kwargs)
         if add_size:
             if has_predicate(props, SCHEMA.contentSize):
                 raise ValueError("Cannot add size when contentSize is provided")
-            self.add_entity(ret, (SCHEMA.contentSize, Literal(str(stat(path).st_size))))
+            self.add_entity(
+                ret, (SCHEMA.contentSize, Literal(str(stat(full_path).st_size)))
+            )
         return ret
 
     def add_root_entity(
@@ -417,7 +418,7 @@ class AttachedCrate(RoCrate):
         """
         try:
             from rocrate_validator import models, services
-            from rocrate_validator.utils import URI
+            from rocrate_validator.utils.uri import URI
         except ImportError:
             raise ImportError(
                 "rocrate-validator is not installed. Please use the `validation` extra, e.g. `pip install rdfcrate[validation]`."
@@ -427,8 +428,7 @@ class AttachedCrate(RoCrate):
         result = services.validate(
             services.ValidationSettings(
                 rocrate_uri=URI(self.root),
-                # TODO: Support other profiles
-                profile_identifier="ro-crate-1.1",
+                profile_identifier=f"ro-crate-{self.version.version}",
                 requirement_severity=models.Severity.RECOMMENDED,
             )
         )
@@ -455,7 +455,7 @@ class DetatchedCrate(RoCrate):
     """
     A crate describing remote files.
 
-    See <https://www.researchobject.org/ro-crate/specification/1.2-DRAFT/structure#detached-ro-crate>
+    See <https://www.researchobject.org/ro-crate/specification/1.3/structure#detached-ro-crate>
     """
 
     root: str

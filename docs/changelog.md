@@ -16,6 +16,9 @@
 - The automatically added `contentSize` is now a string, as specified by schema.org
 - Datatypes such as `Text` and `Boolean` are no longer added to the context
 - `add_entity()` no longer takes a plain `str`, it must be either a `BNode` or `URIRef`
+- The default RO-Crate version is now 1.3 (`ROCrate1_3`) instead of 1.1. Pass `version=ROCrate1_1` to keep the old behaviour
+- `ROCrate1_2.version` is now `"1.2"` instead of `"1.2-DRAFT"`, since RO-Crate 1.2 has been released
+- `validate()` and `get_issues()` now check the crate against the RO-Crate profile matching its version, rather than always using the 1.1 profile. The 1.2 and 1.3 profiles have more RECOMMENDED checks, so crates that passed before may now fail at the default `RECOMMENDED` threshold
 
 ### Added
 
@@ -26,6 +29,11 @@
     - `"curie"` adds `prefix` as a CURIE prefix for `_base`
     - `"external"` adds no terms, and raises an error for any term the external context doesn't define
 - Subclasses of a `ContextNamespace` inherit its terms, `_base`, `prefix` and `mode`. Passing `prefix` or `mode` to the subclass overrides the inherited value
+- `ROCrate1_3`, for RO-Crate 1.3
+
+### Fixed
+
+- `AttachedCrate.register_file(add_size=True)` now finds the file relative to the crate root rather than the working directory
 
 
 ## 1.1.0

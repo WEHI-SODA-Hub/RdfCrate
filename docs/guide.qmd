@@ -67,13 +67,13 @@ You will always need to add the two mandatory entities, the root data entity and
 ```{python}
 #| output: false
 from datetime import date
-from rdflib import URIRef
+from rdflib import Literal, URIRef
 
 crate.add_root_entity(
-    "Melbourne train stations",
-    "Photos and metadata about Melbourne train stations",
-    date.today(),
-    URIRef("https://creativecommons.org/licenses/by/4.0/"),
+    (SCHEMA.name, Literal("Melbourne train stations")),
+    (SCHEMA.description, Literal("Photos and metadata about Melbourne train stations")),
+    (SCHEMA.datePublished, Literal(date.today().isoformat())),
+    (SCHEMA.license, URIRef("https://creativecommons.org/licenses/by/4.0/")),
 )
 crate.add_metadata_entity()
 ```

@@ -61,14 +61,17 @@ def make_test_crate(recursive: bool = False):
         ),
     )
     crate.add_root_entity(
-        "Test Crate",
-        "Crate for validating RdfCrate",
-        datetime.now(UTC),
-        crate.add_entity(
-            MIT,
-            (RDF.type, SCHEMA.CreativeWork),
-            (SCHEMA.name, Literal("MIT License")),
-            (SCHEMA.description, Literal("A permissive open source licence")),
+        (SCHEMA.name, Literal("Test Crate")),
+        (SCHEMA.description, Literal("Crate for validating RdfCrate")),
+        (SCHEMA.datePublished, Literal(datetime.now(UTC).isoformat())),
+        (
+            SCHEMA.license,
+            crate.add_entity(
+                MIT,
+                (RDF.type, SCHEMA.CreativeWork),
+                (SCHEMA.name, Literal("MIT License")),
+                (SCHEMA.description, Literal("A permissive open source licence")),
+            ),
         ),
         (SCHEMA.version, Literal("1.0")),
         (SCHEMA.publisher, wehi),

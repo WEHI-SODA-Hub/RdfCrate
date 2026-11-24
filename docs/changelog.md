@@ -16,6 +16,7 @@
 - The automatically added `contentSize` is now a string, as specified by schema.org
 - Datatypes such as `Text` and `Boolean` are no longer added to the context
 - `add_entity()` no longer takes a plain `str`, it must be either a `BNode` or `URIRef`
+- `add_root_entity()` no longer takes `name`, `description`, `date_published` and `license` as positional arguments. Pass them as `(predicate, object)` tuples like any other property, e.g. `(SCHEMA.name, Literal("My Crate"))`. They are no longer checked in Python, and should be checked by validation instead
 - The default RO-Crate version is now 1.3 (`ROCrate1_3`) instead of 1.1. Pass `version=ROCrate1_1` to keep the old behaviour
 - `ROCrate1_2.version` is now `"1.2"` instead of `"1.2-DRAFT"`, since RO-Crate 1.2 has been released
 - `validate()` and `get_issues()` now check the crate against the RO-Crate profile matching its version, rather than always using the 1.1 profile. The 1.2 and 1.3 profiles have more RECOMMENDED checks, so crates that passed before may now fail at the default `RECOMMENDED` threshold

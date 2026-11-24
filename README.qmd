@@ -40,10 +40,10 @@ crate.register_file(
     (RDF.type, DcmiType.StillImage),
 )
 crate.add_root_entity(
-    "Melbourne Bridges",
-    "Photo gallery of iconic bridges in Melbourne",
-    date.today(),
-    URIRef("https://creativecommons.org/licenses/by/4.0/"),
+    (SCHEMA.name, Literal("Melbourne Bridges")),
+    (SCHEMA.description, Literal("Photo gallery of iconic bridges in Melbourne")),
+    (SCHEMA.datePublished, Literal(date.today().isoformat())),
+    (SCHEMA.license, URIRef("https://creativecommons.org/licenses/by/4.0/")),
 )
 crate.add_metadata_entity()
 print(crate.compile())

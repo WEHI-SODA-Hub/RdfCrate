@@ -56,13 +56,14 @@ crate.add((parent, SCHEMA.hasPart, me))
 
 ## Mandatory Properties
 
-Methods like `add_root_entity` take the properties that RO-Crate requires as positional arguments, and any others after them:
+Methods like `add_root_entity` take properties as `(predicate, object)` tuples, exactly like `add_entity`.
+They don't check that the properties RO-Crate requires are present: that is left to validation, such as `crate.validate()`:
 ```python
 crate.add_root_entity(
-    "Melbourne Bridges",
-    "Photo gallery of iconic bridges in Melbourne",
-    date.today(),
-    URIRef("https://creativecommons.org/licenses/by/4.0/"),
+    (SCHEMA.name, Literal("Melbourne Bridges")),
+    (SCHEMA.description, Literal("Photo gallery of iconic bridges in Melbourne")),
+    (SCHEMA.datePublished, Literal(date.today().isoformat())),
+    (SCHEMA.license, URIRef("https://creativecommons.org/licenses/by/4.0/")),
     (SCHEMA.keywords, Literal("bridges")),
 )
 ```

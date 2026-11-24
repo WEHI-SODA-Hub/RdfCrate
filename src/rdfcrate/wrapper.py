@@ -5,20 +5,19 @@ import warnings
 from abc import ABCMeta, abstractmethod
 from collections.abc import Iterable
 from dataclasses import dataclass
-from datetime import date
 from os import stat
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Any, overload
+from typing import TYPE_CHECKING, Annotated, Any
 from urllib.parse import quote
 
-from rdflib import DCTERMS, RDF, BNode, IdentifiedNode, Literal, URIRef
+from rdflib import DCTERMS, RDF, IdentifiedNode, Literal, URIRef
 from rdflib.plugins.shared.jsonld.context import Context
 from typing_extensions import Doc, Unpack
 
 from rdfcrate.context_builder import ContextBuilder
 from rdfcrate.context_graph import ContextGraph, ContextGraphKwargs, PropertyArg
 from rdfcrate.spec_version import ROCrate1_3, SpecVersion
-from rdfcrate.types import Object, Predicate
+from rdfcrate.types import Predicate
 from rdfcrate.vocabs import SCHEMA
 
 if TYPE_CHECKING:
@@ -37,39 +36,6 @@ def has_predicate(props: Iterable[PropertyArg], predicate: Predicate) -> bool:
     Checks if a property list contains a specific predicate
     """
     return any(prop_predicate == predicate for prop_predicate, _ in props)
-
-
-# These overloads come before `str` because RDF terms are also `str` subclasses
-@overload
-def as_literal(value: URIRef) -> URIRef: ...  # pyright: ignore[reportOverlappingOverload]
-
-
-@overload
-def as_literal(value: BNode) -> BNode: ...  # pyright: ignore[reportOverlappingOverload]
-
-
-@overload
-def as_literal(value: Literal) -> Literal: ...
-
-
-@overload
-def as_literal(value: Object) -> Object: ...
-
-
-@overload
-def as_literal(value: str | date) -> Literal: ...
-
-
-def as_literal(value: Object | str | date) -> Object:
-    """
-    Converts plain Python values to plain string literals, leaving RDF terms unchanged.
-    Dates are converted to ISO 8601 strings, as required by RO-Crate.
-    """
-    if isinstance(value, date):
-        return Literal(value.isoformat())
-    if isinstance(value, str) and not isinstance(value, IdentifiedNode | Literal):
-        return Literal(value)
-    return value
 
 
 class RoCrateKwargs(ContextGraphKwargs, total=False):
@@ -111,44 +77,36 @@ class RoCrate(ContextGraph, metaclass=ABCMeta):
         The root entity of the RO-Crate
         """
 
-    def add_root_entity(
-        self,
-        name: Object | str,
-        description: Object | str,
-        date_published: Object | str | date,
-        license: Object | str,
-        *props: PropertyArg,
-    ) -> URIRef:
+    def add_root_entity(self, *props: PropertyArg) -> URIRef:
         """
-        Adds the root entity to the crate.
+        Adds the root data entity to the crate.
+
+        RO-Crate requires the root data entity to have `name`, `description`, `datePublished` and `license` properties.
+        These aren't checked here, but will be reported by validation.
+
+        See https://www.researchobject.org/ro-crate/specification/1.3/root-data-entity.html#direct-properties-of-the-root-data-entity
 
         Params:
-            name: Name of the crate. Strings are converted to literals.
-            description: Description of the crate. Strings are converted to literals.
-            date_published: Publication date of the crate. Dates are converted to ISO 8601 strings.
-            license: License of the crate. This should ideally be a `URIRef` of a license entity.
+            props: Properties used to describe the root `Dataset` entity
+
+        Example:
+            ```python
+                        from rdflib import Literal, URIRef
+            from rdfcrate import SCHEMA, AttachedCrate
+
+            AttachedCrate(".").add_root_entity(
+                (SCHEMA.name, Literal("My Crate")),
+                (SCHEMA.description, Literal("A crate containing my data")),
+                (SCHEMA.datePublished, Literal(date.today().isoformat())),
+                (SCHEMA.license, URIRef("https://creativecommons.org/licenses/by/4.0/")),
+            )
+            ```
         """
-        self.add_entity(
+        return self.add_entity(
             self.root_data_entity,
             (RDF.type, SCHEMA.Dataset),
-            *self._root_props(name, description, date_published, license),
             *props,
         )
-        return self.root_data_entity
-
-    def _root_props(
-        self,
-        name: Object | str,
-        description: Object | str,
-        date_published: Object | str | date,
-        license: Object | str,
-    ) -> list[PropertyArg]:
-        return [
-            (SCHEMA.name, as_literal(name)),
-            (SCHEMA.description, as_literal(description)),
-            (SCHEMA.datePublished, as_literal(date_published)),
-            (SCHEMA.license, as_literal(license)),
-        ]
 
     @property
     @abstractmethod
@@ -374,19 +332,13 @@ class AttachedCrate(RoCrate):
 
     def add_root_entity(
         self,
-        name: Object | str,
-        description: Object | str,
-        date_published: Object | str | date,
-        license: Object | str,
         *props: PropertyArg,
         recursive: Recursive = False,
     ) -> URIRef:
-        return self.register_dir(
-            ".",
-            *self._root_props(name, description, date_published, license),
-            *props,
-            recursive=recursive,
-        )
+        """
+        See [`RoCrate.add_root_entity`][rdfcrate.wrapper.RoCrate.add_root_entity].
+        """
+        return self.register_dir(".", *props, recursive=recursive)
 
     def register_dir(
         self,

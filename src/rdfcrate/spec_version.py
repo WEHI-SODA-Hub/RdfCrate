@@ -6,6 +6,7 @@ Attributes:
     ROCrate1_0: RO-Crate 1.0
     ROCrate1_1: RO-Crate 1.1
     ROCrate1_2: RO-Crate 1.2
+    ROCrate1_3: RO-Crate 1.3
 """
 
 from rdflib import URIRef
@@ -43,9 +44,15 @@ ROCrate1_1: SpecVersion = SpecVersion(
     conforms_to_url="https://w3id.org/ro/crate/1.1",
 )
 ROCrate1_2: SpecVersion = SpecVersion(
-    "1.2-DRAFT",
+    "1.2",
     context_url="https://w3id.org/ro/crate/1.2/context",
     conforms_to_url="https://w3id.org/ro/crate/1.2",
 )
 
-all_specs = [ROCrate0_2, ROCrate1_0, ROCrate1_1, ROCrate1_2]
+ROCrate1_3: SpecVersion = SpecVersion(
+    "1.3",
+    context_url="https://w3id.org/ro/crate/1.3/context",
+    conforms_to_url="https://w3id.org/ro/crate/1.3",
+)
+
+all_specs = [ROCrate0_2, ROCrate1_0, ROCrate1_1, ROCrate1_2, ROCrate1_3]

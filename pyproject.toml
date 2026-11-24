@@ -15,7 +15,7 @@ dependencies = [
 
 [project.optional-dependencies]
 validation = [
-    "roc-validator>=0.5.0",
+    "roc-validator>=0.14.0",
 ]
 nav = [
     "rdfnav; python_version >= '3.12'",
@@ -39,7 +39,7 @@ dev = [
     "pandas>=2.2.3",
     "tabulate>=0.9.0",
     "requests>=2.32.3",
-    "roc-validator>=0.5.0",
+    "roc-validator>=0.14.0",
     "ruff>=0.11.5",
     "mkdocs-api-autonav>=0.4.0",
 ]

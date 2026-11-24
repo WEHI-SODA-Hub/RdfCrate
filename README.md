@@ -53,7 +53,7 @@ print(crate.compile())
 
     {
       "@context": [
-        "https://w3id.org/ro/crate/1.1/context",
+        "https://w3id.org/ro/crate/1.3/context",
         {
           "StillImage": "http://purl.org/dc/dcmitype/StillImage"
         }
@@ -66,7 +66,7 @@ print(crate.compile())
             "@id": "./"
           },
           "conformsTo": {
-            "@id": "https://w3id.org/ro/crate/1.1"
+            "@id": "https://w3id.org/ro/crate/1.3"
           }
         },
         {
@@ -81,7 +81,7 @@ print(crate.compile())
         {
           "@id": "./",
           "@type": "Dataset",
-          "datePublished": "2026-11-17",
+          "datePublished": "2026-11-23",
           "description": "Photo gallery of iconic bridges in Melbourne",
           "hasPart": {
             "@id": "monty.jpg"

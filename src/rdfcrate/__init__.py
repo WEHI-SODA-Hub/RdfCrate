@@ -6,6 +6,7 @@ from rdfcrate.spec_version import (
     ROCrate1_0,
     ROCrate1_1,
     ROCrate1_2,
+    ROCrate1_3,
     SpecVersion,
 )
 from rdfcrate.vocabs import SCHEMA
@@ -22,5 +23,6 @@ __all__ = [
     "ROCrate1_0",
     "ROCrate1_1",
     "ROCrate1_2",
+    "ROCrate1_3",
     "SpecVersion",
 ]

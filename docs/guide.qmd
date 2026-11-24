@@ -108,7 +108,7 @@ import pandas as pd
 
 json_ld = """
     {
-        "@context": "https://w3id.org/ro/crate/1.1/context",
+        "@context": "https://w3id.org/ro/crate/1.3/context",
         "@id": "https://www.geonames.org/2152593/",
         "@type": "Place",
         "name": "Prahran"
